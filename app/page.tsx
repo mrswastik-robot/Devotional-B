@@ -6,6 +6,20 @@ import { buttonVariants } from "@/components/ui/button";
 
 import CustomFeed from "@/components/CustomFeed";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+
 export default function Home() {
   return (
     <>
@@ -30,13 +44,26 @@ export default function Home() {
               </p>
             </div>
 
-            <Link
-              className={buttonVariants({
-                className: 'w-full mt-4 mb-6',
-              })}
-              href={`/r/create`}>
-              Create Community
-            </Link>
+            <div>
+              <Dialog>
+                  <DialogTrigger asChild>
+                    <Button  className=" w-full">Create Question</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[925px] max-h-[725px]">
+                    <DialogHeader>
+                      <DialogTitle>Post Question</DialogTitle>
+                      <DialogDescription>
+                        Create your question here. Click post when you are done.
+                      </DialogDescription>
+                    </DialogHeader>
+                      <Textarea className="w-full h-full" placeholder="What's your question?" />
+                    <DialogFooter>
+                      <Button type="submit" className=" w-full">Post</Button>
+                    </DialogFooter>
+                  </DialogContent>
+              </Dialog>
+              
+            </div>
           </dl>
         </div>
       </div>

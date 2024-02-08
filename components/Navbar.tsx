@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { HomeIcon, Search } from "lucide-react";
+import { Book, HomeIcon, Search } from "lucide-react";
 import { Home } from "lucide-react";
 import { Bell } from "lucide-react";
 import { NotebookTabs } from "lucide-react";
 import { SquarePen } from "lucide-react";
+import { BookmarkMinus } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "./ui/input";
@@ -41,7 +42,7 @@ const Navbar = (props: Props) => {
             variant="ghost"
             onClick={() => setClicked("notebook")}
           >
-            <NotebookTabs
+            <BookmarkMinus
               className={`w-5 h-5 ${clicked === "notebook" ? "text-red-500" : ""}`}
             />
           </Button>
@@ -58,7 +59,7 @@ const Navbar = (props: Props) => {
         </div>
         {/* search bar */}
         <div className=" relative w-[15]">
-          <Input className=" pl-10 w-[22rem]" placeholder="Search" />
+          <Input className=" pl-10 w-[40rem]" placeholder="Search" />
           <Search className=" absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
         </div>
 

@@ -5,6 +5,7 @@ import {Home as HomeIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 import CustomFeed from "@/components/CustomFeed";
+import RightHandFeed from "@/components/RightHandFeed/RightHandFeed";
 
 import {
   Dialog,
@@ -19,12 +20,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import TopFeedCard from "@/components/TopFeedCard";
 
 export default function Home() {
   return (
     <>
-    <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1>
+    {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 py-6'>
+        
+        <TopFeedCard />
       
         <CustomFeed />
 
@@ -47,7 +51,7 @@ export default function Home() {
             <div>
               <Dialog>
                   <DialogTrigger asChild>
-                    <Button  className=" w-full">Ask Question</Button>
+                    <Button variant="askQue"  className=" w-full">Ask Question</Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[925px] ">
                     <DialogHeader>
@@ -65,6 +69,9 @@ export default function Home() {
               
             </div>
           </dl>
+
+          <RightHandFeed />          
+
         </div>
       </div>
     </>

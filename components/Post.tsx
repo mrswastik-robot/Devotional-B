@@ -3,6 +3,9 @@
 import React, { useRef } from 'react'
 
 import { MessageSquare } from 'lucide-react'
+import { Share } from 'lucide-react'
+import { Bookmark } from 'lucide-react'
+
 import  Link  from 'next/link'
 import Image from 'next/image'
 
@@ -23,7 +26,7 @@ const Post = ({post}: Props) => {
     const pRef = useRef<HTMLDivElement>(null)
 
   return (
-    <div className='rounded-md bg-white dark:bg-gray-600 shadow'>
+    <div className='rounded-md bg-white dark:bg-[#1A1A1B] shadow'>
       <div className='px-6 py-4 flex justify-between'>
         <PostVoteClient
         //   postId={post.id}
@@ -51,7 +54,7 @@ const Post = ({post}: Props) => {
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           <a href={`/r/post/${post.id}`}>
-            <h1 className='text-lg font-semibold py-2 leading-6 text-gray-900'>
+            <h1 className='text-lg font-semibold py-2 leading-6 text-gray-900 dark:text-white'>
               {post.title}
             </h1>
           </a>
@@ -69,12 +72,20 @@ const Post = ({post}: Props) => {
         </div>
       </div>
 
-      <div className='bg-gray-50 z-20 text-sm px-4 py-4 sm:px-6'>
+      <div className='bg-gray-50 dark:bg-[#161617] z-20 items-end flex justify-end gap-x-3 text-sm px-4 py-4 sm:px-6'>
+
         <Link
           href={`/r/post/${post.id}`}
           className='w-fit flex items-center gap-2'>
           <MessageSquare className='h-4 w-4' /> {5} comments
         </Link>
+        <Link href={`/r/post/${post.id}`} className='w-fit flex items-center gap-2'>
+          <Share className='h-4 w-4' /> Share
+        </Link>
+        <Link href={`/r/post/${post.id}`} className='w-fit flex items-center gap-2'>
+          <Bookmark className='h-4 w-4' /> Save
+        </Link>
+
       </div>
     </div>
   )

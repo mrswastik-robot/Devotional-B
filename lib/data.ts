@@ -44,3 +44,41 @@ export const postData = [
     shares: 44,
     },
 ]
+
+export const RecentPosts = [
+  {
+    title: 'This is a hot topic right now.',
+    image: 'https://source.unsplash.com/random',
+    points: 123,
+    comments: 12,
+    date: '2 days ago',
+  },
+  {
+    title: 'This is a hot topic right now.',
+    image: 'https://source.unsplash.com/random',
+    points: 123,
+    comments: 12,
+    date: '2 days ago',
+  },
+  {
+    title: 'This is a hot topic right now.',
+    image: 'https://source.unsplash.com/random',
+    points: 123,
+    comments: 12,
+    date: '2 days ago',
+  },
+  {
+    title: 'This is a hot topic right now.',
+    image: 'https://source.unsplash.com/random',
+    points: 123,
+    comments: 12,
+    date: '2 days ago',
+  },
+  {
+    title: 'This is a hot topic right now.',
+    image: 'https://source.unsplash.com/random',
+    points: 123,
+    comments: 12,
+    date: '2 days ago',
+  },
+]

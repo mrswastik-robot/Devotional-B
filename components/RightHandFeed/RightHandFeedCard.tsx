@@ -20,7 +20,7 @@ const RightHandFeedCard = ({ post }: Props) => {
         <div className="w-[5rem] h-[4rem] rounded-lg overflow-hidden">
           <Image
             src={post.image}
-            alt={post.title}
+            alt="fetch error"
             width={8}
             height={5}
             className="w-full h-full object-cover"

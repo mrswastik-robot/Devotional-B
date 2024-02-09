@@ -7,7 +7,7 @@ type Props = {}
 
 const RightHandFeed = (props: Props) => {
   return (
-    <div className=' -my-3 px-6 py-4'>
+    <div className='  px-6 py-4'>
       <div>
         <h1 className='font-bold text-3xl md:text-2xl'>Recent Posts</h1>
       </div>

@@ -14,7 +14,7 @@ const TopFeedCard = (props: Props) => {
 
   return (
     <div className=" col-span-5">
-      <div className=" bg-[#F9FAFB] dark:bg-[#161617] w-full p-4 rounded-md flex gap-6 shadow-lg border border-1 border-gray-500">
+      <div className=" bg-[#F9FAFB] dark:bg-[#161617] w-full p-4 rounded-md flex gap-6 shadow-md border  border-gray-400/40">
         <Link
           href={"/"}
           className={`gap-2 flex ${

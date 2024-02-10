@@ -40,7 +40,7 @@ export default function Home() {
               Home
             </p>
           </div> */}
-          <dl className='rounded-lg divide-y divide-gray-100 border border-gray-300  px-6 py-4 text-sm leading-6'>
+          <dl className='rounded-lg divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#1A1A1B] border-gray-300  px-6 py-4 text-sm leading-6'>
             <div className='flex justify-between gap-x-4 py-3'>
               <p className='text-zinc-500'>
                 Your personal Devotional frontpage. Come here to check in with your
@@ -51,7 +51,7 @@ export default function Home() {
             <div>
               <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="askQue"  className=" w-full">Ask Question</Button>
+                    <Button variant="default"  className=" w-full">Ask Question</Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[925px] ">
                     <DialogHeader>

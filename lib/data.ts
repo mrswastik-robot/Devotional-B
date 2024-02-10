@@ -1,7 +1,8 @@
 //a dummy data for the feed which consits of the user's name, the user's profile picture, the post image, the post description, the number of likes, the number of comments, and the number of shares
 export const postData = [
   {
-    name: 'John Doe',
+    id: '100',
+    name: 'Ram Charan',
     profilePic: 'https://randomuser.me/api/portraits',
     postImage: 'https://source.unsplash.com/random',
     title:'This is a post title',
@@ -12,7 +13,8 @@ export const postData = [
     },
 
     {
-    name: 'Jane Doe',
+    id: '101', 
+    name: 'Ram Charan',
     profilePic: 'https://randomuser.me/api/portraits',
     postImage: 'https://source.unsplash.com/random',
     title:'This is a post description',
@@ -23,7 +25,8 @@ export const postData = [
     },
 
     {
-    name: 'John Doe',
+    id: '102',
+    name: 'Ram Charan',
     profilePic: 'https://randomuser.me/api/portraits',
     postImage: 'https://source.unsplash.com/random',
     title:'This is a post title',
@@ -34,7 +37,8 @@ export const postData = [
     },
 
     {
-    name: 'Jane Doe',
+    id: '103',
+    name: 'Ram Charan',
     profilePic: 'https://randomuser.me/api/portraits',
     postImage: 'https://source.unsplash.com/random',
     title:'This is a post title',

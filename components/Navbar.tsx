@@ -24,7 +24,7 @@ const Navbar = (props: Props) => {
 
   return (
     <div className="fixed top-0 inset-x-0 h-fit bg-zinc-100 dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2">
-      <div className="container max-w-7xl h-full mx-auto flex items-center justify-evenly gap-2">
+      <div className="container max-w-7xl h-full mx-auto flex items-center justify-between gap-2">
         {/* logo */}
         <div className=" flex gap-[1.7rem]">
           <Link href="/" className="flex gap-2 items-center">
@@ -58,12 +58,12 @@ const Navbar = (props: Props) => {
 
         {/* search bar */}
         <div className=" relative ">
-          <Input className=" pl-10 w-[37rem]" placeholder="Search" />
+          <Input className=" pl-10 w-[40rem]" placeholder="Search" />
           <Search className=" absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
         </div>
 
         <div className=" flex gap-4">
-          <ThemeToggler className=" mr-3" />
+          <ThemeToggler className=" mr-4" />
           <Avatar>
             <div className=" relative w-full h-full aspect-square">
               <Image

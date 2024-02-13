@@ -1,5 +1,10 @@
-import React from 'react'
+"use client"
 
+import React, { useState } from 'react'
+
+import { postData } from '@/lib/data'
+import QuePost from '@/components/queAnsPage/QuePost'
+import {Tiptap as TipTap} from '@/components/TipTap'
 type Props = {
     params: {
         postId: string
@@ -9,11 +14,25 @@ type Props = {
 const PostPage = ({params: {postId}}: Props) => {
 
     // console.log(params.postId)
+  const queObject = postData.filter((post) => post.id === postId)
+
+  const [description , setDescription] = useState('')
 
   return (
     <div>
-        <h1>Post Page</h1>
-        <p>Welcome to the {postId} page</p>
+      
+      <div>
+        {
+        queObject.map((post, index) => (
+            <QuePost key={index} post={post} />
+        ))
+      }
+      </div>
+
+      <div>
+        <TipTap setDescription={setDescription}/>
+      </div>
+     
     </div>
   )
 }

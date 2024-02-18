@@ -1,6 +1,7 @@
 "use client";
 
-import { GetServerSideProps } from "next";
+
+
 
 
 import React, { useState } from "react";
@@ -10,6 +11,7 @@ import QuePost from "@/components/queAnsPage/QuePost";
 import { Tiptap as TipTap } from "@/components/TipTap";
 import AnsPost from "@/components/queAnsPage/AnsPost";
 import RecentFeed from "@/components/queAnsPage/RecentFeed";
+
 
 type Props = {
   params: {

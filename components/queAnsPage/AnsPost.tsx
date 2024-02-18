@@ -13,10 +13,10 @@ import PostVoteClient from "@/components/post-vote/PostVoteClient";
 
 type Props = {
   answers: {
-    id: string;
+    // id: string;
     name: string;
-    // profilePic: string;
-    postImage: string;
+    profilePic: string;
+    // postImage: string;
     // title: string;
     description: string;
     likes: number;
@@ -49,7 +49,7 @@ const AnsPost = ({ answers }: Props) => {
                   <div className=" relative w-full h-full aspect-square">
                     <Image
                       fill
-                      src={answer.postImage}
+                      src={answer.profilePic}
                       alt="profile picture"
                       referrerPolicy="no-referrer"
                     />

@@ -1,10 +1,6 @@
 "use client";
 
-
-
-
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { postData } from "@/lib/data";
 import QuePost from "@/components/queAnsPage/QuePost";
@@ -12,16 +8,86 @@ import { Tiptap as TipTap } from "@/components/TipTap";
 import AnsPost from "@/components/queAnsPage/AnsPost";
 import RecentFeed from "@/components/queAnsPage/RecentFeed";
 
+import { db } from "@/utils/firebase";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { get } from "http";
+
 
 type Props = {
   params: {
     postId: string;
   };
+
+  post: {
+    id: string;
+    title: string;
+    name: string;
+    description: string;
+    profilePic: string;
+    postImage: string;
+    likes: number;
+    comments: number;
+    shares: number;
+  };
+};
+
+type AnswerType = {
+  // id: string;
+  name: string;
+  description: string;
+  profilePic: string;
+  // postImage: string;
+  likes: number;
+  comments: number;
+  shares: number;
+  // Add any other fields as necessary
 };
 
 const PostPage = ({ params: { postId } }: Props) => {
-  // console.log(params.postId)
-  const queObject = postData.filter((post) => post.id === postId)[0];
+  // console.log(postId);
+  // const queObject = postData.filter((post) => post.id === postId)[0];
+
+  const [queObject, setQueObject] = useState<Props["post"]>({
+    id: "",
+    title: "",
+    name: "",
+    description: "",
+    profilePic: "",
+    postImage: "",
+    likes: 0,
+    comments: 0,
+    shares: 0,
+  });
+  const [answers, setAnswers] = useState<AnswerType[]>([]);
+
+  useEffect(() => {
+    const fetchQueandAns = async () => {
+      try {
+
+        //main question fetching
+        const queRef = doc(db, "questions", postId);
+        const queDoc = await getDoc(queRef);
+
+        if (queDoc.exists()) {
+          setQueObject(queDoc.data() as Props["post"]);
+        } else {
+          console.log("No such document!");
+        }
+
+        //answers fetching
+        const ansRef = collection(db, "questions", postId, "answers");
+        const ansSnapshot = await getDocs(ansRef);                   //getting whole collection of answers for the question
+
+        const answers = ansSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() as AnswerType }));
+
+        setAnswers(answers);
+        
+      } catch (error) {
+        console.log('Error fetching que details',error);
+      }
+    }
+    fetchQueandAns();
+  }, [postId]);
 
   const [description, setDescription] = useState("");
 
@@ -40,7 +106,7 @@ const PostPage = ({ params: { postId } }: Props) => {
 
         {/* Answers to the question */}
         <div>
-          <AnsPost answers={queObject?.answers} />
+          <AnsPost answers={answers} />
         </div>
       </div>
 

@@ -59,7 +59,7 @@ const QuePost = ({ post }: Props) => {
             </Avatar>
             {/* </div> */}
             <Separator orientation="vertical" className=" h-5 mt-4 " />
-            <span className=" mt-4">{post?.name}</span>{" "}
+            <span className=" mt-4">{post.name}</span>{" "}
             <svg
               viewBox="0 0 48 48"
               className=" mt-5 w-2 h-2"

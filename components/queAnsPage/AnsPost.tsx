@@ -15,7 +15,7 @@ type Props = {
   answers: {
     id: string;
     name: string;
-    profilePic: string;
+    // profilePic: string;
     postImage: string;
     // title: string;
     description: string;
@@ -35,7 +35,7 @@ const AnsPost = ({ answers }: Props) => {
           key={answer.id}
           className="rounded-md bg-white dark:bg-[#262626] shadow mt-7 space-y-4" 
         >
-          <div className="px-6 py-14 flex justify-between">
+          <div className="px-6 py-5 flex justify-between">
             <PostVoteClient
             //   postId={post.id}
             //   initialVotesAmt={_votesAmt}

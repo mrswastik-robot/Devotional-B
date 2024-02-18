@@ -87,6 +87,9 @@ export const postData = [
         postImage: 'https://source.unsplash.com/random',
         title:'This one is the right answer', 
         description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book',
+        likes: 123,
+        comments: 12,
+        shares: 44,
     },
     ]
     },
@@ -102,6 +105,41 @@ export const postData = [
     likes: 123,
     comments: 12,
     shares: 44,
+    answers: [
+      {
+        id: '1021',
+        name: 'Allu Arjun',
+        profilePic: 'https://randomuser.me/api/portraits',
+        postImage: 'https://source.unsplash.com/random',
+        title:'This one is the right answer', 
+        description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+        likes: 123,
+        comments: 12,
+        shares: 44,
+      },
+      {
+        id: '1022',
+        name: 'Allu Arjun',
+        profilePic: 'https://randomuser.me/api/portraits',
+        postImage: 'https://source.unsplash.com/random',
+        title:'This one is the right answer', 
+        description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+        likes: 123,
+        comments: 12,
+        shares: 44,
+      },
+      {
+        id: '1023',
+        name: 'Allu Arjun',
+        profilePic: 'https://randomuser.me/api/portraits',
+        postImage: 'https://source.unsplash.com/random',
+        title:'This one is the right answer', 
+        description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+        likes: 123,
+        comments: 12,
+        shares: 44,
+      },
+    ]
     },
 
     {
@@ -114,6 +152,41 @@ export const postData = [
     likes: 123,
     comments: 12,
     shares: 44,
+    answers: [
+      {
+        id: '1031',
+        name: 'Allu Arjun',
+        profilePic: 'https://randomuser.me/api/portraits',
+        postImage: 'https://source.unsplash.com/random',
+        title:'This one is the right answer', 
+        description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+        likes: 123,
+        comments: 12,
+        shares: 44,
+      },
+      {
+        id: '1032',
+        name: 'Allu Arjun',
+        profilePic: 'https://randomuser.me/api/portraits',
+        postImage: 'https://source.unsplash.com/random',
+        title:'This one is the right answer', 
+        description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+        likes: 123,
+        comments: 12,
+        shares: 44,
+      },
+      {
+        id: '1033',
+        name: 'Allu Arjun',
+        profilePic: 'https://randomuser.me/api/portraits',
+        postImage: 'https://source.unsplash.com/random',
+        title:'This one is the right answer', 
+        description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+        likes: 123,
+        comments: 12,
+        shares: 44,
+      },
+    ]
     },
 ]
 

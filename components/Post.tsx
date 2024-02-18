@@ -66,11 +66,11 @@ const Post = ({post}: Props) => {
             <Button variant='ghost' className=' text-blue-500 text-sm mt-1 p-0'>Follow</Button>
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
-          <a href={`/postPage/${post.id}`}>
+          <Link href={`/postPage/${post.id}`}>
             <h1 className='text-lg font-semibold py-2 leading-6 text-gray-900 dark:text-white'>
               {post.title}
             </h1>
-          </a>
+          </Link>
 
           <div
             className='relative text-sm max-h-40 w-full overflow-clip'

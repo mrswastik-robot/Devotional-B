@@ -18,17 +18,30 @@ type Props = {
     postId: string;
   };
 
-  post: {
-    id: string;
-    title: string;
-    name: string;
-    description: string;
-    profilePic: string;
-    postImage: string;
-    likes: number;
-    comments: number;
-    shares: number;
-  };
+  // post: {
+  //   id: string;
+  //   title: string;
+  //   name: string;
+  //   description: string;
+  //   profilePic: string;
+  //   postImage: string;
+  //   likes: number;
+  //   comments: number;
+  //   shares: number;
+  // };
+};
+
+type QuestionType = {
+  id: string;
+  title: string;
+  name: string;
+  description: string;
+  profilePic: string;
+  postImage: string;
+  likes: number;
+  comments: number;
+  shares: number;
+  // Add any other fields as necessary
 };
 
 type AnswerType = {
@@ -47,17 +60,7 @@ const PostPage = ({ params: { postId } }: Props) => {
   // console.log(postId);
   // const queObject = postData.filter((post) => post.id === postId)[0];
 
-  const [queObject, setQueObject] = useState<Props["post"]>({
-    id: "",
-    title: "",
-    name: "",
-    description: "",
-    profilePic: "",
-    postImage: "",
-    likes: 0,
-    comments: 0,
-    shares: 0,
-  });
+  const [queObject, setQueObject] = useState<QuestionType>({} as QuestionType); //postData.filter((post) => post.id === postId)[0
   const [answers, setAnswers] = useState<AnswerType[]>([]);
 
   useEffect(() => {
@@ -69,7 +72,7 @@ const PostPage = ({ params: { postId } }: Props) => {
         const queDoc = await getDoc(queRef);
 
         if (queDoc.exists()) {
-          setQueObject(queDoc.data() as Props["post"]);
+          setQueObject(queDoc.data() as QuestionType);
         } else {
           console.log("No such document!");
         }

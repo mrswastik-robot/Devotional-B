@@ -7,7 +7,7 @@ type Props = {}
 
 const RecentFeed = (props: Props) => {
   return (
-    <div className='  px-6 py-4'>
+    <div className='  px-6 py-4 dark:bg-[#262626]'>
 
       <div>
         <h1 className='font-normal text-xl md:text-base uppercase'>Recent Posts</h1>

@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import TopFeedCard from "@/components/TopFeedCard";
+import { Tiptap } from "@/components/TipTap";
 
 export default function Home() {
   return (
@@ -60,6 +61,7 @@ export default function Home() {
                         Create your question here. Click post when you are done.
                       </DialogDescription>
                     </DialogHeader>
+                      {/* <Tiptap /> */}
                       <Textarea className="w-full min-h-[500px]" placeholder="What's your question?" />
                     <DialogFooter>
                       <Button type="submit" className=" w-full">Post</Button>

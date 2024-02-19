@@ -64,6 +64,8 @@ const Navbar = (props: Props) => {
 
         <div className=" flex gap-4">
           <ThemeToggler className=" mr-4" />
+
+          <Link href="/profilePage">
           <Avatar>
             <div className=" relative w-full h-full aspect-square">
               <Image
@@ -75,6 +77,8 @@ const Navbar = (props: Props) => {
             </div>
             <AvatarFallback>SP</AvatarFallback>
           </Avatar>
+          </Link>
+
         </div>
       </div>
     </div>

@@ -77,7 +77,7 @@ const Post = ({post}: Props) => {
             ref={pRef}>
             {/* <EditorOutput content={post.content} /> */}
             <p>{post.description}</p>
-            <div className='absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/80 dark:from-[#262626] to-transparent'></div>
+            <div className='absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/90 dark:from-[#262626] to-transparent'></div>
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
               

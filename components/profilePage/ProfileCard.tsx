@@ -2,16 +2,18 @@ import React from "react";
 import Image from "next/image";
 import { Button } from "../ui/button";
 
-type Props = {};
+type Props = {
+    user: any;
+};
 
-const ProfileCard = (props: Props) => {
+const ProfileCard = ({user}: Props) => {
   return (
     <div>
       <div className="flex items-center justify-evenly mx-auto bg-[#FFFFFF] dark:bg-[#262626] p-5 rounded-lg">
 
         <div>
         <Image
-          src="/oppenheimer.jpg"
+          src={user?.photoURL || '/nodp.webp'}
           width={300}
           height={300}
           className=" w-[10rem] h-[10rem] rounded-full"
@@ -22,7 +24,7 @@ const ProfileCard = (props: Props) => {
 
 
         <div className="space-y-5">
-          <h1 className="text-4xl font-bold">Swastik Patel</h1>
+          <h1 className="text-4xl font-bold">{user?.displayName}</h1>
           <div className=" flex gap-x-4 mt-4 text-lg">
             <p>Posts: 0</p>
             <svg

@@ -4,6 +4,8 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import Placeholder from "@tiptap/extension-placeholder";
+
 import ListItem from "@tiptap/extension-list-item";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
@@ -58,53 +60,9 @@ const MenuBar = ({ editor }) => {
         >
           <FaStrikethrough />
         </button>
-        {/* <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 2 }) ? "is_active" : ""
-          }
-        >
-          <FaHeading />
-        </button> */}
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 3 }) ? "is_active" : ""
-          }
-        >
-          <FaHeading className="heading3" />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") ? "is_active" : ""}
-        >
-          <FaListUl />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") ? "is_active" : ""}
-        >
-          <FaListOl />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={editor.isActive("blockquote") ? "is_active" : ""}
-        >
-          <FaQuoteLeft />
-        </button>
+
       </div>
-      <div className="  flex gap-4 ">
-        <button onClick={() => editor.chain().focus().undo().run()}>
-          <FaUndo />
-        </button>
-        <button onClick={() => editor.chain().focus().redo().run()}>
-          <FaRedo />
-        </button>
-      </div>
+      
     </div>
   );
 };
@@ -126,11 +84,18 @@ const MenuBar = ({ editor }) => {
 
 export const Tiptap = ({ setDescription }) => {
   const editor = useEditor({
-    extensions: [StarterKit, Underline , ListItem, BulletList, OrderedList],
-    content: `Type your answer here ...`,
+    extensions: [StarterKit, Underline ,
+      Placeholder.configure({
+        placeholder: "Write ...",
+        placeholderClassName: "text-gray-400",
+        emptyNodeText: "Write ...",
+        
+      }),
+    ],
+    content: ``,
     editorProps: {
       attributes: {
-        class: "prose rounded-lg border border-input bg-black  ring-offset-2 disabled:opacity-50 min-h-[15rem] p-4 py-[8rem]",
+        class: "prose rounded-lg border border-input   ring-offset-2 disabled:opacity-50  min-h-[10rem] p-4 py-[8rem]",
       },
     },
     
@@ -138,6 +103,7 @@ export const Tiptap = ({ setDescription }) => {
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       setDescription(html);
+      // console.log("HTML", html);
     },
   });
 

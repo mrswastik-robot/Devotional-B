@@ -1,11 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import React, { useEffect, useState } from "react";
 
 import {Home as HomeIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 import CustomFeed from "@/components/CustomFeed";
 import RightHandFeed from "@/components/RightHandFeed/RightHandFeed";
+import TopFeedCard from "@/components/TopFeedCard";
 
 import {
   Dialog,
@@ -16,14 +20,61 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormLabel,
+  FormField,
+  FormItem,
+  FormMessage
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import TopFeedCard from "@/components/TopFeedCard";
+
+import {useForm} from "react-hook-form";
+
 import { Tiptap } from "@/components/TipTap";
+import { z } from "zod";
+import {zodResolver} from "@hookform/resolvers/zod";
+import { QuestionType } from "@/schemas/question";
+
+import { auth } from "@/utils/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useRouter } from "next/navigation";
+
+type Input = z.infer<typeof QuestionType>;
+
 
 export default function Home() {
+
+  const router = useRouter();
+  const [user, loading] = useAuthState(auth);
+
+  useEffect(() => {
+    if(!user)
+      router.push('/auth');
+  }, [user, loading])
+
+  const [description, setDescription] = useState("");
+  console.log(description);
+
+  const form = useForm<Input>({
+    mode: "onChange",
+    resolver: zodResolver(QuestionType),
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+  });
+
+  function onSubmit(data: Input) {
+    console.log(data.title);
+    // console.log(data.description);
+    // console.log("Submitted");
+  }
+
   return (
     <>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
@@ -62,10 +113,52 @@ export default function Home() {
                       </DialogDescription>
                     </DialogHeader>
                       {/* <Tiptap /> */}
-                      <Textarea className="w-full min-h-[500px]" placeholder="What's your question?" />
-                    <DialogFooter>
-                      <Button type="submit" className=" w-full">Post</Button>
-                    </DialogFooter>
+                      {/* <Textarea className="w-full min-h-[500px]" placeholder="What's your question?" /> */}
+
+                      <Form {...form}>
+                        <form
+                        className="relative space-y-3 overflow-hidden"
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        >
+
+                          {/* Title */}
+                          <FormField
+                          control={form.control}
+                          name="title"
+                          render = {({field}) => (
+                            <FormItem>
+                              <FormLabel>Title</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Title for the question ..." {...field}/>
+                              </FormControl>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
+
+                          {/* TipTap Editor */}
+                          <FormField
+                          control={form.control}
+                          name="description"
+                          render = {({field}) => (
+                            <FormItem>
+                              <FormLabel>Description</FormLabel>
+                              <FormControl>
+                                <Tiptap setDescription={setDescription} />
+                              </FormControl>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
+
+                          
+                            <Button type="submit" className=" w-full">Post</Button>
+                          
+
+                        </form>
+                      </Form>
+
+                    
                   </DialogContent>
               </Dialog>
               

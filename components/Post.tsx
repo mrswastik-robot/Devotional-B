@@ -91,7 +91,7 @@ const Post = ({post}: Props) => {
         <Link
           href={`/postPage/${post.id}`}
           className='w-fit flex items-center gap-2'>
-          <MessageSquare className='h-4 w-4' /> {5} comments
+          <MessageSquare className='h-4 w-4' /> {5} Answers
         </Link>
         <Link href={`/r/post/${post.id}`} className='w-fit flex items-center gap-2'>
           <Share className='h-4 w-4' /> Share

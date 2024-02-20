@@ -16,11 +16,16 @@ import { Input } from "./ui/input";
 import { ThemeToggler } from "./ThemeToggler";
 import { Button } from "./ui/button";
 
+import { auth } from "@/utils/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 type Props = {};
 
 const Navbar = (props: Props) => {
 
   const [clicked, setClicked] = useState("");
+
+  const [user, loading] = useAuthState(auth);
 
   return (
     <div className="fixed top-0 inset-x-0 h-fit bg-zinc-100 dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2">
@@ -65,19 +70,26 @@ const Navbar = (props: Props) => {
         <div className=" flex gap-4">
           <ThemeToggler className=" mr-4" />
 
-          <Link href="/profilePage">
-          <Avatar>
-            <div className=" relative w-full h-full aspect-square">
-              <Image
-                fill
-                src="https://avatars.githubusercontent.com/u/107865087?v=4"
-                alt="profile picture"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <AvatarFallback>SP</AvatarFallback>
-          </Avatar>
-          </Link>
+          {(user) ? (
+            <Link href="/profilePage">
+            <Avatar>
+              <div className=" relative w-full h-full aspect-square">
+                <Image
+                  fill
+                  src={user?.photoURL || "/nodp.webp"}
+                  alt="profile picture"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <AvatarFallback>SP</AvatarFallback>
+            </Avatar>
+            </Link>
+          ) : (
+            <Link href="/auth">
+              <Button variant="default" className=" rounded-3xl">Sign In</Button>
+            </Link>
+          )}
+          
 
         </div>
       </div>

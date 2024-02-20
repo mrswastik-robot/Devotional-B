@@ -1,7 +1,7 @@
 "use client";
 import ProfileCard from '@/components/profilePage/ProfileCard'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { auth } from '@/utils/firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -15,9 +15,11 @@ const ProfilePage = (props: Props) => {
     const [user, loading] = useAuthState(auth);
     // console.log(user);
 
-    if(!user)
-        router.push('/auth');
-
+    useEffect(() => {
+        if(!user)
+          router.push('/auth');
+      }
+    , [user, loading])
 
   return (
     <div className=' mt-4'>

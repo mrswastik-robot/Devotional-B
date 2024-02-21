@@ -1,10 +1,14 @@
 
 'use client'
 
+import React, { useCallback } from "react";
+
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
 
 import ListItem from "@tiptap/extension-list-item";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -26,8 +30,44 @@ import {
   FaUnderline,
   FaUndo,
 } from "react-icons/fa";
+import { IoIosLink } from "react-icons/io";
+import { FaImages } from "react-icons/fa6";
 
 const MenuBar = ({ editor }) => {
+
+  //inserting links
+  const setLink = useCallback(() => {
+    const previousUrl = editor.getAttributes('link').href
+    const url = window.prompt('URL', previousUrl)
+
+    // cancelled
+    if (url === null) {
+      return
+    }
+
+    // empty
+    if (url === '') {
+      editor.chain().focus().extendMarkRange('link').unsetLink()
+        .run()
+
+      return
+    }
+
+    // update link
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url })
+      .run()
+  }, [editor])
+
+
+  //inserting images through URL
+  const addImage = () => {
+    const url = window.prompt('URL')
+
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run()
+    }
+  }
+
 
   if (!editor) {
     return null;
@@ -63,6 +103,18 @@ const MenuBar = ({ editor }) => {
           className={editor.isActive("strike") ? "is_active" : ""}
         >
           <FaStrikethrough />
+        </button>
+
+        <button 
+          type="button"
+          onClick={setLink} className={editor.isActive('link') ? 'is-active' : ''}>
+          <IoIosLink />  
+      </button>
+
+        <button 
+          type="button"
+          onClick={addImage}>
+          <FaImages />
         </button>
 
       </div>
@@ -101,6 +153,16 @@ export const Tiptap = ({ onChange ,value }) => {
       //   content: `write ...`,
         
       // }),
+      Link.configure({
+        openOnClick: true,
+        autolink: true,
+        editorProps: {
+          attributes: {
+            class: "underline text-blue-500",
+          },
+        },
+      }),
+      Image,
     ],
     content: ``,
     placeholder: `Write ...`,

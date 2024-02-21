@@ -8,10 +8,39 @@ import { Tiptap as TipTap } from "@/components/TipTap";
 import AnsPost from "@/components/queAnsPage/AnsPost";
 import RecentFeed from "@/components/queAnsPage/RecentFeed";
 
-import { db } from "@/utils/firebase";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { get } from "http";
+import { auth, db } from "@/utils/firebase";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+  onSnapshot,
+} from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 
+import {
+  Form,
+  FormControl,
+  FormLabel,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+import { useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
+
+import { Tiptap } from "@/components/TipTap";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AnswerDescriptionType } from "@/schemas/answer";
+
+type Input = z.infer<typeof AnswerDescriptionType>;
 
 type Props = {
   params: {
@@ -63,40 +92,73 @@ const PostPage = ({ params: { postId } }: Props) => {
   const [queObject, setQueObject] = useState<QuestionType>({} as QuestionType); //postData.filter((post) => post.id === postId)[0
   const [answers, setAnswers] = useState<AnswerType[]>([]);
 
-  useEffect(() => {
-    const fetchQueandAns = async () => {
-      try {
+  const router = useRouter();
+  const [user, loading] = useAuthState(auth);
 
-        //main question fetching
-        const queRef = doc(db, "questions", postId);
-        const queDoc = await getDoc(queRef);
+  const form = useForm<Input>({
+    resolver: zodResolver(AnswerDescriptionType),
+    defaultValues: {
+      description: "",
+    },
+  });
 
-        if (queDoc.exists()) {
-          setQueObject(queDoc.data() as QuestionType);
-        } else {
-          console.log("No such document!");
-        }
-
-        //answers fetching
-        const ansRef = collection(db, "questions", postId, "answers");
-        const ansSnapshot = await getDocs(ansRef);                   //getting whole collection of answers for the question
-
-        const answers = ansSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() as AnswerType }));
-
-        setAnswers(answers);
-        
-      } catch (error) {
-        console.log('Error fetching que details',error);
+  //creating answer post for the question
+  async function createAnswerPost(data: Input) {
+    const docRef = await addDoc(
+      collection(db, "questions", postId, "answers"),
+      {
+        description: data.description,
+        uid: user?.uid,
+        name: user?.displayName,
+        profilePic: user?.photoURL,
+        createdAt: serverTimestamp(),
       }
-    }
-    fetchQueandAns();
+    );
+
+    console.log("Document written with ID: ", docRef.id);
+  }
+
+  function onSubmit(data: Input) {
+    console.log(data);
+
+    createAnswerPost(data);
+    form.reset();
+  }
+
+  //fetching question and answers to display on the page
+  useEffect(() => {
+    // Listener for the question
+    const queRef = doc(db, "questions", postId);
+    const queUnsub = onSnapshot(queRef, (doc) => {
+      if (doc.exists()) {
+        setQueObject(doc.data() as QuestionType);
+      } else {
+        console.log("No such document!");
+      }
+    });
+
+    // Listener for the answers
+    const ansRef = collection(db, "questions", postId, "answers");
+    const ansUnsub = onSnapshot(ansRef, (snapshot) => {
+      const answers = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as AnswerType),
+      }));
+
+      setAnswers(answers);
+    });
+
+    // Cleanup function to unsubscribe from the listeners when the component unmounts
+    return () => {
+      queUnsub();
+      ansUnsub();
+    };
   }, [postId]);
 
   const [description, setDescription] = useState("");
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6">
-
       <div className=" md:col-span-5 ">
         <div>
           <QuePost post={queObject} />
@@ -106,6 +168,35 @@ const PostPage = ({ params: { postId } }: Props) => {
         <div>
           {/* <TipTap setDescription={setDescription} /> */}
           {/* <TipTap /> */}
+          <Form {...form}>
+            <form
+              className=" relative space-y-3 overflow-hidden"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
+              {/* TipTap Editor */}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* <FormLabel>Write an answer...</FormLabel> */}
+                    <FormControl>
+                      <Controller
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => <Tiptap {...field} />}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" className=" w-full">
+                Post
+              </Button>
+            </form>
+          </Form>
         </div>
 
         {/* Answers to the question */}

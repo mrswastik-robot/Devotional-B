@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import parse from "html-react-parser";
 
 import { MessageSquare } from "lucide-react";
 import { Share } from "lucide-react";
@@ -98,7 +99,8 @@ const AnsPost = ({ answers }: Props) => {
                 ref={pRef}
               >
                 {/* <EditorOutput content={post.content} /> */}
-                <p>{answer.description}</p>
+            <p className="ProseMirror">{answer.description ? parse(answer.description) : ""}</p>
+
                 {/* <div className='absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/80 dark:from-[#262626] to-transparent'></div> */}
                 {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long

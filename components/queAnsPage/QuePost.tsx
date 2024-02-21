@@ -36,7 +36,7 @@ type Props = {
 const QuePost = ({ post }: Props) => {
   const pRef = useRef<HTMLDivElement>(null);
 
-console.log(typeof post.description)
+// console.log(typeof post.description)
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow">
       <div className="px-6 py-14 flex justify-between">

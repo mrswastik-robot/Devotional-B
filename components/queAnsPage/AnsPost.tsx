@@ -94,7 +94,7 @@ const AnsPost = ({ answers }: Props) => {
               </a> */}
 
               <div
-                className="relative text-lg max-h-40 w-full overflow-clip"
+                className="relative text-lg max-h-50 w-full "
                 ref={pRef}
               >
                 {/* <EditorOutput content={post.content} /> */}

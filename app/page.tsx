@@ -34,15 +34,18 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 import {useForm} from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { Tiptap } from "@/components/TipTap";
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import { QuestionType } from "@/schemas/question";
 
-import { auth } from "@/utils/firebase";
+import { auth , db } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
+
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -58,10 +61,11 @@ export default function Home() {
   }, [user, loading])
 
   const [description, setDescription] = useState("");
-  console.log(description);
+  // console.log(description);
 
   const form = useForm<Input>({
-    mode: "onChange",
+    // mode: "onSubmit",
+    // mode: "onChange",
     resolver: zodResolver(QuestionType),
     defaultValues: {
       title: "",
@@ -69,11 +73,28 @@ export default function Home() {
     },
   });
 
-  function onSubmit(data: Input) {
-    console.log(data.title);
-    // console.log(data.description);
-    // console.log("Submitted");
+  async function createQuestionPost(data: Input) {
+
+    const docRef = await addDoc(collection(db, "questions"), {
+      title: data.title,
+      description: data.description,
+      uid: user?.uid,
+      profilePic: user?.photoURL,
+      name: user?.displayName,
+      createdAt: serverTimestamp(),
+    });
+
+    console.log("Document written with ID: ", docRef.id);
   }
+
+  function onSubmit(data: Input) {
+    console.log(data);
+
+    createQuestionPost(data);
+    
+  }
+
+  // form.watch();
 
   return (
     <>
@@ -138,17 +159,24 @@ export default function Home() {
 
                           {/* TipTap Editor */}
                           <FormField
-                          control={form.control}
-                          name="description"
-                          render = {({field}) => (
-                            <FormItem>
-                              <FormLabel>Description</FormLabel>
-                              <FormControl>
-                                <Tiptap setDescription={setDescription} />
-                              </FormControl>
-                              <FormMessage/>
-                            </FormItem>
-                          )}
+                            control={form.control}
+                            name="description"
+                            render = {({field}) => (
+                              <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <FormControl>
+                                  <Controller
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                      <Tiptap {...field} />
+                                    )}
+                                    
+                                   /> 
+                                </FormControl>
+                                <FormMessage/>
+                              </FormItem>
+                            )}
                           />
 
                           

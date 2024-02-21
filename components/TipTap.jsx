@@ -37,24 +37,28 @@ const MenuBar = ({ editor }) => {
     <div className="pb-5 flex items-left px-4 border rounded-lg py-3 mt-4 gap-x-4">
       <div className=" flex gap-4">
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={editor.isActive("bold") ? "is_active" : ""}
         >
           <FaBold />
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={editor.isActive("italic") ? "is_active" : ""}
         >
           <FaItalic />
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={editor.isActive("underline") ? "is_active" : ""}
         >
           <FaUnderline />
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={editor.isActive("strike") ? "is_active" : ""}
         >
@@ -82,17 +86,24 @@ const MenuBar = ({ editor }) => {
 //   })
 // ];
 
-export const Tiptap = ({ setDescription }) => {
+export const Tiptap = ({ onChange ,value }) => {
   const editor = useEditor({
     extensions: [StarterKit, Underline ,
-      Placeholder.configure({
-        placeholder: "Write ...",
-        placeholderClassName: "text-gray-400",
-        emptyNodeText: "Write ...",
+      // Placeholder.configure({
+      //   placeholder: "Write ...",
+      //   placeholderClassName: "text-gray-400",
+      //   emptyNodeText: "Write ...",
+      //   editorProps: {
+      //     attributes: {
+      //       class: "prose rounded-lg border border-input text-black  ring-offset-2 disabled:opacity-50  min-h-[10rem] p-4 py-[8rem]",
+      //     },
+      //   },
+      //   content: `write ...`,
         
-      }),
+      // }),
     ],
     content: ``,
+    placeholder: `Write ...`,
     editorProps: {
       attributes: {
         class: "prose rounded-lg border border-input   ring-offset-2 disabled:opacity-50  min-h-[10rem] p-4 py-[8rem]",
@@ -102,7 +113,8 @@ export const Tiptap = ({ setDescription }) => {
 
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
-      setDescription(html);
+      // setDescription(html);
+      onChange(html);
       // console.log("HTML", html);
     },
   });

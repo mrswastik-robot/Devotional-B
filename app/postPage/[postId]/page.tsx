@@ -104,7 +104,8 @@ const PostPage = ({ params: { postId } }: Props) => {
 
         {/* TipEditor */}
         <div>
-          <TipTap setDescription={setDescription} />
+          {/* <TipTap setDescription={setDescription} /> */}
+          {/* <TipTap /> */}
         </div>
 
         {/* Answers to the question */}

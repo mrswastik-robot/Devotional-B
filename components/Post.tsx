@@ -2,6 +2,8 @@
 
 import React, { useRef } from 'react'
 
+import parse from 'html-react-parser'
+
 import { MessageSquare } from 'lucide-react'
 import { Share } from 'lucide-react'
 import { Bookmark } from 'lucide-react'
@@ -52,7 +54,7 @@ const Post = ({post}: Props) => {
                     <div className=' relative w-full h-full aspect-square'>
                         <Image
                         fill
-                        src={post.postImage}
+                        src={post.profilePic}
                         alt='profile picture'
                         referrerPolicy='no-referrer'
                         />
@@ -76,7 +78,7 @@ const Post = ({post}: Props) => {
             className='relative text-sm max-h-40 w-full overflow-clip'
             ref={pRef}>
             {/* <EditorOutput content={post.content} /> */}
-            <p>{post.description}</p>
+            <p>{parse(post.description)}</p>
             <div className='absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/90 dark:from-[#262626] to-transparent'></div>
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long

@@ -2,6 +2,8 @@
 
 import React, { useRef } from "react";
 
+import parse from "html-react-parser";
+
 import { MessageSquare } from "lucide-react";
 import { Share } from "lucide-react";
 import { Bookmark } from "lucide-react";
@@ -34,6 +36,7 @@ type Props = {
 const QuePost = ({ post }: Props) => {
   const pRef = useRef<HTMLDivElement>(null);
 
+console.log(typeof post.description)
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow">
       <div className="px-6 py-14 flex justify-between">
@@ -50,7 +53,7 @@ const QuePost = ({ post }: Props) => {
               <div className=" relative w-full h-full aspect-square">
                 <Image
                   fill
-                  src='/oppenheimer.jpg'
+                  src={post.profilePic}
                   alt="profile picture"
                   referrerPolicy="no-referrer"
                 />
@@ -92,11 +95,11 @@ const QuePost = ({ post }: Props) => {
           {/* </a> */}
 
           <div
-            className="relative text-lg max-h-40 w-full overflow-clip"
+            className="relative text-lg max-h-50 w-full  "
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}
-            <p>{post.description}</p>
+            <p className="ProseMirror">{post.description ? parse(post.description) : ""}</p>
             {/* <div className='absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/80 dark:from-[#262626] to-transparent'></div> */}
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
@@ -107,12 +110,7 @@ const QuePost = ({ post }: Props) => {
       </div>
 
       <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 items-end flex justify-end gap-x-3 text-sm px-4 py-4 sm:px-6">
-        <Link
-          href={`/postPage/${post.id}`}
-          className="w-fit flex items-center gap-2"
-        >
-          <MessageSquare className="h-4 w-4" /> {5} comments
-        </Link>
+        
         <Link
           href={`/r/post/${post.id}`}
           className="w-fit flex items-center gap-2"

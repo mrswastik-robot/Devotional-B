@@ -29,6 +29,7 @@ type Props = {
     likes: number;
     comments: number;
     shares: number;
+    questionImageURL: string;
   };
   // id: string
 };
@@ -47,7 +48,7 @@ const QuePost = ({ post }: Props) => {
         />
 
         <div className="w-0 flex-1">
-          <div className="flex max-h-40 mt-1 space-x-3 text-xs text-gray-500">
+          <div className="flex max-h-60 mt-1 space-x-3 text-xs text-gray-500">
             {/* <div> */}
             <Avatar>
               <div className=" relative w-full h-full aspect-square">
@@ -93,6 +94,18 @@ const QuePost = ({ post }: Props) => {
               {post.title}
             </h1>
           {/* </a> */}
+
+          {post.questionImageURL ? (
+            <div className="relative w-full h-[400px]">
+              <Image
+                src={post.questionImageURL}
+                className="rounded-md"
+                alt="question image"
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+          ) : null}
 
           <div
             className="relative text-lg max-h-50 w-full  "

@@ -30,6 +30,7 @@ type Props = {
         likes: number
         comments: number
         shares: number
+        questionImageURL: string
     }
     // id: string
 }
@@ -73,6 +74,17 @@ const Post = ({post}: Props) => {
               {post.title}
             </h1>
           </Link>
+
+          {post.questionImageURL ? (
+            <div className='relative w-full h-60'>
+              <Image
+                src={post.questionImageURL}
+                layout='fill'
+                objectFit='cover'
+                alt='post image'
+              />
+            </div>
+          ) : null}
 
           <div
             className='relative text-sm max-h-40 w-full overflow-clip'

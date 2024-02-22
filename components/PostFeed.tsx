@@ -19,6 +19,7 @@ type PostType = {
   likes: number;
   shares: number;
   comments: number;
+  questionImageURL: string;
   // Add any other fields as necessary
 }
 

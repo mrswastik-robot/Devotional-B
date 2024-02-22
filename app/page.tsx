@@ -41,11 +41,12 @@ import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import { QuestionType } from "@/schemas/question";
 
-import { auth , db } from "@/utils/firebase";
+import { auth , db , storage } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -54,6 +55,38 @@ export default function Home() {
 
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
+
+  const [imageUpload , setImageUpload] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  const uploadImage = () => {
+    if(imageUpload == null) return;
+
+    const storageRef = ref(storage, `questions/${imageUpload.name}`);
+
+    const uploadTask = uploadBytesResumable(storageRef, imageUpload);
+
+    uploadTask.on('state_changed', 
+    (snapshot:any) => {
+      // You can use this to display upload progress
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+    }, 
+    (error: any) => {
+      // Handle unsuccessful uploads
+      console.log('Upload failed', error);
+    }, 
+    () => {
+      // Upload completed successfully, now we can get the download URL
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        console.log('File available at', downloadURL);
+        // Save the URL to state or wherever you want to keep it
+        setImageUrl(downloadURL);
+      });
+    }
+  );
+
+  }
 
   useEffect(() => {
     if(!user)
@@ -70,6 +103,7 @@ export default function Home() {
     defaultValues: {
       title: "",
       description: "",
+      questionImageURL: "",
     },
   });
 
@@ -82,13 +116,14 @@ export default function Home() {
       profilePic: user?.photoURL,
       name: user?.displayName,
       createdAt: serverTimestamp(),
+      questionImageURL: imageUrl,
     });
 
     console.log("Document written with ID: ", docRef.id);
   }
 
   function onSubmit(data: Input) {
-    console.log(data);
+    // console.log(data);
 
     createQuestionPost(data);
     
@@ -185,6 +220,16 @@ export default function Home() {
 
                         </form>
                       </Form>
+
+                      <div>
+                        {/* <input type="file" onChange={(event) => {setImageUpload(event.target.files[0])}}/> */}
+                        <input type="file" onChange={(event) => {
+                          if(event.target.files) {
+                            setImageUpload(event.target.files[0]);
+                          }
+                        }}/>
+                        <button onClick={uploadImage}>Upload Image</button>
+                      </div>
 
                     
                   </DialogContent>

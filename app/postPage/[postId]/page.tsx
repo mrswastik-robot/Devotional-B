@@ -70,6 +70,7 @@ type QuestionType = {
   likes: number;
   comments: number;
   shares: number;
+  questionImageURL: string;
   // Add any other fields as necessary
 };
 

@@ -5,6 +5,7 @@ export const AnswerDescriptionType = z.object({
     // id: z.string(),
     // questionId: z.string(),
     description: z.string().min(10, { message: 'Answer must be at least 10 characters long' }),
+    answerImageURL: z.string().optional(),
     // createdAt: z.string(),
     // updatedAt: z.string(),
     // profilePic: z.string(),

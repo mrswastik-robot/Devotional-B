@@ -23,6 +23,7 @@ type Props = {
     likes: number;
     comments: number;
     shares: number;
+    answerImageURL: string;
   }[];
 };
 
@@ -93,6 +94,19 @@ const AnsPost = ({ answers }: Props) => {
                   {answer.title}
                 </h1>
               </a> */}
+
+              {answer.answerImageURL ? (
+                  <div className="relative w-full h-[400px]">
+                    <Image
+                      src={answer.answerImageURL}
+                      className="rounded-md"
+                      layout="fill"
+                      alt="answer image"
+                      objectFit="contain"
+                    />
+                  </div>
+                ) : null
+              }
 
               <div
                 className="relative text-lg max-h-50 w-full "

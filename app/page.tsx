@@ -228,7 +228,7 @@ export default function Home() {
                             setImageUpload(event.target.files[0]);
                           }
                         }}/>
-                        <button onClick={uploadImage}>Upload Image</button>
+                        <Button onClick={uploadImage}>Upload Image</Button>
                       </div>
 
                     

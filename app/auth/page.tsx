@@ -15,6 +15,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  sendEmailVerification,
 } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -62,6 +63,15 @@ const LoginPage = (props: Props) => {
       .then(async(userCredential) => {
         const user = userCredential.user;
         // console.log(user);
+
+        // Send email verification
+        await sendEmailVerification(user)
+        .then(() => {
+          console.log('Verification email sent.');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
          //setting 'name' to email and 'profilePic' to url
         //  const docRef = doc(collection(db , "questions"));

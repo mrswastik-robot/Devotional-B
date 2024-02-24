@@ -3,7 +3,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 
-import React, { useEffect } from "react";
+import React, { useEffect , useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { auth, db } from "@/utils/firebase";
@@ -16,8 +16,22 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   sendEmailVerification,
+  signInAnonymously,
 } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 type Props = {};
 
@@ -27,6 +41,7 @@ const LoginPage = (props: Props) => {
 
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
+  const [anonymousUserName, setAnonymousUserName] = useState("");
 
   //gogle sign in
   const signInWithGoogle = async () => {
@@ -108,11 +123,32 @@ const LoginPage = (props: Props) => {
       });
   }
 
+
+  //signin anonymously
+  const signingInAnonymously = async (e:React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await signInAnonymously(auth)
+      .then(async(userCredential) => {
+        const user = userCredential.user;
+        // console.log(user);
+        // Update user's profile
+        await updateProfile(user, {
+          displayName: anonymousUserName, // Set displayName to anonymousUser
+          photoURL: "https://avatars.githubusercontent.com/u/107865087?v=4" // Set photoURL to a default image URL
+        });
+        router.push("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+
   useEffect(() => {
     if (user) {
       router.push("/");
     }
-  }, [user]);
+  }, [user , loading , router]);
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
@@ -248,10 +284,47 @@ const LoginPage = (props: Props) => {
                   <span className="ml-3">Sign In</span>
                 </button>
 
+                {/* sign in anonymously button */}
+                <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className=" w-full mt-6 bg-purple-400">Sigin Anonymously</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Be Unknown</DialogTitle>
+                        <DialogDescription>
+                          Create an anonymous username here.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <form onSubmit={signingInAnonymously}>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="name" className="text-right">
+                              Name
+                            </Label>
+                            <Input
+                              id="name"
+                              name="name"
+                              type="text"
+                              autoComplete="off"
+                              className="col-span-3"
+                              onChange={(e) => setAnonymousUserName(e.target.value)}
+                            />
+                          </div>
+                          
+                        </div>
+                        <DialogFooter>
+                          <Button type="submit">Enter</Button>
+                        </DialogFooter>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+
               </div>
             </div>
           </div>
         </div>
+
         <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
           <div
             className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
@@ -261,6 +334,9 @@ const LoginPage = (props: Props) => {
             }}
           ></div>
         </div>
+        
+        
+
       </div>
     </div>
   );

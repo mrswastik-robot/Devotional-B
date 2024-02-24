@@ -56,6 +56,8 @@ export default function Home() {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
 
+
+  //system image upload stuff
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 

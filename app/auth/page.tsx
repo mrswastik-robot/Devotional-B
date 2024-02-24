@@ -7,12 +7,14 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { auth, db } from "@/utils/firebase";
+import { collection , doc ,setDoc } from "firebase/firestore";
 import {
   signInWithPopup,
   GoogleAuthProvider,
   FacebookAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -57,10 +59,24 @@ const LoginPage = (props: Props) => {
 
   const signUpWithEmail = async () => {
     await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async(userCredential) => {
         const user = userCredential.user;
         // console.log(user);
-        
+
+         //setting 'name' to email and 'profilePic' to url
+        //  const docRef = doc(collection(db , "questions"));
+        //  await setDoc(docRef , {
+        //   name: user.email,
+        //   profilePic: "https://avatars.githubusercontent.com/u/107865087?v=4"
+        //  })
+
+        //above solution not worth it , will remove the code soon
+
+         // Update user's profile
+      await updateProfile(user, {
+        displayName: email, // Set displayName to email
+        photoURL: "https://avatars.githubusercontent.com/u/107865087?v=4" // Set photoURL to a default image URL
+      });
 
         
         router.push("/");
@@ -74,7 +90,7 @@ const LoginPage = (props: Props) => {
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        // console.log(user);
+        
         router.push("/");
       })
       .catch((error) => {

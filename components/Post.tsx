@@ -12,6 +12,7 @@ import  Link  from 'next/link'
 import Image from 'next/image'
 
 import PostVoteClient from './post-vote/PostVoteClient'
+import PostVoteClientPhone from './post-vote/PostVoteClientPhone'
 import { Avatar, AvatarFallback } from './ui/avatar'
 
 import { formatTimeToNow } from '@/lib/date'
@@ -48,6 +49,8 @@ const Post = ({post}: Props) => {
         //   initialVote={_currentVote?.type}
         />
 
+        {/* <PostVoteClientPhone/> */}
+
         <div className='w-0 flex-1'>
           <div className='flex max-h-40 mt-1 space-x-3 text-xs text-gray-500'>
             {/* <div> */}
@@ -66,7 +69,7 @@ const Post = ({post}: Props) => {
             <Separator orientation='vertical' className=' h-5 mt-4 '/>
             <span className=' mt-4'>{post.name}</span>{' '}            
             <svg viewBox="0 0 48 48" className=" mt-5 w-2 h-2" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z" fill="#333333"></path> </g></svg>
-            <Button variant='ghost' className=' text-blue-500 text-sm mt-1 p-0'>Follow</Button>
+            <Button variant='ghost' className=' text-blue-500 text-xs mt-1 p-0'>Follow</Button>
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           <Link href={`/postPage/${post.id}`}>
@@ -100,19 +103,30 @@ const Post = ({post}: Props) => {
         </div>
       </div>
 
-      <div className='bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 items-end flex justify-end gap-x-3 text-sm px-4 py-4 sm:px-6'>
+      <div className='bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 md:items-end flex justify-between md:justify-end md:gap-x-3 text-sm px-4 py-4 sm:px-6'>
 
-        <Link
-          href={`/postPage/${post.id}`}
-          className='w-fit flex items-center gap-2'>
-          <MessageSquare className='h-4 w-4' /> {5} Answers
-        </Link>
-        <Link href={`/r/post/${post.id}`} className='w-fit flex items-center gap-2'>
-          <Share className='h-4 w-4' /> Share
-        </Link>
-        <Link href={`/r/post/${post.id}`} className='w-fit flex items-center gap-2'>
-          <Bookmark className='h-4 w-4' /> Save
-        </Link>
+
+        <div className=' sm:block md:hidden '>
+          <PostVoteClientPhone/>
+        </div>
+
+
+        <div className=' flex gap-x-3'>
+          <Link
+            href={`/postPage/${post.id}`}
+            className='w-fit flex items-center gap-2'>
+            <MessageSquare className='h-4 w-4' /> <span className=' sm:block hidden'>5 Answers</span>
+          </Link>
+          <Link href={`/r/post/${post.id}`} className='w-fit flex items-center gap-2'>
+            <Share className='h-4 w-4' /> <span className=' sm:block hidden'>Share</span>
+          </Link>
+          <Link href={`/r/post/${post.id}`} className='w-fit flex items-center gap-2'>
+            <Bookmark className='h-4 w-4' /> <span className=' sm:block hidden'>Save</span>
+          </Link>
+        </div>
+
+        
+        
 
       </div>
     </div>

@@ -19,6 +19,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         askQue: "bg-[#FFFFFF] dark:bg-[#1A1A1B] border border-gray-200 dark:border-gray-700 text-black dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-gray-800",
+        votingPhoen: "b-0 "
       },
       size: {
         default: "h-10 px-4 py-2",

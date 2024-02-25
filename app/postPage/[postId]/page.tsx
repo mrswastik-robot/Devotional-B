@@ -253,7 +253,7 @@ const PostPage = ({ params: { postId } }: Props) => {
         </div>
       </div>
 
-      <div className=" col-span-2 overflow-hidden h-fit rounded-lg border border-gray-300 order-first md:order-last">
+      <div className=" col-span-2 overflow-hidden h-fit rounded-lg border border-gray-300 ">
         <RecentFeed />
       </div>
     </div>

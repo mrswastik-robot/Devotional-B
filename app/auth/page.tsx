@@ -287,13 +287,13 @@ const LoginPage = (props: Props) => {
                 {/* sign in anonymously button */}
                 <Dialog>
                     <DialogTrigger asChild>
-                      <Button className=" w-full mt-6 bg-purple-400">Sigin Anonymously</Button>
+                      <Button className=" w-full mt-6 bg-purple-400">Sign In as Guest</Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                       <DialogHeader>
-                        <DialogTitle>Be Unknown</DialogTitle>
+                        <DialogTitle>Welcome to the Devotional-B</DialogTitle>
                         <DialogDescription>
-                          Create an anonymous username here.
+                          No hassle of creating account. Just enter your name and start using the app ...
                         </DialogDescription>
                       </DialogHeader>
                       <form onSubmit={signingInAnonymously}>

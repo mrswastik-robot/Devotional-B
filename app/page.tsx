@@ -32,6 +32,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 
 import {useForm} from "react-hook-form";
 import { Controller } from "react-hook-form";
@@ -60,6 +61,7 @@ export default function Home() {
   //system image upload stuff
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [progress , setProgress] = useState<number | null>(0);
 
   const uploadImage = () => {
     if(imageUpload == null) return;
@@ -73,6 +75,7 @@ export default function Home() {
       // You can use this to display upload progress
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       console.log('Upload is ' + progress + '% done');
+      setProgress(progress);
     }, 
     (error: any) => {
       // Handle unsuccessful uploads
@@ -231,6 +234,7 @@ export default function Home() {
                           }
                         }}/>
                         <Button onClick={uploadImage}>Upload Image</Button>
+                        <Progress value={progress} className=" w-[70%]"/>
                       </div>
 
                     

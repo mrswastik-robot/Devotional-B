@@ -17,6 +17,8 @@ import {
   addDoc,
   serverTimestamp,
   onSnapshot,
+  query,
+  orderBy,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
@@ -177,7 +179,8 @@ const PostPage = ({ params: { postId } }: Props) => {
 
     // Listener for the answers
     const ansRef = collection(db, "questions", postId, "answers");
-    const ansUnsub = onSnapshot(ansRef, (snapshot) => {
+    const q = query(ansRef, orderBy('createdAt', 'desc')); // Order by 'createdAt' in descending order
+    const ansUnsub = onSnapshot(q, (snapshot) => {
       const answers = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...(doc.data() as AnswerType),
@@ -185,6 +188,7 @@ const PostPage = ({ params: { postId } }: Props) => {
 
       setAnswers(answers);
     });
+
 
     // Cleanup function to unsubscribe from the listeners when the component unmounts
     return () => {

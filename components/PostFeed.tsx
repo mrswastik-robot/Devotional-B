@@ -30,7 +30,7 @@ const PostFeed = (props: Props) => {
   useEffect(() => {
 
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef,);
+    const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
     const unsub = onSnapshot(q, (snapshot) => {
       setPosts(snapshot.docs.map((doc) => ({id: doc.id, ...doc.data()} as PostType)));

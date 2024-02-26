@@ -93,7 +93,7 @@ export default function Home() {
   useEffect(() => {
     if(!user)
       router.push('/auth');
-  }, [user, loading])
+  }, [user, loading , router])
 
   const [description, setDescription] = useState("");
   // console.log(description);

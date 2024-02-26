@@ -21,7 +21,7 @@ const ProfilePage = (props: Props) => {
         if(!user)
           router.push('/auth');
       }
-    , [user, loading])
+    , [user, loading , router])
 
   return (
     <div className=' mt-4'>

@@ -31,9 +31,11 @@ import {
   FormField,
   FormItem,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 
 import { useForm } from "react-hook-form";
 import { Controller } from "react-hook-form";
@@ -75,6 +77,8 @@ type QuestionType = {
   comments: number;
   shares: number;
   questionImageURL: string;
+  createdAt: string;
+  anonymity: boolean;
   // Add any other fields as necessary
 };
 
@@ -88,6 +92,8 @@ type AnswerType = {
   comments: number;
   shares: number;
   answerImageURL: string;
+  createdAt: string;
+  anonymity: boolean;
   // Add any other fields as necessary
 };
 
@@ -138,6 +144,7 @@ const PostPage = ({ params: { postId } }: Props) => {
     defaultValues: {
       description: "",
       answerImageURL: "",
+      anonymity: false,
     },
   });
 
@@ -152,6 +159,7 @@ const PostPage = ({ params: { postId } }: Props) => {
         profilePic: user?.photoURL,
         createdAt: serverTimestamp(),
         answerImageURL: imageUrl,
+        anonymity: data.anonymity,
       }
     );
 
@@ -233,6 +241,30 @@ const PostPage = ({ params: { postId } }: Props) => {
                   </FormItem>
                 )}
               />
+
+              {/* anonymity toggle */}
+              <FormField
+                            control={form.control}
+                            name="anonymity"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                                <div className="space-y-0.5">
+                                  <FormLabel className="text-base">
+                                    Answer Anonymously
+                                  </FormLabel>
+                                  <FormDescription>
+                                    Answer question without revealing your identity.
+                                  </FormDescription>
+                                </div>
+                                <FormControl>
+                                  <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
 
               <Button type="submit" className=" w-full">
                 Post

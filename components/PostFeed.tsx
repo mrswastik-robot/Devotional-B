@@ -20,6 +20,8 @@ type PostType = {
   shares: number;
   comments: number;
   questionImageURL: string;
+  createdAt: string;
+  anonymity: boolean;
   // Add any other fields as necessary
 }
 

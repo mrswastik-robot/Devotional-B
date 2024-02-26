@@ -30,12 +30,16 @@ type Props = {
     comments: number;
     shares: number;
     questionImageURL: string;
+    createdAt: string;
+    anonymity: boolean;
   };
   // id: string
 };
 
 const QuePost = ({ post }: Props) => {
   const pRef = useRef<HTMLDivElement>(null);
+
+  const isAnonymous = post.anonymity;
 
 // console.log(typeof post.description)
   return (
@@ -54,7 +58,7 @@ const QuePost = ({ post }: Props) => {
               <div className=" relative w-full h-full aspect-square">
                 <Image
                   fill
-                  src={post.profilePic}
+                  src={isAnonymous ? ('https://qph.cf2.quoracdn.net/main-qimg-73e139be8bfc1267eeed8ed6a2802109-lq') : (post.profilePic)}
                   alt="profile picture"
                   referrerPolicy="no-referrer"
                 />
@@ -63,7 +67,7 @@ const QuePost = ({ post }: Props) => {
             </Avatar>
             {/* </div> */}
             <Separator orientation="vertical" className=" h-5 mt-4 " />
-            <span className=" mt-4">{post.name}</span>{" "}
+            <span className=" mt-4">{isAnonymous ? ('Anonymous') : (post.name)}</span>{" "}
             <svg
               viewBox="0 0 48 48"
               className=" mt-5 w-2 h-2"

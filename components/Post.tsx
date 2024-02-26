@@ -32,6 +32,8 @@ type Props = {
         comments: number
         shares: number
         questionImageURL: string
+        createdAt: string
+        anonymity: boolean
     }
     // id: string
 }
@@ -39,6 +41,8 @@ type Props = {
 const Post = ({post}: Props) => {
 
     const pRef = useRef<HTMLDivElement>(null)
+
+    const isAnonymous = post.anonymity
 
   return (
     <div className='rounded-md bg-white dark:bg-[#262626] shadow'>
@@ -58,7 +62,7 @@ const Post = ({post}: Props) => {
                     <div className=' relative w-full h-full aspect-square'>
                         <Image
                         fill
-                        src={post.profilePic}
+                        src={isAnonymous ? ('https://qph.cf2.quoracdn.net/main-qimg-73e139be8bfc1267eeed8ed6a2802109-lq') : (post.profilePic)}
                         alt='profile picture'
                         referrerPolicy='no-referrer'
                         />
@@ -67,7 +71,7 @@ const Post = ({post}: Props) => {
                 </Avatar>
             {/* </div> */}
             <Separator orientation='vertical' className=' h-5 mt-4 '/>
-            <span className=' mt-4'>{post.name}</span>{' '}            
+            <span className=' mt-4'>{isAnonymous ? ('Anonymous') : (post.name)}</span>{' '}            
             <svg viewBox="0 0 48 48" className=" mt-5 w-2 h-2" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z" fill="#333333"></path> </g></svg>
             <Button variant='ghost' className=' text-blue-500 text-xs mt-1 p-0'>Follow</Button>
             {/* {formatTimeToNow(new Date(post.createdAt))} */}

@@ -72,6 +72,11 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+
+      backgroundImage: (theme) => ({
+        'login-bg' : "url('/quoraBG.jpeg')"
+      }),
+      
     },
   },
   plugins: [require("tailwindcss-animate")],

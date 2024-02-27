@@ -39,7 +39,8 @@ const PostVoteClientPhone = (props: Props) => {
             "text-emerald-500 fill-emerald-500": currentVote === "UP",
           })}
         />
-      <Separator orientation="vertical" className=" h-7 my-1 ml-2 dark:text-zinc-400 text-zinc-500"/>
+        <p className=" text-sm text-zinc-500 ml-2 hover:text-zinc-700">Upvote</p>
+      {/* <Separator orientation="vertical" className=" h-7 my-1 ml-2 dark:text-zinc-400 text-zinc-500"/> */}
 
       </Button>
 

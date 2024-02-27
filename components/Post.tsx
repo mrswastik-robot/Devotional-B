@@ -47,11 +47,11 @@ const Post = ({post}: Props) => {
   return (
     <div className='rounded-md bg-white dark:bg-[#262626] shadow'>
       <div className='px-6 py-4 flex justify-between'>
-        <PostVoteClient
+        {/* <PostVoteClient
         //   postId={post.id}
         //   initialVotesAmt={_votesAmt}
         //   initialVote={_currentVote?.type}
-        />
+        /> */}
 
         {/* <PostVoteClientPhone/> */}
 
@@ -107,12 +107,12 @@ const Post = ({post}: Props) => {
         </div>
       </div>
 
-      <div className='bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 md:items-end flex justify-between md:justify-end md:gap-x-3 text-sm px-4 py-4 sm:px-6'>
+      <div className='bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between  gap-x-3 text-sm px-4 py-4 sm:px-6'>
 
 
-        <div className=' sm:block md:hidden '>
+        {/* <div className=' sm:block md:hidden '> */}
           <PostVoteClientPhone/>
-        </div>
+        {/* </div> */}
 
 
         <div className=' flex gap-x-3'>

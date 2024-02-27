@@ -1,7 +1,9 @@
-import React, { useRef } from "react";
+"use client";
+
+import React, { useRef , useState , useEffect} from "react";
 import parse from "html-react-parser";
 
-import { MessageSquare } from "lucide-react";
+import { Key, MessageSquare } from "lucide-react";
 import { Share } from "lucide-react";
 import { Bookmark } from "lucide-react";
 
@@ -34,6 +36,22 @@ const AnsPost = ({ answers }: Props) => {
 
   // const isAnonymous = answers[0].anonymity;
 
+  const [commentInputVisibility , setCommentInputVisibility] = useState(answers.map(() => false))
+
+  const toggleCommentInputVisibility = (index: number) => {
+    // Update the visibility of the comment input at the given index
+    setCommentInputVisibility(prevVisibility =>
+      prevVisibility.map((isVisible, i) => (i === index ? !isVisible : isVisible))
+    );
+  };
+
+  useEffect(() => {
+    // Close all comment inputs when the component is unmounted
+     setCommentInputVisibility(answers.map(() => false));
+  }, [answers]);
+
+  
+
   return (
     <div>
       {answers.map((answer: any, key) => (
@@ -63,11 +81,11 @@ const AnsPost = ({ answers }: Props) => {
                   <AvatarFallback>SP</AvatarFallback>
                 </Avatar>
                 {/* </div> */}
-                <Separator orientation="vertical" className=" h-5 mt-4 " />
-                <span className=" mt-4">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
+                <Separator orientation="vertical" className=" h-5 mt-3 " />
+                <span className=" mt-3">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
                 <svg
                   viewBox="0 0 48 48"
-                  className=" mt-5 w-2 h-2"
+                  className=" mt-4 w-2 h-2"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -87,7 +105,7 @@ const AnsPost = ({ answers }: Props) => {
                 </svg>
                 <Button
                   variant="ghost"
-                  className=" text-blue-500 text-xs mt-1 p-0"
+                  className=" text-blue-500 text-xs  p-0"
                 >
                   Follow
                 </Button>
@@ -129,12 +147,13 @@ const AnsPost = ({ answers }: Props) => {
           </div>
 
           <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 items-end flex justify-end gap-x-3 text-sm px-4 py-4 sm:px-6">
-            <Link
-              href={`/postPage/${answer.id}`}
+            <button
+              // href={`/postPage/${answer.id}`}
               className="w-fit flex items-center gap-2"
+              onClick={() => toggleCommentInputVisibility(key)}
             >
               <MessageSquare className="h-4 w-4" /> {5} comments
-            </Link>
+            </button>
             <Link
               href={`/r/post/${answer.id}`}
               className="w-fit flex items-center gap-2"
@@ -148,6 +167,18 @@ const AnsPost = ({ answers }: Props) => {
               <Bookmark className="h-4 w-4" /> Save
             </Link>
           </div>
+
+          {/* Add a comment input that shows or hides when the comments button is clicked */}
+          {commentInputVisibility[key] && (
+            <div className="px-4 py-2">
+              <input
+                type="text"
+                className="w-full p-2 border rounded-md"
+                placeholder="Write a comment..."
+              />
+            </div>
+          )} 
+
         </div>
       ))}
     </div>

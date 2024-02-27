@@ -8,7 +8,7 @@ type Props = {}
 const CustomFeed = (props: Props) => {
   return (
     <div className='col-span-5 space-y-5'>
-        <TopFeedCard/>
+        {/* <TopFeedCard/> */}
         <PostFeed/>
     </div>
   )

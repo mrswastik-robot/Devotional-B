@@ -7,6 +7,9 @@ const nextConfig = {
     // distDir: 'build',
     // output: 'export',
     // trailingSlash: true,
+    experimental: {
+        missingSuspenseWithCSRBailout: false,
+      },
 };
 
 export default nextConfig;

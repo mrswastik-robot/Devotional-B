@@ -46,7 +46,7 @@ import { QuestionType } from "@/schemas/question";
 
 import { auth , db , storage } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter , usePathname, useSearchParams } from "next/navigation";
+import { useRouter , useSearchParams } from "next/navigation";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";

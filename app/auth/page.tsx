@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 
 import React, { useEffect , useState } from "react";
-import { useRouter , usePathname , useSearchParams } from "next/navigation";
+import { useRouter  } from "next/navigation";
 
 import { auth, db } from "@/utils/firebase";
 import { collection , doc ,setDoc } from "firebase/firestore";
@@ -38,8 +38,6 @@ type Props = {};
 const LoginPage = (props: Props) => {
   
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const [user, loading] = useAuthState(auth);
 

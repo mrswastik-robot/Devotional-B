@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , Suspense } from "react";
 
 import {Home as HomeIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
@@ -144,6 +144,7 @@ export default function Home() {
   // form.watch();
 
   return (
+    <Suspense>
     <>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6'>
@@ -297,5 +298,6 @@ export default function Home() {
         
       </div>
     </>
+    </Suspense>
   );
 }

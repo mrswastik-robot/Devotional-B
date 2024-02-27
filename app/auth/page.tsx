@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 
 import React, { useEffect , useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter , usePathname , useSearchParams } from "next/navigation";
 
 import { auth, db } from "@/utils/firebase";
 import { collection , doc ,setDoc } from "firebase/firestore";
@@ -36,7 +36,11 @@ import { Label } from "@/components/ui/label"
 type Props = {};
 
 const LoginPage = (props: Props) => {
+  
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [user, loading] = useAuthState(auth);
 
   const googleProvider = new GoogleAuthProvider();
@@ -125,18 +129,26 @@ const LoginPage = (props: Props) => {
 
 
   //signin anonymously
-  const signingInAnonymously = async (e:React.SyntheticEvent<HTMLFormElement>) => {
+  const signingInAnonymously = async (e:React.SyntheticEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    // guests should not be able to post questions
+    // const isGuest = true;
+    
+    // Generate a unique 4-digit number
+  const uniqueNumber = Math.floor(1000 + Math.random() * 9000);
+
     await signInAnonymously(auth)
       .then(async(userCredential) => {
         const user = userCredential.user;
         // console.log(user);
         // Update user's profile
         await updateProfile(user, {
-          displayName: anonymousUserName, // Set displayName to anonymousUser
-          photoURL: "https://avatars.githubusercontent.com/u/107865087?v=4" // Set photoURL to a default image URL
+          // displayName: anonymousUserName, // Set displayName to anonymousUser
+          displayName: `Guest${uniqueNumber}`, // Set displayName to "Guest1234"
+          photoURL: "https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png" // Set photoURL to a default image URL
         });
-        router.push("/");
+        router.push('/?isGuest=true');
       })
       .catch((error) => {
         console.log(error);
@@ -151,8 +163,8 @@ const LoginPage = (props: Props) => {
   }, [user , loading , router]);
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-      <div className="max-w-screen-xl m-0 sm:m-0 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+    <div className="min-h-[75%] bg-gray-100 text-gray-900 flex justify-center shadow-lg">
+      <div className="max-w-screen-xl m-0 sm:m-0 bg-white shadow sm:rounded-xl flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div>
             <h1 className="  text-center text-3xl font-extralight">
@@ -248,6 +260,8 @@ const LoginPage = (props: Props) => {
                   placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <div className=" flex gap-2">
+
                 <button className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   onClick={signUpWithEmail}
                   >
@@ -283,11 +297,13 @@ const LoginPage = (props: Props) => {
                   </svg>
                   <span className="ml-3">Sign In</span>
                 </button>
+                </div>
+
 
                 {/* sign in anonymously button */}
-                <Dialog>
+                {/* <Dialog>
                     <DialogTrigger asChild>
-                      <Button className=" w-full mt-6 bg-purple-400">Sign In as Guest</Button>
+                      <Button className=" w-full mt-6 bg-[#581C87]">Continue as a Guest</Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                       <DialogHeader>
@@ -318,14 +334,17 @@ const LoginPage = (props: Props) => {
                         </DialogFooter>
                       </form>
                     </DialogContent>
-                  </Dialog>
+                  </Dialog> */}
+
+                  <Button type="submit" onClick={signingInAnonymously} className=" w-full mt-6 bg-[#581C87]">Continue as a Guest</Button>
+
 
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
+        <div className="flex-1 bg-indigo-100 text-center hidden lg:flex rounded-r-xl">
           <div
             className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
             style={{
@@ -333,6 +352,10 @@ const LoginPage = (props: Props) => {
                 "url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg')",
             }}
           ></div>
+          
+            {/* <h1>No hassle of loggin In</h1>
+            <Button onClick={signInWithGoogle}>Sign In as Guest</Button>
+           */}
         </div>
         
         

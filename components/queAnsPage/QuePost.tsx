@@ -88,7 +88,7 @@ const QuePost = ({ post }: Props) => {
                 ></path>{" "}
               </g>
             </svg>
-            <Button variant="ghost" className=" text-blue-500 text-sm mt-1 p-0">
+            <Button variant="ghost" className=" text-blue-500 text-xs mt-1 p-0">
               Follow
             </Button>
             {/* {formatTimeToNow(new Date(post.createdAt))} */}

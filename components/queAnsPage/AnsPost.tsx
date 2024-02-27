@@ -87,7 +87,7 @@ const AnsPost = ({ answers }: Props) => {
                 </svg>
                 <Button
                   variant="ghost"
-                  className=" text-blue-500 text-sm mt-1 p-0"
+                  className=" text-blue-500 text-xs mt-1 p-0"
                 >
                   Follow
                 </Button>

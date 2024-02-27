@@ -46,7 +46,7 @@ import { QuestionType } from "@/schemas/question";
 
 import { auth , db , storage } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/navigation";
+import { useRouter , usePathname, useSearchParams } from "next/navigation";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
@@ -57,6 +57,8 @@ type Input = z.infer<typeof QuestionType>;
 export default function Home() {
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isGuest = searchParams.get('isGuest');
   const [user, loading] = useAuthState(auth);
 
 
@@ -160,16 +162,24 @@ export default function Home() {
           </div> */}
           <dl className='rounded-lg divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#1A1A1B] border-gray-300  px-6 py-4 text-sm leading-6'>
             <div className='flex justify-between gap-x-4 py-3'>
-              <p className='text-zinc-500'>
-                Your personal Devotional frontpage. Come here to check in with your
-                favorite communities.
+              {
+                isGuest === 'true' ? (
+                  <p className=" text-zinc-500">
+                    You are currently logged in as a Guest. To post question you need to have an account.
+                  </p>
+                ) : (
+                <p className='text-zinc-500'>
+                  Your personal Devotional frontpage. Come here to check in with your
+                  favorite communities.
               </p>
+                )
+              }
             </div>
 
             <div>
               <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="default"  className=" w-full">Ask Question</Button>
+                    <Button variant="default"  className=" w-full" disabled={isGuest === 'true'}>Ask Question</Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[925px] ">
                     <DialogHeader>
@@ -249,7 +259,12 @@ export default function Home() {
                           />
 
                           
-                            <Button type="submit" className=" w-full">Post</Button>
+                            <Button type="submit" 
+                              className=" w-full"
+                              // disabled={isGuest === 'true'}
+                            >
+                              Post
+                            </Button>
                           
 
                         </form>

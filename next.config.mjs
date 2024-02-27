@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['randomuser.me' , 'source.unsplash.com', 'avatars.githubusercontent.com' , 'turk.net' , 'lh3.googleusercontent.com', 'graph.facebook.com', 'firebasestorage.googleapis.com', 'qph.cf2.quoracdn.net'],
+        domains: ['randomuser.me' , 'source.unsplash.com', 'avatars.githubusercontent.com' , 'turk.net' , 'lh3.googleusercontent.com', 'graph.facebook.com', 'firebasestorage.googleapis.com', 'qph.cf2.quoracdn.net', 'images.rawpixel.com'],
         // unoptimized: true,
     },
     // distDir: 'build',

@@ -76,7 +76,7 @@ const Post = ({post}: Props) => {
             <Button variant='ghost' className=' text-blue-500 text-xs mt-1 p-0'>Follow</Button>
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
-          <Link href={`/postPage/${post.id}`}>
+          <Link href={`/postPage2/${post.title.split(' ').join('-')}`}>
             <h1 className='text-lg font-semibold py-2 leading-6 text-gray-900 dark:text-white'>
               {post.title}
             </h1>
@@ -117,7 +117,7 @@ const Post = ({post}: Props) => {
 
         <div className=' flex gap-x-3'>
           <Link
-            href={`/postPage/${post.id}`}
+            href={`/postPage2/${post.title.split(' ').join('-')}`}
             className='w-fit flex items-center gap-2'>
             <MessageSquare className='h-4 w-4' /> <span className=' sm:block hidden'>5 Answers</span>
           </Link>

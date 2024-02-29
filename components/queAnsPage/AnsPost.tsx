@@ -118,7 +118,7 @@ const AnsPost = ({ answers }: Props) => {
               </a> */}
 
               {answer.answerImageURL ? (
-                  <div className="relative w-full h-[400px]">
+                  <div className="relative w-full h-[400px] mt-2">
                     <Image
                       src={answer.answerImageURL}
                       className="rounded-md"
@@ -131,7 +131,7 @@ const AnsPost = ({ answers }: Props) => {
               }
 
               <div
-                className="relative text-lg max-h-50 w-full "
+                className="relative text-lg max-h-50 w-full mt-2 "
                 ref={pRef}
               >
                 {/* <EditorOutput content={post.content} /> */}

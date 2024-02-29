@@ -8,7 +8,7 @@ import { Tiptap as TipTap } from "@/components/TipTap";
 import AnsPost from "@/components/queAnsPage/AnsPost";
 import RecentFeed from "@/components/queAnsPage/RecentFeed";
 
-import { auth, db , storage} from "@/utils/firebase";
+import { auth, db, storage } from "@/utils/firebase";
 import {
   collection,
   doc,
@@ -21,8 +21,12 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
-
+import {
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 import {
   Form,
@@ -41,7 +45,8 @@ import { useForm } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
-import { Tiptap } from "@/components/TipTap";
+// import { Tiptap } from "@/components/TipTap";
+import { Tiptap } from "@/components/TipTapAns";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnswerDescriptionType } from "@/schemas/answer";
@@ -101,6 +106,8 @@ const PostPage = ({ params: { postId } }: Props) => {
   // console.log(postId);
   // const queObject = postData.filter((post) => post.id === postId)[0];
 
+  const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(true);
+
   const [queObject, setQueObject] = useState<QuestionType>({} as QuestionType); //postData.filter((post) => post.id === postId)[0
   const [answers, setAnswers] = useState<AnswerType[]>([] as AnswerType[]);
 
@@ -110,34 +117,35 @@ const PostPage = ({ params: { postId } }: Props) => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
 
-  const uploadImage = () => {
-    if(imageUpload == null) return;
+  const uploadImage = (file: any) => {
+    if (file == null) return;
 
-    const storageRef = ref(storage, `answers/${imageUpload.name}`);
+    const storageRef = ref(storage, `answers/${file.name}`);
 
-    const uploadTask = uploadBytesResumable(storageRef, imageUpload);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
-    uploadTask.on('state_changed', 
-    (snapshot:any) => {
-      // You can use this to display upload progress
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
-    }, 
-    (error: any) => {
-      // Handle unsuccessful uploads
-      console.log('Upload failed', error);
-    }, 
-    () => {
-      // Upload completed successfully, now we can get the download URL
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        console.log('File available at', downloadURL);
-        // Save the URL to state or wherever you want to keep it
-        setImageUrl(downloadURL);
-      });
-    }
-  );
-
-  }
+    uploadTask.on(
+      "state_changed",
+      (snapshot: any) => {
+        // You can use this to display upload progress
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error: any) => {
+        // Handle unsuccessful uploads
+        console.log("Upload failed", error);
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          // Save the URL to state or wherever you want to keep it
+          setImageUrl(downloadURL);
+        });
+      }
+    );
+  };
 
   const form = useForm<Input>({
     resolver: zodResolver(AnswerDescriptionType),
@@ -187,7 +195,7 @@ const PostPage = ({ params: { postId } }: Props) => {
 
     // Listener for the answers
     const ansRef = collection(db, "questions", postId, "answers");
-    const q = query(ansRef, orderBy('createdAt', 'desc')); // Order by 'createdAt' in descending order
+    const q = query(ansRef, orderBy("createdAt", "desc")); // Order by 'createdAt' in descending order
     const ansUnsub = onSnapshot(q, (snapshot) => {
       const answers = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -196,7 +204,6 @@ const PostPage = ({ params: { postId } }: Props) => {
 
       setAnswers(answers);
     });
-
 
     // Cleanup function to unsubscribe from the listeners when the component unmounts
     return () => {
@@ -214,74 +221,91 @@ const PostPage = ({ params: { postId } }: Props) => {
           <QuePost post={queObject} />
         </div>
 
-        {/* TipEditor */}
-        <div>
-          {/* <TipTap setDescription={setDescription} /> */}
-          {/* <TipTap /> */}
-          <Form {...form}>
-            <form
-              className=" relative space-y-3 overflow-hidden"
-              onSubmit={form.handleSubmit(onSubmit)}
+        <div className=" mt-7">
+          {isCommentBoxOpen ? (
+            <div
+              className="rounded-3xl border border-gray-300 p-4 cursor-pointer"
+              onClick={() => setIsCommentBoxOpen(false)}
             >
-              {/* TipTap Editor */}
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    {/* <FormLabel>Write an answer...</FormLabel> */}
-                    <FormControl>
-                      <Controller
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => <Tiptap {...field} />}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* anonymity toggle */}
-              <FormField
+              Write a comment...
+            </div>
+          ) : (
+            <div className=" rounded-3xl border border-gray-300 p-4 cursor-pointer">
+              <Form {...form}>
+                <form
+                  className=" relative space-y-3 overflow-hidden"
+                  onSubmit={form.handleSubmit(onSubmit)}
+                >
+                  {/* TipTap Editor */}
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        {/* <FormLabel>Write an answer...</FormLabel> */}
+                        <FormControl>
+                          <Controller
                             control={form.control}
-                            name="anonymity"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                                <div className="space-y-0.5">
-                                  <FormLabel className="text-base">
-                                    Answer Anonymously
-                                  </FormLabel>
-                                  <FormDescription>
-                                    Answer question without revealing your identity.
-                                  </FormDescription>
-                                </div>
-                                <FormControl>
-                                  <Switch
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
+                            name="description"
+                            render={({ field }) => <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage}/>}
                           />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <Button type="submit" className=" w-full">
-                Post
-              </Button>
-            </form>
-          </Form>
+                  {/* anonymity toggle */}
+                  <FormField
+                    control={form.control}
+                    name="anonymity"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                        <div className="space-y-0.5">
+                          <FormLabel className="text-base">
+                            Answer Anonymously
+                          </FormLabel>
+                          <FormDescription>
+                            Answer question without revealing your identity.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className=" space-x-2 flex items-end justify-end ">
+                    
+                    <Button variant="outline" className=" rounded-3xl"
+                    onClick={() => {setIsCommentBoxOpen(true); form.reset(); setImageUrl(null);}}
+                    >
+                      Cancel
+                    </Button>
+
+                    <Button type="submit" variant="outline" className=" rounded-3xl ">
+                      Post
+                    </Button>
+                  </div>
+                  
+                </form>
+              </Form>
+            </div>
+          )}
         </div>
 
-        <div>
-                        {/* <input type="file" onChange={(event) => {setImageUpload(event.target.files[0])}}/> */}
+        {/* <div>
                         <input type="file" onChange={(event) => {
                           if(event.target.files) {
                             setImageUpload(event.target.files[0]);
                           }
                         }}/>
                         <Button onClick={uploadImage}>Upload Image</Button>
-          </div>
+          </div> */}
 
         {/* Answers to the question */}
         <div>

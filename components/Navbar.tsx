@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+// import { useRouter } from "next/router";        this won't work as we are using next/navigation in Next.js 14
+import { usePathname } from "next/navigation";
 
 import { Book, HomeIcon, Search, User } from "lucide-react";
 import { Home } from "lucide-react";
@@ -26,6 +28,12 @@ const Navbar = (props: Props) => {
   const [clicked, setClicked] = useState("");
 
   const [user, loading] = useAuthState(auth);
+
+  const pathname = usePathname();
+
+  if (pathname === "/auth") {
+    return null;
+  }
 
   return (
     <div className="fixed top-0 inset-x-0 h-fit bg-zinc-100 dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2">

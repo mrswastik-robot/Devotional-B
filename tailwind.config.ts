@@ -74,7 +74,7 @@ const config = {
       },
 
       backgroundImage: (theme) => ({
-        'login-bg' : "url('/quoraBG.jpeg')"
+        'login-bg' : "url('/authbgnew.jpg')"
       }),
       
     },

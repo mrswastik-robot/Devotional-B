@@ -1,7 +1,7 @@
 
 'use client'
 
-import React, { useCallback , useRef } from "react";
+import React, { useCallback , useEffect, useRef } from "react";
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -16,7 +16,7 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 
-
+import { Progress } from "./ui/progress";
 
 import {
   FaBold,
@@ -33,7 +33,7 @@ import {
 import { IoIosLink } from "react-icons/io";
 import { FaImages } from "react-icons/fa6";
 
-const MenuBar = ({ editor , setImageUpload , uploadImage }) => {
+const MenuBar = ({ editor , setImageUpload , uploadImage , progress}) => {
 
     //image insert krne k liye 
 
@@ -88,6 +88,11 @@ const MenuBar = ({ editor , setImageUpload , uploadImage }) => {
     }
   }
 
+  //for updating the progress bar
+  useEffect(() => {
+    console.log("Progress", progress);
+    }, [progress]);
+
 
   if (!editor) {
     return null;
@@ -140,7 +145,11 @@ const MenuBar = ({ editor , setImageUpload , uploadImage }) => {
         <button type="button" onClick={handleClick}>
             <FaImages />
         </button>
+        <p>{progress}</p>
+        <Progress value={progress} className=" w-full z-10"/>
         <input type="file" ref={hiddenFileInput} onChange={handleFileSelect} style={{display: 'none'}} />
+
+
 
       </div>
       
@@ -163,7 +172,7 @@ const MenuBar = ({ editor , setImageUpload , uploadImage }) => {
 //   })
 // ];
 
-export const Tiptap = ({ onChange ,value  , setImageUpload , uploadImage}) => {
+export const Tiptap = ({ onChange ,value  , setImageUpload , uploadImage , progress}) => {
   const editor = useEditor({
     extensions: [StarterKit, Underline ,
       // Placeholder.configure({
@@ -208,8 +217,12 @@ export const Tiptap = ({ onChange ,value  , setImageUpload , uploadImage}) => {
 
   return (
     <div className="">
-      <MenuBar editor={editor} setImageUpload={setImageUpload} uploadImage={uploadImage} />
+      <MenuBar editor={editor} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress} />
       <EditorContent editor={editor} className=" min-h-[10rem] border border-gray-300 rounded-lg"  />
+      <Progress value={progress} className=" w-full"/>
+
+
+
     </div>
   );
 };

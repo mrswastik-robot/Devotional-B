@@ -39,7 +39,7 @@ import { Switch } from "@/components/ui/switch";
 import {useForm} from "react-hook-form";
 import { Controller } from "react-hook-form";
 
-import { Tiptap } from "@/components/TipTap";
+import { Tiptap } from "@/components/TipTapAns";
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import { QuestionType } from "@/schemas/question";
@@ -67,12 +67,12 @@ export default function Home() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
 
-  const uploadImage = () => {
-    if(imageUpload == null) return;
+  const uploadImage = (file: any) => {
+    if(file == null) return;
 
-    const storageRef = ref(storage, `questions/${imageUpload.name}`);
+    const storageRef = ref(storage, `questions/${file.name}`);
 
-    const uploadTask = uploadBytesResumable(storageRef, imageUpload);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on('state_changed', 
     (snapshot:any) => {
@@ -190,8 +190,9 @@ export default function Home() {
                       </DialogDescription>
                     </DialogHeader>
                       {/* <Tiptap /> */}
-                      {/* <Textarea className="w-full min-h-[500px]" placeholder="What's your question?" /> */}
+                     {/* <Textarea className="w-full min-h-[500px]" placeholder="What's your question?" /> */}
 
+                      <div className=" border border-gray-300 rounded-3xl p-4 cursor-pointer">
                       <Form {...form}>
                         <form
                         className="relative space-y-3 overflow-hidden"
@@ -225,7 +226,7 @@ export default function Home() {
                                     control={form.control}
                                     name="description"
                                     render={({ field }) => (
-                                      <Tiptap {...field} />
+                                      <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress} />
                                     )}
                                     
                                    /> 
@@ -270,9 +271,9 @@ export default function Home() {
 
                         </form>
                       </Form>
+                      </div>
 
-                      <div>
-                        {/* <input type="file" onChange={(event) => {setImageUpload(event.target.files[0])}}/> */}
+                      {/* <div>
                         <input type="file" onChange={(event) => {
                           if(event.target.files) {
                             setImageUpload(event.target.files[0]);
@@ -280,7 +281,7 @@ export default function Home() {
                         }}/>
                         <Button onClick={uploadImage}>Upload Image</Button>
                         <Progress value={progress} className=" w-[70%]"/>
-                      </div>
+                      </div> */}
 
                     
                   </DialogContent>

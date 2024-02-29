@@ -113,6 +113,7 @@ const PostPage = ({ params: { postId } }: Props) => {
 
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [progress , setProgress] = useState<number | null>(0);
 
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
@@ -131,6 +132,7 @@ const PostPage = ({ params: { postId } }: Props) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
+        setProgress(progress);
       },
       (error: any) => {
         // Handle unsuccessful uploads
@@ -247,7 +249,7 @@ const PostPage = ({ params: { postId } }: Props) => {
                           <Controller
                             control={form.control}
                             name="description"
-                            render={({ field }) => <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage}/>}
+                            render={({ field }) => <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress}/>}
                           />
                         </FormControl>
                         <FormMessage />

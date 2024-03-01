@@ -311,7 +311,7 @@ const PostPage = ({ params: { postId } }: Props) => {
 
         {/* Answers to the question */}
         <div>
-          <AnsPost answers={answers} />
+          {/* <AnsPost answers={answers} /> */}
         </div>
       </div>
 

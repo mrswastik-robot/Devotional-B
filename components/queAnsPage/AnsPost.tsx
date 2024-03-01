@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import PostVoteClient from "@/components/post-vote/PostVoteClient";
+import CommentBox from "./CommentBox";
 
 type Props = {
   answers: {
@@ -29,9 +30,10 @@ type Props = {
     createdAt: string;
     anonymity: boolean;
   }[];
+  postTitleWithSpaces: string;
 };
 
-const AnsPost = ({ answers }: Props) => {
+const AnsPost = ({ answers , postTitleWithSpaces }: Props) => {
   const pRef = useRef<HTMLDivElement>(null);
 
   // const isAnonymous = answers[0].anonymity;
@@ -154,29 +156,21 @@ const AnsPost = ({ answers }: Props) => {
             >
               <MessageSquare className="h-4 w-4" /> {5} comments
             </button>
-            <Link
-              href={`/r/post/${answer.id}`}
+            <button
               className="w-fit flex items-center gap-2"
             >
               <Share className="h-4 w-4" /> Share
-            </Link>
-            <Link
-              href={`/r/post/${answer.id}`}
+            </button>
+            <button
               className="w-fit flex items-center gap-2"
             >
               <Bookmark className="h-4 w-4" /> Save
-            </Link>
+            </button>
           </div>
 
           {/* Add a comment input that shows or hides when the comments button is clicked */}
           {commentInputVisibility[key] && (
-            <div className="px-4 py-2">
-              <input
-                type="text"
-                className="w-full p-2 border rounded-md"
-                placeholder="Write a comment..."
-              />
-            </div>
+            <CommentBox postTitleWithSpaces={postTitleWithSpaces} answerId={answer.id} toggleCommentInputVisibility={() => toggleCommentInputVisibility(key)} />
           )} 
 
         </div>

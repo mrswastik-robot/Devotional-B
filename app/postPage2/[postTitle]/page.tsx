@@ -183,6 +183,12 @@ const PostPage = ({ params: { postTitle } }: Props) => {
       });
   
       console.log("Document written with ID: ", docRef.id);
+
+      //reset the form and image
+        form.reset();
+        setImageUrl(null);
+        setProgress(0);
+
     } else {
       console.log("No such document!");
     }
@@ -192,7 +198,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
     console.log(data);
 
     createAnswerPost(data);
-    form.reset();
+    // form.reset();     //won't reset from here
   }
 
   //fetching question and answers to display on the page
@@ -303,7 +309,8 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                       Cancel
                     </Button>
 
-                    <Button type="submit" variant="outline" className=" rounded-3xl ">
+                    <Button type="submit" variant="outline" className=" rounded-3xl "
+                    >
                       Post
                     </Button>
                   </div>
@@ -325,7 +332,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
 
         {/* Answers to the question */}
         <div>
-          <AnsPost answers={answers} />
+          <AnsPost answers={answers} postTitleWithSpaces={postTitleWithSpaces} />
         </div>
       </div>
 

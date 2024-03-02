@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import PostVoteClient from "@/components/post-vote/PostVoteClient";
 import CommentBox from "./CommentBox";
+import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
 
 type Props = {
   answers: {
@@ -62,11 +63,11 @@ const AnsPost = ({ answers , postTitleWithSpaces }: Props) => {
           className="rounded-md bg-white dark:bg-[#262626] shadow mt-7 space-y-4" 
         >
           <div className="px-6 py-5 flex justify-between">
-            <PostVoteClient
+            {/* <PostVoteClient
             //   postId={post.id}
             //   initialVotesAmt={_votesAmt}
             //   initialVote={_currentVote?.type}
-            />
+            /> */}
 
             <div className="w-0 flex-1">
               <div className="flex max-h-40 mt-1 space-x-3 text-xs text-gray-500">
@@ -148,24 +149,29 @@ const AnsPost = ({ answers , postTitleWithSpaces }: Props) => {
             </div>
           </div>
 
-          <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 items-end flex justify-end gap-x-3 text-sm px-4 py-4 sm:px-6">
-            <button
-              // href={`/postPage/${answer.id}`}
-              className="w-fit flex items-center gap-2"
-              onClick={() => toggleCommentInputVisibility(key)}
-            >
-              <MessageSquare className="h-4 w-4" /> {5} comments
-            </button>
-            <button
-              className="w-fit flex items-center gap-2"
-            >
-              <Share className="h-4 w-4" /> Share
-            </button>
-            <button
-              className="w-fit flex items-center gap-2"
-            >
-              <Bookmark className="h-4 w-4" /> Save
-            </button>
+          <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between gap-x-3 text-sm px-4 py-4 sm:px-6">
+
+            <PostVoteClientPhone/>
+            
+            <div className=" flex gap-x-3">
+              <button
+                // href={`/postPage/${answer.id}`}
+                className="w-fit flex items-center gap-2"
+                onClick={() => toggleCommentInputVisibility(key)}
+              >
+                <MessageSquare className="h-4 w-4" /> {5} comments
+              </button>
+              <button
+                className="w-fit flex items-center gap-2"
+              >
+                <Share className="h-4 w-4" /> Share
+              </button>
+              <button
+                className="w-fit flex items-center gap-2"
+              >
+                <Bookmark className="h-4 w-4" /> Save
+              </button>
+            </div>
           </div>
 
           {/* Add a comment input that shows or hides when the comments button is clicked */}

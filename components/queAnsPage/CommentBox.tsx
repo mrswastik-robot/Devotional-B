@@ -40,13 +40,25 @@ type CommentType = {
     createdAt: string;
 }
 
+type ReplyType = {
+    // id: string;
+    reply: string;
+    name: string;
+    profilePic: string;
+    createdAt: string;
+
+}
+
 type CommentTypeWithId = CommentType & {id: string};
 
 const CommentBox = ({postTitleWithSpaces , answerId , toggleCommentInputVisibility}: Props) => {
 
+
     const [user , loading ] = useAuthState(auth);
 
     const [comments , setComments] = useState<CommentTypeWithId[]>([]);
+
+    
 
     const form = useForm<Input>({
         resolver: zodResolver(CommentType),
@@ -134,6 +146,25 @@ const CommentBox = ({postTitleWithSpaces , answerId , toggleCommentInputVisibili
       fetchComments();
     }, [postTitleWithSpaces, answerId]);
 
+    
+    //for displaying the reply input
+
+    // const [replyInputVisibility, setReplyInputVisibility] = useState(comments.map(() => false));
+    //not working with above method
+
+    const [replyIndex, setReplyIndex] = useState<number | null>(null);
+
+    
+    // const toggleReplyInputVisibility = (index: number) => {
+    //   setReplyInputVisibility(prevVisibility =>
+    //       prevVisibility.map((isVisible, i) => (i === index ? !isVisible : isVisible))
+    //   );
+    // };
+
+    const toggleReplyInputVisibility = (index: number) => {
+      setReplyIndex(prevIndex => (prevIndex === index ? null : index));
+    };
+
 
 
   return (
@@ -186,7 +217,7 @@ const CommentBox = ({postTitleWithSpaces , answerId , toggleCommentInputVisibili
 
           {/* displaying comments */}
       <div className=" mt-4">
-        {comments.map((comment) => (
+        {comments.map((comment , index) => (
           <div key={comment.id} className=" p-4 rounded-3xl border border-gray-300 my-1">
           <div className="flex  space-x-2">
             <img
@@ -198,9 +229,21 @@ const CommentBox = ({postTitleWithSpaces , answerId , toggleCommentInputVisibili
               <p className="text-sm font-semibold">{comment.name}</p>
               <p className="text-sm">{comment.comment}</p>
               <div>
-                <button className=" text-xs text-blue-500 hover:underline">
+                <button
+                onClick={() => toggleReplyInputVisibility(index)} 
+                className=" text-xs text-blue-500 hover:underline">
                   Reply
                 </button>
+                    
+                    {/* displaying the reply input */}
+                    {replyIndex === index && (
+                    <input
+                      type="text"
+                      placeholder="Add a reply"
+                      className="w-full rounded-3xl border border-gray-300 p-2 mt-2"
+                    />
+        )}
+
               </div>
             </div>
     

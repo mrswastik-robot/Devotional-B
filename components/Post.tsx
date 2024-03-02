@@ -107,7 +107,7 @@ const Post = ({post}: Props) => {
         </div>
       </div>
 
-      <div className='bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between  gap-x-3 text-sm px-4 py-4 sm:px-6'>
+      <div className='bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between  gap-x-3 text-sm px-4 py-2  sm:px-6'>
 
 
         {/* <div className=' sm:block md:hidden '> */}

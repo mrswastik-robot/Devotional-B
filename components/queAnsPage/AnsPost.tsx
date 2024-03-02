@@ -159,17 +159,17 @@ const AnsPost = ({ answers , postTitleWithSpaces }: Props) => {
                 className="w-fit flex items-center gap-2"
                 onClick={() => toggleCommentInputVisibility(key)}
               >
-                <MessageSquare className="h-4 w-4" /> {5} comments
+                <MessageSquare className="h-4 w-4" /> <span className=' sm:block hidden'>5 Answers</span>
               </button>
               <button
                 className="w-fit flex items-center gap-2"
               >
-                <Share className="h-4 w-4" /> Share
+                <Share className="h-4 w-4" /> <span className=' sm:block hidden'>Share</span>
               </button>
               <button
                 className="w-fit flex items-center gap-2"
               >
-                <Bookmark className="h-4 w-4" /> Save
+                <Bookmark className="h-4 w-4" /> <span className=' sm:block hidden'>Save</span>
               </button>
             </div>
           </div>

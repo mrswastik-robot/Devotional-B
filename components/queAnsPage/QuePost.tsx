@@ -45,7 +45,7 @@ const QuePost = ({ post }: Props) => {
 // console.log(typeof post.description)
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow">
-      <div className="px-6 py-14 flex justify-between">
+      <div className="px-6 md:py-6 py-4 flex justify-between">
         {/* <PostVoteClient
         //   postId={post.id}
         //   initialVotesAmt={_votesAmt}
@@ -136,13 +136,13 @@ const QuePost = ({ post }: Props) => {
             href={`/r/post/${post.id}`}
             className="w-fit flex items-center gap-2"
           >
-            <Share className="h-4 w-4" /> Share
+            <Share className="h-4 w-4" /> <span className=' sm:block hidden'>Share</span>
           </Link>
           <Link
             href={`/r/post/${post.id}`}
             className="w-fit flex items-center gap-2"
           >
-            <Bookmark className="h-4 w-4" /> Save
+            <Bookmark className="h-4 w-4" /> <span className=' sm:block hidden'>Save</span>
           </Link>
         </div>
         

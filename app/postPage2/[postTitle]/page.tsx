@@ -238,7 +238,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6">
-      <div className=" md:col-span-5 ">
+      <div className=" md:col-span-5 col-span-2 ">
         <div>
           <QuePost post={queObject} />
         </div>
@@ -287,9 +287,9 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                           <FormLabel className="text-base">
                             Answer Anonymously
                           </FormLabel>
-                          <FormDescription>
+                          {/* <FormDescription>
                             Answer question without revealing your identity.
-                          </FormDescription>
+                          </FormDescription> */}
                         </div>
                         <FormControl>
                           <Switch

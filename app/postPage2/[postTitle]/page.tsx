@@ -118,6 +118,9 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
 
+  //need the actual postId of the question to send to the PostVoteClient
+  const [postId , setPostId] = useState<string>("");
+
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
 
@@ -183,6 +186,10 @@ const PostPage = ({ params: { postTitle } }: Props) => {
       });
   
       console.log("Document written with ID: ", docRef.id);
+
+      //set the postId to the id of the question so that finally it can be sent to PostVoteClient for voting system.
+      setPostId(doc.id);
+      console.log(postId)
 
       //reset the form and image
         form.reset();
@@ -332,7 +339,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
 
         {/* Answers to the question */}
         <div>
-          <AnsPost answers={answers} postTitleWithSpaces={postTitleWithSpaces} />
+          <AnsPost answers={answers} postTitleWithSpaces={postTitleWithSpaces} postId={queObject.id} />
         </div>
       </div>
 

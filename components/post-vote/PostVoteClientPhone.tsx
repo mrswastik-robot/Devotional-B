@@ -1,27 +1,108 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
 
-type Props = {};
+import { doc, getDoc, setDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 
-const PostVoteClientPhone = (props: Props) => {
+type Props = {
+  postId: string;
+  postType: "questions" | "answers";
+  userId: string;
+  questionId?: string;
+};
+
+const PostVoteClientPhone = ({
+  postId,
+  postType,
+  questionId,
+  userId,
+}: Props) => {
   const [currentVote, setCurrentVote] = useState<"UP" | "DOWN" | null>(null);
   const [votesAmt, setVotesAmt] = useState<number>(0);
 
-  const vote = (type: "UP" | "DOWN") => {
+  useEffect(() => {
+    let docPath = `questions/${postId}`;
+
+    if (postType === "answers") {
+      if (!questionId) {
+        console.error("questionId must be defined when postType is 'answers'");
+        return;
+      }
+      docPath = `questions/${questionId}/answers/${postId}`;
+    }
+
+    // Fetch user's vote on mount
+    const fetchUserVote = async () => {
+      const docRef = doc(db, `${docPath}/votes/${userId}`);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setCurrentVote(docSnap.data().value === 1 ? "UP" : "DOWN");
+      }
+    };
+
+    fetchUserVote();
+
+    // Listen for changes to voteAmt and update state
+    const unsubscribe = onSnapshot(doc(db, docPath), (docSnap) => {
+      if (docSnap.exists()) {
+        setVotesAmt(docSnap.data().voteAmt);
+      } else {
+        // Handle the case where the document does not exist
+        console.log(`No such document: ${docPath}`);
+      }
+    });
+
+    return unsubscribe; // Unsubscribe on unmount
+  }, [postId, postType, questionId, userId]);
+
+  const vote = async (type: "UP" | "DOWN") => {
+    let docPath = `questions/${postId}`;
+
+    if (postType === "answers") {
+      if (!questionId) {
+        console.error("questionId must be defined when postType is 'answers'");
+        return;
+      }
+      docPath = `questions/${questionId}/answers/${postId}`;
+    }
+
+    const voteValue = type === "UP" ? 1 : -1;
+    const voteRef = doc(db, `${docPath}/votes/${userId}`);
+    const postRef = doc(db, docPath);
+
     if (currentVote === type) {
+      // User is removing their vote
+      await deleteDoc(voteRef);
       setCurrentVote(null);
-      setVotesAmt(type === "UP" ? votesAmt - 1 : votesAmt + 1);
-    } else if (currentVote === null) {
-      setCurrentVote(type);
-      setVotesAmt(type === "UP" ? votesAmt + 1 : votesAmt - 1);
+
+      // Subtract voteValue from voteAmt
+      const postSnap = await getDoc(postRef);
+      if (postSnap.exists()) {
+        await setDoc(
+          postRef,
+          { voteAmt: (postSnap.data().voteAmt || 0) - voteValue },
+          { merge: true }
+        );
+      }
     } else {
+      // User is adding or changing their vote
+      await setDoc(voteRef, { uid: userId, value: voteValue });
       setCurrentVote(type);
-      setVotesAmt(type === "UP" ? votesAmt + 2 : votesAmt - 2);
+
+      // Add voteValue to voteAmt
+      const postSnap = await getDoc(postRef);
+      if (postSnap.exists()) {
+        await setDoc(
+          postRef,
+          { voteAmt: (postSnap.data().voteAmt || 0) + voteValue },
+          { merge: true }
+        );
+      }
     }
   };
 
@@ -39,18 +120,16 @@ const PostVoteClientPhone = (props: Props) => {
             "text-emerald-500 fill-emerald-500": currentVote === "UP",
           })}
         />
-        <p className=" text-sm text-zinc-500 ml-2 hover:text-zinc-700">Support</p>
-      {/* <Separator orientation="vertical" className=" h-7 my-1 ml-2 dark:text-zinc-400 text-zinc-500"/> */}
-
+        <p className=" text-sm text-zinc-500 ml-2 hover:text-zinc-700">
+          Support
+        </p>
+        {/* <Separator orientation="vertical" className=" h-7 my-1 ml-2 dark:text-zinc-400 text-zinc-500"/> */}
       </Button>
-
 
       {/* score */}
       <p className="text-center py-2 font-medium text-sm text-zinc-900 dark:text-white">
         {votesAmt}
       </p>
-
-
 
       {/* downvote */}
       <Button
@@ -62,7 +141,10 @@ const PostVoteClientPhone = (props: Props) => {
         variant="votingPhoen"
         aria-label="downvote"
       >
-      <Separator orientation="vertical" className=" h-7 my-1 mr-2 dark:text-zinc-400"/>
+        <Separator
+          orientation="vertical"
+          className=" h-7 my-1 mr-2 dark:text-zinc-400"
+        />
         <ArrowBigDown
           className={cn("h-5 w-5 text-zinc-700 dark:text-white", {
             "text-red-500 fill-red-500": currentVote === "DOWN",

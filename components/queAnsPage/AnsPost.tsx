@@ -16,6 +16,9 @@ import PostVoteClient from "@/components/post-vote/PostVoteClient";
 import CommentBox from "./CommentBox";
 import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
 
+import { auth } from "@/utils/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 type Props = {
   answers: {
     // id: string;
@@ -32,9 +35,15 @@ type Props = {
     anonymity: boolean;
   }[];
   postTitleWithSpaces: string;
+  postId: string;
 };
 
-const AnsPost = ({ answers , postTitleWithSpaces }: Props) => {
+const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
+  
+  //to send in postvoteclient for voting system
+  const [user] = useAuthState(auth);
+  // console.log(postId);
+
   const pRef = useRef<HTMLDivElement>(null);
 
   // const isAnonymous = answers[0].anonymity;
@@ -149,9 +158,9 @@ const AnsPost = ({ answers , postTitleWithSpaces }: Props) => {
             </div>
           </div>
 
-          <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between gap-x-3 text-sm px-4 py-4 sm:px-6">
+          <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between gap-x-3 text-sm px-4 py-2 sm:px-6">
 
-            <PostVoteClientPhone/>
+            <PostVoteClientPhone postId={answer.id} postType="answers"  userId={user?.uid!} questionId={postId}/>
             
             <div className=" flex gap-x-3">
               <button

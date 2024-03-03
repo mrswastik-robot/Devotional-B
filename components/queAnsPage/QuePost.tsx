@@ -19,6 +19,9 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
 
+import { auth } from "@/utils/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 type Props = {
   post: {
     id: string;
@@ -38,6 +41,10 @@ type Props = {
 };
 
 const QuePost = ({ post }: Props) => {
+
+  //to send userId in postvoteclient for voting system
+  const [user] = useAuthState(auth);
+  
   const pRef = useRef<HTMLDivElement>(null);
 
   const isAnonymous = post.anonymity;
@@ -127,9 +134,9 @@ const QuePost = ({ post }: Props) => {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between gap-x-3 text-sm px-4 py-4 sm:px-6">
+      <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between gap-x-3 text-sm px-4 py-2 sm:px-6">
 
-        <PostVoteClientPhone />
+        <PostVoteClientPhone postId={post.id} postType="questions" userId={user?.uid!}/>
 
         <div className=" flex gap-x-3">
           <Link

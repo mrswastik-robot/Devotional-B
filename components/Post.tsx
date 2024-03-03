@@ -19,6 +19,9 @@ import { formatTimeToNow } from '@/lib/date'
 import { Separator } from './ui/separator'
 import { Button } from './ui/button'
 
+import { auth } from '@/utils/firebase'
+import { useAuthState } from 'react-firebase-hooks/auth'
+
 
 type Props = {
     post: {
@@ -43,6 +46,9 @@ const Post = ({post}: Props) => {
     const pRef = useRef<HTMLDivElement>(null)
 
     const isAnonymous = post.anonymity
+
+    //needed to send it to PostVoteClientPhone so that it can get the current user's vote
+    const [user] = useAuthState(auth);
 
   return (
     <div className='rounded-md bg-white dark:bg-[#262626] shadow'>
@@ -111,7 +117,7 @@ const Post = ({post}: Props) => {
 
 
         {/* <div className=' sm:block md:hidden '> */}
-          <PostVoteClientPhone/>
+          <PostVoteClientPhone postId={post.id} postType="questions" userId={user?.uid!}/>
         {/* </div> */}
 
 

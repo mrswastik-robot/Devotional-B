@@ -195,7 +195,7 @@ export default function Home() {
                       <div className=" border border-gray-300 rounded-3xl p-4 cursor-pointer">
                       <Form {...form}>
                         <form
-                        className="relative space-y-3 overflow-hidden"
+                        className="relative space-y-3 "
                         onSubmit={form.handleSubmit(onSubmit)}
                         >
 
@@ -207,7 +207,7 @@ export default function Home() {
                             <FormItem>
                               <FormLabel>Title</FormLabel>
                               <FormControl>
-                                <Input placeholder="Title for the question ..." {...field}/>
+                                <Input className="" placeholder="Title for the question ..." {...field}/>
                               </FormControl>
                               <FormMessage/>
                             </FormItem>

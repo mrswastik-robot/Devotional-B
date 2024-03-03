@@ -219,8 +219,12 @@ export const Tiptap = ({ onChange ,value  , setImageUpload , uploadImage , progr
     <div className="">
       <MenuBar editor={editor} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress} />
       <EditorContent editor={editor} className=" min-h-[10rem] border border-gray-300 rounded-lg"  />
-      <Progress value={progress} className=" w-full"/>
-
+      {
+        progress != 0 &&
+        
+          <Progress value={progress} className=" w-full"/>
+        
+      }
 
 
     </div>

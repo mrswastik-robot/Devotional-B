@@ -5,6 +5,7 @@ import { FaFacebookF } from "react-icons/fa";
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { auth, db } from "@/utils/firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
@@ -166,15 +167,14 @@ const LoginPage = (props: Props) => {
     <div className=" absolute bg-login-bg bg-cover bg-no-repeat left-0 top-0 h-full w-full "></div>
     <div
       
-      className="bg-[#F8FAFC] md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:top-1/2 md:left-1/2 items-center justify-center flex shadow-lg rounded-3xl"
+      className="bg-[#F8FAFC] md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:top-1/2 md:left-1/2 items-center justify-center flex shadow-xl rounded-3xl"
     >
       <div className="relative p-4  w-full h-full  md:h-auto">
-        <div className="relative bg-white rounded-lg shadow">
+        <div className="relative bg-[#F8FAFC] rounded-lg ">
           
 
           <div className="p-5">
-            <h3 className="text-2xl mb-0.5 font-medium"></h3>
-            <p className="mb-4 text-sm font-normal text-gray-800"></p>
+            
 
             <div className="text-center">
               <p className="mb-3 text-2xl font-semibold leading-5 text-slate-900">
@@ -185,28 +185,32 @@ const LoginPage = (props: Props) => {
               </p>
             </div>
 
-            <div className=" md:flex md:flex-col-2 w-full mt-7">
-            <div className="mt-7 flex flex-col gap-4 w-full p-4">
+            <div className=" md:flex md:flex-col-2 w-full mt-5">
+            <div className="mt-4 flex flex-col gap-4 w-full p-4">
               <p className=" text-sm text-zinc-400">
                 By continiuing you indicate that you agree to Devotional-B <span className=" text-blue-500">Terms of Service</span> and <span className=" text-blue-500">Privacy Policy</span>.
               </p>
-              <button className=" md:mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
+              <button className=" md:mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
               onClick={signInWithGoogle}
               >
-                <img
+                <Image
                   src="https://www.svgrepo.com/show/475656/google-color.svg"
                   alt="Google"
+                  width={18}
+                  height={18}
                   className="h-[18px] w-[18px] "
                 />
                 Continue with Google
               </button>
 
-              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
+              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
               onClick={signInWithFacebook}
               >
-                <img
+                <Image
                   src="https://www.svgrepo.com/show/489934/facebook.svg"
                   alt="Google"
+                  width={18}
+                  height={18}
                   className="h-[18px] w-[18px] "
                 />
                 Continue with Facebook
@@ -221,7 +225,7 @@ const LoginPage = (props: Props) => {
 
             <Separator orientation="vertical" className="h-[14rem] sm:block hidden" />
 
-            <div className="w-full p-4 md:mt-7">
+            <div className="w-full p-4 md:mt-3">
               <label htmlFor="email" className="sr-only">
                 Email address
               </label>

@@ -17,6 +17,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 
 import { Progress } from "./ui/progress";
+import { Toggle } from "./ui/toggle";
 
 import {
   FaBold,
@@ -100,40 +101,51 @@ const MenuBar = ({ editor , setImageUpload , uploadImage , progress}) => {
 
   return (
     <div className="pb-5 flex items-left ml-1  rounded-lg py-3  gap-x-4">
-      <div className=" flex gap-4">
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") ? "is_active" : ""}
-        >
-          <FaBold />
-        </button>
+      <div className=" flex gap-0 ">
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={editor.isActive("bold") ? "is_active" : ""}
+          >
+            <Toggle variant="" aria-label='Toggle Bold'>
+                <FaBold />
+            </Toggle>
+
+          </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={editor.isActive("italic") ? "is_active" : ""}
         >
+        <Toggle aria-label='Toggle Italics'>
           <FaItalic />
+        </Toggle>
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={editor.isActive("underline") ? "is_active" : ""}
         >
+        <Toggle aria-label='Toggle Italics'>
           <FaUnderline />
+        </Toggle>
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={editor.isActive("strike") ? "is_active" : ""}
         >
+        <Toggle aria-label='Toggle Strike'>
           <FaStrikethrough />
+        </Toggle>
         </button>
 
         <button 
           type="button"
           onClick={setLink} className={editor.isActive('link') ? 'is-active' : ''}>
+          <Toggle aria-label='Toggle Link'>
           <IoIosLink />  
+          </Toggle>
       </button>
 
         {/* <button 
@@ -143,9 +155,11 @@ const MenuBar = ({ editor , setImageUpload , uploadImage , progress}) => {
         </button> */}
 
         <button type="button" onClick={handleClick}>
+          <Toggle aria-label='Toggle Image'>
             <FaImages />
+          </Toggle>
         </button>
-        <p>{progress}</p>
+        {/* <p>{progress}</p> */}
         <Progress value={progress} className=" w-full z-10"/>
         <input type="file" ref={hiddenFileInput} onChange={handleFileSelect} style={{display: 'none'}} />
 

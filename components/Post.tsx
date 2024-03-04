@@ -61,7 +61,7 @@ const Post = ({post}: Props) => {
 
         {/* <PostVoteClientPhone/> */}
 
-        <div className='w-0 flex-1'>
+        <div className='w-0 flex-1 break-normal overflow-hidden'>
           <div className='flex max-h-40 mt-1 space-x-3 text-xs text-gray-500'>
             {/* <div> */}
                 <Avatar>

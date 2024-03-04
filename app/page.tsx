@@ -50,6 +50,7 @@ import { useRouter , useSearchParams } from "next/navigation";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -161,7 +162,7 @@ export default function Home() {
               Home
             </p>
           </div> */}
-          <dl className='rounded-lg divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#1A1A1B] border-gray-300  px-6 py-4 text-sm leading-6'>
+          <dl className='rounded-lg divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-300  px-6 py-4 text-sm leading-6'>
             <div className='flex justify-between gap-x-4 py-3'>
               {
                 isGuest === 'true' ? (
@@ -241,14 +242,14 @@ export default function Home() {
                             control={form.control}
                             name="anonymity"
                             render={({ field }) => (
-                              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2">
                                 <div className="space-y-0.5">
                                   <FormLabel className="text-base">
                                     Post Anonymously
                                   </FormLabel>
-                                  <FormDescription>
+                                  {/* <FormDescription>
                                     Post question without revealing your identity.
-                                  </FormDescription>
+                                  </FormDescription> */}
                                 </div>
                                 <FormControl>
                                   <Switch
@@ -260,13 +261,15 @@ export default function Home() {
                             )}
                           />
 
-                          
-                            <Button type="submit" 
-                              className=" w-full"
-                              // disabled={isGuest === 'true'}
-                            >
-                              Post
-                            </Button>
+                          <DialogClose asChild>
+                              <Button type="submit" 
+                                className=" w-full"
+                                // disabled={isGuest === 'true'}
+                              >
+                                Post
+                              </Button>
+                          </DialogClose>
+                            
                           
 
                         </form>

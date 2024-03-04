@@ -48,7 +48,7 @@ const RightHandFeedCard = ({ post }: Props) => {
       <h3 className="font-medium text-lg mb-1">{post.title.length>27?`${post.title.substring(0,27)}...`:post.title}</h3>
     </Link>
       <div className="text-sm flex gap-1">
-        <p className="text-zinc-500">{post.voteAmt} supports</p>
+        <p className="text-zinc-500">{post.voteAmt?post.voteAmt:0} supports</p>
         <svg viewBox="0 0 48 48" className="mt-1 w-3 h-3" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z" fill="#333333"></path>
         </svg>

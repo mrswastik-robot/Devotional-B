@@ -46,7 +46,7 @@ const RightHandFeed = (props: Props) => {
 
         {
             posts.slice(0, 5).map((post, index) => (
-                <div key={index} className='flex gap-4 items-start mt-4'>
+                <div key={index} className='flex gap-4 items-start mt-3'>
                     <RightHandFeedCard post={post}/>
                 </div>
             ))

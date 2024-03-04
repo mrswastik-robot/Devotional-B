@@ -23,13 +23,13 @@ const RightHandFeedCard = ({ post }: Props) => {
   return (
     <div className="">
   <Separator className="mb-1" />
-  <div className="flex gap-1 flex-col">
+  <div className="flex gap-3 flex-col">
   <div className='flex max-h-40 mt-1 space-x-3 text-gray-500'>
             <div className="">
                     <div className=' relative w-full rounded-full overflow-hidden'>
                         <Image
-                        width={50}
-                        height={50}
+                        width={30}
+                        height={30}
                         objectFit="cover"
                         src={isAnonymous ? ('https://qph.cf2.quoracdn.net/main-qimg-73e139be8bfc1267eeed8ed6a2802109-lq') : (post.profilePic)}
                         alt='profile picture'
@@ -37,13 +37,8 @@ const RightHandFeedCard = ({ post }: Props) => {
                         />
                     </div>
             </div>
-            <Separator orientation='vertical' className=' h-5 mt-4 '/>
-            <div className='flex flex-col justify-end'>
-        <span className=''>{isAnonymous ? 'Anonymous' : post.name}</span>{' '}
-        <span className=''>
-          <Button variant='ghost' className='text-blue-500 text-xs p-0 place-content-center'>Follow</Button>
-        </span>
-      </div>
+            <Separator orientation='vertical' className=' h-5 mt-1 '/>
+        <span className=''>{isAnonymous ? 'Anonymous' : post.name}</span>
           </div>
     <div className="flex flex-col">
     <Link href={`/postPage2/${post.title.split(' ').join('-')}`}>

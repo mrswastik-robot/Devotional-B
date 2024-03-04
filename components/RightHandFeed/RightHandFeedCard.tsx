@@ -22,8 +22,8 @@ const RightHandFeedCard = ({ post }: Props) => {
   const isAnonymous = post.anonymity
   return (
     <div className="">
-  <Separator className="my-1" />
-  <div className="flex gap-4 flex-col">
+  <Separator className="mb-1" />
+  <div className="flex gap-1 flex-col">
   <div className='flex max-h-40 mt-1 space-x-3 text-gray-500'>
             <div className="">
                     <div className=' relative w-full rounded-full overflow-hidden'>
@@ -38,10 +38,12 @@ const RightHandFeedCard = ({ post }: Props) => {
                     </div>
             </div>
             <Separator orientation='vertical' className=' h-5 mt-4 '/>
-            <span className=''>{isAnonymous ? ('Anonymous') : (post.name)}</span>{' '}          
-            <span className='ml-0'>
-            <Button variant='ghost' className=' text-blue-500 text-xs mt-1 p-0 place-items-end'>Follow</Button>
-            </span>
+            <div className='flex flex-col justify-end'>
+        <span className=''>{isAnonymous ? 'Anonymous' : post.name}</span>{' '}
+        <span className=''>
+          <Button variant='ghost' className='text-blue-500 text-xs p-0 place-content-center'>Follow</Button>
+        </span>
+      </div>
           </div>
     <div className="flex flex-col">
     <Link href={`/postPage2/${post.title.split(' ').join('-')}`}>

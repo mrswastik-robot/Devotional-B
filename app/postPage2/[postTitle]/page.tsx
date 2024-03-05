@@ -89,7 +89,7 @@ type QuestionType = {
 };
 
 type AnswerType = {
-  // id: string;
+  //id: string;
   name: string;
   description: string;
   profilePic: string;

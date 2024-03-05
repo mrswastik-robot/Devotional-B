@@ -39,6 +39,7 @@ type Input = z.infer<typeof CommentType>;
 
 type Props = {
   postTitleWithSpaces: string;
+  changeHandler: Function;
   answerId: string;
   toggleCommentInputVisibility: () => void;
 };
@@ -64,6 +65,7 @@ type CommentTypeWithId = CommentType & { id: string };
 
 const CommentBox = ({
   postTitleWithSpaces,
+  changeHandler,
   answerId,
   toggleCommentInputVisibility,
 }: Props) => {
@@ -103,6 +105,7 @@ const CommentBox = ({
       console.log("Comment written with : ", docRef);
 
       form.reset();
+      changeHandler((prev: boolean)=>!prev)
     } else {
       console.log("No such document");
     }
@@ -113,6 +116,7 @@ const CommentBox = ({
     console.log(postTitleWithSpaces);
 
     createCommentPost(data);
+
   };
 
   //fetching all the comments

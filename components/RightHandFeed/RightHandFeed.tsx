@@ -1,7 +1,7 @@
 import { RecentPosts } from '@/lib/data'
 import React, {useEffect, useState} from 'react'
 import { db } from '@/utils/firebase'
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { collection, getDocs, limit, onSnapshot, orderBy, query } from 'firebase/firestore'
 
 import RightHandFeedCard from './RightHandFeedCard'
 
@@ -26,10 +26,28 @@ const RightHandFeed = (props: Props) => {
   useEffect(() => {
 
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'));
+    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(5));
 
-    const unsub = onSnapshot(q, (snapshot) => {
-      setPosts(snapshot.docs.map((doc) => ({id: doc.id, ...doc.data()} as PostType)));
+    const unsub = onSnapshot(q, async(snapshot) => {
+      const postsData =[];
+
+      for (const doc of snapshot.docs) {
+        
+        // Fetch the 'answers' subcollection for each question
+        const answersCollectionRef = collection(doc.ref, 'answers');
+        const answersQuery = query(answersCollectionRef);
+    
+        const answersSnapshot = await getDocs(answersQuery);
+        const numAnswers = answersSnapshot.size;
+    
+        // Add the total number of answers to the question data
+        const questionData = { id: doc.id, comments: numAnswers, ...doc.data() } as PostType;
+    
+        postsData.push(questionData);
+      }
+  
+      //console.log(postsData)
+      setPosts(postsData);
     })
 
     return () => {
@@ -45,7 +63,7 @@ const RightHandFeed = (props: Props) => {
       </div>
 
         {
-            posts.slice(0, 5).map((post, index) => (
+            posts.map((post, index) => (
                 <div key={index} className='flex gap-4 items-start mt-3'>
                     <RightHandFeedCard post={post}/>
                 </div>

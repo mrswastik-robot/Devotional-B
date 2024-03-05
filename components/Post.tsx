@@ -125,7 +125,7 @@ const Post = ({post}: Props) => {
           <Link
             href={`/postPage2/${post.title.split(' ').join('-')}`}
             className='w-fit flex items-center gap-2'>
-            <MessageSquare className='h-4 w-4' /> <span className=' sm:block hidden'>5 Answers</span>
+            <MessageSquare className='h-4 w-4' /> <span className=' sm:block hidden'>{post.comments} Answers</span>
           </Link>
           <Link href={`/r/post/${post.id}`} className='w-fit flex items-center gap-2'>
             <Share className='h-4 w-4' /> <span className=' sm:block hidden'>Share</span>

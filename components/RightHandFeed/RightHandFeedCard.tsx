@@ -49,7 +49,7 @@ const RightHandFeedCard = ({ post }: Props) => {
         <svg viewBox="0 0 48 48" className="mt-1 w-3 h-3" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z" fill="#333333"></path>
         </svg>
-        <p className="text-zinc-500">{7} comments</p>
+        <p className="text-zinc-500">{post.comments} comments</p>
       </div>
     </div>
   </div>

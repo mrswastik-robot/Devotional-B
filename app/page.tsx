@@ -61,7 +61,7 @@ export default function Home() {
   const searchParams = useSearchParams();
   const isGuest = searchParams.get('isGuest');
   const [user, loading] = useAuthState(auth);
-
+  const [newPost, setNewPost] = useState(false);
 
   //system image upload stuff
   const [imageUpload , setImageUpload] = useState<File | null>(null);
@@ -154,6 +154,7 @@ export default function Home() {
     // console.log(data);
 
     createQuestionPost(data);
+    setNewPost((prev)=>!prev);
     
   }
 
@@ -167,7 +168,7 @@ export default function Home() {
         
         {/* <TopFeedCard /> */}
       
-        <CustomFeed />
+        <CustomFeed newPost = {newPost} />
 
         {/* subreddit info */}
         <div className='col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-5'>

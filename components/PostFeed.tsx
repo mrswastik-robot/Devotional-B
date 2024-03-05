@@ -9,7 +9,9 @@ import Loader from './ui/Loader';
 import {db} from '@/utils/firebase'
 import { collection, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore'
 
-type Props = {}
+type Props = {
+  newPost:boolean
+}
 
 type PostType = {
   id: string;
@@ -35,6 +37,8 @@ const PostFeed = (props: Props) => {
   const [loadMore, setLoadMore] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [addFirst, setAddFirst] = useState(false);
 
   useEffect(() => {
     
@@ -69,7 +73,14 @@ const PostFeed = (props: Props) => {
       
       const lastDocument = snapshot.docs[snapshot.docs.length - 1];
       setLoadMore(lastDocument);
+
+      if(addFirst){
+        setPosts(postsData)
+        setAddFirst(false);
+      }
+      else{
       setPosts((prevPosts)=>[...prevPosts, ...postsData]);
+      }
       setIsLoading(false);
       setPageLoaded(true);
     })
@@ -77,7 +88,14 @@ const PostFeed = (props: Props) => {
     return () => {
       unsub()
     }
-  }, [lastDoc]);
+  }, [lastDoc, reload]);
+
+  useEffect(()=>{
+    //console.log("In Post", props.newPost);
+    setAddFirst(true);
+    setLastDoc(null);
+    setReload((prev)=>!prev);
+  }, [props.newPost])
 
   const loadMoreData = ()=>{
     setLastDoc(loadMore);

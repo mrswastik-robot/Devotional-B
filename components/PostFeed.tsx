@@ -74,7 +74,7 @@ const PostFeed = (props: Props) => {
       const lastDocument = snapshot.docs[snapshot.docs.length - 1];
       setLoadMore(lastDocument);
 
-      if(addFirst){
+      if(addFirst&&lastDoc==null){
         setPosts(postsData)
         setAddFirst(false);
       }

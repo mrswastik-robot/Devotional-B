@@ -22,7 +22,7 @@ import { collection, doc, getDocs, query } from "firebase/firestore";
 
 type Props = {
   answers: {
-    //id: string;
+    id: string;
     name: string;
     profilePic: string;
     // postImage: string;

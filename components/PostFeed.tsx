@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import Post from './Post'
 import { postData } from '@/lib/data'
+import { Button } from './ui/button';
+import Loader from './ui/Loader';
 
 import {db} from '@/utils/firebase'
-import { collection, getDocs, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { collection, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore'
 
 type Props = {}
 
@@ -28,14 +30,27 @@ type PostType = {
 const PostFeed = (props: Props) => {
 
   const [posts , setPosts] = useState<PostType[]>([]);
+  const limitValue:number=7;
+  const [lastDoc, setLastDoc] = useState<any>(null);
+  const [loadMore, setLoadMore] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pageLoaded, setPageLoaded] = useState(false);
 
   useEffect(() => {
-
+    
+    setIsLoading(true);
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'));
+
+    let q;
+    if(lastDoc){
+    q = query(collectionRef, orderBy('createdAt', 'desc'), startAfter(lastDoc), limit(limitValue));
+    }
+    else{
+      q=query(collectionRef, orderBy('createdAt', 'desc'), limit(limitValue));
+    }
 
     const unsub = onSnapshot(q, async(snapshot) => {
-      const postsData =[];
+      const postsData:any = [];
 
       for (const doc of snapshot.docs) {
         
@@ -51,24 +66,41 @@ const PostFeed = (props: Props) => {
     
         postsData.push(questionData);
       }
- 
-      setPosts(postsData);
+      
+      const lastDocument = snapshot.docs[snapshot.docs.length - 1];
+      setLoadMore(lastDocument);
+      setPosts((prevPosts)=>[...prevPosts, ...postsData]);
+      setIsLoading(false);
+      setPageLoaded(true);
     })
 
     return () => {
       unsub()
     }
-  }, [])
+  }, [lastDoc]);
+
+  const loadMoreData = ()=>{
+    setLastDoc(loadMore);
+  }
 
   return (
     <div className=' w-[100%]'>
-        <ul className=' flex flex-col col-span-2 space-y-4'>
+        <ul className=' flex flex-col col-span-2 space-y-6'>
           {posts.map((post, index) => (
             <li key={index}>
               <Post post={post} />
             </li>
           ))}
         </ul>
+        <div className='w-[100%] lg:ml-64 md:ml-80 xl:ml-96'>
+        { isLoading?<Loader/>:pageLoaded&&
+        <div className='mt-4'>
+        <Button>
+        <button onClick={loadMoreData}>LoadMore</button>
+        </Button>
+        </div>
+        }
+        </div>
     </div>
   )
 }

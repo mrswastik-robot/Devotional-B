@@ -38,6 +38,7 @@ type Props = {
         createdAt: string
         anonymity: boolean
     }
+    // children: Element
     // id: string
 }
 
@@ -51,7 +52,7 @@ const Post = ({post}: Props) => {
     const [user] = useAuthState(auth);
 
   return (
-    <div className='rounded-md bg-white dark:bg-[#262626] shadow'>
+    <div className='rounded-md bg-white dark:bg-[#262626] shadow my-3'>
       <div className='px-6 py-4 flex justify-between'>
         {/* <PostVoteClient
         //   postId={post.id}

@@ -52,6 +52,11 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 
+import algoliasearch from "algoliasearch/lite";
+// import algoliasearch from "algoliasearch";
+import { InstantSearch , SearchBox , Hits, Highlight } from "react-instantsearch";
+import Post from "@/components/Post";
+
 type Input = z.infer<typeof QuestionType>;
 
 
@@ -102,6 +107,19 @@ export default function Home() {
     if(!user)
       router.push('/auth');
   }, [user, loading , router])
+  
+  
+  //algolsearchClientff
+  
+  const [searchClient, setSearchClient] = useState<any>(null);
+  useEffect(() => {
+    setSearchClient(algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef'))
+  } , [])
+
+  // const client = algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef')
+
+
+
 
   const [description, setDescription] = useState("");
   // console.log(description);
@@ -142,6 +160,26 @@ export default function Home() {
     
   }
 
+  const [searchTerm , setSearchTerm] = useState("");
+
+  function transformHitToPost(hit: any) {
+    return {
+      id: hit.objectID, // Algolia provides an unique objectID for each record
+      title: hit.title,
+      name: hit.name,
+      description: hit.description,
+      profilePic: hit.profilePic,
+      postImage: hit.postImage,
+      likes: hit.likes,
+      comments: hit.comments,
+      shares: hit.shares,
+      questionImageURL: hit.questionImageURL,
+      createdAt: hit.createdAt,
+      anonymity: hit.anonymity,
+      // add other necessary fields
+    };
+  }
+
   // form.watch();
 
   return (
@@ -152,7 +190,19 @@ export default function Home() {
         
         {/* <TopFeedCard /> */}
       
-        <CustomFeed />
+      <div className=" col-span-5 ">
+        {
+          searchClient && (
+            <InstantSearch searchClient={searchClient} indexName="search_questions">
+              <SearchBox searchAsYouType={true}  />
+              
+              <Hits  hitComponent={({hit}) => <Post post={transformHitToPost(hit)} />} />
+              
+            </InstantSearch>
+          )
+        }
+        </div>
+        {/* <CustomFeed /> */}
 
         {/* subreddit info */}
         <div className='col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-5'>

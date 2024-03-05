@@ -21,7 +21,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 type Props = {
   answers: {
-    // id: string;
+    id: string;
     name: string;
     profilePic: string;
     // postImage: string;

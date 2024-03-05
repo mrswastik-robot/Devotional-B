@@ -89,7 +89,7 @@ type QuestionType = {
 };
 
 type AnswerType = {
-  // id: string;
+  id: string;
   name: string;
   description: string;
   profilePic: string;
@@ -223,8 +223,8 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         const qAns = query(ansRef, orderBy("createdAt", "desc")); // Order by 'createdAt' in descending order
         const ansUnsub = onSnapshot(qAns, (snapshot) => {
           const answers = snapshot.docs.map((doc) => ({
-            id: doc.id,
             ...(doc.data() as AnswerType),
+            id: doc.id,
           }));
   
           setAnswers(answers);

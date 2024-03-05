@@ -108,11 +108,13 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
   }, [postId, answers, commentAdded]);
 
   return (
+
     <div>
       {dispAnswer.map((answer: any, key) => (
+
         <div
           key={answer.id}
-          className="rounded-md bg-white dark:bg-[#262626] shadow mt-7 space-y-4" 
+          className="rounded-md bg-white dark:bg-[#262626] shadow mt-7 space-y-4 break-words overflow-hidden" 
         >
           <div className="px-6 py-5 flex justify-between">
             {/* <PostVoteClient
@@ -211,7 +213,9 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                 className="w-fit flex items-center gap-2"
                 onClick={() => toggleCommentInputVisibility(key)}
               >
+
                 <MessageSquare className="h-4 w-4" /> <span className=' sm:block hidden'>{answer.comments} Answers</span>
+
               </button>
               <button
                 className="w-fit flex items-center gap-2"

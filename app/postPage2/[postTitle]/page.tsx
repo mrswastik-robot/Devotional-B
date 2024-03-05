@@ -289,8 +289,8 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                     control={form.control}
                     name="anonymity"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                        <div className="space-y-0.5">
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2">
+                        <div className="">
                           <FormLabel className="text-base">
                             Answer Anonymously
                           </FormLabel>
@@ -338,7 +338,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
           </div> */}
 
         {/* Answers to the question */}
-        <div>
+        <div className="">
           <AnsPost answers={answers} postTitleWithSpaces={postTitleWithSpaces} postId={queObject.id} />
         </div>
       </div>

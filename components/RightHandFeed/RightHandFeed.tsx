@@ -56,7 +56,7 @@ const RightHandFeed = (props: Props) => {
   }, [])
 
   return (
-    <div className='  px-6 py-4'>
+    <div className=' bg-[#FFFFFF] dark:bg-[#262626]  px-6 py-4'>
 
       <div>
         <h1 className='font-normal text-xl md:text-base uppercase'>Recent Posts</h1>

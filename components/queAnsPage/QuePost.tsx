@@ -51,7 +51,7 @@ const QuePost = ({ post }: Props) => {
 
 // console.log(typeof post.description)
   return (
-    <div className="rounded-md bg-white dark:bg-[#262626] shadow">
+    <div className="rounded-md bg-white dark:bg-[#262626] shadow break-words overflow-hidden">
       <div className="px-6 md:py-6 py-4 flex justify-between">
         {/* <PostVoteClient
         //   postId={post.id}
@@ -102,7 +102,7 @@ const QuePost = ({ post }: Props) => {
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           {/* <a href={`/postPage/${post.id}`}> */}
-            <h1 className="text-3xl font-semibold py-2 leading-6 text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-semibold py-3 leading-6 text-gray-900 dark:text-white">
               {post.title}
             </h1>
           {/* </a> */}

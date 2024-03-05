@@ -16,8 +16,9 @@ import PostVoteClient from "@/components/post-vote/PostVoteClient";
 import CommentBox from "./CommentBox";
 import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
 
-import { auth } from "@/utils/firebase";
+import { auth, db } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { collection, doc, getDocs, query } from "firebase/firestore";
 
 type Props = {
   answers: {
@@ -38,10 +39,26 @@ type Props = {
   postId: string;
 };
 
+type AnswerType = {
+  // id: string;
+  name: string;
+  description: string;
+  profilePic: string;
+  // postImage: string;
+  likes: number;
+  comments: number;
+  shares: number;
+  answerImageURL: string;
+  createdAt: string;
+  anonymity: boolean;
+  // Add any other fields as necessary
+};
+
 const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
   
   //to send in postvoteclient for voting system
   const [user] = useAuthState(auth);
+  const [dispAnswer, setDispAnswer] = useState<AnswerType[]>([] as AnswerType[]);
   // console.log(postId);
 
   const pRef = useRef<HTMLDivElement>(null);
@@ -49,6 +66,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
   // const isAnonymous = answers[0].anonymity;
 
   const [commentInputVisibility , setCommentInputVisibility] = useState(answers.map(() => false))
+  const [commentAdded, setCommentAdded] = useState(false);
 
   const toggleCommentInputVisibility = (index: number) => {
     // Update the visibility of the comment input at the given index
@@ -60,13 +78,40 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
   useEffect(() => {
     // Close all comment inputs when the component is unmounted
      setCommentInputVisibility(answers.map(() => false));
+
+
   }, [answers]);
 
-  
+  useEffect(()=>{
+    const fetchData = async () => {
+      const updatedAnswers = await Promise.all(
+        answers.map(async (answer) => {
+          // Fetch the 'comments' subcollection for each 'answers' document
+          const commentsCollectionRef = collection(
+            doc(db, 'questions', postId, 'answers', answer.id),
+            'comments'
+          );
+          //console.log("answer", answer);
+          const commentsQuery = query(commentsCollectionRef);
+          const commentsSnapshot = await getDocs(commentsQuery);
+
+          // Add the total number of comments to the 'answers' data
+          return { ...answer, comments: commentsSnapshot.size };
+        })
+      );
+
+      setDispAnswer(updatedAnswers);
+      // Do something with updatedAnswers, such as updating state
+    };
+
+    fetchData();
+  }, [postId, answers, commentAdded]);
 
   return (
-    <div className=" space-y-4">
-      {answers.map((answer: any, key) => (
+
+    <div>
+      {dispAnswer.map((answer: any, key) => (
+
         <div
           key={answer.id}
           className="rounded-md bg-white dark:bg-[#262626] shadow mt-7 space-y-4 break-words overflow-hidden" 
@@ -168,7 +213,9 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                 className="w-fit flex items-center gap-2"
                 onClick={() => toggleCommentInputVisibility(key)}
               >
-                <MessageSquare className="h-4 w-4" /> <span className=' sm:block hidden'>5 Comments</span>
+
+                <MessageSquare className="h-4 w-4" /> <span className=' sm:block hidden'>{answer.comments} Answers</span>
+
               </button>
               <button
                 className="w-fit flex items-center gap-2"
@@ -185,7 +232,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
 
           {/* Add a comment input that shows or hides when the comments button is clicked */}
           {commentInputVisibility[key] && (
-            <CommentBox postTitleWithSpaces={postTitleWithSpaces} answerId={answer.id} toggleCommentInputVisibility={() => toggleCommentInputVisibility(key)} />
+            <CommentBox postTitleWithSpaces={postTitleWithSpaces} changeHandler={setCommentAdded} answerId={answer.id} toggleCommentInputVisibility={() => toggleCommentInputVisibility(key)} />
           )} 
 
         </div>

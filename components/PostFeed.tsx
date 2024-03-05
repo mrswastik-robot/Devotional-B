@@ -5,7 +5,7 @@ import Post from './Post'
 import { postData } from '@/lib/data'
 
 import {db} from '@/utils/firebase'
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { collection, getDocs, onSnapshot, orderBy, query } from 'firebase/firestore'
 
 type Props = {}
 
@@ -34,8 +34,25 @@ const PostFeed = (props: Props) => {
     const collectionRef = collection(db, 'questions');
     const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
-    const unsub = onSnapshot(q, (snapshot) => {
-      setPosts(snapshot.docs.map((doc) => ({id: doc.id, ...doc.data()} as PostType)));
+    const unsub = onSnapshot(q, async(snapshot) => {
+      const postsData =[];
+
+      for (const doc of snapshot.docs) {
+        
+        // Fetch the 'answers' subcollection for each question
+        const answersCollectionRef = collection(doc.ref, 'answers');
+        const answersQuery = query(answersCollectionRef);
+    
+        const answersSnapshot = await getDocs(answersQuery);
+        const numAnswers = answersSnapshot.size;
+    
+        // Add the total number of answers to the question data
+        const questionData = { id: doc.id, comments: numAnswers, ...doc.data() } as PostType;
+    
+        postsData.push(questionData);
+      }
+ 
+      setPosts(postsData);
     })
 
     return () => {

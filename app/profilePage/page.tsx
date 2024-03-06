@@ -7,9 +7,11 @@ import { useRouter } from 'next/navigation';
 
 import { auth , db } from '@/utils/firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { collection, query , where , onSnapshot, orderBy} from 'firebase/firestore';
+import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs} from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Post from '@/components/Post';
+import Loader from '@/components/ui/Loader';
+import { Button } from '@/components/ui/button';
 
 
 
@@ -36,30 +38,165 @@ const ProfilePage = (props: Props) => {
     const router = useRouter();
     const [user, loading] = useAuthState(auth);
     // console.log(user);
+    const [postType, setPostType] = useState("normal");
+    const [isAnonymous, setIsAnonymous] = useState(false);
     const [questions, setQuestions] = useState<PostType[]>([]);
+    const [anonymousQuestions, setAnonymousQuestions] = useState<PostType[]>([]);
+    const [loadingPosts, setLoadingPosts] = useState(true);
+    const [LastDoc, setLastDoc] = useState<any>(null);
+    const [anonymousMorePosts, setAnonymousMorePosts] = useState(false);
+    const [anonymousLastdoc, setAnonymousLastdoc] = useState<any>(null);
+    const [start, setStart] = useState<boolean>(true);
+    const [anonymousStart, setAnonymousStart] = useState<boolean>(true);
+    const [morePosts, setMorePosts] = useState(false);
+
+    const [loadMore, setLoadMore] = useState<boolean>(false);
 
     useEffect(() => {
-      if (!user) {
-        router.push('/auth');
-      } else {
-        const questionsRef = collection(db, 'questions');
-        const q = query(questionsRef, where('uid', '==', user.uid), orderBy('createdAt', 'desc'));
-        const unsub = onSnapshot(q, (snapshot) => {
-          setQuestions(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType)));
-        });
+      const fetchData = async () => {
+        try {
+          if (!user) {
+            router.push('/auth');
+          } else {
+            setLoadingPosts(true);
+            const questionsRef = collection(db, 'questions');
+            let q;
+    
+            if (postType === 'normal') {
+              if(start){
+              q = query(questionsRef, and(where('uid', '==', user.uid),
+              where('anonymity', '==', false)), orderBy('createdAt', 'desc'), limit(7));
+              const snapshot = await getDocs(q);
+            setQuestions(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType)));
+            const lastdoc = snapshot.docs[snapshot.docs.length - 1];
+            if(lastdoc)setMorePosts(true);
+            else setMorePosts(false);
+            setLastDoc(lastdoc);
+              setStart(false);
+              }
+              else{
+                const moreQ = query(
+                  questionsRef,
+                  and(where('uid', '==', user.uid),
+                where('anonymity', '==', false)),
+                  orderBy('createdAt', 'desc'),
+                  startAfter(LastDoc),
+                  limit(7)
+                );
+      
+                const moreSnapshot = await getDocs(moreQ);
+                setQuestions((prevQuestions) => [
+                  ...prevQuestions,
+                  ...moreSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType)),
+                ]);
+                const lastdoc = moreSnapshot.docs[moreSnapshot.docs.length - 1];
+                if(lastdoc)setMorePosts(true);
+                else setMorePosts(false);
+                setLastDoc(lastdoc);
+              }
+            } else {
+              if(anonymousStart){
+              q = query(
+                questionsRef,
+                and(where('uid', '==', user.uid),
+                where('anonymity', '==', true)),
+                orderBy('createdAt', 'desc'),
+                limit(7)
+              );
+              const snapshot = await getDocs(q);
+            setAnonymousQuestions(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType)));
+            const lastdoc = snapshot.docs[snapshot.docs.length - 1];
+            if(lastdoc)setAnonymousMorePosts(true);
+            else setAnonymousMorePosts(false);
+            setAnonymousLastdoc(lastdoc);
+            setAnonymousStart(false);
+            }
+          else{
+            const moreQ = query(
+              questionsRef,
+              and(where('uid', '==', user.uid),
+              where('anonymity', '==', true)),
+              orderBy('createdAt', 'desc'),
+              startAfter(anonymousLastdoc),
+              limit(7)
+            );
   
-        return () => {
-          unsub();
+            const moreSnapshot = await getDocs(moreQ);
+            setAnonymousQuestions((prevQuestions) => [
+              ...prevQuestions,
+              ...moreSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType)),
+            ]);
+            const lastdoc = moreSnapshot.docs[moreSnapshot.docs.length - 1];
+            if(lastdoc)setAnonymousMorePosts(true);
+            else setAnonymousMorePosts(false);
+            setAnonymousLastdoc(lastdoc);
+          }
+          };
+          
+          }
+          setLoadingPosts(false);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setLoadingPosts(false);
         }
-      }
-    }, [user, loading, router]);
+      };
+    
+      fetchData();
+    }, [user, loading, router, postType, loadMore]);
+
+    const handleToggleSwitch = () => {
+      setStart(true);
+      setAnonymousStart(true);
+      setIsAnonymous((prevIsAnonymous) => !prevIsAnonymous);
+      setPostType((prevPostType) => {
+        if(prevPostType=='normal')return 'anonymous'
+        else return 'normal'
+      });
+    };
+
+    const handleLoadMore = () => {
+      setLoadMore((prev)=>!prev)
+    };
+    
+    console.log("LastDoc ", LastDoc);
 
   return (
     <div className=' mt-4'>
         <ProfileCard user={user}/>
-
-        {(questions?.length === 0) ? (
-          <div className=' absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 '>
+        <div className='toggleSwitch flex items-center justify-center mt-5'>
+        <label className="inline-flex items-center cursor-pointer">
+  <input type='checkbox' checked={isAnonymous} onChange={handleToggleSwitch} className="sr-only peer"/>
+  <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+  <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{isAnonymous ? 'Anonymous Posts' : 'Normal Posts'}</span>
+</label>
+      </div>
+      <div>
+        {
+        <div>{
+        isAnonymous?<div>{
+          (anonymousQuestions?.length === 0) ? (
+          !loadingPosts&&<div className=' absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 '>
+            <Image
+            src='/trash.png'
+            width={300}
+            height={300}
+            className=" w-[10rem] h-[9rem] rounded-full"
+            alt="Profile Pic"
+            />
+            <h1 className=' text-2xl text-zinc-500'>No posts yet</h1>
+          </div>
+        ) : (
+          anonymousQuestions &&
+            anonymousQuestions.map((post, index) => (
+              // <Post key={index} post={post} />
+              <div key={index} className=' my-7'>
+                <Post post={post} />
+              </div>
+            ))
+        )}
+        </div>:  
+        (questions?.length === 0) ? (
+          !loadingPosts&&<div className=' absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 '>
             <Image
             src='/trash.png'
             width={300}
@@ -77,8 +214,22 @@ const ProfilePage = (props: Props) => {
                 <Post post={post} />
               </div>
             ))
-        )}
-
+        )
+          }
+        </div>
+        }
+        </div>
+        <div className='flex items-center justify-center'>
+        {
+          loadingPosts?<div><Loader/></div>:
+        <div>
+        {isAnonymous?
+          anonymousMorePosts?<Button onClick={handleLoadMore}>LoadMore...</Button>:<div>No More Posts...</div>:morePosts?<Button onClick={handleLoadMore}>LoadMore</Button>
+        :<div>No More Posts...</div>
+        }
+        </div>
+}
+        </div>
         <div>
           <button onClick={() => auth.signOut()} className="font-medium bg-red-600 hover:bg-red-900 text-white py-2 px-4 rounded-lg textx-sm my-7">Sign Out</button>
         </div>

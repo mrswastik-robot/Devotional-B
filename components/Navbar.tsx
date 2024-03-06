@@ -21,8 +21,8 @@ import { Button } from "./ui/button";
 import { auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+// import { useSelector } from "react-redux";
+// import { RootState } from "@/store/store";
 import algoliasearch from "algoliasearch/lite";
 // import { InstantSearch, SearchBox } from "react-instantsearch-core";
 import { useMemo } from "react";

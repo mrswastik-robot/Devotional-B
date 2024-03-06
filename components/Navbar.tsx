@@ -90,15 +90,15 @@ const Navbar = ({}: Props) => {
           <Search className=" absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
         </div>
 
-        <div className="relative">
+        {/* <div className="relative"> */}
               
                  {/* <InstantSearch searchClient={searchClient} indexName="search_questions"> */}
                 {/* <InstantSearch searchClient={searchClient} indexName="search_questions" searchState={searchState} onSearchStateChange={setSearchState}>
                   <SearchBox searchAsYouType={true} />
                 </InstantSearch> */}
               
-              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
-        </div>
+              {/* <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" /> */}
+        {/* </div> */}
 
         <div className=" flex gap-4">
           <ThemeToggler className=" mr-4" />

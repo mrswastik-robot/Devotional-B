@@ -37,6 +37,7 @@ type Props = {
         questionImageURL: string
         createdAt: string
         anonymity: boolean
+        ansNumbers: number
     }
     // children: Element
     // id: string
@@ -52,7 +53,7 @@ const Post = ({post}: Props) => {
     const [user] = useAuthState(auth);
 
   return (
-    <div className='rounded-md bg-white dark:bg-[#262626] shadow my-3'>
+    <div className='rounded-md bg-white dark:bg-[#262626] shadow my-1'>
       <div className='px-6 py-4 flex justify-between'>
         {/* <PostVoteClient
         //   postId={post.id}

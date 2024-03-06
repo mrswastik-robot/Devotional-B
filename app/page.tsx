@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState , Suspense } from "react";
 
-import {Home as HomeIcon } from "lucide-react";
+import {Home as HomeIcon , Search } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 import CustomFeed from "@/components/CustomFeed";
@@ -147,6 +147,7 @@ export default function Home() {
       createdAt: serverTimestamp(),
       questionImageURL: imageUrl,
       anonymity: data.anonymity,
+      ansNumbers: 0,
     });
 
     console.log("Document written with ID: ", docRef.id);
@@ -176,9 +177,23 @@ export default function Home() {
       questionImageURL: hit.questionImageURL,
       createdAt: hit.createdAt,
       anonymity: hit.anonymity,
+      ansNumbers: hit.ansNumbers,
       // add other necessary fields
     };
   }
+
+  const searchClasses = {
+    root: 'flex flex-col space-y-2 ',
+    form: 'flex flex-col space-y-2 ',
+    input: 'w-full border border-gray-300 rounded-lg p-2 pl-10',
+    // submit: 'bg-emerald-500 text-white rounded-lg p-2',
+    submit: 'hidden',
+    reset: 'hidden',
+    // loadingIndicator: 'text-red-500',
+    // submitIcon: 'h-5 w-5',
+    // resetIcon: 'h-5 w-5',
+    // loadingIcon: 'h-5 w-5',
+  };
 
   // form.watch();
 
@@ -191,16 +206,23 @@ export default function Home() {
         {/* <TopFeedCard /> */}
       
       <div className=" col-span-5 ">
-        {
+        {/* {
           searchClient && (
-            <InstantSearch searchClient={searchClient} indexName="search_questions">
-              <SearchBox searchAsYouType={true}  />
+            <InstantSearch searchClient={searchClient} indexName="search_questions" >
+
+              <div className="relative">
+              <SearchBox classNames={searchClasses} searchAsYouType={true} placeholder="Search ..." />
+              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
+
+              </div>
+
               
               <Hits  hitComponent={({hit}) => <Post post={transformHitToPost(hit)} />} />
               
             </InstantSearch>
           )
-        }
+        } */}
+        <CustomFeed />
         </div>
         {/* <CustomFeed /> */}
 

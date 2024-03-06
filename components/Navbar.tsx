@@ -21,9 +21,24 @@ import { Button } from "./ui/button";
 import { auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-type Props = {};
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import algoliasearch from "algoliasearch/lite";
+// import { InstantSearch, SearchBox } from "react-instantsearch-core";
+import { useMemo } from "react";
 
-const Navbar = (props: Props) => {
+type Props = {
+  // searchState: any;
+  // setSearchState: any;
+  // searchClient: any;
+};
+
+const Navbar = ({}: Props) => {
+
+  //for searching stuff through the search bar in the navbar
+  // const searchClient = useSelector((state: RootState) => state.search.searchClient);
+  // const searchClient = algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef');
+  // const searchClient = useMemo(() => algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef'), []);
 
   const [clicked, setClicked] = useState("");
 
@@ -73,6 +88,16 @@ const Navbar = (props: Props) => {
         <div className=" relative ">
           <Input className=" pl-10 w-[40rem]" placeholder="Search" />
           <Search className=" absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
+        </div>
+
+        <div className="relative">
+              
+                 {/* <InstantSearch searchClient={searchClient} indexName="search_questions"> */}
+                {/* <InstantSearch searchClient={searchClient} indexName="search_questions" searchState={searchState} onSearchStateChange={setSearchState}>
+                  <SearchBox searchAsYouType={true} />
+                </InstantSearch> */}
+              
+              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
         </div>
 
         <div className=" flex gap-4">

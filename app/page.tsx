@@ -3,8 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState , Suspense } from "react";
+
 import imageCompression from 'browser-image-compression';
-import {Home as HomeIcon } from "lucide-react";
+
+import {Home as HomeIcon , Search } from "lucide-react";
+
 import { buttonVariants } from "@/components/ui/button";
 
 import CustomFeed from "@/components/CustomFeed";
@@ -51,6 +54,11 @@ import { useRouter , useSearchParams } from "next/navigation";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
+
+import algoliasearch from "algoliasearch/lite";
+// import algoliasearch from "algoliasearch";
+import { InstantSearch , SearchBox , Hits, Highlight } from "react-instantsearch";
+import Post from "@/components/Post";
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -117,6 +125,19 @@ export default function Home() {
     if(!user)
       router.push('/auth');
   }, [user, loading , router])
+  
+  
+  //algolsearchClientff
+  
+  const [searchClient, setSearchClient] = useState<any>(null);
+  useEffect(() => {
+    setSearchClient(algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef'))
+  } , [])
+
+  // const client = algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef')
+
+
+
 
   const [description, setDescription] = useState("");
   // console.log(description);
@@ -144,6 +165,7 @@ export default function Home() {
       createdAt: serverTimestamp(),
       questionImageURL: imageUrl,
       anonymity: data.anonymity,
+      // ansNumbers: 0,
     });
 
     console.log("Document written with ID: ", docRef.id);
@@ -158,6 +180,40 @@ export default function Home() {
     
   }
 
+  const [searchTerm , setSearchTerm] = useState("");
+
+  function transformHitToPost(hit: any) {
+    return {
+      id: hit.objectID, // Algolia provides an unique objectID for each record
+      title: hit.title,
+      name: hit.name,
+      description: hit.description,
+      profilePic: hit.profilePic,
+      postImage: hit.postImage,
+      likes: hit.likes,
+      comments: hit.comments,
+      shares: hit.shares,
+      questionImageURL: hit.questionImageURL,
+      createdAt: hit.createdAt,
+      anonymity: hit.anonymity,
+      // ansNumbers: hit.ansNumbers,
+      // add other necessary fields
+    };
+  }
+
+  const searchClasses = {
+    root: 'flex flex-col space-y-2 ',
+    form: 'flex flex-col space-y-2 ',
+    input: 'w-full border border-gray-300 rounded-lg p-2 pl-10',
+    // submit: 'bg-emerald-500 text-white rounded-lg p-2',
+    submit: 'hidden',
+    reset: 'hidden',
+    // loadingIndicator: 'text-red-500',
+    // submitIcon: 'h-5 w-5',
+    // resetIcon: 'h-5 w-5',
+    // loadingIcon: 'h-5 w-5',
+  };
+
   // form.watch();
 
   return (
@@ -168,7 +224,28 @@ export default function Home() {
         
         {/* <TopFeedCard /> */}
       
-        <CustomFeed newPost = {newPost} />
+        
+      <div className=" col-span-5 ">
+        {/* {
+          searchClient && (
+            <InstantSearch searchClient={searchClient} indexName="search_questions" >
+
+              <div className="relative">
+              <SearchBox classNames={searchClasses} searchAsYouType={true} placeholder="Search ..." />
+              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
+
+              </div>
+
+              
+              <Hits  hitComponent={({hit}) => <Post post={transformHitToPost(hit)} />} />
+              
+            </InstantSearch>
+          )
+        } */}
+        <CustomFeed newPost = {newPost}/>
+        </div>
+        {/* <CustomFeed /> */}
+
 
         {/* subreddit info */}
         <div className='col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-5'>

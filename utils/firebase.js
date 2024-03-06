@@ -4,6 +4,9 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
+
+import { getFunctions , connectFunctionsEmulator } from "firebase/functions";
+import {  connectFirestoreEmulator } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,3 +29,9 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+//functions
+const functions = getFunctions(app);
+// connectFunctionsEmulator(functions, 'localhost', 5001);
+// //firestore
+// connectFirestoreEmulator(db, 'localhost', 8081);

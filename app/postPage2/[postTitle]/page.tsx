@@ -21,6 +21,8 @@ import {
   query,
   orderBy,
   where,
+  increment,
+  updateDoc,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
@@ -201,6 +203,11 @@ const PostPage = ({ params: { postTitle } }: Props) => {
       });
   
       console.log("Document written with ID: ", docRef.id);
+
+      // Increment the ansNumbers field of the question
+    // await updateDoc(docRef, {
+    //   ansNumbers: increment(1),
+    // });
 
       //set the postId to the id of the question so that finally it can be sent to PostVoteClient for voting system.
       setPostId(doc.id);

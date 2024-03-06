@@ -107,7 +107,7 @@ const PostFeed = (props: Props) => {
     return () => {
       unsub();
     };
-  }, []);
+  }, [lastDoc, reload]);
 
   //algolia stuff
 
@@ -141,9 +141,9 @@ const PostFeed = (props: Props) => {
       setSearchResult(null);
     }
 
-  }, [lastDoc, reload]);
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     //console.log("In Post", props.newPost);
     setAddFirst(true);
     setLastDoc(null);
@@ -215,8 +215,10 @@ const PostFeed = (props: Props) => {
             </div>
             }
             </div>
+            </div>
         )}
-      </div>
+      
+    </div>
     </div>
   );
 };

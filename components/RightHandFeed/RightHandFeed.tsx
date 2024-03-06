@@ -4,6 +4,7 @@ import { db } from '@/utils/firebase'
 import { collection, getDocs, limit, onSnapshot, orderBy, query } from 'firebase/firestore'
 
 import RightHandFeedCard from './RightHandFeedCard'
+import { Separator } from '../ui/separator'
 
 type Props = {}
 
@@ -64,8 +65,11 @@ const RightHandFeed = (props: Props) => {
 
         {
             posts.map((post, index) => (
-                <div key={index} className='flex gap-4 items-start mt-3'>
+                <div key={index} className='mt-3'>
+                    <Separator className="mb-1" />
+                    <div className='flex gap-4 items-start'>
                     <RightHandFeedCard post={post}/>
+                    </div>
                 </div>
             ))
         }

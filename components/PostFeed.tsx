@@ -125,7 +125,7 @@ const PostFeed = (props: Props) => {
       questionImageURL: hit.questionImageURL,
       createdAt: hit.createdAt,
       anonymity: hit.anonymity,
-      ansNumbers: hit.ansNumbers,
+      // ansNumbers: hit.ansNumbers,
       // add other necessary fields
     };
   }

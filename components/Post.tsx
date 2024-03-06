@@ -37,7 +37,7 @@ type Props = {
         questionImageURL: string
         createdAt: string
         anonymity: boolean
-        ansNumbers: number
+        // ansNumbers: number
     }
     // children: Element
     // id: string

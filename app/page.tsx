@@ -147,7 +147,7 @@ export default function Home() {
       createdAt: serverTimestamp(),
       questionImageURL: imageUrl,
       anonymity: data.anonymity,
-      ansNumbers: 0,
+      // ansNumbers: 0,
     });
 
     console.log("Document written with ID: ", docRef.id);
@@ -177,7 +177,7 @@ export default function Home() {
       questionImageURL: hit.questionImageURL,
       createdAt: hit.createdAt,
       anonymity: hit.anonymity,
-      ansNumbers: hit.ansNumbers,
+      // ansNumbers: hit.ansNumbers,
       // add other necessary fields
     };
   }

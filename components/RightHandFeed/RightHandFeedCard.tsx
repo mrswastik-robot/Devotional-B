@@ -22,7 +22,6 @@ const RightHandFeedCard = ({ post }: Props) => {
   const isAnonymous = post.anonymity
   return (
     <div className="">
-  <Separator className="mb-1" />
   <div className="flex gap-3 flex-col">
   <div className='flex max-h-40 mt-1 space-x-3 text-gray-500'>
             <div className="">

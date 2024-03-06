@@ -4,7 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState , Suspense } from "react";
 
+import imageCompression from 'browser-image-compression';
+
 import {Home as HomeIcon , Search } from "lucide-react";
+
 import { buttonVariants } from "@/components/ui/button";
 
 import CustomFeed from "@/components/CustomFeed";
@@ -66,19 +69,32 @@ export default function Home() {
   const searchParams = useSearchParams();
   const isGuest = searchParams.get('isGuest');
   const [user, loading] = useAuthState(auth);
-
+  const [newPost, setNewPost] = useState(false);
 
   //system image upload stuff
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
 
-  const uploadImage = (file: any) => {
+  const uploadImage = async(file: any) => {
     if(file == null) return;
 
     const storageRef = ref(storage, `questions/${file.name}`);
 
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    try {
+      // Set compression options
+    const options = {
+      maxSizeMB: 1, // Max size in megabytes
+      maxWidthOrHeight: 800, // Max width or height
+      useWebWorker: true, // Use web worker for better performance (optional)
+    };
+  
+      // Compress the image
+      
+      const compressedFile = await imageCompression(file, options);
+
+    //uploading compressed file
+    const uploadTask = uploadBytesResumable(storageRef, compressedFile);
 
     uploadTask.on('state_changed', 
     (snapshot:any) => {
@@ -99,7 +115,9 @@ export default function Home() {
         setImageUrl(downloadURL);
       });
     }
-  );
+  );}catch(err){
+    console.error('Error compressing or uploading image:', err);
+  }
 
   }
 
@@ -158,6 +176,7 @@ export default function Home() {
     // console.log(data);
 
     createQuestionPost(data);
+    setNewPost((prev)=>!prev);
     
   }
 
@@ -205,6 +224,7 @@ export default function Home() {
         
         {/* <TopFeedCard /> */}
       
+        
       <div className=" col-span-5 ">
         {/* {
           searchClient && (
@@ -222,9 +242,10 @@ export default function Home() {
             </InstantSearch>
           )
         } */}
-        <CustomFeed />
+        <CustomFeed newPost = {newPost}/>
         </div>
         {/* <CustomFeed /> */}
+
 
         {/* subreddit info */}
         <div className='col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-5'>

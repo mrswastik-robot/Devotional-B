@@ -7,6 +7,7 @@ import QuePost from "@/components/queAnsPage/QuePost";
 import { Tiptap as TipTap } from "@/components/TipTap";
 import AnsPost from "@/components/queAnsPage/AnsPost";
 import RecentFeed from "@/components/queAnsPage/RecentFeed";
+import imageCompression from 'browser-image-compression';
 
 import { auth, db, storage } from "@/utils/firebase";
 import {
@@ -126,12 +127,23 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
 
-  const uploadImage = (file: any) => {
+  const uploadImage = async(file: any) => {
     if (file == null) return;
 
     const storageRef = ref(storage, `answers/${file.name}`);
 
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    try {
+      // Set compression options
+    const options = {
+      maxSizeMB: 1, // Max size in megabytes
+      maxWidthOrHeight: 800, // Max width or height
+      useWebWorker: true, // Use web worker for better performance (optional)
+    };
+  
+      // Compress the image
+      const compressedFile = await imageCompression(file, options);
+
+    const uploadTask = uploadBytesResumable(storageRef, compressedFile);
 
     uploadTask.on(
       "state_changed",
@@ -155,6 +167,9 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         });
       }
     );
+    }catch(err){
+      console.log("Error compressing and uploading Image...")
+    }
   };
 
   const form = useForm<Input>({

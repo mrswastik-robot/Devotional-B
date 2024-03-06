@@ -1,17 +1,15 @@
 "use client";
 
+
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Post from "./Post";
 import { postData } from "@/lib/data";
+        
+import { Button } from './ui/button';
+import Loader from './ui/Loader';        
 
 import { db } from "@/utils/firebase";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore'
 
 import algoliasearch from "algoliasearch/lite";
 // import algoliasearch from "algoliasearch";
@@ -23,7 +21,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { triggerSearch } from "@/store/slice";
 
-type Props = {};
+type Props = {
+  newPost:boolean
+}
 
 type PostType = {
   id: string;
@@ -43,14 +43,32 @@ type PostType = {
 };
 
 const PostFeed = (props: Props) => {
-  const [posts, setPosts] = useState<PostType[]>([]);
+
+  const [posts , setPosts] = useState<PostType[]>([]);
+  const limitValue:number=7;
+  const [lastDoc, setLastDoc] = useState<any>(null);
+  const [loadMore, setLoadMore] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pageLoaded, setPageLoaded] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [addFirst, setAddFirst] = useState(false);
 
   useEffect(() => {
-    const collectionRef = collection(db, "questions");
-    const q = query(collectionRef, orderBy("createdAt", "desc"));
+    
+    setIsLoading(true);
+    const collectionRef = collection(db, 'questions');
 
-    const unsub = onSnapshot(q, async (snapshot) => {
-      const postsData = [];
+    let q;
+    if(lastDoc){
+    q = query(collectionRef, orderBy('createdAt', 'desc'), startAfter(lastDoc), limit(limitValue));
+    }
+    else{
+      q=query(collectionRef, orderBy('createdAt', 'desc'), limit(limitValue));
+    }
+
+    const unsub = onSnapshot(q, async(snapshot) => {
+      const postsData:any = [];
+
 
       for (const doc of snapshot.docs) {
         // Fetch the 'answers' subcollection for each question
@@ -70,8 +88,21 @@ const PostFeed = (props: Props) => {
         postsData.push(questionData);
       }
 
-      setPosts(postsData);
-    });
+      
+      const lastDocument = snapshot.docs[snapshot.docs.length - 1];
+      setLoadMore(lastDocument);
+
+      if(addFirst&&lastDoc==null){
+        setPosts(postsData)
+        setAddFirst(false);
+      }
+      else{
+      setPosts((prevPosts)=>[...prevPosts, ...postsData]);
+      }
+      setIsLoading(false);
+      setPageLoaded(true);
+    })
+
 
     return () => {
       unsub();
@@ -109,7 +140,19 @@ const PostFeed = (props: Props) => {
       console.log(error);
       setSearchResult(null);
     }
-  };
+
+  }, [lastDoc, reload]);
+
+  useEffect(()=>{
+    //console.log("In Post", props.newPost);
+    setAddFirst(true);
+    setLastDoc(null);
+    setReload((prev)=>!prev);
+  }, [props.newPost])
+
+  const loadMoreData = ()=>{
+    setLastDoc(loadMore);
+  }
 
   useEffect(() => {
     if (searchText === "") {
@@ -155,13 +198,23 @@ const PostFeed = (props: Props) => {
             ))}
           </ul>
         ) : (
-          <ul className=" flex flex-col col-span-2 space-y-1">
-            {posts.map((post, index) => (
-              <li key={index}>
-                <Post post={post} />
-              </li>
-            ))}
-          </ul>
+              <div className=' w-[100%]'>
+            <ul className=' flex flex-col col-span-2 space-y-6'>
+              {posts.map((post, index) => (
+                <li key={index}>
+                  <Post post={post} />
+                </li>
+              ))}
+            </ul>
+            <div className='w-[100%] lg:ml-64 md:ml-80 xl:ml-96'>
+            { isLoading?<Loader/>:pageLoaded&&
+            <div className='mt-4'>
+            <Button>
+            <button onClick={loadMoreData}>LoadMore</button>
+            </Button>
+            </div>
+            }
+            </div>
         )}
       </div>
     </div>

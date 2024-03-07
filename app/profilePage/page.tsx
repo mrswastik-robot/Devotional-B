@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 import { auth , db } from '@/utils/firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs} from 'firebase/firestore';
+import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs , doc , getDoc} from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Post from '@/components/Post';
 import Loader from '@/components/ui/Loader';
@@ -56,6 +56,9 @@ const ProfilePage = (props: Props) => {
   const [start, setStart] = useState<boolean>(true);
   const [anonymousStart, setAnonymousStart] = useState<boolean>(true);
   const [morePosts, setMorePosts] = useState(false);
+  
+  //savedPosts
+  const [ savedPosts , setSavedPosts] = useState<PostType[]>([]);
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
 
@@ -173,6 +176,34 @@ const ProfilePage = (props: Props) => {
       fetchData();
     }, [user, loading, router, postType, loadMore]);
 
+    //fetching the savedPosts from the 'users' collection
+    useEffect(() => {
+      const fetchSavedPosts = () => {
+        if (!user) return;
+    
+        const userRef = doc(db, 'users', user.uid);
+        const unsubscribe = onSnapshot(userRef, async (userDoc) => {
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const savedPostIds = userData.savedPosts;
+            const savedPostsPromises = savedPostIds.map((postId: string) => {
+              const postRef = doc(db, 'questions', postId); // Replace 'questions' with the name of your posts collection
+              return getDoc(postRef);
+            });
+    
+            const savedPostsDocs = await Promise.all(savedPostsPromises);
+            const savedPosts = savedPostsDocs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType));
+            setSavedPosts(savedPosts);
+          }
+        });
+    
+        // Clean up the listener when the component unmounts
+        return () => unsubscribe();
+      };
+    
+      fetchSavedPosts();
+    }, [user]);
+
     const handleToggleSwitchNormal = () => {
       setStart(true);
       //setAnonymousStart(true);
@@ -185,6 +216,12 @@ const ProfilePage = (props: Props) => {
       setIsAnonymous(true);
       setPostType('anonymous');
     };
+
+    const handleToggleSwithcSaved = () => {
+      setPostType('saved');
+      setIsAnonymous(false);
+      // setStart(false);
+    }
 
     const handleLoadMore = () => {
       setLoadMore((prev)=>!prev)
@@ -201,12 +238,33 @@ const ProfilePage = (props: Props) => {
   <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{isAnonymous ? 'Anonymous Posts' : 'Normal Posts'}</span>
 </label>
       </div> */}
-      <div className='toggleSwitch flex items-center justify-center mt-5'>
-          <Tabs defaultValue="account" className="w-[400px]">
-      <TabsList className="grid w-full grid-cols-2">
+      <div className='toggleSwitch w-full flex items-center justify-center mt-5'>
+          <Tabs defaultValue="account" className="w-full">
+      <TabsList className="grid mx-auto  gap-3 grid-cols-3 w-[500px]">
         <TabsTrigger value="account" onClick={handleToggleSwitchNormal} >Normal Posts</TabsTrigger>
         <TabsTrigger value="password" onClick={handleToggleSwitchAnonymous}>Anonymous Posts</TabsTrigger>
+        <TabsTrigger value="saved" onClick={handleToggleSwithcSaved}>Saved Posts</TabsTrigger>
       </TabsList>
+      <TabsContent value="saved" className="min-w-full">
+      { savedPosts.length !== 0 ? (
+        savedPosts.map((post, index) => (
+          <div key={index} className=" my-5">
+            <Post post={post} />
+          </div>
+        ))
+      ) : (
+        <div className=" absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 ">
+          <Image
+            src="/trash.png"
+            width={300}
+            height={300}
+            className=" w-[10rem] h-[9rem] rounded-full"
+            alt="Profile Pic"
+          />
+          <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+        </div>
+      )}
+      </TabsContent>
     </Tabs>
     </div>
 
@@ -252,7 +310,7 @@ const ProfilePage = (props: Props) => {
                 </div>
               )
             ) : (
-              questions &&
+              questions && postType === "normal" &&
               questions.map((post, index) => (
                 // <Post key={index} post={post} />
                 <div key={index} className=" my-5">
@@ -270,7 +328,7 @@ const ProfilePage = (props: Props) => {
             <Loader />
           </div>
         ) : (
-          <div>
+          <div className=" mb-7">
             {isAnonymous ? (
               anonymousMorePosts ? (
                 <Button onClick={handleLoadMore}>LoadMore...</Button>
@@ -278,21 +336,14 @@ const ProfilePage = (props: Props) => {
                 <div>No More Posts...</div>
               )
             ) : morePosts ? (
-              <Button onClick={handleLoadMore}>LoadMore</Button>
+              postType != 'saved' &&<Button onClick={handleLoadMore}>LoadMore</Button>
             ) : (
               <div>No More Posts...</div>
             )}
           </div>
         )}
       </div>
-      <div>
-        <button
-          onClick={() => auth.signOut()}
-          className="font-medium bg-red-600 hover:bg-red-900 text-white py-2 px-4 rounded-lg textx-sm my-7"
-        >
-          Sign Out
-        </button>
-      </div>
+      
     </div>
   );
 };

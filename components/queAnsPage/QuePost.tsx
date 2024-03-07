@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef , useState , useEffect } from "react";
 
 import parse from "html-react-parser";
 
@@ -13,6 +13,8 @@ import Image from "next/image";
 
 import PostVoteClient from "@/components/post-vote/PostVoteClient";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 import { formatTimeToNow } from "@/lib/date";
 import { Separator } from "@/components/ui/separator";
@@ -21,6 +23,8 @@ import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
 
 import { auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { db } from "@/utils/firebase";
+import { doc, getDoc, updateDoc , arrayRemove, arrayUnion } from "firebase/firestore";
 
 type Props = {
   post: {
@@ -42,6 +46,8 @@ type Props = {
 
 const QuePost = ({ post }: Props) => {
 
+  const { toast } = useToast();
+
   //to send userId in postvoteclient for voting system
   const [user] = useAuthState(auth);
   
@@ -49,7 +55,67 @@ const QuePost = ({ post }: Props) => {
 
   const isAnonymous = post.anonymity;
 
-// console.log(typeof post.description)
+  //handling the saving Post functionality
+  //saving the post funcitonality
+  const [savedState , setSavedState] = useState(false);
+
+  const handleSave = async() => {
+
+    if(!user)
+    {
+      toast({
+        title:' Please sign in to save posts ',
+        variant:'destructive',
+      })
+      return;
+    }
+    
+      const userRef = doc(db , 'users' , user.uid);
+    
+
+    if(savedState)
+    {
+      //post is currently saved remove it from saved posts
+      await updateDoc(userRef , {
+        savedPosts: arrayRemove(post.id)
+      })
+      toast({
+        title:' Post removed from saved ',
+        variant:'default',  
+      })
+    }else{
+      //post is currently not saved add it to saved posts
+      await updateDoc(userRef , {
+        savedPosts: arrayUnion(post.id),
+      })
+      toast({
+        title:' Post saved ',
+        variant:'default',
+      })
+    }
+
+
+      setSavedState(!savedState);
+  }
+
+  //fetching savedPosts from user's document
+  useEffect(() => {
+    const fetchUser = async () => {
+      if(!user) return;
+        const userRef = doc(db, 'users', user.uid); // Replace 'user.uid' with the actual user ID
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.savedPosts.includes(post.id)) {
+                setSavedState(true);
+            }
+        }
+    };
+
+    fetchUser();
+}, [post.id , user ]);
+
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow break-words overflow-hidden">
       <div className="px-6 md:py-6 py-4 flex justify-between">
@@ -139,18 +205,18 @@ const QuePost = ({ post }: Props) => {
         <PostVoteClientPhone postId={post.id} postType="questions" userId={user?.uid!}/>
 
         <div className=" flex gap-x-3">
-          <Link
-            href={`/r/post/${post.id}`}
+          <button
             className="w-fit flex items-center gap-2"
           >
             <Share className="h-4 w-4" /> <span className=' sm:block hidden'>Share</span>
-          </Link>
-          <Link
-            href={`/r/post/${post.id}`}
+          </button>
+          <button
             className="w-fit flex items-center gap-2"
+            onClick={handleSave}
           >
-            <Bookmark className="h-4 w-4" /> <span className=' sm:block hidden'>Save</span>
-          </Link>
+            <Bookmark className={cn("h-4 w-4", {" text-black fill-black" : savedState == true,})} />{" "}
+            {savedState ? (<span className=" sm:block hidden">Saved</span>) : (<span className=" sm:block hidden">Save</span>)}
+          </button>
         </div>
         
         

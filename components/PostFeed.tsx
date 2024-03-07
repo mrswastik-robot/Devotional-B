@@ -210,7 +210,7 @@ const PostFeed = (props: Props) => {
             { isLoading?<Loader/>:pageLoaded&&
             <div className='mt-4'>
             <Button>
-            <button onClick={loadMoreData}>LoadMore</button>
+            <button onClick={loadMoreData}>LoadMore...</button>
             </Button>
             </div>
             }

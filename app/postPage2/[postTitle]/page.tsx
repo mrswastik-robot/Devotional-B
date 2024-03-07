@@ -278,7 +278,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
               className="rounded-3xl border border-gray-300 p-4 cursor-pointer"
               onClick={() => setIsCommentBoxOpen(false)}
             >
-              Write a comment...
+              Write a Answer...
             </div>
           ) : (
             <div className=" rounded-3xl border border-gray-300 p-4 cursor-pointer">

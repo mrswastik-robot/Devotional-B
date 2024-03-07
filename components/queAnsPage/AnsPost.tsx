@@ -214,7 +214,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                 onClick={() => toggleCommentInputVisibility(key)}
               >
 
-                <MessageSquare className="h-4 w-4" /> <span className=' sm:block hidden'>{answer.comments} Answers</span>
+                <MessageSquare className="h-4 w-4" /> <span className=' sm:block hidden'>{answer.comments} Comments</span>
 
               </button>
               <button

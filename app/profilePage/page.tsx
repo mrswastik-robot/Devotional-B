@@ -12,6 +12,14 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Post from '@/components/Post';
 import Loader from '@/components/ui/Loader';
 import { Button } from '@/components/ui/button';
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
 
 
@@ -144,32 +152,43 @@ const ProfilePage = (props: Props) => {
       fetchData();
     }, [user, loading, router, postType, loadMore]);
 
-    const handleToggleSwitch = () => {
+    const handleToggleSwitchNormal = () => {
       setStart(true);
+      //setAnonymousStart(true);
+      setIsAnonymous(false);
+      setPostType('normal');
+    };
+
+    const handleToggleSwitchAnonymous = () => {
       setAnonymousStart(true);
-      setIsAnonymous((prevIsAnonymous) => !prevIsAnonymous);
-      setPostType((prevPostType) => {
-        if(prevPostType=='normal')return 'anonymous'
-        else return 'normal'
-      });
+      setIsAnonymous(true);
+      setPostType('anonymous');
     };
 
     const handleLoadMore = () => {
       setLoadMore((prev)=>!prev)
     };
     
-    console.log("LastDoc ", LastDoc);
 
   return (
     <div className=' mt-4'>
         <ProfileCard user={user}/>
-        <div className='toggleSwitch flex items-center justify-center mt-5'>
+        {/* <div className='toggleSwitch flex items-center justify-center mt-5'>
         <label className="inline-flex items-center cursor-pointer">
   <input type='checkbox' checked={isAnonymous} onChange={handleToggleSwitch} className="sr-only peer"/>
   <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
   <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{isAnonymous ? 'Anonymous Posts' : 'Normal Posts'}</span>
 </label>
-      </div>
+      </div> */}
+      <div className='toggleSwitch flex items-center justify-center mt-5'>
+          <Tabs defaultValue="account" className="w-[400px]">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger value="account" onClick={handleToggleSwitchNormal} >Normal Posts</TabsTrigger>
+        <TabsTrigger value="password" onClick={handleToggleSwitchAnonymous}>Anonymous Posts</TabsTrigger>
+      </TabsList>
+    </Tabs>
+    </div>
+
       <div>
         {
         <div>{
@@ -219,20 +238,20 @@ const ProfilePage = (props: Props) => {
         </div>
         }
         </div>
-        <div className='flex items-center justify-center'>
+        <div className='flex items-center justify-center mb-4'>
         {
           loadingPosts?<div><Loader/></div>:
-        <div>
+        <div className=''>
         {isAnonymous?
-          anonymousMorePosts?<Button onClick={handleLoadMore}>LoadMore...</Button>:<div>No More Posts...</div>:morePosts?<Button onClick={handleLoadMore}>LoadMore</Button>
+          anonymousMorePosts?<Button onClick={handleLoadMore}>LoadMore...</Button>:<div>No More Posts...</div>:morePosts?<Button onClick={handleLoadMore}>LoadMore...</Button>
         :<div>No More Posts...</div>
         }
         </div>
 }
         </div>
-        <div>
+        {/* <div>
           <button onClick={() => auth.signOut()} className="font-medium bg-red-600 hover:bg-red-900 text-white py-2 px-4 rounded-lg textx-sm my-7">Sign Out</button>
-        </div>
+        </div> */}
         
     </div>
   )

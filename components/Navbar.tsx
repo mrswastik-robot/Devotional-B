@@ -12,6 +12,20 @@ import { Bell } from "lucide-react";
 import { NotebookTabs } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "./ui/input";
@@ -21,9 +35,11 @@ import { Button } from "./ui/button";
 import { auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { useDispatch , useSelector } from "react-redux";
-import { setSearchText , triggerSearch } from "@/store/slice";
-import { RootState } from "@/store/store";
+// import { useSelector } from "react-redux";
+// import { RootState } from "@/store/store";
+import algoliasearch from "algoliasearch/lite";
+// import { InstantSearch, SearchBox } from "react-instantsearch-core";
+import { useMemo } from "react";
 
 type Props = {
   // searchState: any;
@@ -38,14 +54,6 @@ const Navbar = ({}: Props) => {
   // const searchClient = algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef');
   // const searchClient = useMemo(() => algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef'), []);
 
-  const dispatch = useDispatch();
-  const searchText = useSelector((state: RootState) => state.search.searchText);
-
-  const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    dispatch(setSearchText(e.target.value));
-  }
-
   const [clicked, setClicked] = useState("");
 
   const [user, loading] = useAuthState(auth);
@@ -57,12 +65,12 @@ const Navbar = ({}: Props) => {
   }
 
   return (
-    <div className="fixed top-0 inset-x-0 h-fit bg-[#FFFFFF] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2">
+    <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#FFFFFF] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2">
       <div className="container max-w-7xl h-full mx-auto flex items-center justify-between gap-2">
         {/* logo */}
         <div className=" flex gap-[1.7rem]">
           <Link href="/" className="flex gap-2 items-center">
-            <p className="hidden text-zinc-700 dark:text-emerald-100 text-xl font-medium md:block">
+            <p className="hidden text-zinc-700 dark:text-emerald-100 text-xl font-bold md:block">
               Devotional-B
             </p>
           </Link>
@@ -92,22 +100,11 @@ const Navbar = ({}: Props) => {
 
         {/* search bar */}
         <div className=" relative ">
-          {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
-          <input type="text" 
-            value={searchText}
-            onChange={handleSearchText} 
-            placeholder="Search" 
-            className="w-[40rem] border border-gray-300 rounded-lg p-2 pl-10" 
-            onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  dispatch(triggerSearch());
-                }
-            }}
-          />
+          <Input className=" pl-10 w-[40rem]" placeholder="Search" />
           <Search className=" absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
         </div>
 
-        {/* <div className="relative"> */}
+        <div className="relative">
               
                  {/* <InstantSearch searchClient={searchClient} indexName="search_questions"> */}
                 {/* <InstantSearch searchClient={searchClient} indexName="search_questions" searchState={searchState} onSearchStateChange={setSearchState}>
@@ -115,13 +112,52 @@ const Navbar = ({}: Props) => {
                 </InstantSearch> */}
               
               {/* <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" /> */}
-        {/* </div> */}
+        </div>
 
-        <div className=" flex gap-4">
+        <div className="flex gap-4">
           <ThemeToggler className=" mr-4" />
 
-          {(user) ? (
-            <Link href="/profilePage">
+          {(user) ? (<div>
+            <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+            <Avatar className='cursor-pointer'>
+              <div className=" relative w-full h-full aspect-square">
+                <Image
+                  fill
+                  src={user?.photoURL || "/nodp.webp"}
+                  alt="profile picture"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <AvatarFallback>SP</AvatarFallback>
+            </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+              <Link href="/profilePage">
+                <DropdownMenuItem>
+                
+                  Profile
+                
+                </DropdownMenuItem>
+                </Link>
+                
+                <Link href="">
+                <DropdownMenuItem>
+                  Settings
+                </DropdownMenuItem>
+                </Link>
+                </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => auth.signOut()}>
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+            {/* Old comp */}
+            {/* <Link href="/profilePage">
             <Avatar>
               <div className=" relative w-full h-full aspect-square">
                 <Image
@@ -133,7 +169,8 @@ const Navbar = ({}: Props) => {
               </div>
               <AvatarFallback>SP</AvatarFallback>
             </Avatar>
-            </Link>
+            </Link> */}
+            </div>
           ) : (
             <Link href="/auth">
               <Button variant="default" className=" rounded-3xl">Sign In</Button>

@@ -109,17 +109,21 @@ const Post = ({ post , savedPostId }: Props) => {
   
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        if (userData.savedPosts.includes(post.id)) {
+        const savedPosts = userData.savedPosts || [];
+  
+        // If the post is in the savedPosts array, set savedState to true
+        if (savedPosts.includes(post.id)) {
           setSavedState(true);
         } else {
-          // Reset the savedState to false if the current post ID is not the savedPostId
-          setSavedState(post.id === savedPostId || savedPostId === null);
+          // If the post is not in the savedPosts array, set savedState to false
+          // unless it's the recently saved post (post.id === savedPostId)
+          setSavedState(post.id === savedPostId);
         }
       }
     };
   
     fetchUser();
-  }, [post.id, user, savedPostId]);
+  }, [post.id, user,savedPostId ]);
 
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow my-1">

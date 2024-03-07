@@ -20,6 +20,7 @@ import { formatTimeToNow } from "@/lib/date";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
+import ShareDialog from "../ShareDialog";
 
 import { auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -205,10 +206,10 @@ const QuePost = ({ post }: Props) => {
         <PostVoteClientPhone postId={post.id} postType="questions" userId={user?.uid!}/>
 
         <div className=" flex gap-x-3">
-          <button
-            className="w-fit flex items-center gap-2"
-          >
-            <Share className="h-4 w-4" /> <span className=' sm:block hidden'>Share</span>
+            <button
+              className="w-fit flex items-center gap-2"
+            >
+            <ShareDialog postLink={`/postPage2/${post?.title?.split(" ").join("-")}`}/>
           </button>
           <button
             className="w-fit flex items-center gap-2"

@@ -20,8 +20,9 @@ import {
   import { FaInstagram } from "react-icons/fa";
   import { FaFacebook } from "react-icons/fa";
   import { FaXTwitter } from "react-icons/fa6";
+    import { Share } from "lucide-react";
 
-function ShareDialog({postLink}) {
+function ShareDialog({postLink}: {postLink: string}) {
     const [isCopied, setIsCopied] = useState(false);
     const frontendURL = process.env.NEXT_FRONTEND_URL || "https://devotional-b.vercel.app";
     const link = `${frontendURL}${postLink}`;
@@ -49,7 +50,10 @@ function ShareDialog({postLink}) {
         <div>
             <AlertDialog>
                 <AlertDialogTrigger asChild>
-                    <div>Share</div>
+                    <div className=' flex gap-2'>
+                        <Share className="h-4 w-4" />{" "}
+                        <p>Share</p>
+                    </div>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>

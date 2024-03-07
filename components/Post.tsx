@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 
 import parse from "html-react-parser";
 
@@ -23,6 +23,7 @@ import { auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { useToast } from "./ui/use-toast";
+import { cn } from "@/lib/utils";
 
 type Props = {
   post: {
@@ -48,6 +49,13 @@ const Post = ({ post }: Props) => {
   const pRef = useRef<HTMLDivElement>(null);
 
   const { toast } = useToast();
+
+  //saving the post funcitonality
+  const [savedState , setSavedState] = useState(false);
+
+  const handleSave = () => {
+    setSavedState(!savedState);
+  }
 
   const isAnonymous = post.anonymity;
 
@@ -170,20 +178,19 @@ const Post = ({ post }: Props) => {
             <MessageSquare className="h-4 w-4" />{" "}
             <span className=" sm:block hidden">{post.comments} Answers</span>
           </Link>
-          <Link
-            href={`/r/post/${post.id}`}
+          <button
             className="w-fit flex items-center gap-2"
           >
             <Share className="h-4 w-4" />{" "}
             <span className=" sm:block hidden">Share</span>
-          </Link>
-          <Link
-            href={`/r/post/${post.id}`}
+          </button>
+          <button
             className="w-fit flex items-center gap-2"
+            onClick={handleSave}
           >
-            <Bookmark className="h-4 w-4" />{" "}
+            <Bookmark className={cn("h-4 w-4", {" text-black fill-black" : savedState == true,})} />{" "}
             <span className=" sm:block hidden">Save</span>
-          </Link>
+          </button>
         </div>
       </div>
     </div>

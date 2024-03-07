@@ -7,6 +7,7 @@ import parse from "html-react-parser";
 import { MessageSquare } from "lucide-react";
 import { Share } from "lucide-react";
 import { Bookmark } from "lucide-react";
+import ShareDialog from "./ShareDialog";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -182,7 +183,7 @@ const Post = ({ post }: Props) => {
             className="w-fit flex items-center gap-2"
           >
             <Share className="h-4 w-4" />{" "}
-            <span className=" sm:block hidden">Share</span>
+            <span className=" sm:block hidden"><ShareDialog postLink={`/postPage2/${post.title.split(" ").join("-")}`}/></span>
           </button>
           <button
             className="w-fit flex items-center gap-2"

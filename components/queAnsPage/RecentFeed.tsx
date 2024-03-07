@@ -39,7 +39,7 @@ const RecentFeed = (props: Props) => {
   useEffect(() => {
 
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(6));
+    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(7));
 
     const unsub = onSnapshot(q, async(snapshot) => {
       const postsData =[];
@@ -81,7 +81,7 @@ const RecentFeed = (props: Props) => {
         {posts.map((post, index) => (
           <TableRow key={index}>
             <Link href={`/postPage2/${post.title.split(' ').join('-')}`}>
-            <TableCell className="font-medium">{post.title}</TableCell>
+            <TableCell className="text-blue-500">{post.title}</TableCell>
             </Link>
           </TableRow>
         ))}

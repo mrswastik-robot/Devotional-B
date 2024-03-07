@@ -28,6 +28,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { triggerSearch } from "@/store/slice";
 
+
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/utils/firebase";
+import { doc  } from "firebase/firestore";
+
 type Props = {
   newPost: boolean;
 };
@@ -50,6 +55,27 @@ type PostType = {
 };
 
 const PostFeed = (props: Props) => {
+
+  //had to put the following piece of code here due to a bug , that showed the recent saved posts on the top of the page and at it's original place as well , thus twice in the page
+  const [user, loading] = useAuthState(auth);
+  const [savedPosts , setSavedPosts] = useState<any>([]);
+
+  useEffect(() => {
+    if (user) {
+      const userRef = doc(db, "users", user.uid);
+      const unsubscribe = onSnapshot(userRef, (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          setSavedPosts(data.savedPosts || []);
+        }
+      });
+      return unsubscribe;
+    }
+  }, [user]);
+
+
+
+
   const [posts, setPosts] = useState<PostType[]>([]);
   const limitValue: number = 7;
   const [lastDoc, setLastDoc] = useState<any>(null);
@@ -112,7 +138,7 @@ const PostFeed = (props: Props) => {
     return () => {
       unsub();
     };
-  }, [lastDoc, reload]);
+  }, [lastDoc, reload ,savedPosts]);
 
   //algolia stuff
 

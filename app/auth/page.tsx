@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import { auth, db } from "@/utils/firebase";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -157,9 +157,23 @@ const LoginPage = (props: Props) => {
   };
 
   useEffect(() => {
+
     if (user) {
+      const createUserDocument = async () => {
+        const userRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(userRef);
+
+        if(!docSnap.exists())
+        {
+          await setDoc(userRef, {
+            //savedPost is an array of postIds and left empty here , will be updated when user saves a post in Post.tsx
+          });
+        }
+      }
       router.push("/");
+      createUserDocument();
     }
+
   }, [user, loading, router]);
 
   return (

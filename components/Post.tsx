@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef , useEffect } from "react";
 
 import parse from "html-react-parser";
 
@@ -19,11 +19,12 @@ import { formatTimeToNow } from "@/lib/date";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 
-import { auth } from "@/utils/firebase";
+import { auth, db } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
+import { arrayRemove, arrayUnion, doc, updateDoc , getDoc } from "firebase/firestore";
 
 type Props = {
   post: {
@@ -50,17 +51,70 @@ const Post = ({ post }: Props) => {
 
   const { toast } = useToast();
 
-  //saving the post funcitonality
-  const [savedState , setSavedState] = useState(false);
-
-  const handleSave = () => {
-    setSavedState(!savedState);
-  }
-
   const isAnonymous = post.anonymity;
 
   //needed to send it to PostVoteClientPhone so that it can get the current user's vote
-  const [user] = useAuthState(auth);
+  const [user , loading] = useAuthState(auth);
+
+  //saving the post funcitonality
+  const [savedState , setSavedState] = useState(false);
+
+  const handleSave = async() => {
+
+    if(!user)
+    {
+      toast({
+        title:' Please sign in to save posts ',
+        variant:'destructive',
+      })
+      return;
+    }
+    
+      const userRef = doc(db , 'users' , user.uid);
+    
+
+    if(savedState)
+    {
+      //post is currently saved remove it from saved posts
+      await updateDoc(userRef , {
+        savedPosts: arrayRemove(post.id)
+      })
+      toast({
+        title:' Post removed from saved ',
+        variant:'default',  
+      })
+    }else{
+      //post is currently not saved add it to saved posts
+      await updateDoc(userRef , {
+        savedPosts: arrayUnion(post.id),
+      })
+      toast({
+        title:' Post saved ',
+        variant:'default',
+      })
+    }
+
+
+      setSavedState(!savedState);
+  }
+
+  //fetching savedPosts from user's document
+  useEffect(() => {
+    const fetchUser = async () => {
+      if(!user) return;
+        const userRef = doc(db, 'users', user.uid); // Replace 'user.uid' with the actual user ID
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.savedPosts.includes(post.id)) {
+                setSavedState(true);
+            }
+        }
+    };
+
+    fetchUser();
+}, [post.id , user ]);
 
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow my-1">
@@ -189,7 +243,7 @@ const Post = ({ post }: Props) => {
             onClick={handleSave}
           >
             <Bookmark className={cn("h-4 w-4", {" text-black fill-black" : savedState == true,})} />{" "}
-            <span className=" sm:block hidden">Save</span>
+            {savedState ? (<span className=" sm:block hidden">Saved</span>) : (<span className=" sm:block hidden">Save</span>)}
           </button>
         </div>
       </div>

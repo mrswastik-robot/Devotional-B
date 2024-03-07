@@ -203,7 +203,7 @@ const PostFeed = (props: Props) => {
           </ul>
         ) : (
           <div className=" w-[100%]">
-            <ul className=" flex flex-col col-span-2 space-y-2">
+            <ul className=" flex flex-col col-span-2 space-y-1">
               {posts.map((post, index) => (
                 <li key={index}>
                   <Post post={post} />

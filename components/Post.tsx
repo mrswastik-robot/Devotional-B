@@ -92,13 +92,13 @@ const Post = ({ post }: Props) => {
               <AvatarFallback>SP</AvatarFallback>
             </Avatar>
             {/* </div> */}
-            <Separator orientation="vertical" className=" h-5 mt-4 " />
-            <span className=" mt-4">
+            {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
+            <span className=" mt-3">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
             <svg
               viewBox="0 0 48 48"
-              className=" mt-5 w-2 h-2"
+              className=" mt-4 w-2 h-2"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -116,7 +116,7 @@ const Post = ({ post }: Props) => {
                 ></path>{" "}
               </g>
             </svg>
-            <Button variant="ghost" className=" text-blue-500 text-xs mt-1 p-0"
+            <Button variant="ghost" className=" text-blue-500 text-xs mt-0 p-0"
             onClick={() => {
               toast({
                 title:' Feature coming soon ... ',

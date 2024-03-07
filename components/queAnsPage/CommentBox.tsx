@@ -222,23 +222,23 @@ const CommentBox = ({
   }
 
   return (
-    <div className="rounded-3xl border border-gray-300 p-4 cursor-pointer">
+    <div className=" border border-gray-300 pt-4 ">
       <Form {...form}>
         <form
-          className="relative space-y-3 overflow-hidden"
+          className="relative flex gap-1 overflow-hidden p-1 px-3"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
             control={form.control}
             name="comment"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className=" w-full">
                 <FormControl>
                   <Input
                     type="text"
-                    placeholder="Add a comment"
+                    placeholder="Add a comment ..."
                     autoComplete="off"
-                    className="w-full rounded-md border border-gray-300 p-2"
+                    className="w-full rounded-3xl  bg-slate-100 p-2"
                     {...field}
                   />
                 </FormControl>
@@ -247,14 +247,14 @@ const CommentBox = ({
             )}
           />
 
-          <div className=" flex items-end justify-end gap-2">
-            <Button
+          <div className=" flex items-end justify-end ">
+            {/* <Button
               variant="outline"
               onClick={toggleCommentInputVisibility}
               className=" rounded-3xl"
             >
               Cancel
-            </Button>
+            </Button> */}
             <Button type="submit" variant="outline" className=" rounded-3xl">
               Comment
             </Button>
@@ -267,7 +267,7 @@ const CommentBox = ({
         {comments.map((comment, index) => (
           <div
             key={comment.id}
-            className=" p-4 rounded-3xl border border-gray-300 my-1"
+            className=" w-full  border border-gray-300  py-4 px-3"
           >
             <div className="flex  space-x-2">
               <img

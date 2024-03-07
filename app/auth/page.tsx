@@ -164,132 +164,145 @@ const LoginPage = (props: Props) => {
 
   return (
     <>
-    <div className=" absolute bg-login-bg bg-cover bg-no-repeat left-0 top-0 h-full w-full "></div>
-    <div
-      
-      className="bg-[#F8FAFC] md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:top-1/2 md:left-1/2 items-center justify-center flex shadow-xl rounded-3xl"
-    >
-      <div className="relative p-4  w-full h-full  md:h-auto">
-        <div className="relative bg-[#F8FAFC] rounded-lg ">
-          
-
-          <div className="p-5">
-            
-
-            <div className="text-center">
-              <p className="mb-3 text-2xl font-semibold leading-5 text-slate-900">
-                Devotional-B
-              </p>
-              <p className="mt-2 text-sm leading-4 text-slate-600">
-                You must be logged in to perform this action.
-              </p>
-            </div>
-
-            <div className=" md:flex md:flex-col-2 w-full mt-5">
-            <div className="mt-4 flex flex-col gap-4 w-full p-4">
-              <p className=" text-sm text-zinc-400">
-                By continiuing you indicate that you agree to Devotional-B <span className=" text-blue-500">Terms of Service</span> and <span className=" text-blue-500">Privacy Policy</span>.
-              </p>
-              <button className=" md:mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={signInWithGoogle}
-              >
-                <Image
-                  src="https://www.svgrepo.com/show/475656/google-color.svg"
-                  alt="Google"
-                  width={18}
-                  height={18}
-                  className="h-[18px] w-[18px] "
-                />
-                Continue with Google
-              </button>
-
-              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={signInWithFacebook}
-              >
-                <Image
-                  src="https://www.svgrepo.com/show/489934/facebook.svg"
-                  alt="Google"
-                  width={18}
-                  height={18}
-                  className="h-[18px] w-[18px] "
-                />
-                Continue with Facebook
-              </button>
-            </div>
-
-            <div className="md:hidden flex w-full items-center gap-2 py-6 text-sm text-slate-600">
-              <div className="h-px w-full bg-slate-200"></div>
-              OR
-              <div className="h-px w-full bg-slate-200"></div>
-            </div>
-
-            <Separator orientation="vertical" className="h-[14rem] sm:block hidden" />
-
-            <div className="w-full p-4 md:mt-3">
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                name="email"
-                type="email"
-                autoComplete="email"
-                className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
-                placeholder="Email Address"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                className="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <p className="mb-3 mt-2 text-sm text-gray-500">
-                
-                  Reset your password?
-                
-              </p>
-
-              <div className=" flex gap-2">
-
-              <button
-                // type="submit"
-                className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
-                onClick={signUpWithEmail}
-              >
-                Sign Up
-              </button>
-
-              <button
-                // type="submit"
-                className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
-                onClick={signInWithEmail}
-              >
-                Sign In
-              </button>
-
+      <div className=" absolute bg-login-bg bg-cover bg-no-repeat left-0 top-0 h-full w-full "></div>
+      <div className="bg-[#F8FAFC] md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:top-1/2 md:left-1/2 items-center justify-center flex shadow-xl rounded-3xl">
+        <div className="relative p-4  w-full h-full  md:h-auto">
+          <div className="relative bg-[#F8FAFC] rounded-lg ">
+            <div className="p-5">
+              <div className="text-center">
+                <p className="mb-3 text-2xl font-semibold leading-5 text-slate-900">
+                  Devotional-B
+                </p>
+                <p className="mt-2 text-sm leading-4 text-slate-600">
+                  You must be logged in to perform this action.
+                </p>
               </div>
-              
-            </div>
-            </div>
 
-            <div className="mt-6 text-center text-sm text-slate-600">
-              Dont want to have an account?
-              <button className="font-medium text-[#4285f4] ml-1 underline"
+              <div className=" md:flex md:flex-col-2 w-full mt-11">
+                <div className="mt-1 flex flex-col gap-4 w-full px-4">
+                  <p className=" text-sm text-zinc-400">
+                    By continiuing you indicate that you agree to Devotional-B{" "}
+                    <span className=" text-blue-500">Terms of Service</span> and{" "}
+                    <span className=" text-blue-500">Privacy Policy</span>.
+                  </p>
+                  <button
+                    className=" md:mt-5 inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
+                    onClick={signInWithGoogle}
+                  >
+                    <Image
+                      src="https://www.svgrepo.com/show/475656/google-color.svg"
+                      alt="Google"
+                      width={18}
+                      height={18}
+                      className="h-[18px] w-[18px] "
+                    />
+                    Continue with Google
+                  </button>
+
+                  <button
+                    className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
+                    onClick={signInWithFacebook}
+                  >
+                    <Image
+                      src="https://www.svgrepo.com/show/489934/facebook.svg"
+                      alt="Google"
+                      width={18}
+                      height={18}
+                      className="h-[18px] w-[18px] "
+                    />
+                    Continue with Facebook
+                  </button>
+
+                  <div className=" mt-2 w-full">
+                    <p className=" text-sm text-slate-600">
+                      <button
+                        className="font-medium text-[#4285f4] hover:text-blue-600 w-full underline"
+                        onClick={signingInAnonymously}
+                      >
+                        Continue as Guest
+                      </button>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="md:hidden flex w-full items-center gap-2 py-6 text-sm text-slate-600">
+                  <div className="h-px w-full bg-slate-200"></div>
+                  OR
+                  <div className="h-px w-full bg-slate-200"></div>
+                </div>
+
+                <Separator
+                  orientation="vertical"
+                  className="h-[15rem] sm:block hidden"
+                />
+
+                <div className=" w-full space-y-3">
+                  <p className=" ml-4 text-zinc-400">Login</p>
+                  <Separator
+                    orientation="horizontal"
+                    className="h-px ml-4 my-1 w-[90%] bg-slate-200"
+                  />
+                  <div className="w-full px-3 py-1 ">
+                    <label htmlFor="email" className="sr-only">
+                      Email address
+                    </label>
+                    <input
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+                      placeholder="Email Address"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <label htmlFor="password" className="sr-only">
+                      Password
+                    </label>
+                    <input
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      className="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+                      placeholder="Password"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <p className="mb-3 mt-2 text-sm text-gray-500">
+                      Reset your password?
+                    </p>
+
+                    <div className=" flex gap-2">
+                      <button
+                        // type="submit"
+                        className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
+                        onClick={signUpWithEmail}
+                      >
+                        Sign Up
+                      </button>
+
+                      <button
+                        // type="submit"
+                        className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
+                        onClick={signInWithEmail}
+                      >
+                        Sign In
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 text-center text-sm text-slate-600">
+                {/* Dont want to have an account? */}
+                {/* <button className="font-medium text-[#4285f4] ml-1 underline"
               onClick={signingInAnonymously}
               >
                  Continue as Guest
-              </button>
+              </button> */}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    {/* </div> */}
+      {/* </div> */}
     </>
   );
 };

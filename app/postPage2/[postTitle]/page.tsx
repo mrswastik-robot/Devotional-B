@@ -350,16 +350,6 @@ const PostPage = ({ params: { postTitle } }: Props) => {
           )}
         </div>
 
-        {/* <div>
-                        <input type="file" onChange={(event) => {
-                          if(event.target.files) {
-                            setImageUpload(event.target.files[0]);
-                          }
-                        }}/>
-                        <Button onClick={uploadImage}>Upload Image</Button>
-          </div> */}
-
-        {/* Answers to the question */}
         <div className="">
           <AnsPost answers={answers} postTitleWithSpaces={postTitleWithSpaces} postId={queObject.id} />
         </div>

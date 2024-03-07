@@ -21,7 +21,7 @@ const RecentFeedCard = ({ post }: Props) => {
   const isAnonymous = post.anonymity
   return (
     <div className="">
-  <div className="flex gap-3 flex-col">
+  <div className="flex gap-2 flex-col">
   <div className='flex max-h-40 mt-1 space-x-3 text-gray-500'>
             <div className="">
                     <div className=' relative w-full rounded-full overflow-hidden'>

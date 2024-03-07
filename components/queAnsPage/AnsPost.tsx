@@ -114,7 +114,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
 
         <div
           key={answer.id}
-          className="rounded-md bg-white dark:bg-[#262626] shadow mt-7 space-y-4 break-words overflow-hidden" 
+          className="rounded-md bg-white dark:bg-[#262626] shadow mt-7 space-y-2 break-words overflow-hidden" 
         >
           <div className="px-6 py-5 flex justify-between">
             {/* <PostVoteClient

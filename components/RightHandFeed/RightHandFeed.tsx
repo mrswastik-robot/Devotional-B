@@ -66,7 +66,7 @@ const RightHandFeed = (props: Props) => {
         {
             posts.map((post, index) => (
                 <div key={index} className='mt-3'>
-                    <Separator className="mb-1" />
+                    <Separator className="mb-1 min-w-full" />
                     <div className='flex gap-4 items-start'>
                     <RightHandFeedCard post={post}/>
                     </div>

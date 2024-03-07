@@ -74,7 +74,7 @@ const QuePost = ({ post }: Props) => {
               <AvatarFallback>SP</AvatarFallback>
             </Avatar>
             {/* </div> */}
-            <Separator orientation="vertical" className=" h-5 mt-3 " />
+            {/* <Separator orientation="vertical" className=" h-5 mt-3 " /> */}
             <span className=" mt-3">{isAnonymous ? ('Anonymous') : (post.name)}</span>{" "}
             <svg
               viewBox="0 0 48 48"
@@ -102,7 +102,7 @@ const QuePost = ({ post }: Props) => {
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           {/* <a href={`/postPage/${post.id}`}> */}
-            <h1 className="text-3xl font-semibold py-3 leading-6 text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-semibold py-3 leading-6 text-gray-900 dark:text-white">
               {post.title}
             </h1>
           {/* </a> */}
@@ -120,7 +120,7 @@ const QuePost = ({ post }: Props) => {
           ) : null}
 
           <div
-            className="relative text-lg max-h-50 w-full  "
+            className="relative text-base max-h-50 w-full  "
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}

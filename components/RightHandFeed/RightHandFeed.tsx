@@ -68,6 +68,7 @@ const RightHandFeed = (props: Props) => {
   }, [])
 
   return (
+
     <div className=' bg-[#FFFFFF] dark:bg-[#262626]'>
 
 <Table>
@@ -91,6 +92,7 @@ const RightHandFeed = (props: Props) => {
         </TableRow>
       </TableFooter> */}
       </Table>
+
 
     </div>
   )

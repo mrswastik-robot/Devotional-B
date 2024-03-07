@@ -109,12 +109,12 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
 
   return (
 
-    <div>
+    <div className=" mt-7">
       {dispAnswer.map((answer: any, key) => (
 
         <div
           key={answer.id}
-          className="rounded-md bg-white dark:bg-[#262626] shadow mt-7 space-y-4 break-words overflow-hidden" 
+          className="rounded-md bg-white dark:bg-[#262626] shadow my-3 space-y-0 break-words overflow-hidden" 
         >
           <div className="px-6 py-5 flex justify-between">
             {/* <PostVoteClient
@@ -203,7 +203,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
             </div>
           </div>
 
-          <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between gap-x-3 text-sm px-4 py-2 sm:px-6">
+          <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150  flex justify-between gap-x-3 text-sm px-4 py-2 sm:px-6">
 
             <PostVoteClientPhone postId={answer.id} postType="answers"  userId={user?.uid!} questionId={postId}/>
             

@@ -22,7 +22,7 @@ import algoliasearch from "algoliasearch/lite";
 // import algoliasearch from "algoliasearch";
 import { InstantSearch, SearchBox, Hits, Highlight } from "react-instantsearch";
 import { Search } from "lucide-react";
-import { set } from "date-fns";
+import { add, set } from "date-fns";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
@@ -59,6 +59,7 @@ const PostFeed = (props: Props) => {
   //had to put the following piece of code here due to a bug , that showed the recent saved posts on the top of the page and at it's original place as well , thus twice in the page
   const [user, loading] = useAuthState(auth);
   const [savedPosts , setSavedPosts] = useState<any>([]);
+  const [savedPostId, setSavedPostId] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -67,6 +68,7 @@ const PostFeed = (props: Props) => {
         if (doc.exists()) {
           const data = doc.data();
           setSavedPosts(data.savedPosts || []);
+          setSavedPostId(data.savedPosts?.[data.savedPosts.length - 1] || null);
         }
       });
       return unsubscribe;
@@ -138,7 +140,7 @@ const PostFeed = (props: Props) => {
     return () => {
       unsub();
     };
-  }, [lastDoc, reload ,savedPosts]);
+  }, [lastDoc, reload ,savedPosts ]);
 
   //algolia stuff
 
@@ -232,7 +234,7 @@ const PostFeed = (props: Props) => {
             <ul className=" flex flex-col col-span-2 space-y-1">
               {posts.map((post, index) => (
                 <li key={index}>
-                  <Post post={post} />
+                  <Post post={post} savedPostId = {savedPostId} />
                 </li>
               ))}
             </ul>

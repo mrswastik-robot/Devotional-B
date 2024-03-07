@@ -201,7 +201,7 @@ const QuePost = ({ post }: Props) => {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20  flex justify-between gap-x-3 text-sm px-4 py-2 sm:px-6">
+      <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150  flex justify-between gap-x-3 text-sm px-4 py-2 sm:px-6">
 
         <PostVoteClientPhone postId={post.id} postType="questions" userId={user?.uid!}/>
 

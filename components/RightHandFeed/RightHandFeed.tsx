@@ -5,6 +5,17 @@ import { collection, getDocs, limit, onSnapshot, orderBy, query } from 'firebase
 
 import RightHandFeedCard from './RightHandFeedCard'
 import { Separator } from '../ui/separator'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import Link from 'next/link'
 
 type Props = {}
 
@@ -27,7 +38,7 @@ const RightHandFeed = (props: Props) => {
   useEffect(() => {
 
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(5));
+    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(7));
 
     const unsub = onSnapshot(q, async(snapshot) => {
       const postsData =[];
@@ -57,26 +68,31 @@ const RightHandFeed = (props: Props) => {
   }, [])
 
   return (
-    <div className=' bg-[#FFFFFF] dark:bg-[#262626]  px-6 py-4'>
 
-      <div>
-        <h1 className='font-normal text-xl md:text-base uppercase'>Recent Posts</h1>
-      </div>
+    <div className=' bg-[#FFFFFF] dark:bg-[#262626]'>
 
-        {
-            posts.map((post, index) => (
-                <div key={index} className='mt-3'>
-                    <Separator className="mb-1 min-w-full" />
-                    <div className='flex gap-4 items-start'>
-                    <RightHandFeedCard post={post}/>
-                    </div>
-                </div>
-            ))
-        }
+<Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="text-left font-bold text-black dark:text-white">Recent Posts</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {posts.map((post, index) => (
+          <TableRow key={index}>
+            <Link href={`/postPage2/${post.title.split(' ').join('-')}`}>
+            <TableCell className="text-blue-500">{post.title}</TableCell>
+            </Link>
+          </TableRow>
+        ))}
+      </TableBody>
+      {/* <TableFooter>
+        <TableRow>
+          <TableCell>Ask Question...</TableCell>
+        </TableRow>
+      </TableFooter> */}
+      </Table>
 
-        <div className=' mt-5 justify-end items-end flex'>
-            <p className='text-sm'>Clear</p>
-        </div>
 
     </div>
   )

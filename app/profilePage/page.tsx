@@ -5,23 +5,23 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { auth, db } from "@/utils/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+
+import { auth , db } from '@/utils/firebase'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs} from 'firebase/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import Post from '@/components/Post';
+import Loader from '@/components/ui/Loader';
+import { Button } from '@/components/ui/button';
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
-  collection,
-  query,
-  where,
-  onSnapshot,
-  orderBy,
-  and,
-  startAfter,
-  limit,
-  getDocs,
-} from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import Post from "@/components/Post";
-import Loader from "@/components/ui/Loader";
-import { Button } from "@/components/ui/button";
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+
 
 type Props = {};
 
@@ -168,44 +168,48 @@ const ProfilePage = (props: Props) => {
         console.error("Error fetching data:", error);
         setLoadingPosts(false);
       }
+      };
+    
+      fetchData();
+    }, [user, loading, router, postType, loadMore]);
+
+    const handleToggleSwitchNormal = () => {
+      setStart(true);
+      //setAnonymousStart(true);
+      setIsAnonymous(false);
+      setPostType('normal');
     };
 
-    fetchData();
-  }, [user, loading, router, postType, loadMore]);
+    const handleToggleSwitchAnonymous = () => {
+      setAnonymousStart(true);
+      setIsAnonymous(true);
+      setPostType('anonymous');
+    };
 
-  const handleToggleSwitch = () => {
-    setStart(true);
-    setAnonymousStart(true);
-    setIsAnonymous((prevIsAnonymous) => !prevIsAnonymous);
-    setPostType((prevPostType) => {
-      if (prevPostType == "normal") return "anonymous";
-      else return "normal";
-    });
-  };
-
-  const handleLoadMore = () => {
-    setLoadMore((prev) => !prev);
-  };
-
-  console.log("LastDoc ", LastDoc);
+    const handleLoadMore = () => {
+      setLoadMore((prev)=>!prev)
+    };
+    
 
   return (
-    <div className=" mt-4">
-      <ProfileCard user={user} />
-      <div className="toggleSwitch flex items-center justify-center mt-5">
+    <div className=' mt-4'>
+        <ProfileCard user={user}/>
+        {/* <div className='toggleSwitch flex items-center justify-center mt-5'>
         <label className="inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={isAnonymous}
-            onChange={handleToggleSwitch}
-            className="sr-only peer"
-          />
-          <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-            {isAnonymous ? "Anonymous Posts" : "Normal Posts"}
-          </span>
-        </label>
-      </div>
+  <input type='checkbox' checked={isAnonymous} onChange={handleToggleSwitch} className="sr-only peer"/>
+  <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+  <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{isAnonymous ? 'Anonymous Posts' : 'Normal Posts'}</span>
+</label>
+      </div> */}
+      <div className='toggleSwitch flex items-center justify-center mt-5'>
+          <Tabs defaultValue="account" className="w-[400px]">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger value="account" onClick={handleToggleSwitchNormal} >Normal Posts</TabsTrigger>
+        <TabsTrigger value="password" onClick={handleToggleSwitchAnonymous}>Anonymous Posts</TabsTrigger>
+      </TabsList>
+    </Tabs>
+    </div>
+
       <div>
         {
           <div>
@@ -258,6 +262,7 @@ const ProfilePage = (props: Props) => {
             )}
           </div>
         }
+
       </div>
       <div className="flex items-center justify-center">
         {loadingPosts ? (

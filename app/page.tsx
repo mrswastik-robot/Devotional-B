@@ -263,7 +263,7 @@ export default function Home() {
                     You are currently logged in as a Guest. To post question you need to have an account.
                   </p>
                 ) : (
-                <p className='text-zinc-500'>
+                <p className='text-zinc-500 font-semibold'>
                   Your personal Devotional frontpage. Come here to check in with your
                   favorite communities.
               </p>

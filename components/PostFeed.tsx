@@ -210,19 +210,17 @@ const PostFeed = (props: Props) => {
                 </li>
               ))}
             </ul>
-            <div className="w-[100%] lg:ml-64 md:ml-80 xl:ml-96">
-              {isLoading ? (
-                <Loader />
-              ) : (
-                pageLoaded && (
-                  <div className="mt-4">
-                    <Button>
-                      <button onClick={loadMoreData}>LoadMore</button>
-                    </Button>
-                  </div>
-                )
-              )}
+            
+            <div className='w-[100%] lg:ml-64 md:ml-80 xl:ml-96'>
+            { isLoading?<Loader/>:pageLoaded&&
+            <div className='mt-4'>
+            <Button>
+            <button onClick={loadMoreData}>LoadMore...</button>
+            </Button>
             </div>
+            }
+            </div>
+            
           </div>
         )}
       </div>

@@ -27,13 +27,20 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
+
+import { arrayRemove, arrayUnion, doc, updateDoc , getDoc } from "firebase/firestore";
 import {
-  arrayRemove,
-  arrayUnion,
-  doc,
-  updateDoc,
-  getDoc,
-} from "firebase/firestore";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 
 type Props = {
   post: {
@@ -146,7 +153,10 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
         {/* <PostVoteClientPhone/> */}
 
         <div className="w-0 flex-1 break-normal overflow-hidden">
-          <div className="flex max-h-40 mt-1 space-x-2 text-xs text-gray-500">
+
+          {!isProfile&&
+          <div className="flex max-h-40 mt-1 space-x-3 text-xs text-gray-500">
+
             {/* <div> */}
             <Avatar>
               <div className=" relative w-full h-full aspect-square">
@@ -207,12 +217,15 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             )}
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
+          }
+          
           <Link href={`/postPage2/${post?.title?.split(" ").join("-")}`}>
             <h1 className={`text-lg font-semibold py-2 leading-6 text-gray-900 dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
           </Link>
 
+          <p className="mb-1">{parse(post.description)}</p>
           {post.questionImageURL ? (
             <div className="relative w-full h-60">
               <Image
@@ -229,8 +242,10 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}
+
             <p>{parse(post.description)}</p>
             {isExpanded ? '' : <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div> }
+
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
               
@@ -281,14 +296,32 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
               <span className=" sm:block hidden">Save</span>
             )}
           </button>
-          {isProfile && (
-            <button
-              className="w-fit flex items-center gap-2"
-              onClick={HandleDelete}
-            >
-              <AiTwotoneDelete className="text-xl" />{" "}
-            </button>
-          )}
+
+          {isProfile&&
+          <AlertDialog>
+          <AlertDialogTrigger asChild>
+          <button
+            className="w-fit flex items-center gap-2"
+          >
+            <AiTwotoneDelete className='text-xl' />{" "}
+          </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                post and remove the data from our servers.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={HandleDelete} >Delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+          }
+
         </div>
       </div>
     </div>

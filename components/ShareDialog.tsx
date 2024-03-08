@@ -26,7 +26,6 @@ function ShareDialog({postLink}: {postLink: string}) {
     const [isCopied, setIsCopied] = useState(false);
     const frontendURL = process.env.NEXT_FRONTEND_URL || "https://devotional-b.vercel.app";
     const link = `${frontendURL}${postLink}`;
-    console.log(process.env);
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(link);
@@ -61,16 +60,16 @@ function ShareDialog({postLink}: {postLink: string}) {
                         <AlertDialogDescription>
                             <ToggleGroup type="multiple">
                             <ToggleGroupItem value="bold" className='flex gap-1' onClick={copyToClipboard}>
-                                    <div><FaLink className='text-black' /></div><div>{isCopied?<div className='text-green ml-1'>Copied!</div>:<div className='text-black' >Copy Link</div>}</div>
+                                    <div><FaLink className='text-black dark:text-white' /></div><div>{isCopied?<div className='text-green ml-1'>Copied!</div>:<div className='text-black dark:text-white' >Copy Link</div>}</div>
                                 </ToggleGroupItem>
                                 <ToggleGroupItem value="italic" className='flex gap-1' onClick={shareViaWhatsapp}>
-                                    <div><FaWhatsapp className='text-black' /></div><div className='text-black'>Whatsapp</div>
+                                    <div><FaWhatsapp className='text-black dark:text-white' /></div><div className='text-black dark:text-white'>Whatsapp</div>
                                 </ToggleGroupItem>
                                 <ToggleGroupItem value="strikethrough" className='flex gap-1' onClick={shareViaFacebook}>
-                                    <div><FaFacebook className='text-black' /></div><div className='text-black'>Facebook</div>
+                                    <div><FaFacebook className='text-black dark:text-white' /></div><div className='text-black dark:text-white'>Facebook</div>
                                 </ToggleGroupItem>
                                 <ToggleGroupItem value="strikethrough" className='flex gap-1' onClick={shareViaTwitter}>
-                                    <div><FaXTwitter className='text-black' /></div><div className='text-black' >Twitter</div>
+                                    <div><FaXTwitter className='text-black dark:text-white' /></div><div className='text-black dark:text-white' >Twitter</div>
                                 </ToggleGroupItem>
                             </ToggleGroup>
                         </AlertDialogDescription>

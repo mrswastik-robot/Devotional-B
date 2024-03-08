@@ -179,10 +179,10 @@ const LoginPage = (props: Props) => {
   return (
     <>
       <div className=" absolute bg-login-bg bg-cover bg-no-repeat left-0 top-0 h-full w-full "></div>
-      <div className="bg-[#F8FAFC] md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:top-1/2 md:left-1/2 items-center justify-center flex shadow-xl rounded-3xl">
-        <div className="relative p-4  w-full h-full  md:h-auto">
+      <div className="bg-[#F8FAFC] md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:top-1/2 md:left-1/2 items-center justify-center flex shadow-xl rounded-md max-w-[750px] min-h-[450px]">
+        <div className="relative    w-full h-full  ">
           <div className="relative bg-[#F8FAFC] rounded-lg ">
-            <div className="p-5">
+            <div className="px-4 py-9 md:py-0">
               <div className="text-center">
                 <p className="mb-3 text-2xl font-semibold leading-5 text-slate-900">
                   Devotional-B
@@ -304,7 +304,7 @@ const LoginPage = (props: Props) => {
                 </div>
               </div>
 
-              <div className="mt-6 text-center text-sm text-slate-600">
+              <div className=" text-center text-sm text-slate-600">
                 {/* Dont want to have an account? */}
                 {/* <button className="font-medium text-[#4285f4] ml-1 underline"
               onClick={signingInAnonymously}

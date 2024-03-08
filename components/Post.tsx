@@ -157,6 +157,7 @@ const Post = ({ post , savedPostId, isProfile=false, handleDelete=()=>{} }: Prop
         {/* <PostVoteClientPhone/> */}
 
         <div className="w-0 flex-1 break-normal overflow-hidden">
+          {!isProfile&&
           <div className="flex max-h-40 mt-1 space-x-3 text-xs text-gray-500">
             {/* <div> */}
             <Avatar>
@@ -212,12 +213,14 @@ const Post = ({ post , savedPostId, isProfile=false, handleDelete=()=>{} }: Prop
             </Button>
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
+          }
           <Link href={`/postPage2/${post.title.split(" ").join("-")}`}>
             <h1 className="text-lg font-semibold py-2 leading-6 text-gray-900 dark:text-white">
               {post.title}
             </h1>
           </Link>
 
+          <p className="mb-1">{parse(post.description)}</p>
           {post.questionImageURL ? (
             <div className="relative w-full h-60">
               <Image
@@ -234,8 +237,7 @@ const Post = ({ post , savedPostId, isProfile=false, handleDelete=()=>{} }: Prop
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}
-            <p>{parse(post.description)}</p>
-            <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/90 dark:from-[#262626] to-transparent"></div>
+            {/* <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/90 dark:from-[#262626] to-transparent"></div> */}
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
               

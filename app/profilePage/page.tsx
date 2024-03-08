@@ -288,6 +288,7 @@ const ProfilePage = (props: Props) => {
       title:'Feature Coming Soon',
       variant:'default',
     })
+    setPostType('followers')
   }
 
   function handleToggleSwithFollowing(){
@@ -295,6 +296,7 @@ const ProfilePage = (props: Props) => {
       title:'Feature Coming Soon',
       variant:'default',
     })
+    setPostType('following');
   }
 
   function handleToggleSwithAnswers(){
@@ -302,10 +304,11 @@ const ProfilePage = (props: Props) => {
       title:'Feature Coming Soon',
       variant:'default',
     })
+    setPostType('answers')
   }
 
   return (
-    <div className='mt-4'>
+    <div className='mt-0'>
         <ProfileCard user={user}/>
         {/* <div className='toggleSwitch flex items-center justify-center mt-5'>
         <label className="inline-flex items-center cursor-pointer">
@@ -324,33 +327,15 @@ const ProfilePage = (props: Props) => {
         <TabsTrigger value="followers" onClick={handleToggleSwithFollowers}>Followers</TabsTrigger>
         <TabsTrigger value="following" onClick={handleToggleSwithFollowing}>Following</TabsTrigger>
       </TabsList>
-      <TabsContent value="saved" className="min-w-full">
-      { savedPosts.length !== 0 ? (
-        savedPosts.map((post, index) => (
-          <div key={index} className="my-3">
-            <Post post={post} />
-          </div>
-        ))
-      ) : (
-        <div className=" absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 ">
-          <Image
-            src="/trash.png"
-            width={300}
-            height={300}
-            className=" w-[10rem] h-[9rem] rounded-full"
-            alt="Profile Pic"
-          />
-          <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
-        </div>
-      )}
-      </TabsContent>
     </Tabs>
     </div>
+    {(postType=='normal'||postType=='anonymous'||postType=='answers')&&
       <div className="border-y-[1px] border-black border-opacity-15 py-2 flex justify-between items-center">
         <div className="font-[600] opacity-80">
-        {postType=='normal'?<div>Normal</div>:postType=='anonymous'?<div>Anonymous</div>:postType=='saved'?<div>Saved</div>:<div>Coming Soon</div>}
+        {postType=='normal'?<div>Normal</div>:postType=='anonymous'?<div>Anonymous</div>:<div>Coming Soon</div>}
         </div>
         <div>
+
         <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="font-[600] flex items-center gap-1 cursor-pointer opacity-75 rounded-md p-1 hover:bg-slate-200">{`${sortType=='recent'?"Most Recent":"Oldest"}`}<span><FaChevronDown/></span></div>
@@ -371,14 +356,15 @@ const ProfilePage = (props: Props) => {
 
         </div>
       </div>
+}
       <div>
         {
           <div>
-            {isAnonymous ? (
+            {postType=='anonymous' ? (
               <div>
                 {anonymousQuestions?.length === 0
                   ? !loadingPosts && (
-                      <div className=" absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 ">
+                      <div className="flex items-center justify-center flex-col mt-5 w-full">
                         <Image
                           src="/trash.png"
                           width={300}
@@ -399,9 +385,12 @@ const ProfilePage = (props: Props) => {
                       </div>
                     ))}
               </div>
-            ) : questions?.length === 0 ? (
+            ) : postType=='normal'? 
+            <div>
+              {
+            questions?.length === 0 ? (
               !loadingPosts && (
-                <div className=" absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 ">
+                <div className="flex items-center justify-center flex-col mt-5 w-full">
                   <Image
                     src="/trash.png"
                     width={300}
@@ -420,11 +409,67 @@ const ProfilePage = (props: Props) => {
                   <Post post={post} isProfile={true} handleDelete={handleDelete} />
                 </div>
               ))
-            )}
+            )
+              }
+            </div>
+            :<div>
+              {
+                postType=='saved'?<div>
+                  { savedPosts.length !== 0 ? (
+        savedPosts.map((post, index) => (
+          <div key={index} className="my-3">
+            <Post post={post} />
+          </div>
+        ))
+      ) : (
+        <div className="flex items-center justify-center flex-col mt-5 w-full">
+          <Image
+            src="/trash.png"
+            width={300}
+            height={300}
+            className=" w-[10rem] h-[9rem] rounded-full"
+            alt="Profile Pic"
+          />
+          <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+        </div>
+      )}
+                </div>:<div>
+                  {
+                    postType=='answers'?<div>
+                      <div className="flex items-center justify-center flex-col mt-5 w-full">
+          <Image
+            src="/trash.png"
+            width={300}
+            height={300}
+            className=" w-[10rem] h-[9rem] rounded-full"
+            alt="Profile Pic"
+          />
+          <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+        </div>
+                    </div>:<div>{
+                      // <NetworkList/> Will make a new component for followers and following list till then displaying no posts found.
+                      <div className="flex items-center justify-center flex-col mt-5 w-full">
+          <Image
+            src="/trash.png"
+            width={300}
+            height={300}
+            className=" w-[10rem] h-[9rem] rounded-full"
+            alt="Profile Pic"
+          />
+          <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+        </div>
+                      }</div>
+                  }
+                </div>
+              }
+            </div>
+            }
           </div>
         }
 
       </div>
+      <div>
+      {(postType=='normal'||postType=='anonymous')&& //will change this once lazy loading is available for all the tabs.
       <div className="flex items-center justify-center">
         {loadingPosts ? (
           <div>
@@ -439,14 +484,15 @@ const ProfilePage = (props: Props) => {
                 <div>No More Posts...</div>
               )
             ) : morePosts ? (
-              postType != 'saved' &&<Button onClick={handleLoadMore}>LoadMore</Button>
+              <Button onClick={handleLoadMore}>LoadMore</Button>
             ) : (
               <div>No More Posts...</div>
             )}
           </div>
         )}
       </div>
-      
+      }
+      </div>
     </div>
   );
 };

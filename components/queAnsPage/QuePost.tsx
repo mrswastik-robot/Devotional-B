@@ -127,13 +127,13 @@ const QuePost = ({ post }: Props) => {
         /> */}
 
         <div className="w-0 flex-1">
-          <div className="flex max-h-60 mt-1 space-x-3 text-xs text-gray-500">
+          <div className="flex max-h-60 mt-1 space-x-2 text-xs text-gray-500">
             {/* <div> */}
             <Avatar>
               <div className=" relative w-full h-full aspect-square">
                 <Image
                   fill
-                  src={isAnonymous ? ('https://qph.cf2.quoracdn.net/main-qimg-73e139be8bfc1267eeed8ed6a2802109-lq') : (post.profilePic)}
+                  src={isAnonymous ? ('https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png') : (post.profilePic)}
                   alt="profile picture"
                   referrerPolicy="no-referrer"
                 />
@@ -143,29 +143,43 @@ const QuePost = ({ post }: Props) => {
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-3 " /> */}
             <span className=" mt-3">{isAnonymous ? ('Anonymous') : (post.name)}</span>{" "}
-            <svg
-              viewBox="0 0 48 48"
-              className=" mt-4 w-2 h-2"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                {" "}
-                <path
-                  d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z"
-                  fill="#333333"
-                ></path>{" "}
-              </g>
-            </svg>
-            <Button variant="ghost" className=" text-blue-500 text-xs p-0">
-              Follow
-            </Button>
+            {isAnonymous ? null : (
+              <div className=" flex space-x-2 ">
+                <svg
+                  viewBox="0 0 48 48"
+                  className=" mt-4 w-2 h-2"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <path
+                      d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z"
+                      fill="#333333"
+                    ></path>{" "}
+                  </g>
+                </svg>
+
+                <Button
+                  variant="ghost"
+                  className=" text-blue-500 text-xs mt-0 p-0"
+                  onClick={() => {
+                    toast({
+                      title: " Feature coming soon ... ",
+                      variant: "feature",
+                    });
+                  }}
+                >
+                  Follow
+                </Button>
+              </div>
+            )}
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           {/* <a href={`/postPage/${post.id}`}> */}
@@ -187,7 +201,7 @@ const QuePost = ({ post }: Props) => {
           ) : null}
 
           <div
-            className="relative text-base max-h-50 w-full  "
+            className="relative text-lg max-h-50 w-full  "
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}

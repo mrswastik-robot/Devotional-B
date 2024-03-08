@@ -56,26 +56,22 @@ type PostType = {
 
 const PostFeed = (props: Props) => {
 
-  //had to put the following piece of code here due to a bug , that showed the recent saved posts on the top of the page and at it's original place as well , thus twice in the page
-  const [user, loading] = useAuthState(auth);
-  const [savedPosts , setSavedPosts] = useState<any>([]);
-  const [savedPostId, setSavedPostId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (user) {
-      const userRef = doc(db, "users", user.uid);
-      const unsubscribe = onSnapshot(userRef, (doc) => {
-        if (doc.exists()) {
-          const data = doc.data();
-          setSavedPosts(data.savedPosts || []);
-          setSavedPostId(data.savedPosts?.[data.savedPosts.length - 1] || null);
-        }
-      });
-      return unsubscribe;
-    }
-  }, [user]);
-
-
+  //  //had to put the following piece of code here due to a bug , that showed the recent saved posts on the top of the page and at it's original place as well , thus twice in the page
+  //  const [user, loading] = useAuthState(auth);
+  //  const [savedPosts , setSavedPosts] = useState<any>([]);
+ 
+  //  useEffect(() => {
+  //    if (user) {
+  //      const userRef = doc(db, "users", user.uid);
+  //      const unsubscribe = onSnapshot(userRef, (doc) => {
+  //        if (doc.exists()) {
+  //          const data = doc.data();
+  //          setSavedPosts(data.savedPosts || []);
+  //        }
+  //      });
+  //      return unsubscribe;
+  //    }
+  //  }, [user]);
 
 
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -126,6 +122,7 @@ const PostFeed = (props: Props) => {
 
       const lastDocument = snapshot.docs[snapshot.docs.length - 1];
       setLoadMore(lastDocument);
+      
 
       if (addFirst && lastDoc == null) {
         setPosts(postsData);
@@ -140,7 +137,7 @@ const PostFeed = (props: Props) => {
     return () => {
       unsub();
     };
-  }, [lastDoc, reload ,savedPosts ]);
+  }, [lastDoc, reload , ]);
 
   //algolia stuff
 
@@ -234,7 +231,7 @@ const PostFeed = (props: Props) => {
             <ul className=" flex flex-col col-span-2 space-y-1">
               {posts.map((post, index) => (
                 <li key={index}>
-                  <Post post={post} savedPostId = {savedPostId} />
+                  <Post post={post} />
                 </li>
               ))}
             </ul>

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import PostVoteClient from "@/components/post-vote/PostVoteClient";
 import CommentBox from "./CommentBox";
 import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
+import { useToast } from "@/components/ui/use-toast";
 
 import { auth, db } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -55,6 +56,8 @@ type AnswerType = {
 };
 
 const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
+
+  const { toast } = useToast();
   
   //to send in postvoteclient for voting system
   const [user] = useAuthState(auth);
@@ -62,8 +65,6 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
   // console.log(postId);
 
   const pRef = useRef<HTMLDivElement>(null);
-
-  // const isAnonymous = answers[0].anonymity;
 
   const [commentInputVisibility , setCommentInputVisibility] = useState(answers.map(() => false))
   const [commentAdded, setCommentAdded] = useState(false);
@@ -107,6 +108,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
     fetchData();
   }, [postId, answers, commentAdded]);
 
+
   return (
 
     <div className=" mt-7">
@@ -124,13 +126,13 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
             /> */}
 
             <div className="w-0 flex-1">
-              <div className="flex max-h-40 mt-1 space-x-3 text-xs text-gray-500">
+              <div className="flex max-h-40 mt-1 space-x-2 text-xs text-gray-500">
                 {/* <div> */}
                 <Avatar>
                   <div className=" relative w-full h-full aspect-square">
                     <Image
                       fill
-                      src={answer.anonymity ? ('https://qph.cf2.quoracdn.net/main-qimg-73e139be8bfc1267eeed8ed6a2802109-lq') : (answer.profilePic)}
+                      src={answer.anonymity ? ('https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png') : (answer.profilePic)}
                       alt="profile picture"
                       referrerPolicy="no-referrer"
                     />
@@ -138,8 +140,9 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                   <AvatarFallback>SP</AvatarFallback>
                 </Avatar>
                 {/* </div> */}
-                <Separator orientation="vertical" className=" h-5 mt-3 " />
                 <span className=" mt-3">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
+                {answer.anonymity ? null : (
+              <div className=" flex space-x-2 ">
                 <svg
                   viewBox="0 0 48 48"
                   className=" mt-4 w-2 h-2"
@@ -160,12 +163,21 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                     ></path>{" "}
                   </g>
                 </svg>
+
                 <Button
                   variant="ghost"
-                  className=" text-blue-500 text-xs  p-0"
+                  className=" text-blue-500 text-xs mt-0 p-0"
+                  onClick={() => {
+                    toast({
+                      title: " Feature coming soon ... ",
+                      variant: "feature",
+                    });
+                  }}
                 >
                   Follow
                 </Button>
+              </div>
+            )}
                 {/* {formatTimeToNow(new Date(post.createdAt))} */}
               </div>
               {/* <a href={`/postPage/${answer.id}`}>

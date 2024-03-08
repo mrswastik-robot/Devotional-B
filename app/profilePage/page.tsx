@@ -224,32 +224,31 @@ const ProfilePage = (props: Props) => {
     }, [user, loading, router, postType, loadMore, reload]);
 
     //fetching the savedPosts from the 'users' collection
-    useEffect(() => {
-      const fetchSavedPosts = () => {
-        if (!user) return;
-    
-        const userRef = doc(db, 'users', user.uid);
-        const unsubscribe = onSnapshot(userRef, async (userDoc) => {
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            const savedPostIds = userData.savedPosts;
-            const savedPostsPromises = savedPostIds.map((postId: string) => {
-              const postRef = doc(db, 'questions', postId); // Replace 'questions' with the name of your posts collection
-              return getDoc(postRef);
-            });
-    
-            const savedPostsDocs = await Promise.all(savedPostsPromises);
-            const savedPosts = savedPostsDocs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType));
-            setSavedPosts(savedPosts);
-          }
-        });
-    
-        // Clean up the listener when the component unmounts
-        return () => unsubscribe();
-      };
-    
-      fetchSavedPosts();
-    }, [user]);
+    // Fetching the savedPosts from the 'users' collection
+useEffect(() => {
+  const fetchSavedPosts = async () => {
+    if (!user) return;
+
+    const userRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      const savedPostIds = userData.savedPosts;
+      const savedPostsPromises = savedPostIds.map((postId: string) => {
+        const postRef = doc(db, 'questions', postId); // Replace 'questions' with the name of your posts collection
+        return getDoc(postRef);
+      });
+
+      const savedPostsDocs = await Promise.all(savedPostsPromises);
+      const savedPosts = savedPostsDocs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType));
+      setSavedPosts(savedPosts);
+    }
+  };
+
+  fetchSavedPosts();
+}, [user]);
+
 
     const handleToggleSwitchNormal = () => {
       setStart(true);

@@ -155,7 +155,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
         <div className="w-0 flex-1 break-normal overflow-hidden">
 
           {!isProfile&&
-          <div className="flex max-h-40 mt-1 space-x-3 text-xs text-gray-500">
+          <div className="flex max-h-40 mt-1 space-x-2 text-xs text-gray-500">
 
             {/* <div> */}
             <Avatar>
@@ -225,7 +225,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             </h1>
           </Link>
 
-          <p className="mb-1">{parse(post.description)}</p>
+          {/* <p className="mb-1">{parse(post.description)}</p> */}
           {post.questionImageURL ? (
             <div className="relative w-full h-60">
               <Image

@@ -26,7 +26,6 @@ function ShareDialog({postLink}: {postLink: string}) {
     const [isCopied, setIsCopied] = useState(false);
     const frontendURL = process.env.NEXT_FRONTEND_URL || "https://devotional-b.vercel.app";
     const link = `${frontendURL}${postLink}`;
-    console.log(process.env);
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(link);

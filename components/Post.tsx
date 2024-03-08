@@ -28,6 +28,17 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 import { arrayRemove, arrayUnion, doc, updateDoc , getDoc } from "firebase/firestore";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 type Props = {
   post: {
@@ -263,12 +274,28 @@ const Post = ({ post , savedPostId, isProfile=false, handleDelete=()=>{} }: Prop
             {savedState ? (<span className=" sm:block hidden">Saved</span>) : (<span className=" sm:block hidden">Save</span>)}
           </button>
           {isProfile&&
+          <AlertDialog>
+          <AlertDialogTrigger asChild>
           <button
             className="w-fit flex items-center gap-2"
-            onClick={HandleDelete}
           >
             <AiTwotoneDelete className='text-xl' />{" "}
           </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                post and remove the data from our servers.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={HandleDelete} >Delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
           }
         </div>
       </div>

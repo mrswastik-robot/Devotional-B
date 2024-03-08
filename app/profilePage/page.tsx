@@ -15,6 +15,21 @@ import Loader from '@/components/ui/Loader';
 import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Tabs,
   TabsContent,
@@ -22,6 +37,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { useToast } from "@/components/ui/use-toast";
+import { FaChevronDown } from "react-icons/fa6";
 
 
 type Props = {};
@@ -57,6 +73,8 @@ const ProfilePage = (props: Props) => {
   const [start, setStart] = useState<boolean>(true);
   const [anonymousStart, setAnonymousStart] = useState<boolean>(true);
   const [morePosts, setMorePosts] = useState(false);
+  const [sortType, setSortType] = useState("recent")
+  const [reload, setReload] = useState(false);
   const {toast} = useToast();
   
   //savedPosts
@@ -91,6 +109,7 @@ const ProfilePage = (props: Props) => {
   }
 
   useEffect(() => {
+    //console.log("heyyyyyyyyyyy");
     const fetchData = async () => {
       try {
         if (!user) {
@@ -108,7 +127,7 @@ const ProfilePage = (props: Props) => {
                   where("uid", "==", user.uid),
                   where("anonymity", "==", false)
                 ),
-                orderBy("createdAt", "desc"),
+                orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
                 limit(7)
               );
               const snapshot = await getDocs(q);
@@ -129,7 +148,7 @@ const ProfilePage = (props: Props) => {
                   where("uid", "==", user.uid),
                   where("anonymity", "==", false)
                 ),
-                orderBy("createdAt", "desc"),
+                orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
                 startAfter(LastDoc),
                 limit(7)
               );
@@ -154,7 +173,7 @@ const ProfilePage = (props: Props) => {
                   where("uid", "==", user.uid),
                   where("anonymity", "==", true)
                 ),
-                orderBy("createdAt", "desc"),
+                orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
                 limit(7)
               );
               const snapshot = await getDocs(q);
@@ -175,7 +194,7 @@ const ProfilePage = (props: Props) => {
                   where("uid", "==", user.uid),
                   where("anonymity", "==", true)
                 ),
-                orderBy("createdAt", "desc"),
+                orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
                 startAfter(anonymousLastdoc),
                 limit(7)
               );
@@ -202,7 +221,7 @@ const ProfilePage = (props: Props) => {
       };
     
       fetchData();
-    }, [user, loading, router, postType, loadMore]);
+    }, [user, loading, router, postType, loadMore, reload]);
 
     //fetching the savedPosts from the 'users' collection
     useEffect(() => {
@@ -254,10 +273,39 @@ const ProfilePage = (props: Props) => {
     const handleLoadMore = () => {
       setLoadMore((prev)=>!prev)
     };
+
+    const handleSortChange = ()=>{
+      setStart(true);
+      setAnonymousStart(true);
+      setQuestions([]);
+      setAnonymousQuestions([]);
+      setReload((prev)=>!prev)
+    }
     
 
+  function handleToggleSwithFollowers(){
+    toast({
+      title:'Feature Coming Soon',
+      variant:'default',
+    })
+  }
+
+  function handleToggleSwithFollowing(){
+    toast({
+      title:'Feature Coming Soon',
+      variant:'default',
+    })
+  }
+
+  function handleToggleSwithAnswers(){
+    toast({
+      title:'Feature Coming Soon',
+      variant:'default',
+    })
+  }
+
   return (
-    <div className=' mt-4'>
+    <div className='mt-4'>
         <ProfileCard user={user}/>
         {/* <div className='toggleSwitch flex items-center justify-center mt-5'>
         <label className="inline-flex items-center cursor-pointer">
@@ -266,17 +314,20 @@ const ProfilePage = (props: Props) => {
   <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{isAnonymous ? 'Anonymous Posts' : 'Normal Posts'}</span>
 </label>
       </div> */}
-      <div className='toggleSwitch w-full flex items-center justify-center mt-5'>
-          <Tabs defaultValue="account" className="w-full">
-      <TabsList className="grid mx-auto  gap-3 grid-cols-3 w-[500px]">
-        <TabsTrigger value="account" onClick={handleToggleSwitchNormal} >Normal Posts</TabsTrigger>
-        <TabsTrigger value="password" onClick={handleToggleSwitchAnonymous}>Anonymous Posts</TabsTrigger>
+      <div className='toggleSwitch mt-5'>
+          <Tabs defaultValue="posts" className="w-full">
+      <TabsList className="grid gap-2 grid-cols-6 w-[650px]">
+        <TabsTrigger value="posts" onClick={handleToggleSwitchNormal} >Posts</TabsTrigger>
+        <TabsTrigger value="answers" onClick={handleToggleSwithAnswers}>Answers</TabsTrigger>
+        <TabsTrigger value="anonymous" onClick={handleToggleSwitchAnonymous}>Anonymous</TabsTrigger>
         <TabsTrigger value="saved" onClick={handleToggleSwithcSaved}>Saved Posts</TabsTrigger>
+        <TabsTrigger value="followers" onClick={handleToggleSwithFollowers}>Followers</TabsTrigger>
+        <TabsTrigger value="following" onClick={handleToggleSwithFollowing}>Following</TabsTrigger>
       </TabsList>
       <TabsContent value="saved" className="min-w-full">
       { savedPosts.length !== 0 ? (
         savedPosts.map((post, index) => (
-          <div key={index} className=" my-5">
+          <div key={index} className="my-3">
             <Post post={post} />
           </div>
         ))
@@ -295,7 +346,31 @@ const ProfilePage = (props: Props) => {
       </TabsContent>
     </Tabs>
     </div>
+      <div className="border-y-[1px] border-black border-opacity-15 py-2 flex justify-between items-center">
+        <div className="font-[600] opacity-80">
+        {postType=='normal'?<div>Normal</div>:postType=='anonymous'?<div>Anonymous</div>:postType=='saved'?<div>Saved</div>:<div>Coming Soon</div>}
+        </div>
+        <div>
+        <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <div className="font-[600] flex items-center gap-1 cursor-pointer opacity-75 rounded-md p-1 hover:bg-slate-200">{`${sortType=='recent'?"Most Recent":"Oldest"}`}<span><FaChevronDown/></span></div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-20">
+        <DropdownMenuGroup>
+          <DropdownMenuItem onClick={()=>{setSortType('recent');handleSortChange()}}>
+            Most Recent
+         
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={()=>{setSortType('oldest');handleSortChange()}}>
+            Oldest
+            
+          </DropdownMenuItem>
+          </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
 
+        </div>
+      </div>
       <div>
         {
           <div>
@@ -319,7 +394,7 @@ const ProfilePage = (props: Props) => {
                   : anonymousQuestions &&
                     anonymousQuestions.map((post, index) => (
                       // <Post key={index} post={post} />
-                      <div key={index} className=" my-7">
+                      <div key={index} className=" my-3">
                         <Post post={post} isProfile={true} handleDelete={handleDelete} />
                       </div>
                     ))}
@@ -341,7 +416,7 @@ const ProfilePage = (props: Props) => {
               questions && postType === "normal" &&
               questions.map((post, index) => (
                 // <Post key={index} post={post} />
-                <div key={index} className=" my-5">
+                <div key={index} className=" my-3">
                   <Post post={post} isProfile={true} handleDelete={handleDelete} />
                 </div>
               ))

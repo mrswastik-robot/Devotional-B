@@ -60,17 +60,17 @@ function ShareDialog({postLink}: {postLink: string}) {
                         <AlertDialogTitle className='mb-2'>Share Question Via:-</AlertDialogTitle>
                         <AlertDialogDescription>
                             <ToggleGroup type="multiple">
-                                <ToggleGroupItem value="bold" className='flex gap-1' onClick={copyToClipboard}>
-                                    <div><FaLink /></div><div>{isCopied?<div style={{ marginLeft: '5px', color: 'green' }}>Copied!</div>:<div>Copy Link</div>}</div>
+                            <ToggleGroupItem value="bold" className='flex gap-1' onClick={copyToClipboard}>
+                                    <div><FaLink className='text-black' /></div><div>{isCopied?<div className='text-green ml-1'>Copied!</div>:<div className='text-black' >Copy Link</div>}</div>
                                 </ToggleGroupItem>
                                 <ToggleGroupItem value="italic" className='flex gap-1' onClick={shareViaWhatsapp}>
-                                    <div><FaWhatsapp /></div><div>Whatsapp</div>
+                                    <div><FaWhatsapp className='text-black' /></div><div className='text-black'>Whatsapp</div>
                                 </ToggleGroupItem>
                                 <ToggleGroupItem value="strikethrough" className='flex gap-1' onClick={shareViaFacebook}>
-                                    <div><FaFacebook /></div><div>Facebook</div>
+                                    <div><FaFacebook className='text-black' /></div><div className='text-black'>Facebook</div>
                                 </ToggleGroupItem>
                                 <ToggleGroupItem value="strikethrough" className='flex gap-1' onClick={shareViaTwitter}>
-                                    <div><FaXTwitter /></div><div>Twitter</div>
+                                    <div><FaXTwitter className='text-black' /></div><div className='text-black' >Twitter</div>
                                 </ToggleGroupItem>
                             </ToggleGroup>
                         </AlertDialogDescription>

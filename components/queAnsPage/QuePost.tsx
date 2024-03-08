@@ -133,7 +133,7 @@ const QuePost = ({ post }: Props) => {
               <div className=" relative w-full h-full aspect-square">
                 <Image
                   fill
-                  src={isAnonymous ? ('https://qph.cf2.quoracdn.net/main-qimg-73e139be8bfc1267eeed8ed6a2802109-lq') : (post.profilePic)}
+                  src={isAnonymous ? ('https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png') : (post.profilePic)}
                   alt="profile picture"
                   referrerPolicy="no-referrer"
                 />

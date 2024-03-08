@@ -34,6 +34,7 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Image from "next/image";
 
 type Input = z.infer<typeof CommentType>;
 
@@ -238,7 +239,7 @@ const CommentBox = ({
                     type="text"
                     placeholder="Add a comment ..."
                     autoComplete="off"
-                    className="w-full rounded-3xl  bg-slate-100 p-2"
+                    className="w-[99%] border-0 rounded-3xl  bg-slate-100 p-2"
                     {...field}
                   />
                 </FormControl>
@@ -270,9 +271,11 @@ const CommentBox = ({
             className=" w-full  border border-gray-300  py-4 px-3"
           >
             <div className="flex  space-x-2">
-              <img
+              <Image
                 src={comment.profilePic}
                 alt="Profile Pic"
+                width={32}
+                height={32}
                 className="h-8 w-8 rounded-full"
               />
               <div>
@@ -313,8 +316,10 @@ const CommentBox = ({
                         {/* displaying the replies */}
                         {comment.replies && comment.replies.sort((a:any, b:any) => b.createdAt - a.createdAt).map((reply, replyIndex) => (
                           <div key={replyIndex} className="flex space-x-2 mt-2 ml-2">
-                            <img
+                            <Image
                             src={reply.profilePic}
+                            width={24}
+                            height={24}
                             className="h-6 w-6 rounded-full mt-1"
                             alt="Profile Pic"
                             />

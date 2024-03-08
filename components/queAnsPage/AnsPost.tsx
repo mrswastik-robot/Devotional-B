@@ -58,7 +58,6 @@ type AnswerType = {
 const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
 
   const { toast } = useToast();
-  const isAnonymous = answers[0].anonymity;
   
   //to send in postvoteclient for voting system
   const [user] = useAuthState(auth);
@@ -133,7 +132,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                   <div className=" relative w-full h-full aspect-square">
                     <Image
                       fill
-                      src={answer.anonymity ? ('https://qph.cf2.quoracdn.net/main-qimg-73e139be8bfc1267eeed8ed6a2802109-lq') : (answer.profilePic)}
+                      src={answer.anonymity ? ('https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png') : (answer.profilePic)}
                       alt="profile picture"
                       referrerPolicy="no-referrer"
                     />

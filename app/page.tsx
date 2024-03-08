@@ -255,7 +255,7 @@ export default function Home() {
               Home
             </p>
           </div> */}
-          <dl className='rounded-lg divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-300  px-6 py-4 text-sm leading-6'>
+          <dl className='rounded-lg divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-4 text-sm leading-6'>
             <div className='flex justify-between gap-x-4 py-3'>
               {
                 isGuest === 'true' ? (
@@ -387,7 +387,7 @@ export default function Home() {
           </dl>
 
           {/* <RightHandFeed />           */}
-          <div className='col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg border border-gray-300 order-last'>
+          <div className='col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg border border-gray-100 order-last'>
             <RightHandFeed />
           </div>
 

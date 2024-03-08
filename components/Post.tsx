@@ -63,6 +63,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   const { toast } = useToast();
 
   const isAnonymous = post.anonymity;
+  const [isExpanded , setIsExpanded] = useState(false);
 
   //needed to send it to PostVoteClientPhone so that it can get the current user's vote
   const [user, loading] = useAuthState(auth);
@@ -153,7 +154,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                   fill
                   src={
                     isAnonymous
-                      ? "https://qph.cf2.quoracdn.net/main-qimg-73e139be8bfc1267eeed8ed6a2802109-lq"
+                      ? "https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png"
                       : post.profilePic
                   }
                   alt="profile picture"
@@ -207,7 +208,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           <Link href={`/postPage2/${post?.title?.split(" ").join("-")}`}>
-            <h1 className="text-lg font-semibold py-2 leading-6 text-gray-900 dark:text-white">
+            <h1 className={`text-lg font-semibold py-2 leading-6 text-gray-900 dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
           </Link>
@@ -224,16 +225,21 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           ) : null}
 
           <div
-            className="relative text-sm max-h-40 w-full overflow-clip"
+            className={`relative text-sm max-h-20 w-full overflow-clip ${isExpanded ? 'max-h-none': '' }`}
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}
             <p>{parse(post.description)}</p>
-            <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/90 dark:from-[#262626] to-transparent"></div>
+            {isExpanded ? '' : <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div> }
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
               
             ) : null} */}
+            {!isExpanded && (
+              <div className="absolute bottom-0 left-0 w-full text-right">
+                <button className=" text-blue-500/80 hover:underline" onClick={() => setIsExpanded(true)}>(more)</button>
+              </div>
+            )}
           </div>
         </div>
       </div>

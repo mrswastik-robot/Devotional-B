@@ -124,7 +124,7 @@ export default function Home() {
   useEffect(() => {
     if(!user)
       router.push('/auth');
-  }, [user, loading , router])
+  }, [user, loading ,])
   
   
   //algolsearchClientff

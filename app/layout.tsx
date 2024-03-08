@@ -7,6 +7,8 @@ import Providers from "@/components/ThemeProvider";
 import { StoreProvider } from "@/store/StoreProvider";
 import { Toaster } from "@/components/ui/toaster";
 
+import { GeistSans } from 'geist/font/sans';
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,7 +24,7 @@ export default function RootLayout({
   return (
     <StoreProvider>
       <html lang="en">
-        <body className={cn(inter.className, "antialiased min-h-screen pt-12 bg-[#F1F2F2] dark:bg-[#181818]")}>
+        <body className={cn(GeistSans.className, "antialiased min-h-screen pt-12 bg-[#F1F2F2] dark:bg-[#181818]")}>
           <Providers>
             <Navbar />
             <div className="container max-w-7xl mx-auto h-full pt-12 ">

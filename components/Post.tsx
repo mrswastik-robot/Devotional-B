@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef , useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import parse from "html-react-parser";
 
@@ -27,7 +27,13 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
-import { arrayRemove, arrayUnion, doc, updateDoc , getDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
 
 type Props = {
   post: {
@@ -47,12 +53,11 @@ type Props = {
   };
   // children: Element
   // id: string
-  isProfile?:boolean;
-  handleDelete?:Function;
+  isProfile?: boolean;
+  handleDelete?: Function;
 };
 
-const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
-
+const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   const pRef = useRef<HTMLDivElement>(null);
 
   const { toast } = useToast();
@@ -60,53 +65,48 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
   const isAnonymous = post.anonymity;
 
   //needed to send it to PostVoteClientPhone so that it can get the current user's vote
-  const [user , loading] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
   //saving the post funcitonality
-  const [savedState , setSavedState] = useState(false);
+  const [savedState, setSavedState] = useState(false);
 
-  const HandleDelete=()=>{
+  const HandleDelete = () => {
     handleDelete(post.id);
-  }
+  };
 
-  const handleSave = async() => {
-
-    if(!user)
-    {
+  const handleSave = async () => {
+    if (!user) {
       toast({
-        title:' Please sign in to save posts ',
-        variant:'destructive',
-      })
+        title: " Please sign in to save posts ",
+        variant: "destructive",
+      });
       return;
     }
-    
-      const userRef = doc(db , 'users' , user.uid);
-    
 
-    if(savedState)
-    {
+    const userRef = doc(db, "users", user.uid);
+
+    if (savedState) {
       //post is currently saved remove it from saved posts
-      await updateDoc(userRef , {
-        savedPosts: arrayRemove(post.id)
-      })
+      await updateDoc(userRef, {
+        savedPosts: arrayRemove(post.id),
+      });
       toast({
-        title:' Post removed from saved ',
-        variant:'default',  
-      })
-    }else{
+        title: " Post removed from saved ",
+        variant: "default",
+      });
+    } else {
       //post is currently not saved add it to saved posts
-      await updateDoc(userRef , {
+      await updateDoc(userRef, {
         savedPosts: arrayUnion(post.id),
-      })
+      });
       toast({
-        title:' Post saved ',
-        variant:'default',
-      })
+        title: " Post saved ",
+        variant: "default",
+      });
     }
 
-
-      setSavedState(!savedState);
-  }
+    setSavedState(!savedState);
+  };
 
   //fetching savedPosts from user's document
   useEffect(() => {
@@ -114,11 +114,11 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
       if (!user) return;
       const userRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userRef);
-  
+
       if (userDoc.exists()) {
         const userData = userDoc.data();
         const savedPosts = userData.savedPosts;
-  
+
         // If the post is in the savedPosts array, set savedState to true
         if (savedPosts.includes(post.id)) {
           setSavedState(true);
@@ -129,9 +129,9 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
         }
       }
     };
-  
+
     fetchUser();
-  }, [post.id, user ]);
+  }, [post.id, user]);
 
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow my-1">
@@ -145,7 +145,7 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
         {/* <PostVoteClientPhone/> */}
 
         <div className="w-0 flex-1 break-normal overflow-hidden">
-          <div className="flex max-h-40 mt-1 space-x-3 text-xs text-gray-500">
+          <div className="flex max-h-40 mt-1 space-x-2 text-xs text-gray-500">
             {/* <div> */}
             <Avatar>
               <div className=" relative w-full h-full aspect-square">
@@ -167,37 +167,43 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
             <span className=" mt-3">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
-            <svg
-              viewBox="0 0 48 48"
-              className=" mt-4 w-2 h-2"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                {" "}
-                <path
-                  d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z"
-                  fill="#333333"
-                ></path>{" "}
-              </g>
-            </svg>
-            <Button variant="ghost" className=" text-blue-500 text-xs mt-0 p-0"
-            onClick={() => {
-              toast({
-                title:' Feature coming soon ... ',
-                variant:'feature',
-              })
-            }
-            }
-            >
-              Follow
-            </Button>
+            {isAnonymous ? null : (
+              <div className=" flex space-x-2 ">
+                <svg
+                  viewBox="0 0 48 48"
+                  className=" mt-4 w-2 h-2"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <path
+                      d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z"
+                      fill="#333333"
+                    ></path>{" "}
+                  </g>
+                </svg>
+
+                <Button
+                  variant="ghost"
+                  className=" text-blue-500 text-xs mt-0 p-0"
+                  onClick={() => {
+                    toast({
+                      title: " Feature coming soon ... ",
+                      variant: "feature",
+                    });
+                  }}
+                >
+                  Follow
+                </Button>
+              </div>
+            )}
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           <Link href={`/postPage2/${post?.title?.split(" ").join("-")}`}>
@@ -222,7 +228,7 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}
-            <p>{parse((post.description))}</p>
+            <p>{parse(post.description)}</p>
             <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/90 dark:from-[#262626] to-transparent"></div>
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
@@ -249,26 +255,34 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
             <MessageSquare className="h-4 w-4" />{" "}
             <span className=" sm:block hidden">{post.comments} Answers</span>
           </Link>
-          <button
-            className="w-fit flex items-center gap-2"
-          >
-            <ShareDialog postLink={`/postPage2/${post?.title?.split(" ").join("-")}`}/>
+          <button className="w-fit flex items-center gap-2">
+            <ShareDialog
+              postLink={`/postPage2/${post?.title?.split(" ").join("-")}`}
+            />
           </button>
           <button
             className="w-fit flex items-center gap-2"
             onClick={handleSave}
           >
-            <Bookmark className={cn("h-4 w-4", {" text-black fill-black" : savedState == true,})} />{" "}
-            {savedState ? (<span className=" sm:block hidden">Saved</span>) : (<span className=" sm:block hidden">Save</span>)}
+            <Bookmark
+              className={cn("h-4 w-4", {
+                " text-black fill-black": savedState == true,
+              })}
+            />{" "}
+            {savedState ? (
+              <span className=" sm:block hidden">Saved</span>
+            ) : (
+              <span className=" sm:block hidden">Save</span>
+            )}
           </button>
-          {isProfile&&
-          <button
-            className="w-fit flex items-center gap-2"
-            onClick={HandleDelete}
-          >
-            <AiTwotoneDelete className='text-xl' />{" "}
-          </button>
-          }
+          {isProfile && (
+            <button
+              className="w-fit flex items-center gap-2"
+              onClick={HandleDelete}
+            >
+              <AiTwotoneDelete className="text-xl" />{" "}
+            </button>
+          )}
         </div>
       </div>
     </div>

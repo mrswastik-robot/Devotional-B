@@ -200,7 +200,7 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
             </Button>
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
-          <Link href={`/postPage2/${post.title.split(" ").join("-")}`}>
+          <Link href={`/postPage2/${post?.title?.split(" ").join("-")}`}>
             <h1 className="text-lg font-semibold py-2 leading-6 text-gray-900 dark:text-white">
               {post.title}
             </h1>
@@ -222,7 +222,7 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}
-            <p>{parse(post.description)}</p>
+            <p>{parse((post.description))}</p>
             <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/90 dark:from-[#262626] to-transparent"></div>
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
@@ -243,7 +243,7 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
 
         <div className=" flex gap-x-3">
           <Link
-            href={`/postPage2/${post.title.split(" ").join("-")}`}
+            href={`/postPage2/${post?.title?.split(" ").join("-")}`}
             className="w-fit flex items-center gap-2"
           >
             <MessageSquare className="h-4 w-4" />{" "}
@@ -252,7 +252,7 @@ const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
           <button
             className="w-fit flex items-center gap-2"
           >
-            <ShareDialog postLink={`/postPage2/${post.title.split(" ").join("-")}`}/>
+            <ShareDialog postLink={`/postPage2/${post?.title?.split(" ").join("-")}`}/>
           </button>
           <button
             className="w-fit flex items-center gap-2"

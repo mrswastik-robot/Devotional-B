@@ -56,22 +56,22 @@ type PostType = {
 
 const PostFeed = (props: Props) => {
 
-   //had to put the following piece of code here due to a bug , that showed the recent saved posts on the top of the page and at it's original place as well , thus twice in the page
-   const [user, loading] = useAuthState(auth);
-   const [savedPosts , setSavedPosts] = useState<any>([]);
+  //  //had to put the following piece of code here due to a bug , that showed the recent saved posts on the top of the page and at it's original place as well , thus twice in the page
+  //  const [user, loading] = useAuthState(auth);
+  //  const [savedPosts , setSavedPosts] = useState<any>([]);
  
-   useEffect(() => {
-     if (user) {
-       const userRef = doc(db, "users", user.uid);
-       const unsubscribe = onSnapshot(userRef, (doc) => {
-         if (doc.exists()) {
-           const data = doc.data();
-           setSavedPosts(data.savedPosts || []);
-         }
-       });
-       return unsubscribe;
-     }
-   }, [user]);
+  //  useEffect(() => {
+  //    if (user) {
+  //      const userRef = doc(db, "users", user.uid);
+  //      const unsubscribe = onSnapshot(userRef, (doc) => {
+  //        if (doc.exists()) {
+  //          const data = doc.data();
+  //          setSavedPosts(data.savedPosts || []);
+  //        }
+  //      });
+  //      return unsubscribe;
+  //    }
+  //  }, [user]);
 
 
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -137,7 +137,7 @@ const PostFeed = (props: Props) => {
     return () => {
       unsub();
     };
-  }, [lastDoc, reload , savedPosts ]);
+  }, [lastDoc, reload , ]);
 
   //algolia stuff
 

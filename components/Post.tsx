@@ -47,13 +47,12 @@ type Props = {
   };
   // children: Element
   // id: string
-  savedPostId?: string | null | undefined;
   isProfile?:boolean;
   handleDelete?:Function;
 };
 
-const Post = ({ post , savedPostId, isProfile=false, handleDelete=()=>{} }: Props) => {
-  //console.log("post ", post);
+const Post = ({ post , isProfile=false, handleDelete=()=>{} }: Props) => {
+
   const pRef = useRef<HTMLDivElement>(null);
 
   const { toast } = useToast();
@@ -118,7 +117,7 @@ const Post = ({ post , savedPostId, isProfile=false, handleDelete=()=>{} }: Prop
   
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        const savedPosts = userData.savedPosts || [];
+        const savedPosts = userData.savedPosts;
   
         // If the post is in the savedPosts array, set savedState to true
         if (savedPosts.includes(post.id)) {
@@ -126,13 +125,13 @@ const Post = ({ post , savedPostId, isProfile=false, handleDelete=()=>{} }: Prop
         } else {
           // If the post is not in the savedPosts array, set savedState to false
           // unless it's the recently saved post (post.id === savedPostId)
-          setSavedState(post.id === savedPostId);
+          // setSavedState(post.id === savedPostId);
         }
       }
     };
   
     fetchUser();
-  }, [post.id, user,savedPostId ]);
+  }, [post.id, user ]);
 
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow my-1">

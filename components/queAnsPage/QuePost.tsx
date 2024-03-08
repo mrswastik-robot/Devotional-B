@@ -187,7 +187,7 @@ const QuePost = ({ post }: Props) => {
           ) : null}
 
           <div
-            className="relative text-base max-h-50 w-full  "
+            className="relative text-lg max-h-50 w-full  "
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}

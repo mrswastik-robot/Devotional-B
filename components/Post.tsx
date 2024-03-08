@@ -8,6 +8,8 @@ import { MessageSquare } from "lucide-react";
 import { Share } from "lucide-react";
 import { Bookmark } from "lucide-react";
 import ShareDialog from "./ShareDialog";
+// import { Trash2 } from "lucide-react";
+import { AiTwotoneDelete } from "react-icons/ai";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -46,9 +48,12 @@ type Props = {
   // children: Element
   // id: string
   savedPostId?: string | null | undefined;
+  isProfile?:boolean;
+  handleDelete?:Function;
 };
 
-const Post = ({ post , savedPostId }: Props) => {
+const Post = ({ post , savedPostId, isProfile=false, handleDelete=()=>{} }: Props) => {
+  //console.log("post ", post);
   const pRef = useRef<HTMLDivElement>(null);
 
   const { toast } = useToast();
@@ -60,6 +65,10 @@ const Post = ({ post , savedPostId }: Props) => {
 
   //saving the post funcitonality
   const [savedState , setSavedState] = useState(false);
+
+  const HandleDelete=()=>{
+    handleDelete(post.id);
+  }
 
   const handleSave = async() => {
 
@@ -253,6 +262,14 @@ const Post = ({ post , savedPostId }: Props) => {
             <Bookmark className={cn("h-4 w-4", {" text-black fill-black" : savedState == true,})} />{" "}
             {savedState ? (<span className=" sm:block hidden">Saved</span>) : (<span className=" sm:block hidden">Save</span>)}
           </button>
+          {isProfile&&
+          <button
+            className="w-fit flex items-center gap-2"
+            onClick={HandleDelete}
+          >
+            <AiTwotoneDelete className='text-xl' />{" "}
+          </button>
+          }
         </div>
       </div>
     </div>

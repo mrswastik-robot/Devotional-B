@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 import { auth , db } from '@/utils/firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs , doc , getDoc} from 'firebase/firestore';
+import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs , doc , getDoc, deleteDoc} from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Post from '@/components/Post';
 import Loader from '@/components/ui/Loader';
@@ -21,6 +21,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { useToast } from "@/components/ui/use-toast";
 
 
 type Props = {};
@@ -56,11 +57,38 @@ const ProfilePage = (props: Props) => {
   const [start, setStart] = useState<boolean>(true);
   const [anonymousStart, setAnonymousStart] = useState<boolean>(true);
   const [morePosts, setMorePosts] = useState(false);
+  const {toast} = useToast();
   
   //savedPosts
   const [ savedPosts , setSavedPosts] = useState<PostType[]>([]);
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
+
+  const handleDelete = async(postId:string)=>{
+    try {
+      // Delete the post from the 'questions' collection
+      const postRef = doc(db, 'questions', postId);
+      await deleteDoc(postRef);
+      toast({
+        title:'Deleted Sucessfully',
+        variant:'default',
+      })
+      // Remove the deleted post from the state
+      if (postType === 'normal') {
+        setQuestions((prevQuestions) => prevQuestions.filter((post) => post.id !== postId));
+      } else {
+        setAnonymousQuestions((prevQuestions) => prevQuestions.filter((post) => post.id !== postId));
+      }
+  
+      
+    } catch (error) {
+      toast({
+        title:'Something went wrong',
+        variant:'destructive',
+      })
+      console.error('Error deleting post: ', error);
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -292,7 +320,7 @@ const ProfilePage = (props: Props) => {
                     anonymousQuestions.map((post, index) => (
                       // <Post key={index} post={post} />
                       <div key={index} className=" my-7">
-                        <Post post={post} />
+                        <Post post={post} isProfile={true} handleDelete={handleDelete} />
                       </div>
                     ))}
               </div>
@@ -314,7 +342,7 @@ const ProfilePage = (props: Props) => {
               questions.map((post, index) => (
                 // <Post key={index} post={post} />
                 <div key={index} className=" my-5">
-                  <Post post={post} />
+                  <Post post={post} isProfile={true} handleDelete={handleDelete} />
                 </div>
               ))
             )}

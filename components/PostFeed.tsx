@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Post from "./Post";
 import { postData } from "@/lib/data";
 
@@ -83,6 +83,9 @@ const PostFeed = (props: Props) => {
   const [reload, setReload] = useState(false);
   const [addFirst, setAddFirst] = useState(false);
 
+  //for automating loadmore lazy load button ...
+  const loadMoreButtonRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setIsLoading(true);
     const collectionRef = collection(db, "questions");
@@ -138,6 +141,7 @@ const PostFeed = (props: Props) => {
       unsub();
     };
   }, [lastDoc, reload , ]);
+
 
   //algolia stuff
 
@@ -196,6 +200,31 @@ const PostFeed = (props: Props) => {
     }
   }, [searchTriggered]);
 
+
+  //useEffect for automting lazyload functionality
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreData();
+        }
+      },
+      { threshold: 1 } // 1.0 means that when 100% of the target is visible within the element specified by the root option, the callback is invoked.
+    );
+  
+    if (loadMoreButtonRef.current) {
+      observer.observe(loadMoreButtonRef.current);
+    }
+  
+    return () => {
+      if (loadMoreButtonRef.current) {
+        observer.unobserve(loadMoreButtonRef.current);
+      }
+    };
+  }, [loadMoreButtonRef, loadMoreData]);
+
+
+  //returning the searched results from algoia
   function transformHitToPost(hit: any) {
     return {
       id: hit.objectID, // Algolia provides an unique objectID for each record
@@ -238,7 +267,7 @@ const PostFeed = (props: Props) => {
             
             <div className='w-[100%] lg:ml-64 md:ml-80 xl:ml-96'>
             { isLoading?<Loader/>:pageLoaded&&
-            <div className='mt-4'>
+            <div ref={loadMoreButtonRef} className='mt-4'>
             <Button>
             <button onClick={loadMoreData}>LoadMore...</button>
             </Button>

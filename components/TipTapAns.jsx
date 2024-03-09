@@ -100,7 +100,7 @@ const MenuBar = ({ editor , setImageUpload , uploadImage , progress}) => {
   }
 
   return (
-    <div className="pb-5 flex items-left ml-1  rounded-lg py-3  gap-x-4">
+    <div className=" flex items-left ml-1  rounded-lg  gap-x-4">
       <div className=" flex gap-0 ">
           <button
             type="button"

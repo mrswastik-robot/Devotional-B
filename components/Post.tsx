@@ -251,15 +251,15 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
               
             ) : null} */}
             {!isExpanded && (
-              <div className="absolute bottom-0 left-0 w-full text-right">
-                <button className=" text-blue-500/80 hover:underline" onClick={() => setIsExpanded(true)}>(more)</button>
+              <div className="absolute bottom-0 left-0 w-full text-right ">
+                <button className=" text-blue-500/80  hover:underline bg-white backdrop-blur-sm text-right " onClick={() => setIsExpanded(true)}>(more)</button>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150 flex justify-between  gap-x-3 text-sm px-4 py-2  sm:px-6">
+      <div className="bg-gray-50 rounded-b-md dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150 flex justify-between  gap-x-3 text-sm px-4 py-2  sm:px-6">
         {/* <div className=' sm:block md:hidden '> */}
         <PostVoteClientPhone
           postId={post.id}

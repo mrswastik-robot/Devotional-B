@@ -38,7 +38,7 @@ const RightHandFeed = (props: Props) => {
   useEffect(() => {
 
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(7));
+    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(15));
 
     const unsub = onSnapshot(q, async(snapshot) => {
       const postsData =[];
@@ -69,7 +69,7 @@ const RightHandFeed = (props: Props) => {
 
   return (
 
-    <div className=' bg-[#FFFFFF] dark:bg-[#262626]'>
+    <div className=' rounded-md bg-[#FFFFFF] dark:bg-[#262626]'>
 
 <Table>
       <TableHeader>

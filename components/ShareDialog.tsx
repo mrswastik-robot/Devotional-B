@@ -51,7 +51,7 @@ function ShareDialog({postLink}: {postLink: string}) {
                 <AlertDialogTrigger asChild>
                     <div className=' flex gap-2'>
                         <Share className="h-4 w-4" />{" "}
-                        <p>Share</p>
+                        <p className=' sm:block hidden'>Share</p>
                     </div>
                 </AlertDialogTrigger>
                 <AlertDialogContent>

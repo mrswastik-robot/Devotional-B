@@ -248,15 +248,15 @@ export default function Home() {
 
 
         {/* subreddit info */}
-        <div className='col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-5'>
+        <div className='col-span-4 lg:col-span-2 lg:sticky lg:top-24 overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-3'>
           {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
             <p className='font-semibold py-3 flex items-center gap-1.5'>
               <HomeIcon className='h-4 w-4' />
               Home
             </p>
           </div> */}
-          <dl className='rounded-lg divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-4 text-sm leading-6'>
-            <div className='flex justify-between gap-x-4 py-3'>
+          <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-4 text-sm leading-6'>
+            <div className='flex rounded-md justify-between md:min-h-[7.5rem] gap-x-4 py-3'>
               {
                 isGuest === 'true' ? (
                   <p className=" text-zinc-500">

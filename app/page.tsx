@@ -13,6 +13,7 @@ import { buttonVariants } from "@/components/ui/button";
 import CustomFeed from "@/components/CustomFeed";
 import RightHandFeed from "@/components/RightHandFeed/RightHandFeed";
 import TopFeedCard from "@/components/TopFeedCard";
+import Loader from "@/components/ui/Loader";
 
 import {
   Dialog,
@@ -122,9 +123,9 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if(!user)
+    if(!user && !loading)
       router.push('/auth');
-  }, [user, loading ,])
+  }, [user, loading , router])
   
   
   //algolsearchClientff
@@ -215,6 +216,18 @@ export default function Home() {
   };
 
   // form.watch();
+
+  if(loading)
+  {
+    return(
+      <div className='w-[100%] lg:ml-64 md:ml-80 xl:ml-96'>
+        <Loader />
+      </div>
+    )
+  }
+  else
+  {
+
 
   return (
     <Suspense>
@@ -397,4 +410,5 @@ export default function Home() {
     </>
     </Suspense>
   );
+                    }
 }

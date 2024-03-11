@@ -328,7 +328,9 @@ export default function Home() {
                               </FormItem>
                             )}
                           />
-                          <span className='pt-3'>{`${progress} % Uploaded`}</span>
+                          
+                          {(progress||1)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
+                        
                           {/* anonymity toggle */}
                           <FormField
                             control={form.control}

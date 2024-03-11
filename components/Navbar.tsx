@@ -12,6 +12,8 @@ import { Bell } from "lucide-react";
 import { NotebookTabs } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +40,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch , useSelector } from "react-redux";
 import { setSearchText , triggerSearch } from "@/store/slice";
 import { RootState } from "@/store/store";
+import { useTheme } from "next-themes";
+import AskQuestion from "./AskQuestion";
+
 
 
 type Props = {
@@ -59,6 +64,16 @@ const Navbar = ({}: Props) => {
   const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     dispatch(setSearchText(e.target.value));
+  }
+
+  const { theme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
   }
 
   const [clicked, setClicked] = useState("");
@@ -113,7 +128,7 @@ const Navbar = ({}: Props) => {
             value={searchText}
             onChange={handleSearchText} 
             placeholder="Search" 
-            className="w-[40rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
+            className="w-[30rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerSearch());
@@ -123,8 +138,12 @@ const Navbar = ({}: Props) => {
           <Search className=" absolute left-2 top-1/2 transform text-gray-400 -translate-y-1/2 h-4 w-4" />
         </div>
 
+        <div>
+        <Button className="rounded-full h-9 bg-slate-500 font-semibold">Ask Question</Button>
+        </div>
+
         <div className="flex gap-4">
-          <ThemeToggler className=" mr-4" />
+          {/* <ThemeToggler className=" mr-4" /> Theme option added on dropdown menu  */}
 
           {(user) ? (<div>
             <DropdownMenu>
@@ -158,6 +177,12 @@ const Navbar = ({}: Props) => {
                   Settings
                 </DropdownMenuItem>
                 </Link>
+                <div className="mt-1 ml-2 mb-2">
+                <div className="flex items-center space-x-2">
+      <Switch id="airplane-mode" onCheckedChange={toggleTheme} checked={theme==='dark'}/>
+      <Label htmlFor="airplane-mode">Dark Mode</Label>
+    </div>
+                </div>
                 </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => auth.signOut()}>

@@ -142,7 +142,7 @@ const QuePost = ({ post }: Props) => {
             </Avatar>
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-3 " /> */}
-            <span className="mt-3 text-sm font-semibold text-[#0c0c0c]">{isAnonymous ? ('Anonymous') : (post.name)}</span>{" "}
+            <span className="mt-3 text-sm font-semibold dark:text-white text-[#0c0c0c]">{isAnonymous ? ('Anonymous') : (post.name)}</span>{" "}
             {isAnonymous ? null : (
               <div className=" flex space-x-1 mr-5">
                 <svg

@@ -175,7 +175,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             </Avatar>
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
-            <span className=" mt-3 text-sm font-semibold text-[#0c0c0c]">
+            <span className=" mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-yellow-50">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
             {isAnonymous ? null : (
@@ -242,7 +242,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           >
             {/* <EditorOutput content={post.content} /> */}
 
-            <p className="text-[#282829] text-base/[21px] text-[15px]">{parse(post.description)}</p>
+            <p className="text-[#282829] dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
             {isExpanded ? '' : <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div> }
 
             {/* {pRef.current?.clientHeight === 160 ? (

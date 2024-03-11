@@ -140,7 +140,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                   <AvatarFallback>SP</AvatarFallback>
                 </Avatar>
                 {/* </div> */}
-                <span className="mt-3 text-sm font-semibold text-[#0c0c0c]">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
+                <span className="mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-white">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
                 {answer.anonymity ? null : (
               <div className=" flex space-x-1 mr-5">
                 <svg
@@ -199,7 +199,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
               }
 
               <div
-                className="relative text-base max-h-50 text-[#282829] w-full mt-2 "
+                className="relative text-base max-h-50 text-[#282829] dark:text-white w-full mt-2 "
                 ref={pRef}
               >
                 {/* <EditorOutput content={post.content} /> */}

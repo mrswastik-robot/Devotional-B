@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 import { auth , db } from '@/utils/firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs , doc , getDoc, deleteDoc} from 'firebase/firestore';
+import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs , doc , getDoc, deleteDoc, collectionGroup} from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Post from '@/components/Post';
 import Loader from '@/components/ui/Loader';
@@ -61,9 +61,14 @@ type PostType = {
 const ProfilePage = (props: Props) => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
+  const [answers, setAnswers] = useState<PostType[]>([]);
+  const [answerLastDoc, setAnswerLastDoc] = useState<any>(null);
+  const [answerStart, setAnswerStart] = useState<boolean>(true);
+  const [answerMorePosts, setAnswerMorePosts] = useState(false);
   // console.log(user);
   const [postType, setPostType] = useState("normal");
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [isAnswers, setIsAnswers] = useState(false);
   const [questions, setQuestions] = useState<PostType[]>([]);
   const [anonymousQuestions, setAnonymousQuestions] = useState<PostType[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
@@ -165,7 +170,7 @@ const ProfilePage = (props: Props) => {
               else setMorePosts(false);
               setLastDoc(lastdoc);
             }
-          } else {
+          } else if(postType==="anonymous") {
             if (anonymousStart) {
               q = query(
                 questionsRef,
@@ -212,7 +217,89 @@ const ProfilePage = (props: Props) => {
               setAnonymousLastdoc(lastdoc);
             }
           }
-        }
+          else if(postType=="answers"){
+            const questionsRef = collection(db, 'questions');
+            const questionQuery = query(questionsRef,
+            orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),);
+            const questionSnapshot = await getDocs(questionQuery);
+            let count;
+            const questionDoc = questionSnapshot.docs;
+              const totalPost=questionDoc.length;
+            if(answerStart){
+
+            if (!questionSnapshot.empty) {
+              
+              let totalAnswers: any[] | ((prevState: PostType[]) => PostType[])=[];
+              count=0;
+              while(count<totalPost&&totalAnswers.length<=7){
+              // Reference the 'answers' subcollection directly
+              
+              const answersCollectionRef = collection(questionDoc[count].ref, 'answers');
+      
+              const q = query(
+                answersCollectionRef,
+                // where("uid", "==", user.uid),
+                orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
+              );
+      
+              const snapshot = await getDocs(q);
+      
+              // Update state with the fetched answers
+              totalAnswers=
+                snapshot.docs.map(
+                  (doc) => ({ id: doc.id, ...doc.data() } as PostType)
+                )
+      
+            //   const lstdoc = snapshot.docs[snapshot.docs.length - 1];
+            // // if (lstdoc) setAnswerMorePosts(true);
+            // // else setAnswerMorePosts(false);
+            // // setAnswerLastDoc(lstdoc);
+            setAnswerStart(false);
+            count++;
+            }
+            if(count<totalPost)setAnswerMorePosts(true)
+            else setAnswerMorePosts(false);
+            setAnswers(
+              totalAnswers
+            );
+
+          }
+          }
+            else{
+
+              if (!questionSnapshot.empty) {
+                let intCount=0;
+                // Reference the 'answers' subcollection directly
+                  let totalAnswers:any =[];
+              while((count||0)<totalPost&&totalAnswers.length<=7&&intCount<7){
+                const answersCollectionRef = collection(questionDoc[count||0].ref, 'answers');
+        
+                const moreQ = query(
+                  answersCollectionRef,
+                  where("uid", "==", user.uid),
+                  orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
+                );
+        
+                const moreSnapshot = await getDocs(moreQ);
+        
+                // Update state with the fetched answers
+                totalAnswers=moreSnapshot.docs.map(
+                    (doc) => ({ id: doc.id, ...doc.data() } as PostType)
+                  )
+                 intCount++;
+              }
+              if(count<totalPost)setAnswerMorePosts(true)
+            else setAnswerMorePosts(false);
+              setAnswers((prevAnswers) => [
+                ...prevAnswers,
+                ...totalAnswers,
+              ]);
+
+              }
+
+            }
+            }
+          }
         setLoadingPosts(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -278,6 +365,8 @@ useEffect(() => {
       setAnonymousStart(true);
       setQuestions([]);
       setAnonymousQuestions([]);
+      setAnswers([]);
+      setAnswerStart(true);
       setReload((prev)=>!prev)
     }
     
@@ -299,10 +388,8 @@ useEffect(() => {
   }
 
   function handleToggleSwithAnswers(){
-    toast({
-      title:'Feature Coming Soon',
-      variant:'default',
-    })
+    setAnswerStart(true);
+    setIsAnswers(true);
     setPostType('answers')
   }
 
@@ -331,7 +418,7 @@ useEffect(() => {
     {(postType=='normal'||postType=='anonymous'||postType=='answers')&&
       <div className="border-y-[1px] border-black border-opacity-15 py-2 flex justify-between items-center">
         <div className="font-[600] opacity-80">
-        {postType=='normal'?<div>Normal</div>:postType=='anonymous'?<div>Anonymous</div>:<div>Coming Soon</div>}
+        {postType=='normal'?<div>Normal</div>:postType=='anonymous'?<div>Anonymous</div>:postType=='answers'?<div>Answers</div>:<div>Coming Soon</div>}
         </div>
         <div>
 
@@ -434,18 +521,35 @@ useEffect(() => {
       )}
                 </div>:<div>
                   {
-                    postType=='answers'?<div>
-                      <div className="flex items-center justify-center flex-col mt-5 w-full">
-          <Image
-            src="/trash.png"
-            width={300}
-            height={300}
-            className=" w-[10rem] h-[9rem] rounded-full"
-            alt="Profile Pic"
-          />
-          <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
-        </div>
-                    </div>:<div>{
+                    postType=='answers'?
+                    
+                    <div>
+              {
+            answers?.length === 0 ? (
+              !loadingPosts && (
+                <div className="flex items-center justify-center flex-col mt-5 w-full">
+                  <Image
+                    src="/trash.png"
+                    width={300}
+                    height={300}
+                    className=" w-[10rem] h-[9rem] rounded-full"
+                    alt="Profile Pic"
+                  />
+                  <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+                </div>
+              )
+            ) : (
+              answers && postType === "answers" &&
+              answers.map((post, index) => (
+                // <Post key={index} post={post} />
+                <div key={index} className=" my-3">
+                  <Post post={post} isProfile={true} handleDelete={handleDelete} />
+                </div>
+              ))
+            )
+              }
+            </div>
+                    :<div>{
                       // <NetworkList/> Will make a new component for followers and following list till then displaying no posts found.
                       <div className="flex items-center justify-center flex-col mt-5 w-full">
           <Image
@@ -468,7 +572,7 @@ useEffect(() => {
 
       </div>
       <div>
-      {(postType=='normal'||postType=='anonymous')&& //will change this once lazy loading is available for all the tabs.
+      {(postType=='normal'||postType=='anonymous'||postType=='answers')&& //will change this once lazy loading is available for all the tabs.
       <div className="flex items-center justify-center">
         {loadingPosts ? (
           <div>
@@ -482,10 +586,19 @@ useEffect(() => {
               ) : (
                 <div>No More Posts...</div>
               )
-            ) : morePosts ? (
+            ):(
+              isAnswers?(
+                answerMorePosts ? (
+                  <Button onClick={handleLoadMore}>LoadMore...</Button>
+                ) : (
+                  <div>No More Posts...</div>
+                )
+              ):
+                morePosts ? (
               <Button onClick={handleLoadMore}>LoadMore</Button>
             ) : (
               <div>No More Posts...</div>
+            )
             )}
           </div>
         )}

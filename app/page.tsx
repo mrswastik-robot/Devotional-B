@@ -261,7 +261,7 @@ export default function Home() {
 
 
         {/* subreddit info */}
-        <div className='col-span-4 lg:col-span-2 lg:sticky lg:top-24 overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-3'>
+        <div className='col-span-4 lg:col-span-2 lg:sticky lg:top-20 overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-3'>
           {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
             <p className='font-semibold py-3 flex items-center gap-1.5'>
               <HomeIcon className='h-4 w-4' />

@@ -70,7 +70,10 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   const { toast } = useToast();
 
   const isAnonymous = post.anonymity;
+
+  //for displaying 'more' button
   const [isExpanded , setIsExpanded] = useState(false);
+  const [isOverflowing , setIsOverflowing] = useState(false);
 
   //needed to send it to PostVoteClientPhone so that it can get the current user's vote
   const [user, loading] = useAuthState(auth);
@@ -140,6 +143,18 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
     fetchUser();
   }, [post.id, user]);
+
+  //for displaying 'more' button
+  useEffect(() => {
+    // Assuming a line height of around 20px
+    const maxHeight = 20 * 3; 
+  
+    if (pRef.current && pRef.current.offsetHeight > maxHeight) {
+      setIsOverflowing(true);
+    } else {
+      setIsOverflowing(false);
+    }
+  }, [post.description]);
 
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow my-1">
@@ -250,7 +265,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
               // blur bottom if content is too long
               
             ) : null} */}
-            {!isExpanded && (
+            {!isExpanded && isOverflowing && (
               <div className="absolute bottom-0 left-0 w-full text-right ">
                 <button className=" text-blue-500/80  hover:underline bg-white backdrop-blur-sm text-right " onClick={() => setIsExpanded(true)}>(more)</button>
               </div>

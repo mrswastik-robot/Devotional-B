@@ -322,14 +322,13 @@ export default function Home() {
                                     render={({ field }) => (
                                       <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress} />
                                     )}
-                                    
                                    /> 
                                 </FormControl>
                                 <FormMessage/>
                               </FormItem>
                             )}
                           />
-
+                          <span className='pt-3'>{`${progress} % Uploaded`}</span>
                           {/* anonymity toggle */}
                           <FormField
                             control={form.control}

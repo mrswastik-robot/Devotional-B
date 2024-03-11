@@ -74,14 +74,14 @@ const RightHandFeed = (props: Props) => {
 <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-left font-bold text-black dark:text-white">Recent Posts</TableHead>
+          <TableHead className="text-left font-[590] text-base text-black dark:text-white">Recent Posts</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {posts.map((post, index) => (
           <TableRow key={index}>
             <Link href={`/postPage2/${post.title.split(' ').join('-')}`}>
-            <TableCell className="text-blue-500">{post.title}</TableCell>
+            <TableCell className="text-[#195FAA] text-base">{post.title}</TableCell>
             </Link>
           </TableRow>
         ))}

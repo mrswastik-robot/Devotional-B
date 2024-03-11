@@ -175,14 +175,14 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             </Avatar>
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
-            <span className=" mt-3">
+            <span className=" mt-3 text-sm font-semibold text-[#0c0c0c]">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
             {isAnonymous ? null : (
-              <div className=" flex space-x-2 ">
+              <div className=" flex space-x-1 mr-5">
                 <svg
                   viewBox="0 0 48 48"
-                  className=" mt-4 w-2 h-2"
+                  className=" mt-[1.20rem] mr-1 w-1 h-1"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -201,9 +201,8 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                   </g>
                 </svg>
 
-                <Button
-                  variant="ghost"
-                  className=" text-blue-500 text-xs mt-0 p-0"
+                <div
+                  className=" text-blue-500 text-xs mt-[0.8rem] p-0 hover:underline"
                   onClick={() => {
                     toast({
                       title: " Feature coming soon ... ",
@@ -212,7 +211,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                   }}
                 >
                   Follow
-                </Button>
+                </div>
               </div>
             )}
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
@@ -220,7 +219,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           }
           
           <Link href={`/postPage2/${post?.title?.split(" ").join("-")}`}>
-            <h1 className={`text-lg font-semibold py-2 leading-6 text-gray-900 dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
+            <h1 className={`font-bold py-2 leading-6 text-[17px] text-[#282829] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
           </Link>
@@ -243,7 +242,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           >
             {/* <EditorOutput content={post.content} /> */}
 
-            <p>{parse(post.description)}</p>
+            <p className="text-[#282829] text-base/[21px] text-[15px]">{parse(post.description)}</p>
             {isExpanded ? '' : <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div> }
 
             {/* {pRef.current?.clientHeight === 160 ? (

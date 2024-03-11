@@ -113,14 +113,14 @@ const Navbar = ({}: Props) => {
             value={searchText}
             onChange={handleSearchText} 
             placeholder="Search" 
-            className="w-[40rem] border border-gray-300 rounded-lg p-2 pl-10" 
+            className="w-[40rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerSearch());
                 }
             }}
           />
-          <Search className=" absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
+          <Search className=" absolute left-2 top-1/2 transform text-gray-400 -translate-y-1/2 h-4 w-4" />
         </div>
 
         <div className="flex gap-4">

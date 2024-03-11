@@ -140,12 +140,12 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                   <AvatarFallback>SP</AvatarFallback>
                 </Avatar>
                 {/* </div> */}
-                <span className=" mt-3">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
+                <span className="mt-3 text-sm font-semibold text-[#0c0c0c]">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
                 {answer.anonymity ? null : (
-              <div className=" flex space-x-2 ">
+              <div className=" flex space-x-1 mr-5">
                 <svg
                   viewBox="0 0 48 48"
-                  className=" mt-4 w-2 h-2"
+                  className=" mt-[1.20rem] mr-1 w-1 h-1"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -164,9 +164,8 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                   </g>
                 </svg>
 
-                <Button
-                  variant="ghost"
-                  className=" text-blue-500 text-xs mt-0 p-0"
+                <div
+                  className=" text-blue-500 text-xs mt-[0.8rem] p-0 hover:underline"
                   onClick={() => {
                     toast({
                       title: " Feature coming soon ... ",
@@ -175,7 +174,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
                   }}
                 >
                   Follow
-                </Button>
+                </div>
               </div>
             )}
                 {/* {formatTimeToNow(new Date(post.createdAt))} */}
@@ -200,7 +199,7 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
               }
 
               <div
-                className="relative text-lg max-h-50 w-full mt-2 "
+                className="relative text-base max-h-50 text-[#282829] w-full mt-2 "
                 ref={pRef}
               >
                 {/* <EditorOutput content={post.content} /> */}

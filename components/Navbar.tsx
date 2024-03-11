@@ -41,7 +41,7 @@ import { useDispatch , useSelector } from "react-redux";
 import { setSearchText , triggerSearch } from "@/store/slice";
 import { RootState } from "@/store/store";
 import { useTheme } from "next-themes";
-import AskQuestion from "./AskQuestion";
+// import AskQuestion from "./AskQuestion";
 
 
 

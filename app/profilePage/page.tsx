@@ -222,7 +222,7 @@ const ProfilePage = (props: Props) => {
             const questionQuery = query(questionsRef,
             orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),);
             const questionSnapshot = await getDocs(questionQuery);
-            let count;
+            let count = 0;
             const questionDoc = questionSnapshot.docs;
               const totalPost=questionDoc.length;
             if(answerStart){

@@ -342,8 +342,8 @@ export default function Home() {
                             )}
                           />
                           
-                          {(progress||1)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
-                        
+                          {(progress||0)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
+                          {/* "0" to make upload percentage invisible when no image is selected */}
                           {/* anonymity toggle */}
                           <FormField
                             control={form.control}

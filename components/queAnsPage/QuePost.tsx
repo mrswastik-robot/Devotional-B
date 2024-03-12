@@ -222,7 +222,7 @@ const QuePost = ({ post }: Props) => {
             <button
               className="w-fit flex items-center gap-2"
             >
-            <ShareDialog postLink={`/postPage2/${post?.title?.split(" ").join("-")}`}/>
+            <ShareDialog postLink={`/${post?.title?.split(" ").join("-")}`}/>
           </button>
           <button
             className="w-fit flex items-center gap-2"

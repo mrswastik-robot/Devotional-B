@@ -233,7 +233,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           </div>
           }
           
-          <Link href={`/postPage2/${post?.title?.split(" ").join("-")}`}>
+          <Link href={`/${post?.title?.split(" ").join("-")}`}>
             <h1 className={`font-bold py-2 leading-6 text-[17px] text-[#282829] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
@@ -284,7 +284,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
         <div className=" flex gap-x-3">
           <Link
-            href={`/postPage2/${post?.title?.split(" ").join("-")}`}
+            href={`/${post?.title?.split(" ").join("-")}`}
             className="w-fit flex items-center gap-2"
           >
             <MessageSquare className="h-4 w-4" />{" "}
@@ -292,7 +292,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           </Link>
           <button className="w-fit flex items-center gap-2">
             <ShareDialog
-              postLink={`/postPage2/${post?.title?.split(" ").join("-")}`}
+              postLink={`/${post?.title?.split(" ").join("-")}`}
             />
           </button>
           <button

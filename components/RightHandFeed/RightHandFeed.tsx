@@ -80,7 +80,7 @@ const RightHandFeed = (props: Props) => {
       <TableBody>
         {posts.map((post, index) => (
           <TableRow key={index}>
-            <Link href={`/postPage2/${post.title.split(' ').join('-')}`}>
+            <Link href={`/${post.title.split(' ').join('-')}`}>
             <TableCell className="text-[#195FAA] text-base">{post.title}</TableCell>
             </Link>
           </TableRow>

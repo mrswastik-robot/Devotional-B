@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 // import { useRouter } from "next/router";        this won't work as we are using next/navigation in Next.js 14
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Book, HomeIcon, Search, User } from "lucide-react";
 import { Home } from "lucide-react";
@@ -14,6 +14,7 @@ import { SquarePen } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import AskQuestion from "./AskQuestion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -57,7 +58,7 @@ const Navbar = ({}: Props) => {
   // const searchClient = useSelector((state: RootState) => state.search.searchClient);
   // const searchClient = algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef');
   // const searchClient = useMemo(() => algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef'), []);
-
+  const router = useRouter();
   const dispatch = useDispatch();
   const searchText = useSelector((state: RootState) => state.search.searchText);
 
@@ -140,6 +141,7 @@ const Navbar = ({}: Props) => {
 
         <div>
         <Button className="rounded-full h-9 bg-slate-500 font-semibold">Ask Question</Button>
+        {/* <AskQuestion/> */}
         </div>
 
         <div className="flex gap-4">

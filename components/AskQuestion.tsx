@@ -1,71 +1,27 @@
-"use client";
+import { Button } from "./ui/button";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect, useState , Suspense } from "react";
-
-import imageCompression from 'browser-image-compression';
-
-import {Home as HomeIcon , Search } from "lucide-react";
-
-import { buttonVariants } from "@/components/ui/button";
-
-import CustomFeed from "@/components/CustomFeed";
-import RightHandFeed from "@/components/RightHandFeed/RightHandFeed";
-import TopFeedCard from "@/components/TopFeedCard";
-import Loader from "@/components/ui/Loader";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormLabel,
-  FormField,
-  FormItem,
-  FormMessage,
-  FormDescription,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Progress } from "@/components/ui/progress";
-import { Switch } from "@/components/ui/switch";
-
-import {useForm} from "react-hook-form";
-import { Controller } from "react-hook-form";
-
-import { Tiptap } from "@/components/TipTapAns";
+import React, { useEffect, useState } from 'react'
+import { Input } from "./ui/input";
+import { Switch } from "./ui/switch";
+import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { z } from "zod";
-import {zodResolver} from "@hookform/resolvers/zod";
-import { QuestionType } from "@/schemas/question";
-
-import { auth , db , storage } from "@/utils/firebase";
+import { auth, db, storage } from "@/utils/firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import imageCompression from "browser-image-compression";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter , useSearchParams } from "next/navigation";
-
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
-import { DialogClose } from "@radix-ui/react-dialog";
-
 import algoliasearch from "algoliasearch/lite";
-// import algoliasearch from "algoliasearch";
-import { InstantSearch , SearchBox , Hits, Highlight } from "react-instantsearch";
-import Post from "@/components/Post";
-
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import Loader from "./ui/Loader";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Tiptap } from "./TipTapAns";
+import { Controller, useForm } from "react-hook-form";
+import { QuestionType } from "@/schemas/question";
 type Input = z.infer<typeof QuestionType>;
 
-
-export default function Home() {
-
+function AskQuestion() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isGuest = searchParams.get('isGuest');
@@ -225,51 +181,11 @@ export default function Home() {
       </div>
     )
   }
-  else
-  {
-
-
+  else {
   return (
-    <Suspense>
-    <>
-    {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6'>
-        
-        {/* <TopFeedCard /> */}
-      
-        
-      <div className=" col-span-5 ">
-        {/* {
-          searchClient && (
-            <InstantSearch searchClient={searchClient} indexName="search_questions" >
-
-              <div className="relative">
-              <SearchBox classNames={searchClasses} searchAsYouType={true} placeholder="Search ..." />
-              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
-
-              </div>
-
-              
-              <Hits  hitComponent={({hit}) => <Post post={transformHitToPost(hit)} />} />
-              
-            </InstantSearch>
-          )
-        } */}
-        <CustomFeed newPost = {newPost}/>
-        </div>
-        {/* <CustomFeed /> */}
-
-
-        {/* subreddit info */}
-        <div className='col-span-4 lg:col-span-2 lg:sticky lg:top-20 overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-3'>
-          {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
-            <p className='font-semibold py-3 flex items-center gap-1.5'>
-              <HomeIcon className='h-4 w-4' />
-              Home
-            </p>
-          </div> */}
-          <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-3 text-sm leading-6'>
-            <div className='flex rounded-md justify-between md:min-h-[5rem] gap-x-4 py-3'>
+    <div>
+        <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-4 text-sm leading-6'>
+            <div className='flex rounded-md justify-between md:min-h-[7.5rem] gap-x-4 py-3'>
               {
                 isGuest === 'true' ? (
                   <p className=" text-zinc-500">
@@ -399,17 +315,10 @@ export default function Home() {
               
             </div>
           </dl>
-
-          {/* <RightHandFeed />           */}
-          <div className='col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg border border-gray-100 order-last'>
-            <RightHandFeed />
-          </div>
-
-        </div>
-        
-      </div>
-    </>
-    </Suspense>
-  );
-                    }
+    </div>
+  )
+    }
 }
+
+export default AskQuestion
+

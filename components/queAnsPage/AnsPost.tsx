@@ -15,11 +15,12 @@ import { Button } from "@/components/ui/button";
 import PostVoteClient from "@/components/post-vote/PostVoteClient";
 import CommentBox from "./CommentBox";
 import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
+import Loader from "../ui/Loader";
 import { useToast } from "@/components/ui/use-toast";
 
 import { auth, db } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { collection, doc, getDocs, query } from "firebase/firestore";
+import { collection, doc, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
 
 type Props = {
   answers: {
@@ -41,7 +42,7 @@ type Props = {
 };
 
 type AnswerType = {
-  // id: string;
+  id: string;
   name: string;
   description: string;
   profilePic: string;
@@ -55,13 +56,17 @@ type AnswerType = {
   // Add any other fields as necessary
 };
 
-const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
+const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
   const { toast } = useToast();
   
   //to send in postvoteclient for voting system
   const [user] = useAuthState(auth);
+  const [lastAnswer, setLastAnswer] = useState<AnswerType | null>(null);
+  const [loading, setLoading] = useState(false);
   const [dispAnswer, setDispAnswer] = useState<AnswerType[]>([] as AnswerType[]);
+  const [moreAnswers, setMoreAnswers]=useState(false);
+  const answersContainerRef = useRef<HTMLDivElement | null>(null);
   // console.log(postId);
 
   const pRef = useRef<HTMLDivElement>(null);
@@ -85,34 +90,57 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
 
   useEffect(()=>{
     const fetchData = async () => {
-      const updatedAnswers = await Promise.all(
-        answers.map(async (answer) => {
-          // Fetch the 'comments' subcollection for each 'answers' document
-          const commentsCollectionRef = collection(
-            doc(db, 'questions', postId, 'answers', answer.id),
-            'comments'
-          );
-          //console.log("answer", answer);
-          const commentsQuery = query(commentsCollectionRef);
-          const commentsSnapshot = await getDocs(commentsQuery);
+      setLoading(true);
 
-          // Add the total number of comments to the 'answers' data
-          return { ...answer, comments: commentsSnapshot.size };
-        })
+      // Set up the initial query
+      const ansQuery = query(
+        collection(db, 'questions', postId, 'answers'),
+        orderBy('createdAt', 'desc'),
+        limit(5) // Adjust the limit based on your preference
       );
 
-      setDispAnswer(updatedAnswers);
-      // Do something with updatedAnswers, such as updating state
+      const ansSnapshot = await getDocs(ansQuery);
+
+      if (!ansSnapshot.empty) {
+        const newAnswers = ansSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as AnswerType));
+        setDispAnswer(newAnswers);
+        setLastAnswer(newAnswers[newAnswers.length - 1]);
+        if(newAnswers.length<5){setMoreAnswers(false)}else setMoreAnswers(true);
+      }
+
+      setLoading(false);
     };
 
     fetchData();
   }, [postId, answers, commentAdded]);
 
+  const loadMoreAnswers = async () => {
+    setLoading(true);
+    //console.log("hey ", lastAnswer)
+    // Set up the query for the next batch
+    let ansQuery = query(
+      collection(db, 'questions', postId, 'answers'),
+      orderBy('createdAt', 'desc'),
+      startAfter(lastAnswer ? lastAnswer.createdAt : null), // If there is a last answer, start the query after it
+      limit(5) // Adjust the limit based on your preference
+    );
 
+    const ansSnapshot = await getDocs(ansQuery);
+
+    if (!ansSnapshot.empty) {
+      const newAnswers = ansSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as AnswerType));
+      setDispAnswer((prevAnswers) => [...prevAnswers, ...newAnswers]);
+      setLastAnswer(newAnswers[newAnswers.length - 1]);
+      if(newAnswers.length<5){setMoreAnswers(false)}else setMoreAnswers(true);
+    }
+
+    setLoading(false);
+  };
+  
   return (
 
     <div className=" mt-3">
-      {dispAnswer.map((answer: any, key) => (
+      {dispAnswer.length>0&&dispAnswer.map((answer: any, key) => (
 
         <div
           key={answer.id}
@@ -248,6 +276,14 @@ const AnsPost = ({ answers , postTitleWithSpaces , postId }: Props) => {
 
         </div>
       ))}
+      <div className="flex justify-center">
+      { loading?<div><Loader/></div>:moreAnswers?
+            <Button className="mb-2" onClick={loadMoreAnswers} disabled={loading}>
+              Load More
+            </Button>:<div>No More Answers...</div>
+          }
+
+      </div>
     </div>
   );
 };

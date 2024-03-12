@@ -120,6 +120,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
+  const [ansLoading, setAnsLoading] = useState(false);
 
   //need the actual postId of the question to send to the PostVoteClient
   const [postId , setPostId] = useState<string>("");
@@ -269,8 +270,8 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   return (
 
     <div className="grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6">
-      <div className=" md:col-span-5 col-span-2 ">
-      <div className="overflow-auto max-h-screen">
+      <div className=" md:col-span-5 col-span-2">
+      <div className={`${ansLoading?"overflow-auto":""} max-h-screen`}>
         <div>
           <QuePost post={queObject} />
         </div>

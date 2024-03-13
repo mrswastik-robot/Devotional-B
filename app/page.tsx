@@ -289,7 +289,7 @@ export default function Home() {
                   <DialogTrigger asChild>
                     <Button variant="default"  className=" w-full" disabled={isGuest === 'true'}>Ask Question</Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[925px] ">
+                  <DialogContent className="sm:max-w-[925px] max-h-[55rem] overflow-y-scroll ">
                     <DialogHeader>
                       <DialogTitle>Post Question</DialogTitle>
                       <DialogDescription>

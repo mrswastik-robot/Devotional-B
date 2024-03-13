@@ -59,6 +59,7 @@ type AnswerType = {
 const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
   const { toast } = useToast();
+  // console.log("postid is:", postId);
   
   //to send in postvoteclient for voting system
   const [user] = useAuthState(auth);
@@ -70,6 +71,9 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
   // console.log(postId);
 
   const pRef = useRef<HTMLDivElement>(null);
+
+  //for automatic lazy load
+  const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
   const [commentInputVisibility , setCommentInputVisibility] = useState(answers.map(() => false))
   const [commentAdded, setCommentAdded] = useState(false);
@@ -136,6 +140,29 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
     setLoading(false);
   };
+
+  //useEffect for automatic lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreAnswers();
+        }
+      },
+      { threshold: 1 } // 1.0 means that when 100% of the target is visible within the element specified by the root option, the callback is invoked.
+    );
+  
+    if (loadMoreButtonRef.current) {
+      observer.observe(loadMoreButtonRef.current);
+    }
+  
+    return () => {
+      if (loadMoreButtonRef.current) {
+        observer.unobserve(loadMoreButtonRef.current);
+      }
+    };
+  }, [loadMoreButtonRef, loadMoreAnswers]);
+  
   
   return (
 
@@ -276,11 +303,11 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
         </div>
       ))}
-      <div className="flex justify-center">
+      <div className="flex justify-center py-6">
       { loading?<div><Loader/></div>:moreAnswers?
-            <Button className="mb-2" onClick={loadMoreAnswers} disabled={loading}>
-              Load More
-            </Button>:<div>No More Answers...</div>
+            <button className="mb-2" onClick={loadMoreAnswers} disabled={loading} ref={loadMoreButtonRef}>
+              
+            </button>:<div>No More Answers...</div>
           }
 
       </div>

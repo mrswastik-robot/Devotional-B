@@ -270,7 +270,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   return (
 
     <div className="grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6">
-      <div className=" md:col-span-5 col-span-2">
+      <div className=" md:col-span-5 col-span-2 order-first">
       <div className={`${ansLoading?"overflow-auto":""} max-h-screen`}>
         <div>
           <QuePost post={queObject} />
@@ -359,7 +359,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         </div>
       </div>
 </div>
-      <div className=" col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 ">
+      <div className=" sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last ">
         <RecentFeed />
       </div>
     </div>

@@ -69,7 +69,7 @@ const RecentFeed = (props: Props) => {
   }, [])
   
   return (
-    <div className=' bg-[#FFFFFF] dark:bg-[#262626]'>
+    <div className=' bg-[#FFFFFF] dark:bg-[#262626] order-last'>
 
 
 <Table>

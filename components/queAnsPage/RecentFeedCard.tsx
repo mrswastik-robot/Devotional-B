@@ -39,7 +39,7 @@ const RecentFeedCard = ({ post }: Props) => {
         <span className=''>{isAnonymous ? 'Anonymous' : post.name}</span>
           </div>
     <div className="flex flex-col">
-    <Link href={`/postPage2/${post.title.split(' ').join('-')}`}>
+    <Link href={`/${post.title.split(' ').join('-')}`}>
       <h3 className="font-medium text-lg mb-1">{post.title.length>27?`${post.title.substring(0,27)}...`:post.title}</h3>
     </Link>
       <div className="text-sm flex gap-1">

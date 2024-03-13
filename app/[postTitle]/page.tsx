@@ -120,6 +120,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
+  const [ansLoading, setAnsLoading] = useState(false);
 
   //need the actual postId of the question to send to the PostVoteClient
   const [postId , setPostId] = useState<string>("");
@@ -227,6 +228,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
     console.log(data);
 
     createAnswerPost(data);
+    setIsCommentBoxOpen(true);
     // form.reset();     //won't reset from here
   }
 
@@ -266,13 +268,15 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   const [description, setDescription] = useState("");
 
   return (
+
     <div className="grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6">
-      <div className=" md:col-span-5 col-span-2 ">
+      <div className=" md:col-span-5 col-span-2">
+      <div className={`${ansLoading?"overflow-auto":""} max-h-screen`}>
         <div>
           <QuePost post={queObject} />
         </div>
 
-        <div className=" mt-7">
+        <div className=" mt-3">
           {isCommentBoxOpen ? (
             <div
               className="rounded-3xl border border-gray-300 p-4 cursor-pointer"
@@ -354,8 +358,8 @@ const PostPage = ({ params: { postTitle } }: Props) => {
           <AnsPost answers={answers} postTitleWithSpaces={postTitleWithSpaces} postId={queObject.id} />
         </div>
       </div>
-
-      <div className=" col-span-2 overflow-hidden h-fit rounded-lg border border-gray-300 ">
+</div>
+      <div className=" col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 ">
         <RecentFeed />
       </div>
     </div>

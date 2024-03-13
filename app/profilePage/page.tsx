@@ -65,10 +65,16 @@ const ProfilePage = (props: Props) => {
   const [answerLastDoc, setAnswerLastDoc] = useState<any>(null);
   const [answerStart, setAnswerStart] = useState<boolean>(true);
   const [answerMorePosts, setAnswerMorePosts] = useState(false);
+  const [ savedPosts , setSavedPosts] = useState<PostType[]>([]);
+  const [lastPost, setLastPost] = useState<PostType | null>(null);
+  const [savedStart, setSavedStart] = useState<boolean>(true);
+  const [savedMorePosts, setSavedMorePosts] = useState(false);
+
   // console.log(user);
   const [postType, setPostType] = useState("normal");
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [isAnswers, setIsAnswers] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [questions, setQuestions] = useState<PostType[]>([]);
   const [anonymousQuestions, setAnonymousQuestions] = useState<PostType[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
@@ -83,7 +89,6 @@ const ProfilePage = (props: Props) => {
   const {toast} = useToast();
   
   //savedPosts
-  const [ savedPosts , setSavedPosts] = useState<PostType[]>([]);
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
 
@@ -217,6 +222,59 @@ const ProfilePage = (props: Props) => {
               setAnonymousLastdoc(lastdoc);
             }
           }
+          else if(postType=="saved"){
+            
+              if(savedStart){
+                if (!user) return;
+                console.log(user.uid);
+                try {
+                  let postQuery = query(
+                    collection(db, 'users', user.uid, 'savedPosts'),
+                    orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
+                    limit(5) // Adjust the limit based on your preference
+                  );
+                  const postSnapshot = await getDocs(postQuery);
+                  //console.log(postQuery);
+                  if (!postSnapshot.empty) {
+                    const newPosts = postSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType));
+                    setSavedPosts((prevPosts) => [...prevPosts, ...newPosts]);
+                    const slp=newPosts[newPosts.length - 1];
+                    if (slp) setSavedMorePosts(true);
+              else setSavedMorePosts(false);
+              setLastPost(slp);
+              setSavedStart(false);
+                  }
+
+                } catch (error) {
+                  console.error('Error fetching saved posts:', error);
+                }
+              }
+              else{
+                try {
+                  // Set up the query for the next batch
+                  let postQuery = query(
+                    collection(db, 'users', user.uid, 'savedPosts'),
+                    orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
+                    startAfter(lastPost ? lastPost.createdAt : null), // If there is a last post, start the query after it
+                    limit(5) // Adjust the limit based on your preference
+                  );
+            
+                  const postSnapshot = await getDocs(postQuery);
+            
+                  if (!postSnapshot.empty) {
+                    const newPosts = postSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType));
+                    setSavedPosts((prevPosts) => [...prevPosts, ...newPosts]);
+                    const lsp=newPosts[newPosts.length - 1];
+                    if (lsp) setSavedMorePosts(true);
+              else setSavedMorePosts(false);
+              setLastPost(lsp);
+
+                  }
+                } catch (error) {
+                  console.error('Error loading more posts:', error);
+                }
+              }
+          }
           else if(postType=="answers"){
             const questionsRef = collection(db, 'questions');
             const questionQuery = query(questionsRef,
@@ -311,29 +369,6 @@ const ProfilePage = (props: Props) => {
 
     //fetching the savedPosts from the 'users' collection
     // Fetching the savedPosts from the 'users' collection
-useEffect(() => {
-  const fetchSavedPosts = async () => {
-    if (!user) return;
-
-    const userRef = doc(db, 'users', user.uid);
-    const userDoc = await getDoc(userRef);
-
-    if (userDoc.exists()) {
-      const userData = userDoc.data();
-      const savedPostIds = userData.savedPosts;
-      const savedPostsPromises = savedPostIds.map((postId: string) => {
-        const postRef = doc(db, 'questions', postId); // Replace 'questions' with the name of your posts collection
-        return getDoc(postRef);
-      });
-
-      const savedPostsDocs = await Promise.all(savedPostsPromises);
-      const savedPosts = savedPostsDocs.map((doc) => ({ id: doc.id, ...doc.data() } as PostType));
-      setSavedPosts(savedPosts);
-    }
-  };
-
-  fetchSavedPosts();
-}, [user]);
 
 
     const handleToggleSwitchNormal = () => {
@@ -351,7 +386,8 @@ useEffect(() => {
 
     const handleToggleSwithcSaved = () => {
       setPostType('saved');
-      setIsAnonymous(false);
+      setIsSaved(true);
+      setSavedStart(true);
       // setStart(false);
     }
 
@@ -366,6 +402,8 @@ useEffect(() => {
       setAnonymousQuestions([]);
       setAnswers([]);
       setAnswerStart(true);
+      setSavedPosts([]);
+      setSavedStart(true);
       setReload((prev)=>!prev)
     }
     
@@ -391,6 +429,8 @@ useEffect(() => {
     setIsAnswers(true);
     setPostType('answers')
   }
+
+  console.log("Hd ", savedPosts);
 
   return (
     <div className='mt-0'>
@@ -500,24 +540,30 @@ useEffect(() => {
             :<div>
               {
                 postType=='saved'?<div>
-                  { savedPosts.length !== 0 ? (
-        savedPosts.map((post, index) => (
-          <div key={index} className="my-1">
-            <Post post={post} />
-          </div>
-        ))
-      ) : (
-        <div className="flex items-center justify-center flex-col mt-5 w-full">
-          <Image
-            src="/trash.png"
-            width={300}
-            height={300}
-            className=" w-[10rem] h-[9rem] rounded-full"
-            alt="Profile Pic"
-          />
-          <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
-        </div>
-      )}
+                   {
+            savedPosts?.length === 0 ? (
+              !loadingPosts && (
+                <div className="flex items-center justify-center flex-col mt-5 w-full">
+                  <Image
+                    src="/trash.png"
+                    width={300}
+                    height={300}
+                    className=" w-[10rem] h-[9rem] rounded-full"
+                    alt="Profile Pic"
+                  />
+                  <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+                </div>
+              )
+            ) : (
+              savedPosts && postType === "saved" &&
+              savedPosts.map((post, index) => (
+                // <Post key={index} post={post} />
+                <div key={index} className=" my-1">
+                  <Post post={post} />
+                </div>
+              ))
+            )
+              }
                 </div>:<div>
                   {
                     postType=='answers'?
@@ -571,7 +617,7 @@ useEffect(() => {
 
       </div>
       <div>
-      {(postType=='normal'||postType=='anonymous'||postType=='answers')&& //will change this once lazy loading is available for all the tabs.
+      {(postType=='normal'||postType=='anonymous'||postType=='answers'||postType=='saved')&& //will change this once lazy loading is available for all the tabs.
       <div className="flex items-center justify-center">
         {loadingPosts ? (
           <div>
@@ -592,12 +638,23 @@ useEffect(() => {
                 ) : (
                   <div>No More Posts...</div>
                 )
-              ):
+              ):(
+               isSaved?(
+                savedMorePosts?(
+                  <Button onClick={handleLoadMore}>LoadMore...</Button>
+                ):(
+                  <div>No More Posts...</div>
+                )
+               ):(
                 morePosts ? (
-              <Button onClick={handleLoadMore}>LoadMore</Button>
-            ) : (
-              <div>No More Posts...</div>
-            )
+                  <Button onClick={handleLoadMore}>LoadMore</Button>
+                ) :
+                 (
+                  <div>No More Posts...</div>
+                )
+               )
+              )
+
             )}
           </div>
         )}

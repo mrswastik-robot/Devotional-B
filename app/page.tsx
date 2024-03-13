@@ -220,7 +220,7 @@ export default function Home() {
   if(loading)
   {
     return(
-      <div className='w-[100%] lg:ml-64 md:ml-80 xl:ml-96'>
+      <div className='w-[10%]  items-center justify-center flex mx-auto'>
         <Loader />
       </div>
     )

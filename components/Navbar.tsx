@@ -83,6 +83,7 @@ import { useSearchParams } from "next/navigation";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
+import MobileSidebar from "./MobileSidebar";
 
 
 type Input = z.infer<typeof QuestionType>;
@@ -223,7 +224,32 @@ const Navbar = ({}: Props) => {
 
   return (
     <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#FFFFFF] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2">
-      <div className="container max-w-7xl h-full mx-auto flex items-center justify-between gap-2">
+
+      {/* mobile Navbar */}
+      <div className=" md:hidden flex justify-between px-2">
+        <MobileSidebar />
+        <Link
+        href={`/`}
+        className=" my-auto"
+        >
+          <p className=" text-lg font-bold my-auto">Devotional-B</p>
+        </Link>
+        <Link
+        href={`/profilePage`}
+        >
+          <Image
+          src={user?.photoURL || "/nodp.webp"}
+          alt="profile picture"
+          width={40}
+          height={40}
+          className=" rounded-full"
+
+          />
+        </Link>
+      </div>
+
+
+      <div className=" sm:block hidden container max-w-7xl h-full mx-auto md:flex items-center justify-between gap-2">
         {/* logo */}
         <div className=" flex gap-[1.7rem]">
           <Link href="/" className="flex gap-2 items-center">

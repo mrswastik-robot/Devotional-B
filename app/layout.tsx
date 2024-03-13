@@ -27,7 +27,7 @@ export default function RootLayout({
         <body className={cn(GeistSans.className, "antialiased min-h-screen pt-12 bg-[#F1F2F2] dark:bg-[#181818]")}>
           <Providers>
             <Navbar />
-            <div className="container max-w-7xl mx-auto h-full pt-8 ">
+            <div className="md:container md:max-w-7xl md:mx-auto h-full pt-8 ">
             {children}
             </div>
             <Toaster />

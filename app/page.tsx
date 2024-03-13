@@ -401,7 +401,7 @@ export default function Home() {
           </dl>
 
           {/* <RightHandFeed />           */}
-          <div className='col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg border border-gray-100 order-last'>
+          <div className=' sm:block hidden col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg border border-gray-100 order-last'>
             <RightHandFeed />
           </div>
 

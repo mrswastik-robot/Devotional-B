@@ -306,7 +306,6 @@ const ProfilePage = (props: Props) => {
         setLoadingPosts(false);
       }
       };
-    
       fetchData();
     }, [user, loading, router, postType, loadMore, reload]);
 
@@ -403,7 +402,7 @@ useEffect(() => {
   <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{isAnonymous ? 'Anonymous Posts' : 'Normal Posts'}</span>
 </label>
       </div> */}
-      <div className='toggleSwitch mt-5'>
+      <div className='toggleSwitch mt-2 overflow-auto'>
           <Tabs defaultValue="posts" className="w-full">
       <TabsList className="grid gap-2 grid-cols-6 w-[650px]">
         <TabsTrigger value="posts" onClick={handleToggleSwitchNormal} >Posts</TabsTrigger>
@@ -417,10 +416,10 @@ useEffect(() => {
     </div>
     {(postType=='normal'||postType=='anonymous'||postType=='answers')&&
       <div className="border-y-[1px] border-black border-opacity-15 py-2 flex justify-between items-center">
-        <div className="font-[600] opacity-80">
+        <div className="font-[600] opacity-80 ml-2">
         {postType=='normal'?<div>Normal</div>:postType=='anonymous'?<div>Anonymous</div>:postType=='answers'?<div>Answers</div>:<div>Coming Soon</div>}
         </div>
-        <div>
+        <div className="mr-2">
 
         <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -466,7 +465,7 @@ useEffect(() => {
                   : anonymousQuestions &&
                     anonymousQuestions.map((post, index) => (
                       // <Post key={index} post={post} />
-                      <div key={index} className=" my-3">
+                      <div key={index} className=" my-1">
                         <Post post={post} isProfile={true} handleDelete={handleDelete} />
                       </div>
                     ))}
@@ -491,7 +490,7 @@ useEffect(() => {
               questions && postType === "normal" &&
               questions.map((post, index) => (
                 // <Post key={index} post={post} />
-                <div key={index} className=" my-3">
+                <div key={index} className=" my-1">
                   <Post post={post} isProfile={true} handleDelete={handleDelete} />
                 </div>
               ))
@@ -503,7 +502,7 @@ useEffect(() => {
                 postType=='saved'?<div>
                   { savedPosts.length !== 0 ? (
         savedPosts.map((post, index) => (
-          <div key={index} className="my-3">
+          <div key={index} className="my-1">
             <Post post={post} />
           </div>
         ))
@@ -542,7 +541,7 @@ useEffect(() => {
               answers && postType === "answers" &&
               answers.map((post, index) => (
                 // <Post key={index} post={post} />
-                <div key={index} className=" my-3">
+                <div key={index} className=" my-1">
                   <Post post={post} isProfile={true} handleDelete={handleDelete} />
                 </div>
               ))
@@ -579,7 +578,7 @@ useEffect(() => {
             <Loader />
           </div>
         ) : (
-          <div className=" mb-7">
+          <div className="mt-2 mb-5">
             {isAnonymous ? (
               anonymousMorePosts ? (
                 <Button onClick={handleLoadMore}>LoadMore...</Button>

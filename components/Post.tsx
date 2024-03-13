@@ -258,7 +258,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             {/* <EditorOutput content={post.content} /> */}
 
             <p className="text-[#282829] dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
-            {isExpanded ? '' : <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div> }
+            {!isExpanded && isOverflowing && ( <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div>) }
 
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
@@ -266,7 +266,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             ) : null} */}
             {!isExpanded && isOverflowing && (
               <div className="absolute bottom-0 left-0 w-full text-right ">
-                <button className=" text-blue-500/80  hover:underline bg-white backdrop-blur-sm text-right " onClick={() => setIsExpanded(true)}>(more)</button>
+                <button className=" text-blue-500/80  hover:underline  backdrop-blur-sm  text-right  " onClick={() => setIsExpanded(true)}>(more)</button>
               </div>
             )}
           </div>

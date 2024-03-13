@@ -39,6 +39,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/components/ui/use-toast";
 
 import {useForm} from "react-hook-form";
 import { Controller } from "react-hook-form";
@@ -71,6 +72,8 @@ export default function Home() {
   const isGuest = searchParams.get('isGuest');
   const [user, loading] = useAuthState(auth);
   const [newPost, setNewPost] = useState(false);
+  
+  const { toast } = useToast();
 
   //system image upload stuff
   const [imageUpload , setImageUpload] = useState<File | null>(null);
@@ -167,6 +170,11 @@ export default function Home() {
       questionImageURL: imageUrl,
       anonymity: data.anonymity,
       // ansNumbers: 0,
+    });
+
+    toast({
+      title: "Question Posted",
+      description: "Your question has been posted successfully.",
     });
 
     console.log("Document written with ID: ", docRef.id);

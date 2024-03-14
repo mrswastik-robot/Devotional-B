@@ -215,9 +215,8 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                     ></path>{" "}
                   </g>
                 </svg>
-
                 <div
-                  className=" text-blue-500 text-xs mt-[0.8rem] p-0 hover:underline"
+                  className=" text-blue-500 cursor-pointer text-xs mt-[0.8rem] p-0 hover:underline"
                   onClick={() => {
                     toast({
                       title: " Feature coming soon ... ",

@@ -86,6 +86,8 @@ import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebas
 import { DialogClose } from "@radix-ui/react-dialog";
 import MobileSidebar from "./MobileSidebar";
 
+import { useToast } from "./ui/use-toast";
+
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -102,6 +104,8 @@ const Navbar = ({}: Props) => {
   // const searchClient = algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef');
   // const searchClient = useMemo(() => algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef'), []);
   const router = useRouter();
+
+  const {toast} = useToast();
 
   const searchParams = useSearchParams();
   const isGuest = searchParams.get('isGuest');
@@ -185,6 +189,11 @@ const Navbar = ({}: Props) => {
       anonymity: data.anonymity,
       // ansNumbers: 0,
     });
+
+    toast({
+      title: "Question Posted",
+      description: "Try refreshing in case you don't see your question",
+    })
 
     console.log("Document written with ID: ", docRef.id);
     console.log(data);

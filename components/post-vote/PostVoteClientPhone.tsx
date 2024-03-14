@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
 
-import { doc, getDoc, setDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, setDoc, deleteDoc, onSnapshot , updateDoc ,increment , runTransaction} from "firebase/firestore";
 import { db } from "@/utils/firebase";
 
 type Props = {
@@ -62,7 +62,7 @@ const PostVoteClientPhone = ({
 
   const vote = async (type: "UP" | "DOWN") => {
     let docPath = `questions/${postId}`;
-
+  
     if (postType === "answers") {
       if (!questionId) {
         console.error("questionId must be defined when postType is 'answers'");
@@ -70,40 +70,35 @@ const PostVoteClientPhone = ({
       }
       docPath = `questions/${questionId}/answers/${postId}`;
     }
-
+  
     const voteValue = type === "UP" ? 1 : -1;
     const voteRef = doc(db, `${docPath}/votes/${userId}`);
     const postRef = doc(db, docPath);
-
-    if (currentVote === type) {
-      // User is removing their vote
-      await deleteDoc(voteRef);
-      setCurrentVote(null);
-
-      // Subtract voteValue from voteAmt
-      const postSnap = await getDoc(postRef);
-      if (postSnap.exists()) {
-        await setDoc(
-          postRef,
-          { voteAmt: (postSnap.data().voteAmt || 0) - voteValue },
-          { merge: true }
-        );
+  
+    await runTransaction(db, async (transaction) => {
+      const voteSnap = await transaction.get(voteRef);
+      const postSnap = await transaction.get(postRef);
+  
+      if (voteSnap.exists() && voteSnap.data().value === voteValue) {
+        // User is removing their vote
+        transaction.delete(voteRef);
+        setCurrentVote(null);
+  
+        // Subtract voteValue from voteAmt
+        transaction.update(postRef, {
+          voteAmt: increment(-voteValue),
+        });
+      } else {
+        // User is adding or changing their vote
+        transaction.set(voteRef, { uid: userId, value: voteValue });
+        setCurrentVote(type);
+  
+        // Add voteValue to voteAmt
+        transaction.update(postRef, {
+          voteAmt: increment(voteValue),
+        });
       }
-    } else {
-      // User is adding or changing their vote
-      await setDoc(voteRef, { uid: userId, value: voteValue });
-      setCurrentVote(type);
-
-      // Add voteValue to voteAmt
-      const postSnap = await getDoc(postRef);
-      if (postSnap.exists()) {
-        await setDoc(
-          postRef,
-          { voteAmt: (postSnap.data().voteAmt || 0) + voteValue },
-          { merge: true }
-        );
-      }
-    }
+    });
   };
 
   return (

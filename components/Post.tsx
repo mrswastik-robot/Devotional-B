@@ -190,11 +190,12 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             </Avatar>
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
+            <div className=" flex space-x-2">
             <span className=" mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-yellow-50">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
             {isAnonymous ? null : (
-              <div className=" flex space-x-1 mr-5">
+              <div className=" flex space-x-1 mr-5 ">
                 <svg
                   viewBox="0 0 48 48"
                   className=" mt-[1.20rem] mr-1 w-1 h-1"
@@ -216,8 +217,8 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                   </g>
                 </svg>
 
-                <div
-                  className=" text-blue-500 text-xs mt-[0.8rem] p-0 hover:underline"
+                <button
+                  className=" text-blue-500 text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer"
                   onClick={() => {
                     toast({
                       title: " Feature coming soon ... ",
@@ -226,9 +227,10 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                   }}
                 >
                   Follow
-                </div>
+                </button>
               </div>
             )}
+            </div>
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           }
@@ -265,8 +267,8 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
               
             ) : null} */}
             {!isExpanded && isOverflowing && (
-              <div className="absolute bottom-0 left-0 w-full text-right ">
-                <button className=" text-blue-500/80  hover:underline  backdrop-blur-sm  text-right  " onClick={() => setIsExpanded(true)}>(more)</button>
+              <div className="absolute bottom-[-0.16rem] left-0 w-full  text-right ">
+                <button className=" text-blue-500/80  hover:underline w-[8%] backdrop-blur-none bg-white/50  text-right  " onClick={() => setIsExpanded(true)}>(more)</button>
               </div>
             )}
           </div>

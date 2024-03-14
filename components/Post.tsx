@@ -233,7 +233,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           </div>
           }
           
-          <Link href={`/${post?.title?.split(" ").join("-")}`}>
+          <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
             <h1 className={`font-bold py-2 leading-6 text-[17px] text-[#282829] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>

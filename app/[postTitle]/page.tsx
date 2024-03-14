@@ -110,7 +110,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   // console.log(postId);
   // const queObject = postData.filter((post) => post.id === postId)[0];
 
-  const postTitleWithSpaces = (postTitle as string).split("-").join(" ");
+  const postTitleWithSpaces = decodeURIComponent(postTitle as string).split("-").join(" ");
 
   const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(true);
 

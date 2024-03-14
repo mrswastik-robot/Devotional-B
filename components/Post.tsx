@@ -217,6 +217,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                   </g>
                 </svg>
 
+
                 <button
                   className=" text-blue-500 text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer"
                   onClick={() => {

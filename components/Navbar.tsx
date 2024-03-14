@@ -14,6 +14,7 @@ import { SquarePen } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { useToast } from "./ui/use-toast";
 import AskQuestion from "./AskQuestion";
 import {
   DropdownMenu,
@@ -112,6 +113,7 @@ const Navbar = ({}: Props) => {
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
+  const {toast} = useToast();
 
 
   const dispatch = useDispatch();
@@ -269,20 +271,32 @@ const Navbar = ({}: Props) => {
 
           <div className=" ml-3 space-x-5 flex">
           <Button variant="ghost" onClick={() => setClicked("home")}>
+            <Link href="/">
             <Home
               className={`h-5 w-5 ${clicked === 'home' ? "text-red-500 " : ""}`}
             />
+            </Link>
           </Button>
           <Button
             variant="ghost"
-            onClick={() => setClicked("notebook")}
+            onClick={() => {
+              setClicked("notebook");
+              toast({
+                title: "Feature Coming Soon",
+              })
+            }}
           >
             <UserRoundPlus
               className={`w-5 h-5 ${clicked === "notebook" ? "text-red-500" : ""}`}
             />
           </Button>
           
-          <Button variant="ghost" onClick={() => setClicked("notification")}>
+          <Button variant="ghost" onClick={() =>{ 
+            setClicked("notification"); 
+            toast({
+              title: "Feature Coming Soon",
+            })
+            }}>
             <Bell
               className={`w-5 h-5 ${clicked === 'notification' ? "text-red-500" : ""}`}
             />

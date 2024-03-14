@@ -128,7 +128,7 @@ const PostVoteClientPhone = ({
 
       {/* score */}
       <p className="text-center py-2 font-medium text-sm text-zinc-900 dark:text-white">
-        {votesAmt}
+        {votesAmt||0}
       </p>
 
       {/* downvote */}

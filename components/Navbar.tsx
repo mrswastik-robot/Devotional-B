@@ -14,7 +14,6 @@ import { SquarePen } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { useToast } from "./ui/use-toast";
 import AskQuestion from "./AskQuestion";
 import {
   DropdownMenu,
@@ -88,7 +87,6 @@ import MobileSidebar from "./MobileSidebar";
 
 import { useToast } from "./ui/use-toast";
 
-
 type Input = z.infer<typeof QuestionType>;
 
 type Props = {
@@ -105,7 +103,7 @@ const Navbar = ({}: Props) => {
   // const searchClient = useMemo(() => algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef'), []);
   const router = useRouter();
 
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   const searchParams = useSearchParams();
   const isGuest = searchParams.get('isGuest');
@@ -113,7 +111,6 @@ const Navbar = ({}: Props) => {
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
-  const {toast} = useToast();
 
 
   const dispatch = useDispatch();

@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
 
-import { doc, getDoc, setDoc, deleteDoc, onSnapshot , updateDoc ,increment , runTransaction} from "firebase/firestore";
+import { doc, getDoc, setDoc, deleteDoc, onSnapshot , runTransaction , increment} from "firebase/firestore";
 import { db } from "@/utils/firebase";
 
 type Props = {
@@ -79,27 +79,36 @@ const PostVoteClientPhone = ({
       const voteSnap = await transaction.get(voteRef);
       const postSnap = await transaction.get(postRef);
   
-      if (voteSnap.exists() && voteSnap.data().value === voteValue) {
-        // User is removing their vote
-        transaction.delete(voteRef);
-        setCurrentVote(null);
+      if (voteSnap.exists()) {
+        // User is changing their vote or removing it
+        const previousVoteValue = voteSnap.data().value;
   
-        // Subtract voteValue from voteAmt
-        transaction.update(postRef, {
-          voteAmt: increment(-voteValue),
-        });
+        if (currentVote === type) {
+          // User is removing their vote
+          setCurrentVote(null);
+          transaction.delete(voteRef);
+          transaction.update(postRef, {
+            voteAmt: increment(-voteValue),
+          });
+        } else {
+          // User is changing their vote
+          setCurrentVote(type);
+          transaction.set(voteRef, { uid: userId, value: voteValue });
+          transaction.update(postRef, {
+            voteAmt: increment(voteValue - previousVoteValue),
+          });
+        }
       } else {
-        // User is adding or changing their vote
+        // User is adding a new vote
         transaction.set(voteRef, { uid: userId, value: voteValue });
         setCurrentVote(type);
-  
-        // Add voteValue to voteAmt
         transaction.update(postRef, {
           voteAmt: increment(voteValue),
         });
       }
     });
   };
+  
 
   return (
     <div className=" flex gap-1 border border-1 dark:border-zinc-400 border-zinc-400 rounded-3xl">

@@ -417,7 +417,7 @@ useEffect(() => {
     {(postType=='normal'||postType=='anonymous'||postType=='answers')&&
       <div className="border-y-[1px] border-black border-opacity-15 py-2 flex justify-between items-center">
         <div className="font-[600] opacity-80 ml-2">
-        {postType=='normal'?<div>Normal</div>:postType=='anonymous'?<div>Anonymous</div>:postType=='answers'?<div>Answers</div>:<div>Coming Soon</div>}
+        {postType=='normal'?<div>Posts</div>:postType=='anonymous'?<div>Anonymous</div>:postType=='answers'?<div>Answers</div>:<div>Coming Soon</div>}
         </div>
         <div className="mr-2">
 

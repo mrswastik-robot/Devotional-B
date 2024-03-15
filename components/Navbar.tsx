@@ -80,7 +80,7 @@ import { QuestionType } from "@/schemas/question";
 import { db , storage } from "@/utils/firebase";
 import { useSearchParams } from "next/navigation";
 
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, serverTimestamp, updateDoc } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 import MobileSidebar from "./MobileSidebar";
@@ -187,10 +187,39 @@ const Navbar = ({}: Props) => {
       // ansNumbers: 0,
     });
 
+    const quesId = docRef.id;
+
     toast({
       title: "Question Posted",
       description: "Try refreshing in case you don't see your question",
     })
+
+    try {
+      console.log("keyword Gen.....")
+      const docRef = await addDoc(collection(db, 'keywords'), {
+        prompt: `Generate some keywords on the topic ${data.title}`,
+      });
+      console.log('Keyword Document written with ID: ', docRef.id);
+  
+      // Listen for changes to the document
+      const unsubscribe = onSnapshot(doc(db, 'keywords', docRef.id), async(snap) => {
+        const data = snap.data();
+        if (data && data.response) {
+          console.log('RESPONSE: ' + data.response);
+          const keywordsString = `${data.response}`;
+
+          const questionDocRef = doc(db, 'questions', quesId);
+          await updateDoc(questionDocRef, {
+          keywords: keywordsString, // Add your keywords here
+      });
+        }
+      });
+  
+      // Stop listening after some time (for demonstration purposes)
+      setTimeout(() => unsubscribe(), 60000);
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
 
     console.log("Document written with ID: ", docRef.id);
     console.log(data);

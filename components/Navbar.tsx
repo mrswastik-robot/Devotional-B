@@ -214,7 +214,7 @@ const Navbar = ({}: Props) => {
     try {
       console.log("keyword Gen.....")
       const docRef = await addDoc(collection(db, 'keywords'), {
-        prompt: `Generate some keywords on the topic ${data.title}`,
+        prompt: `Generate some keywords and hashtags on topic ${data.title}`,
       });
       console.log('Keyword Document written with ID: ', docRef.id);
   

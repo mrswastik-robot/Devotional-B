@@ -8,6 +8,7 @@ import { Tiptap as TipTap } from "@/components/TipTap";
 import AnsPost from "@/components/queAnsPage/AnsPost";
 import RecentFeed from "@/components/queAnsPage/RecentFeed";
 import imageCompression from 'browser-image-compression';
+import Image from "next/image";
 
 import { auth, db, storage } from "@/utils/firebase";
 import {
@@ -54,6 +55,8 @@ import { Tiptap } from "@/components/TipTapAns";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnswerDescriptionType } from "@/schemas/answer";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
 
 type Input = z.infer<typeof AnswerDescriptionType>;
 
@@ -87,6 +90,7 @@ type QuestionType = {
   shares: number;
   questionImageURL: string;
   createdAt: string;
+  keywords: string;
   anonymity: boolean;
   // Add any other fields as necessary
 };
@@ -127,9 +131,26 @@ const PostPage = ({ params: { postTitle } }: Props) => {
 
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
+  const [previewImg, setPreviewImg] = useState<any>(null);
 
   const uploadImage = async(file: any) => {
     if (file == null) return;
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target) {
+          const imageUrl = event.target.result;
+          setPreviewImg(imageUrl);
+        } else {
+          console.error('Error reading file:', file);
+          setPreviewImg(null);
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImg(null);
+    }
 
     const storageRef = ref(storage, `answers/${file.name}`);
 
@@ -266,6 +287,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   }, [postTitleWithSpaces, postTitle]);
 
   const [description, setDescription] = useState("");
+  //console.log("Keywords ", queObject.keywords);
 
   return (
 
@@ -309,7 +331,14 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                       </FormItem>
                     )}
                   />
-
+                  {(progress||0)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
+                        <div>
+                            {
+                              previewImg&&<div className="w-full flex items-center justify-center">
+                                <Image src={previewImg} alt="previewImage" width={250} height={250}/>
+                              </div>
+                            }
+                          </div>
                   {/* anonymity toggle */}
                   <FormField
                     control={form.control}
@@ -359,8 +388,28 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         </div>
       </div>
 </div>
+      
       <div className=" sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last ">
+      <div>
         <RecentFeed />
+      </div>
+      <Separator className="h-2"/>
+      <div className="bg-[#FFFFFF] dark:bg-[#262626] order-last">
+        <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="text-left font-[590] text-base text-black dark:text-white">HashTags</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+          <TableRow className="">
+            <div className="bg-[#FFFFFF] dark:bg-[#262626] p-3">
+            {queObject.keywords?queObject.keywords:"No tags Available"}
+            </div>
+          </TableRow>
+      </TableBody>
+      </Table>
+        </div>
       </div>
     </div>
   );

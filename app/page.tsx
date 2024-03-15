@@ -53,7 +53,7 @@ import { auth , db , storage } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter , useSearchParams } from "next/navigation";
 
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, serverTimestamp, updateDoc } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 
@@ -159,6 +159,8 @@ export default function Home() {
   });
 
   async function createQuestionPost(data: Input) {
+    
+    console.log("creating");
 
     const docRef = await addDoc(collection(db, "questions"), {
       title: data.title,
@@ -172,13 +174,42 @@ export default function Home() {
       // ansNumbers: 0,
     });
 
+    const quesId = docRef.id;
+
     toast({
       title: "Question Posted",
       description: "Your question has been posted successfully.",
     });
 
+    try {
+      console.log("keyword Gen.....")
+      const docRef = await addDoc(collection(db, 'keywords'), {
+        prompt: `Generate some keywords on the topic ${data.title}`,
+      });
+      console.log('Keyword Document written with ID: ', docRef.id);
+  
+      // Listen for changes to the document
+      const unsubscribe = onSnapshot(doc(db, 'keywords', docRef.id), async(snap) => {
+        const data = snap.data();
+        if (data && data.response) {
+          console.log('RESPONSE: ' + data.response);
+          const keywordsString = `${data.response}`;
+
+          const questionDocRef = doc(db, 'questions', quesId);
+          await updateDoc(questionDocRef, {
+          keywords: keywordsString, // Add your keywords here
+      });
+        }
+      });
+  
+      // Stop listening after some time (for demonstration purposes)
+      setTimeout(() => unsubscribe(), 60000);
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
+
     console.log("Document written with ID: ", docRef.id);
-    console.log(data);
+    //console.log(data);
   }
 
   function onSubmit(data: Input) {

@@ -111,6 +111,7 @@ const Navbar = ({}: Props) => {
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
+  const [previewImg, setPreviewImg] = useState<any>(null);
 
 
   const dispatch = useDispatch();
@@ -130,6 +131,22 @@ const Navbar = ({}: Props) => {
 
   const uploadImage = async(file: any) => {
     if(file == null) return;
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target) {
+          const imageUrl = event.target.result;
+          setPreviewImg(imageUrl);
+        } else {
+          console.error('Error reading file:', file);
+          setPreviewImg(null);
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImg(null);
+    }
 
     const storageRef = ref(storage, `questions/${file.name}`);
 
@@ -408,6 +425,13 @@ const Navbar = ({}: Props) => {
                           {(progress||0)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
                           {/* "0" to make upload percentage invisible when no image is selected */}
                           {/* anonymity toggle */}
+                          <div>
+                            {
+                              previewImg&&<div className="w-full flex items-center justify-center">
+                                <Image src={previewImg} alt="previewImage" width={250} height={250}/>
+                              </div>
+                            }
+                          </div>
                           <FormField
                             control={form.control}
                             name="anonymity"

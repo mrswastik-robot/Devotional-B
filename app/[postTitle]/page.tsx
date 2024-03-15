@@ -8,6 +8,7 @@ import { Tiptap as TipTap } from "@/components/TipTap";
 import AnsPost from "@/components/queAnsPage/AnsPost";
 import RecentFeed from "@/components/queAnsPage/RecentFeed";
 import imageCompression from 'browser-image-compression';
+import Image from "next/image";
 
 import { auth, db, storage } from "@/utils/firebase";
 import {
@@ -130,9 +131,26 @@ const PostPage = ({ params: { postTitle } }: Props) => {
 
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
+  const [previewImg, setPreviewImg] = useState<any>(null);
 
   const uploadImage = async(file: any) => {
     if (file == null) return;
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target) {
+          const imageUrl = event.target.result;
+          setPreviewImg(imageUrl);
+        } else {
+          console.error('Error reading file:', file);
+          setPreviewImg(null);
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImg(null);
+    }
 
     const storageRef = ref(storage, `answers/${file.name}`);
 
@@ -312,7 +330,14 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                       </FormItem>
                     )}
                   />
-
+                  {(progress||0)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
+                        <div>
+                            {
+                              previewImg&&<div className="w-full flex items-center justify-center">
+                                <Image src={previewImg} alt="previewImage" width={250} height={250}/>
+                              </div>
+                            }
+                          </div>
                   {/* anonymity toggle */}
                   <FormField
                     control={form.control}

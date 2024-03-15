@@ -54,6 +54,8 @@ import { Tiptap } from "@/components/TipTapAns";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnswerDescriptionType } from "@/schemas/answer";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
 
 type Input = z.infer<typeof AnswerDescriptionType>;
 
@@ -87,6 +89,7 @@ type QuestionType = {
   shares: number;
   questionImageURL: string;
   createdAt: string;
+  keywords: string;
   anonymity: boolean;
   // Add any other fields as necessary
 };
@@ -359,8 +362,28 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         </div>
       </div>
 </div>
+      
       <div className=" sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last ">
+      <div>
         <RecentFeed />
+      </div>
+      <Separator className="h-2"/>
+      <div className="bg-[#FFFFFF] dark:bg-[#262626] order-last">
+        <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="text-left font-[590] text-base text-black dark:text-white">HashTags</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+          <TableRow className="">
+            <div className="bg-[#FFFFFF] dark:bg-[#262626] p-3">
+            {queObject.keywords?queObject.keywords:"No tags Available"}
+            </div>
+          </TableRow>
+      </TableBody>
+      </Table>
+        </div>
       </div>
     </div>
   );

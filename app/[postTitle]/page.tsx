@@ -287,6 +287,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   }, [postTitleWithSpaces, postTitle]);
 
   const [description, setDescription] = useState("");
+  //console.log("Keywords ", queObject.keywords);
 
   return (
 

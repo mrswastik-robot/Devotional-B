@@ -303,9 +303,9 @@ const Navbar = ({}: Props) => {
       </div>
 
 
-      <div className=" sm:block hidden container max-w-7xl h-full mx-auto md:flex items-center justify-between gap-2">
+      <div className=" sm:block hidden container max-w-7xl h-full mx-auto md:flex items-center justify-between ">
         {/* logo */}
-        <div className=" flex gap-[1.7rem]">
+        <div className=" flex gap-[1rem]">
           <Link href="/" className="flex gap-2 items-center">
             <p className="hidden text-zinc-700 dark:text-emerald-100 text-xl font-bold md:block">
               Devotional-B
@@ -354,7 +354,7 @@ const Navbar = ({}: Props) => {
             value={searchText}
             onChange={handleSearchText} 
             placeholder="Search" 
-            className="w-[30rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
+            className="w-[37rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerSearch());

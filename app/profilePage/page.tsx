@@ -117,7 +117,7 @@ const ProfilePage = (props: Props) => {
     //console.log("heyyyyyyyyyyy");
     const fetchData = async () => {
       try {
-        if (!user) {
+        if (!user && !loading) {
           router.push("/auth");
         } else {
           setLoadingPosts(true);
@@ -129,7 +129,7 @@ const ProfilePage = (props: Props) => {
               q = query(
                 questionsRef,
                 and(
-                  where("uid", "==", user.uid),
+                  where("uid", "==", user?.uid),
                   where("anonymity", "==", false)
                 ),
                 orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
@@ -150,7 +150,7 @@ const ProfilePage = (props: Props) => {
               const moreQ = query(
                 questionsRef,
                 and(
-                  where("uid", "==", user.uid),
+                  where("uid", "==", user?.uid),
                   where("anonymity", "==", false)
                 ),
                 orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
@@ -175,7 +175,7 @@ const ProfilePage = (props: Props) => {
               q = query(
                 questionsRef,
                 and(
-                  where("uid", "==", user.uid),
+                  where("uid", "==", user?.uid),
                   where("anonymity", "==", true)
                 ),
                 orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
@@ -196,7 +196,7 @@ const ProfilePage = (props: Props) => {
               const moreQ = query(
                 questionsRef,
                 and(
-                  where("uid", "==", user.uid),
+                  where("uid", "==", user?.uid),
                   where("anonymity", "==", true)
                 ),
                 orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
@@ -276,7 +276,7 @@ const ProfilePage = (props: Props) => {
         
                 const moreQ = query(
                   answersCollectionRef,
-                  where("uid", "==", user.uid),
+                  where("uid", "==", user?.uid),
                   orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
                 );
         
@@ -391,6 +391,14 @@ useEffect(() => {
     setIsAnswers(true);
     setPostType('answers')
   }
+
+  if(loading)
+  {
+    return <Loader/>
+  }
+  else
+  {
+
 
   return (
     <div className='mt-0'>
@@ -606,6 +614,7 @@ useEffect(() => {
       </div>
     </div>
   );
+}
 };
 
 export default ProfilePage;

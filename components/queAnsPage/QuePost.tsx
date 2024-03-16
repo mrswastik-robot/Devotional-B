@@ -118,7 +118,7 @@ const QuePost = ({ post }: Props) => {
 }, [post.id , user ]);
 
   return (
-    <div className="rounded-md bg-white dark:bg-[#262626] shadow break-words overflow-hidden">
+    <div className="rounded-md bg-white dark:bg-[#262626] shadow break-words overflow-hidden mt-1">
       <div className="px-6 md:py-6 py-4 flex justify-between">
         {/* <PostVoteClient
         //   postId={post.id}

@@ -13,7 +13,7 @@ import Image from "next/image";
 import { auth, db, storage } from "@/utils/firebase";
 import {
   collection,
-  doc,
+  doc as docc,
   getDoc,
   getDocs,
   addDoc,
@@ -214,6 +214,8 @@ const PostPage = ({ params: { postTitle } }: Props) => {
       const doc = snapshot.docs[0]; // Get the first (and should be only) document that matches the query
   
       // Use the id of the question document to create the answer post in the 'answers' subcollection
+      const questionId = doc.id;
+      console.log("Ques Id ", doc.id);
       const docRef = await addDoc(collection(db, "questions", doc.id, "answers"), {
         description: data.description,
         uid: user?.uid,
@@ -225,6 +227,33 @@ const PostPage = ({ params: { postTitle } }: Props) => {
       });
   
       console.log("Document written with ID: ", docRef.id);
+
+      try {
+        console.log("keyword Gen.....")
+        const docRef = await addDoc(collection(db, 'keywords'), {
+          prompt: `Generate some keywords and hashtags on topic ${data.description}`,
+        });
+        console.log('Keyword Document written with ID: ', docRef.id);
+    
+        // Listen for changes to the document
+        const unsubscribe = onSnapshot(docc(db, 'keywords', docRef.id), async(snap) => {
+          const data = snap.data();
+          if (data && data.response) {
+            console.log('RESPONSE: ' + data.response);
+            const keywordsString = `${data.response}`;
+  
+            const questionDocRef = docc(db, 'questions', questionId);
+            await updateDoc(questionDocRef, {
+            answerKeywords: keywordsString, // Add your keywords here
+        });
+          }
+        });
+    
+        // Stop listening after some time (for demonstration purposes)
+        setTimeout(() => unsubscribe(), 60000);
+      } catch (error) {
+        console.error('Error adding document: ', error);
+      }
 
       // Increment the ansNumbers field of the question
     // await updateDoc(docRef, {

@@ -16,6 +16,16 @@ import TopFeedCard from "@/components/TopFeedCard";
 import Loader from "@/components/ui/Loader";
 
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -80,6 +90,13 @@ export default function Home() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
+
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>('other');
+
+  const handleSelectChange = (newValue: string | undefined) => {
+    setSelectedCategory(newValue);
+    console.log(selectedCategory);
+  };
 
   const uploadImage = async(file: any) => {
     if(file == null) return;
@@ -187,6 +204,7 @@ export default function Home() {
       name: user?.displayName,
       createdAt: serverTimestamp(),
       questionImageURL: imageUrl,
+      category: selectedCategory,
       anonymity: data.anonymity,
       // ansNumbers: 0,
     });
@@ -407,6 +425,24 @@ export default function Home() {
                                 <Image src={previewImg} alt="previewImage" width={250} height={250}/>
                               </div>
                             }
+                          </div>
+                          <div>
+                          <Select value={selectedCategory} onValueChange={handleSelectChange} >
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Select a Category" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Categories</SelectLabel>
+          <SelectItem value="howTo">How To</SelectItem>
+          <SelectItem value="help">Help</SelectItem>
+          <SelectItem value="supernatural">Mystery/Haunted/Ghost</SelectItem>
+          <SelectItem value="astronomy">Astrology/Remedies/Occult</SelectItem>
+          <SelectItem value="stones">GemStones/Rudraksha</SelectItem>
+          <SelectItem value="other">Others</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
                           </div>
                           <FormField
                             control={form.control}

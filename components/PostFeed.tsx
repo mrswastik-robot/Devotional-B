@@ -16,7 +16,18 @@ import {
   orderBy,
   query,
   startAfter,
+  where,
 } from "firebase/firestore";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import algoliasearch from "algoliasearch/lite";
 // import algoliasearch from "algoliasearch";
@@ -82,15 +93,86 @@ const PostFeed = (props: Props) => {
   const [pageLoaded, setPageLoaded] = useState(false);
   const [reload, setReload] = useState(false);
   const [addFirst, setAddFirst] = useState(false);
+  const [morePosts, setMorePosts] = useState(true);
+
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>('all');
+
+  const handleSelectChange = (newValue: string | undefined) => {
+    setPosts([]);
+    setLastDoc(null);
+    setMorePosts(true);
+    setSelectedCategory(newValue);
+    console.log(selectedCategory);
+  };
 
   //for automating loadmore lazy load button ...
   const loadMoreButtonRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setIsLoading(true);
-    const collectionRef = collection(db, "questions");
 
-    let q;
+    //old Code
+    // setIsLoading(true);
+    // console.log(selectedCategory);
+    // const collectionRef = collection(db, "questions");
+
+    // let q;
+    // if (lastDoc) {
+    //   q = query(
+    //     collectionRef,
+    //     orderBy("createdAt", "desc"),
+    //     startAfter(lastDoc),
+    //     limit(limitValue)
+    //   );
+    // } else {
+    //   q = query(collectionRef, orderBy("createdAt", "desc"), limit(limitValue));
+    // }
+
+    // const unsub = onSnapshot(q, async (snapshot) => {
+    //   const postsData: any = [];
+
+    //   for (const doc of snapshot.docs) {
+    //     // Fetch the 'answers' subcollection for each question
+    //     const answersCollectionRef = collection(doc.ref, "answers");
+    //     const answersQuery = query(answersCollectionRef);
+
+    //     const answersSnapshot = await getDocs(answersQuery);
+    //     const numAnswers = answersSnapshot.size;
+
+    //     // Add the total number of answers to the question data
+    //     const questionData = {
+    //       id: doc.id,
+    //       comments: numAnswers,
+    //       ...doc.data(),
+    //     } as PostType;
+
+    //     postsData.push(questionData);
+    //   }
+
+    //   const lastDocument = snapshot.docs[snapshot.docs.length - 1];
+    //   setLoadMore(lastDocument);
+      
+
+    //   if (addFirst && lastDoc == null) {
+    //     setPosts(postsData);
+    //     setAddFirst(false);
+    //   } else {
+    //     setPosts((prevPosts) => [...prevPosts, ...postsData]);
+    //   }
+    //   setIsLoading(false);
+    //   setPageLoaded(true);
+    // });
+
+    // return () => {
+    //   unsub();
+    // };
+    //old code ends
+
+    console.log("Last Doc ", lastDoc);
+    setIsLoading(true);
+  const collectionRef = collection(db, "questions");
+  let q;
+
+  if (selectedCategory === "all") {
     if (lastDoc) {
       q = query(
         collectionRef,
@@ -101,46 +183,76 @@ const PostFeed = (props: Props) => {
     } else {
       q = query(collectionRef, orderBy("createdAt", "desc"), limit(limitValue));
     }
+  } else {
+    if (lastDoc) {
+      q = query(
+        collectionRef,
+        where("category", "==", selectedCategory),
+        orderBy("createdAt", "desc"),
+        startAfter(lastDoc),
+        limit(limitValue)
+      );
+    } else {
+      q = query(
+        collectionRef,
+        where("category", "==", selectedCategory),
+        orderBy("createdAt", "desc"),
+        limit(limitValue)
+      );
+    }
+  }
+  
+  //const postLength = 0;
+  const unsub = onSnapshot(q, async (snapshot) => {
+    const postsData:any = [];
+    if(snapshot.docs.length<limitValue){
+      console.log("Length ", snapshot.docs.length);
+      setMorePosts(false);
+    }
+    else{
+      setMorePosts(true);
+    }
+    for (const doc of snapshot.docs) {
+      // Fetch the 'answers' subcollection for each question
+      const answersCollectionRef = collection(doc.ref, "answers");
+      const answersQuery = query(answersCollectionRef);
+      const answersSnapshot = await getDocs(answersQuery);
+      const numAnswers = answersSnapshot.size;
 
-    const unsub = onSnapshot(q, async (snapshot) => {
-      const postsData: any = [];
+      // Add the total number of answers to the question data
+      const questionData = {
+        id: doc.id,
+        comments: numAnswers,
+        ...doc.data(),
+      };
 
-      for (const doc of snapshot.docs) {
-        // Fetch the 'answers' subcollection for each question
-        const answersCollectionRef = collection(doc.ref, "answers");
-        const answersQuery = query(answersCollectionRef);
+      postsData.push(questionData);
+    }
 
-        const answersSnapshot = await getDocs(answersQuery);
-        const numAnswers = answersSnapshot.size;
+    const lastDocument = snapshot.docs[snapshot.docs.length - 1];
+    setLoadMore(lastDocument);
 
-        // Add the total number of answers to the question data
-        const questionData = {
-          id: doc.id,
-          comments: numAnswers,
-          ...doc.data(),
-        } as PostType;
+    if (addFirst && lastDoc == null) {
+      setPosts(postsData);
+      setAddFirst(false);
+    } else {
+      setPosts((prevPosts) => [...prevPosts, ...postsData]);
+    }
+    setIsLoading(false);
+    setPageLoaded(true);
+  });
 
-        postsData.push(questionData);
-      }
+  return () => {
+    unsub();
+  };
 
-      const lastDocument = snapshot.docs[snapshot.docs.length - 1];
-      setLoadMore(lastDocument);
-      
+  }, [lastDoc, reload , selectedCategory]);
 
-      if (addFirst && lastDoc == null) {
-        setPosts(postsData);
-        setAddFirst(false);
-      } else {
-        setPosts((prevPosts) => [...prevPosts, ...postsData]);
-      }
-      setIsLoading(false);
-      setPageLoaded(true);
-    });
+  const categorySelect = async()=>{
+    setPosts([]);
+    setLastDoc(null);
 
-    return () => {
-      unsub();
-    };
-  }, [lastDoc, reload , ]);
+  }
 
 
   //algolia stuff
@@ -203,6 +315,7 @@ const PostFeed = (props: Props) => {
 
   //useEffect for automting lazyload functionality
   useEffect(() => {
+    if(morePosts){
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -221,6 +334,7 @@ const PostFeed = (props: Props) => {
         observer.unobserve(loadMoreButtonRef.current);
       }
     };
+  }
   }, [loadMoreButtonRef, loadMoreData]);
 
 
@@ -246,6 +360,24 @@ const PostFeed = (props: Props) => {
 
   return (
     <div className=" w-[100%]">
+      <div>
+      <Select value={selectedCategory} onValueChange={handleSelectChange} >
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Select a Category" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Categories</SelectLabel>
+          <SelectItem value="all">All</SelectItem>
+          <SelectItem value="howTo">How To</SelectItem>
+          <SelectItem value="help">Help</SelectItem>
+          <SelectItem value="supernatural">Mystery/Haunted/Ghost</SelectItem>
+          <SelectItem value="astronomy">Astrology/Remedies/Occult</SelectItem>
+          <SelectItem value="stones">GemStones/Rudraksha</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+      </div>
       <div className="relative">
         {searchResult && searchResult.length > 0 ? (
           <ul className="flex flex-col space-y-1">
@@ -272,7 +404,7 @@ const PostFeed = (props: Props) => {
             </div>
             }
             </div>
-            
+            <div className="w-full text-center mt-0">{!isLoading&&!morePosts&&<div>No more Posts...</div>}</div>
           </div>
         )}
       </div>

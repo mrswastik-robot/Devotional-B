@@ -28,7 +28,7 @@ import {
   where,
   onSnapshot,
   orderBy,
-  doc,
+  doc as docc,
   getDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -102,6 +102,36 @@ const CommentBox = ({
           createdAt: serverTimestamp(),
         }
       );
+
+      const quessId = doc.id
+      //console.log("Comment que ", quessId);
+
+      try {
+        console.log("keyword Gen.....")
+        const docRef = await addDoc(collection(db, 'keywords'), {
+          prompt: `Generate some keywords and hashtags on topic ${data.comment}`,
+        });
+        console.log('Keyword Document written with ID: ', docRef.id);
+    
+        // Listen for changes to the document
+        const unsubscribe = onSnapshot(docc(db, 'keywords', docRef.id), async(snap) => {
+          const data = snap.data();
+          if (data && data.response) {
+            console.log('RESPONSE: ' + data.response);
+            const keywordsString = `${data.response}`;
+  
+            const questionDocRef = docc(db, 'questions', quessId);
+            await updateDoc(questionDocRef, {
+            commentKeywords: keywordsString, // Add your keywords here
+        });
+          }
+        });
+    
+        // Stop listening after some time (for demonstration purposes)
+        setTimeout(() => unsubscribe(), 60000);
+      } catch (error) {
+        console.error('Error adding document: ', error);
+      }
 
       console.log("Comment written with : ", docRef);
 
@@ -197,7 +227,7 @@ const CommentBox = ({
 
       
       // Use the actual ID of the question document to construct the comment document reference
-      const commentRef = doc(db, `questions/${questionId}/answers/${answerId}/comments/${commentId}`);
+      const commentRef = docc(db, `questions/${questionId}/answers/${answerId}/comments/${commentId}`);
       const commentSnapshot = await getDoc(commentRef);
 
       if (commentSnapshot.exists()) {

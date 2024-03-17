@@ -360,7 +360,8 @@ const PostFeed = (props: Props) => {
 
   return (
     <div className=" w-[100%]">
-      <div>
+      {/* <div>
+      //Not needed for now
       <Select value={selectedCategory} onValueChange={handleSelectChange} >
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a Category" />
@@ -377,7 +378,7 @@ const PostFeed = (props: Props) => {
         </SelectGroup>
       </SelectContent>
     </Select>
-      </div>
+      </div> */}
       <div className="relative">
         {searchResult && searchResult.length > 0 ? (
           <ul className="flex flex-col space-y-1">

@@ -14,6 +14,7 @@ import CustomFeed from "@/components/CustomFeed";
 import RightHandFeed from "@/components/RightHandFeed/RightHandFeed";
 import TopFeedCard from "@/components/TopFeedCard";
 import Loader from "@/components/ui/Loader";
+import { LuXCircle } from "react-icons/lu";
 
 import {
   Select,
@@ -90,12 +91,18 @@ export default function Home() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
+  const [selectC, setSelectC] = useState<any>([]);
 
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>('other');
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>('');
 
   const handleSelectChange = (newValue: string | undefined) => {
-    setSelectedCategory(newValue);
-    console.log(selectedCategory);
+    // setSelectedCategory(newValue);
+    if(!selectC.includes(newValue)){
+    setSelectC((prev:any)=>{
+      return [...prev, newValue]
+    })
+  }
+    console.log(selectC);
   };
 
   const uploadImage = async(file: any) => {
@@ -159,6 +166,14 @@ export default function Home() {
 
   }
 
+  const delCategories = (category:string)=>{
+    let newCategory=selectC.filter((cat:any)=>{
+      console.log(cat, " ", category);
+      return cat!=category;
+    })
+  setSelectC(newCategory);
+  }
+
   useEffect(() => {
     if(!user && !loading)
       router.push('/auth');
@@ -204,7 +219,7 @@ export default function Home() {
       name: user?.displayName,
       createdAt: serverTimestamp(),
       questionImageURL: imageUrl,
-      category: selectedCategory,
+      category: selectC,
       anonymity: data.anonymity,
       // ansNumbers: 0,
     });
@@ -427,19 +442,26 @@ export default function Home() {
                             }
                           </div>
                           <div>
+                            <div className="flex mb-3">
+                              {
+                                selectC.map((category:string, index:number)=>{
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1' key={index}>{category} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                })
+                              }
+                            </div>
                           <Select value={selectedCategory} onValueChange={handleSelectChange} >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a Category" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Categories</SelectLabel>
-          <SelectItem value="howTo">How To</SelectItem>
-          <SelectItem value="help">Help</SelectItem>
-          <SelectItem value="supernatural">Mystery/Haunted/Ghost</SelectItem>
-          <SelectItem value="astronomy">Astrology/Remedies/Occult</SelectItem>
-          <SelectItem value="stones">GemStones/Rudraksha</SelectItem>
-          <SelectItem value="other">Others</SelectItem>
+          <SelectItem value="How To">How To</SelectItem>
+          <SelectItem value="Help">Help</SelectItem>
+          <SelectItem value="Mystery/Haunted/Ghost">Mystery/Haunted/Ghost</SelectItem>
+          <SelectItem value="Astrology/Remedies/Occult">Astrology/Remedies/Occult</SelectItem>
+          <SelectItem value="GemStones/Rudraksha">GemStones/Rudraksha</SelectItem>
+          <SelectItem value="Others">Others</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

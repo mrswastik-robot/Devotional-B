@@ -32,6 +32,7 @@ import {
   } from "@/components/ui/form";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { SheetClose } from "./ui/sheet";
 
 import imageCompression from 'browser-image-compression';
 
@@ -312,28 +313,36 @@ const Sidebar = (props: Props) => {
 
 
               <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
-                <Link className=" flex gap-2" href="/">
-                    <Home />
-                    Home
-                </Link>
+                  <Link className="" href="/">
+                    <SheetClose className=" flex gap-2">
+                          <Home />
+                          Home
+                    </SheetClose>
+                  </Link>
               </li>
 
               <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
-                <button className=" flex gap-2" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
+                <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
+                  <SheetClose className=" flex gap-2">
                     <Bell />
                     <p>Notifications</p>
+                  </SheetClose>
                 </button>
               </li>
               <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
-                <button className=" flex gap-2" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
+                <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
+                  <SheetClose className=" flex gap-2">
                     <UserRoundPlus />
-                    <p>Following</p>
+                    <p>Followers</p>
+                  </SheetClose>
                 </button>
               </li>
               <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
-                <button className=" flex gap-2" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
+                <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
+                  <SheetClose className=" flex gap-2">
                     <Newspaper />
                     <p>Newsletter</p>
+                  </SheetClose>
                 </button>
               </li>
 

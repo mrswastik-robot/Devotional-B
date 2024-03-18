@@ -38,7 +38,7 @@ const RightHandFeed = (props: Props) => {
   useEffect(() => {
 
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(15));
+    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(10));
 
     const unsub = onSnapshot(q, async(snapshot) => {
       const postsData =[];

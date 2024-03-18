@@ -398,7 +398,7 @@ const PostFeed = (props: Props) => {
               ))}
             </ul>
             
-            <div className='w-[100%] lg:ml-64 md:ml-80 xl:ml-96'>
+            <div className='w-[100]'>
             { isLoading?<Loader/>:pageLoaded&&
             <div ref={loadMoreButtonRef} className='mt-4'>
               <button onClick={loadMoreData}></button>

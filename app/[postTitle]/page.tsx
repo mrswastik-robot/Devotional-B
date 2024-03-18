@@ -93,7 +93,7 @@ type QuestionType = {
   createdAt: string;
   keywords: string;
   anonymity: boolean;
-  hashtags: any;
+  hashtags: Array<string>;
   // Add any other fields as necessary
 };
 

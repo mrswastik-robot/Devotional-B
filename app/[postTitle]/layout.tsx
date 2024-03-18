@@ -36,19 +36,17 @@ const fetchPost = async (postTitle: string) => {
     
 }
 
-export const generateMetaData = async({ params }: Props) : Promise<Metadata> => {
+export async function generateMetadata({ params }: Props) : Promise<Metadata> {
     
     const postTitleWithSpaces = decodeURIComponent(params.postTitle as string).split("-").join(" ");
     const { post }= await fetchPost(postTitleWithSpaces);
-
-
     const metadata: Metadata = {
         title: post[0].title,
         description: "Discover answers to your questions.",
     };
     return metadata;
+    
 }
-
 
 // export const metadata: Metadata = {
 //   title: "Your Questions Answered",

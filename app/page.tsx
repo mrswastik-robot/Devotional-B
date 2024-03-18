@@ -442,13 +442,6 @@ export default function Home() {
                             }
                           </div>
                           <div>
-                            <div className="flex mb-3">
-                              {
-                                selectC.map((category:string, index:number)=>{
-                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1' key={index}>{category} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
-                                })
-                              }
-                            </div>
                           <Select value={selectedCategory} onValueChange={handleSelectChange} >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a Category" />
@@ -465,6 +458,13 @@ export default function Home() {
         </SelectGroup>
       </SelectContent>
     </Select>
+    <div className="flex">
+                              {
+                                selectC.map((category:string, index:number)=>{
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                })
+                              }
+                            </div>
                           </div>
                           <FormField
                             control={form.control}

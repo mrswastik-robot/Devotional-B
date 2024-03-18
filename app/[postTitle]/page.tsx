@@ -382,8 +382,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                     control={form.control}
                     name="anonymity"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2">
-                        <div className="">
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg  border-[1.6px] border-[#d3d7dd] p-2">                        <div className="">
                           <FormLabel className="text-base">
                             Answer Anonymously
                           </FormLabel>
@@ -391,12 +390,14 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                             Answer question without revealing your identity.
                           </FormDescription> */}
                         </div>
+                        <div className="h-full">
                         <FormControl>
-                          <Switch
+                          <Switch className=""
                             checked={field.value}
                             onCheckedChange={field.onChange}
                           />
                         </FormControl>
+                        </div>
                       </FormItem>
                     )}
                   />
@@ -431,7 +432,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
       <div>
         <RecentFeed />
       </div>
-      <Separator className="h-2"/>
+      {/* <Separator className="h-2"/>
       <div className="bg-[#FFFFFF] dark:bg-[#262626] order-last">
         <Table>
       <TableHeader>
@@ -447,7 +448,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
           </TableRow>
       </TableBody>
       </Table>
-        </div>
+        </div> */}
       </div>
     </div>
     </>

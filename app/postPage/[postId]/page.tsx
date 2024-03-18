@@ -84,6 +84,7 @@ type QuestionType = {
   questionImageURL: string;
   createdAt: string;
   anonymity: boolean;
+  hashtags: Array<string>;
   // Add any other fields as necessary
 };
 

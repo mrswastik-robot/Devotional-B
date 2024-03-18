@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Head from "next/head";
 
 import { postData } from "@/lib/data";
 import QuePost from "@/components/queAnsPage/QuePost";
@@ -320,6 +321,14 @@ const PostPage = ({ params: { postTitle } }: Props) => {
 
   return (
 
+    <>
+
+      <Head>
+        <title>{queObject.title}</title>
+        <meta name="keywords" content={queObject.keywords} />
+        <meta name="description" content="This is a dynamic description" />
+      </Head>
+
     <div className="grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6">
       <div className=" md:col-span-5 col-span-2 order-first">
       <div className={`${ansLoading?"overflow-auto":""} max-h-screen`}>
@@ -441,6 +450,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

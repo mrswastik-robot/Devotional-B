@@ -268,8 +268,8 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
               
             ) : null} */}
             {!isExpanded && isOverflowing && (
-              <div className="absolute bottom-[-0.16rem] left-0 w-full  text-right ">
-                <button className=" text-blue-500/80  hover:underline w-[8%] backdrop-blur-none bg-white/50  text-right  " onClick={() => setIsExpanded(true)}>(more)</button>
+              <div className="absolute bottom-0 md:bottom-[-0.16rem] left-0 w-full  text-right ">
+                <button className=" text-blue-500/80  hover:underline md:w-[8%] w-full backdrop-blur-none bg-white/50 dark:bg-transparent  text-right text-sm  " onClick={() => setIsExpanded(true)}>(more)</button>
               </div>
             )}
           </div>

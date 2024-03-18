@@ -234,7 +234,7 @@ export default function Home() {
     try {
       console.log("keyword Gen.....")
       const docRef = await addDoc(collection(db, 'keywords'), {
-        prompt: `Generate some keywords and hashtags on topic ${data.title}`,
+        prompt: `Generate some keywords and hashtags on topic ${data.title} and give it to me in array format without any formatting marks`,
       });
       console.log('Keyword Document written with ID: ', docRef.id);
   
@@ -243,11 +243,21 @@ export default function Home() {
         const data = snap.data();
         if (data && data.response) {
           console.log('RESPONSE: ' + data.response);
-          const keywordsString = `${data.response}`;
+          const keywordsStr = `${data.response}`;
+
+          const cleanedString = keywordsStr.replace(/\*|\`/g, '');
+
+          const splitString = cleanedString.split("Keywords:");
+          const keywordsString = splitString[1].split("Hashtags:")[0].trim();
+          const hashtagsString = splitString[1].split("Hashtags:")[1].trim();
+
+          const keywordsArray = JSON.parse(keywordsString);
+          const hashtagsArray = JSON.parse(hashtagsString);
 
           const questionDocRef = doc(db, 'questions', quesId);
           await updateDoc(questionDocRef, {
-          keywords: keywordsString, // Add your keywords here
+          keywords: keywordsArray,
+          hashtags: hashtagsArray // Add your keywords here
       });
         }
       });
@@ -377,7 +387,7 @@ export default function Home() {
                   <DialogTrigger asChild>
                     <Button variant="default"  className=" w-full" disabled={isGuest === 'true'}>Ask Question</Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[925px] max-h-[55rem] overflow-y-scroll ">
+                  <DialogContent className="sm:max-w-[925px] max-h-[40rem] overflow-y-scroll ">
                     <DialogHeader>
                       <DialogTitle>Post Question</DialogTitle>
                       <DialogDescription>

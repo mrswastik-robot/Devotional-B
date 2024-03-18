@@ -41,6 +41,7 @@ type Props = {
     questionImageURL: string;
     createdAt: string;
     anonymity: boolean;
+    hashtags: any
   };
   // id: string
 };
@@ -48,6 +49,7 @@ type Props = {
 const QuePost = ({ post }: Props) => {
 
   const { toast } = useToast();
+  //console.log(post)
 
   //to send userId in postvoteclient for voting system
   const [user] = useAuthState(auth);
@@ -119,7 +121,7 @@ const QuePost = ({ post }: Props) => {
 
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow break-words overflow-hidden">
-      <div className="px-6 md:py-6 py-4 flex justify-between">
+      <div className="px-6 md:py-4 py-4 flex justify-between">
         {/* <PostVoteClient
         //   postId={post.id}
         //   initialVotesAmt={_votesAmt}
@@ -211,9 +213,23 @@ const QuePost = ({ post }: Props) => {
               
             ) : null} */}
           </div>
+          <div>
+          {
+          (post.hashtags&&(Array.isArray(post.hashtags))&&(post.hashtags.length>0))&&
+            <div className='text-blue-600 mt-2'>
+              {
+                post.hashtags.map((hashtag:any, index:number)=>{
+                  return <span className="mx-1 font-[500] text-sm" key={index} >{hashtag}</span>
+                })
+              }
+            </div>
+}
+          </div>
         </div>
+        
       </div>
 
+      
       <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150  flex justify-between gap-x-3 text-sm px-4 py-2 sm:px-6">
 
         <PostVoteClientPhone postId={post.id} postType="questions" userId={user?.uid!}/>

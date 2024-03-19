@@ -62,6 +62,7 @@ type PostType = {
   createdAt: string;
   anonymity: boolean;
   ansNumbers: number;
+  uid:string;
   // Add any other fields as necessary
 };
 
@@ -353,6 +354,7 @@ const PostFeed = (props: Props) => {
       questionImageURL: hit.questionImageURL,
       createdAt: hit.createdAt,
       anonymity: hit.anonymity,
+      uid: hit.uid
       // ansNumbers: hit.ansNumbers,
       // add other necessary fields
     };

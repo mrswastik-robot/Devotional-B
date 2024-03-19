@@ -94,6 +94,7 @@ type QuestionType = {
   keywords: string;
   anonymity: boolean;
   hashtags: Array<string>;
+  uid: string;
   // Add any other fields as necessary
 };
 
@@ -109,6 +110,7 @@ type AnswerType = {
   answerImageURL: string;
   createdAt: string;
   anonymity: boolean;
+  uid: string;
   // Add any other fields as necessary
 };
 

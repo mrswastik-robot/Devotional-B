@@ -269,7 +269,7 @@ const CommentBox = ({
                     type="text"
                     placeholder="Add a comment ..."
                     autoComplete="off"
-                    className="w-[99%] border-0 rounded-3xl  bg-slate-100 p-2"
+                    className="w-[99%] border-0 rounded-3xl  bg-slate-100 dark:bg-[#181818] p-2"
                     {...field}
                   />
                 </FormControl>

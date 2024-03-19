@@ -20,7 +20,10 @@ type Props = {
 type Post = {
     id: string;
     title: string;
-    // content: string;
+    description: string;
+    // hashtags: string[];
+    keywords: string[];
+    answerKeywords: string;
 }
 
 const fetchPost = async (postTitle: string) => {
@@ -37,12 +40,14 @@ const fetchPost = async (postTitle: string) => {
 }
 
 export async function generateMetadata({ params }: Props) : Promise<Metadata> {
-    
+
     const postTitleWithSpaces = decodeURIComponent(params.postTitle as string).split("-").join(" ");
     const { post }= await fetchPost(postTitleWithSpaces);
     const metadata: Metadata = {
         title: post[0].title,
-        description: "Discover answers to your questions.",
+        description: post[0].description,
+        keywords: post[0].keywords,
+        // answerKeywords: post[0].answerKeywords
     };
     return metadata;
     

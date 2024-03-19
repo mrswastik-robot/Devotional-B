@@ -1,7 +1,6 @@
 {
   "hosting": {
-    "public": "public",
-    "source": ".",
+    "public": "./.firebase/gods-plan-35/hosting",
     "ignore": [
       "firebase.json",
       "**/.*",

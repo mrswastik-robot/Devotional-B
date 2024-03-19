@@ -340,7 +340,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         <div className=" mt-3">
           {isCommentBoxOpen ? (
             <div
-              className="rounded-3xl border border-gray-300 p-4 cursor-pointer"
+              className="rounded-3xl border border-gray-300 p-4 cursor-pointer mx-2 md:mx-0 my-6"
               onClick={() => setIsCommentBoxOpen(false)}
             >
               Write a Answer...

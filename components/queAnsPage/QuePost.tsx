@@ -25,7 +25,7 @@ import ShareDialog from "../ShareDialog";
 import { auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { db } from "@/utils/firebase";
-import { doc, getDoc, updateDoc , arrayRemove, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, updateDoc , arrayRemove, arrayUnion, onSnapshot } from "firebase/firestore";
 
 type Props = {
   post: {
@@ -42,6 +42,7 @@ type Props = {
     createdAt: string;
     anonymity: boolean;
     hashtags: any
+    uid: string;
   };
   // id: string
 };
@@ -53,6 +54,9 @@ const QuePost = ({ post }: Props) => {
 
   //to send userId in postvoteclient for voting system
   const [user] = useAuthState(auth);
+
+  const [isFollowing, setIsFollowing] = useState(false); // State to track if the user is following this post's creator
+  const [isCurrentUser, setIsCurrentUser] = useState(false); // State to track if the post's creator is the current user
   
   const pRef = useRef<HTMLDivElement>(null);
 
@@ -119,6 +123,65 @@ const QuePost = ({ post }: Props) => {
     fetchUser();
 }, [post.id , user ]);
 
+useEffect(() => {
+  // Check if the current user is following the post's creator
+  if (user) {
+    const userRef = doc(db, "users", user.uid);
+    const unsubscribe = onSnapshot(userRef, (doc) => {
+      if (doc.exists()) {
+        const userData = doc.data();
+        setIsFollowing(userData.following.includes(post.uid)); // Update isFollowing based on the following list
+        setIsCurrentUser(user.uid === post.uid); // Check if the post's creator is the current user
+      }
+    });
+
+    return () => unsubscribe();
+  }
+}, [post.uid, user]);
+
+const handleFollow = async () => {
+  if (!user) {
+    toast({
+      title: " Please login to follow others ",
+      variant: "default",
+    });
+    return;
+  }
+
+  const userRef = doc(db, "users", user.uid);
+
+  try {
+    await updateDoc(userRef, {
+      following: isFollowing
+        ? arrayRemove(post.uid) // Unfollow if already following
+        : arrayUnion(post.uid), // Follow if not following
+    });
+
+    setIsFollowing(!isFollowing); // Update isFollowing state
+
+    // Update followers list of the post's creator
+    const postUserRef = doc(db, "users", post.uid);
+    await updateDoc(postUserRef, {
+      followers: isFollowing
+        ? arrayRemove(user.uid) // Remove follower if unfollowing
+        : arrayUnion(user.uid), // Add follower if following
+    });
+
+    // Show toast notification based on follow/unfollow action
+    toast({
+      title: isFollowing ? "Unfollowed" : "Followed",
+      variant: "default",
+    });
+
+  } catch (error) {
+    console.error("Error updating following list:", error);
+    toast({
+      title: "Error updating following list",
+      variant: "destructive",
+    });
+  }
+};
+
   return (
 
     <div className="rounded-md bg-white dark:bg-[#262626] shadow break-words overflow-hidden mt-1">
@@ -147,7 +210,7 @@ const QuePost = ({ post }: Props) => {
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-3 " /> */}
             <span className="mt-3 text-sm font-semibold dark:text-white text-[#0c0c0c]">{isAnonymous ? ('Anonymous') : (post.name)}</span>{" "}
-            {isAnonymous ? null : (
+            {isAnonymous||isCurrentUser || !user ? null : (
               <div className=" flex space-x-1 mr-5">
                 <svg
                   viewBox="0 0 48 48"
@@ -171,15 +234,10 @@ const QuePost = ({ post }: Props) => {
                 </svg>
 
                 <div
-                  className=" text-blue-500 text-xs mt-[0.87rem] p-0 hover:underline"
-                  onClick={() => {
-                    toast({
-                      title: " Feature coming soon ... ",
-                      variant: "feature",
-                    });
-                  }}
+                  className=" text-blue-500 text-xs mt-[0.87rem] p-0 hover:underline cursor-pointer"
+                  onClick={handleFollow}
                 >
-                  Follow
+                  {isFollowing ? "Unfollow" : "Follow"}
                 </div>
               </div>
             )}
@@ -218,7 +276,7 @@ const QuePost = ({ post }: Props) => {
           <div>
           {
           (post.hashtags&&(Array.isArray(post.hashtags))&&(post.hashtags.length>0))&&
-            <div className='text-blue-600 mt-2'>
+            <div className='text-blue-600 mt-4'>
               {
                 post.hashtags.map((hashtag:any, index:number)=>{
                   return <span className="mx-1 font-[500] text-sm" key={index} >{hashtag}</span>

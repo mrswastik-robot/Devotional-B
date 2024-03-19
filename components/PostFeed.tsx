@@ -358,6 +358,7 @@ const PostFeed = (props: Props) => {
     };
   }
 
+  //console.log(posts);
   return (
     <div className=" w-[100%]">
       {/* <div>

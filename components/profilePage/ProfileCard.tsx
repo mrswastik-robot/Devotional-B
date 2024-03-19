@@ -1,12 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 
 type Props = {
-    user: any;
+  user: {
+    photoURL?: string;
+    displayName?: string;
+    uid?: string; // Assuming user object contains the UID
+  };
 };
 
 const ProfileCard = ({user}: Props) => {
+
+  //console.log("User: ", user.uid);
+
+  const [followersCount, setFollowersCount] = useState<number>(0);
+  const [followingCount, setFollowingCount] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchFollowersAndFollowing = async () => {
+      if (user?.uid) {
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const following = userData?.following?.length;
+          const followers = userData?.followers?.length;
+          // Assuming followers and following fields exist in user data
+          setFollowersCount(followers || 0);
+          setFollowingCount(following || 0);
+        }
+      }
+    };
+
+    fetchFollowersAndFollowing();
+  }, [user?.uid]);
+
 
   const otherUser:boolean=false;
   return (
@@ -28,7 +60,7 @@ const ProfileCard = ({user}: Props) => {
         <div className="lg:space-y-5 space-y-2 mx-5">
           <h1 className="lg:text-4xl text-xl font-bold">{user?.displayName}</h1>
           <div className=" flex gap-x-2 lg:mt-4 lg:text-base text-xs">
-          <p>{0} Followers</p>
+          <p>{followersCount} Followers</p>
             <svg
               viewBox="0 0 48 48"
               className="lg:mt-2 lg:w-3 lg:h-3 w-1"
@@ -50,7 +82,7 @@ const ProfileCard = ({user}: Props) => {
               </g>
             </svg>
 
-            <p>{0} Following</p>
+            <p>{followingCount} Following</p>
           </div>
 
           {otherUser&&

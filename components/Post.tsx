@@ -28,7 +28,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 
-import { arrayRemove, arrayUnion, doc, updateDoc , getDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, updateDoc , getDoc, onSnapshot } from "firebase/firestore";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -56,6 +56,7 @@ type Props = {
     questionImageURL: string;
     createdAt: string;
     anonymity: boolean;
+    uid: string; // User ID of the post creator
     // ansNumbers: number
   };
   // children: Element
@@ -80,6 +81,9 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
   //saving the post funcitonality
   const [savedState, setSavedState] = useState(false);
+
+  const [isFollowing, setIsFollowing] = useState(false); // State to track if the user is following this post's creator
+  const [isCurrentUser, setIsCurrentUser] = useState(false); // State to track if the post's creator is the current user
 
   const HandleDelete = () => {
     handleDelete(post.id);
@@ -119,6 +123,22 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
     setSavedState(!savedState);
   };
 
+  useEffect(() => {
+    // Check if the current user is following the post's creator
+    if (user) {
+      const userRef = doc(db, "users", user.uid);
+      const unsubscribe = onSnapshot(userRef, (doc) => {
+        if (doc.exists()) {
+          const userData = doc.data();
+          setIsFollowing(userData.following.includes(post.uid)); // Update isFollowing based on the following list
+          setIsCurrentUser(user.uid === post.uid); // Check if the post's creator is the current user
+        }
+      });
+
+      return () => unsubscribe();
+    }
+  }, [post.uid, user]);
+
   //fetching savedPosts from user's document
   useEffect(() => {
     const fetchUser = async () => {
@@ -155,6 +175,52 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
       setIsOverflowing(false);
     }
   }, [post.description]);
+
+  //console.log("Id: ", post.uid, " ",  post.title);
+
+  const handleFollow = async () => {
+    if (!user) {
+      toast({
+        title: " Please login to follow others ",
+        variant: "default",
+      });
+      return;
+    }
+
+    const userRef = doc(db, "users", user.uid);
+
+    try {
+      await updateDoc(userRef, {
+        following: isFollowing
+          ? arrayRemove(post.uid) // Unfollow if already following
+          : arrayUnion(post.uid), // Follow if not following
+      });
+
+      setIsFollowing(!isFollowing); // Update isFollowing state
+
+      // Update followers list of the post's creator
+      const postUserRef = doc(db, "users", post.uid);
+      await updateDoc(postUserRef, {
+        followers: isFollowing
+          ? arrayRemove(user.uid) // Remove follower if unfollowing
+          : arrayUnion(user.uid), // Add follower if following
+      });
+
+      // Show toast notification based on follow/unfollow action
+      toast({
+        title: isFollowing ? "Unfollowed" : "Followed",
+        variant: "default",
+      });
+
+    } catch (error) {
+      console.error("Error updating following list:", error);
+      toast({
+        title: "Error updating following list",
+        variant: "destructive",
+      });
+    }
+  };
+
 
   return (
     <div className="rounded-md bg-white dark:bg-[#262626] shadow my-1">
@@ -194,7 +260,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             <span className=" mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-yellow-50">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
-            {isAnonymous ? null : (
+            {isAnonymous||isCurrentUser || !user ? null : (
               <div className=" flex space-x-1 mr-5 ">
                 <svg
                   viewBox="0 0 48 48"
@@ -218,17 +284,11 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                 </svg>
 
 
-                <button
-                  className=" text-blue-500 text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer"
-                  onClick={() => {
-                    toast({
-                      title: " Feature coming soon ... ",
-                      variant: "feature",
-                    });
-                  }}
-                >
-                  Follow
-                </button>
+                {(
+        <button className=" text-blue-500 text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer" onClick={handleFollow}>
+          {isFollowing ? "Unfollow" : "Follow"}
+        </button>
+      )}
               </div>
             )}
             </div>

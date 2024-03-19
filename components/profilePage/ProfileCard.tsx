@@ -5,11 +5,12 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 
 type Props = {
-  user: {
-    photoURL?: string;
-    displayName?: string;
-    uid?: string; // Assuming user object contains the UID
-  };
+  // user: {
+  //   photoURL?: string;
+  //   displayName?: string;
+  //   uid?: string; // Assuming user object contains the UID
+  // } | null;
+  user: any
 };
 
 const ProfileCard = ({user}: Props) => {

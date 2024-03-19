@@ -55,6 +55,7 @@ type PostType = {
   questionImageURL: string;
   createdAt: string;
   anonymity: boolean;
+  uid: string
   // Add any other fields as necessary
 };
 

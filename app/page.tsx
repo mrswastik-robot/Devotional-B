@@ -17,6 +17,10 @@ import Loader from "@/components/ui/Loader";
 import { LuXCircle } from "react-icons/lu";
 
 import {
+  signInAnonymously, updateProfile,
+} from "firebase/auth";
+
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -174,9 +178,35 @@ export default function Home() {
   setSelectC(newCategory);
   }
 
+  const signingInAnonymously = async () => {
+
+    // guests should not be able to post questions
+    // const isGuest = true;
+
+    // Generate a unique 4-digit number
+    const uniqueNumber = Math.floor(1000 + Math.random() * 9000);
+
+    await signInAnonymously(auth)
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        // console.log(user);
+        // Update user's profile
+        await updateProfile(user, {
+          // displayName: anonymousUserName, // Set displayName to anonymousUser
+          displayName: `Guest${uniqueNumber}`, // Set displayName to "Guest1234"
+          photoURL:
+            "https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png", // Set photoURL to a default image URL
+        });
+        router.push("/?isGuest=true");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     if(!user && !loading)
-      router.push('/auth');
+      signingInAnonymously();
   }, [user, loading , router])
   
   
@@ -385,7 +415,14 @@ export default function Home() {
             <div>
               <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="default"  className=" w-full" disabled={isGuest === 'true'}>Ask Question</Button>
+                    <Button variant="default"  className=" w-full" disabled={isGuest === 'true'} onClick={()=>{
+
+                      if(user?.isAnonymous){
+                        auth.signOut();
+                        router.push("/auth");
+                        return;
+                      }
+                    }}>Ask Question</Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[925px] max-h-[40rem] overflow-y-scroll ">
                     <DialogHeader>

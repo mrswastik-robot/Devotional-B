@@ -62,6 +62,12 @@ type PostType = {
 const ProfilePage = (props: Props) => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
+
+  //followF
+  const [followers, setFollowers] = useState<any>([]);
+  const [following, setFollowing] = useState<any>([]);
+  const [loadingFollowers, setLoadingFollowers] = useState(true);
+  const [loadingFollowing, setLoadingFollowing] = useState(true);
   const [answers, setAnswers] = useState<PostType[]>([]);
   const [answerLastDoc, setAnswerLastDoc] = useState<any>(null);
   const [answerStart, setAnswerStart] = useState<boolean>(true);
@@ -113,6 +119,48 @@ const ProfilePage = (props: Props) => {
       console.error('Error deleting post: ', error);
     }
   }
+
+  const fetchFollowers = async () => {
+    setPostType('followers');
+    try {
+      setLoadingFollowers(true);
+      if(user){
+      const userRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        console.log(userData);
+        setFollowers(userData.followers);
+      }
+    }
+      setLoadingFollowers(false);
+    } catch (error) {
+      console.error("Error fetching followers:", error);
+      setLoadingFollowers(false);
+    }
+    console.log("Follower A ", followers);
+  };
+
+  const fetchFollowing = async () => {
+    setPostType('following');
+    try {
+      setLoadingFollowing(true);
+      if(user){
+      const userRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setFollowing(userData.following);
+      }
+    }
+      setLoadingFollowing(false);
+    } catch (error) {
+      console.error("Error fetching following:", error);
+      setLoadingFollowing(false);
+    }
+  };
+
+  console.log("user g: ", user);
 
   useEffect(() => {
     //console.log("heyyyyyyyyyyy");
@@ -312,6 +360,7 @@ const ProfilePage = (props: Props) => {
 
     //fetching the savedPosts from the 'users' collection
     // Fetching the savedPosts from the 'users' collection
+
 useEffect(() => {
   const fetchSavedPosts = async () => {
     if (!user) return;
@@ -369,23 +418,6 @@ useEffect(() => {
       setAnswerStart(true);
       setReload((prev)=>!prev)
     }
-    
-
-  function handleToggleSwithFollowers(){
-    toast({
-      title:'Feature Coming Soon',
-      variant:'default',
-    })
-    setPostType('followers')
-  }
-
-  function handleToggleSwithFollowing(){
-    toast({
-      title:'Feature Coming Soon',
-      variant:'default',
-    })
-    setPostType('following');
-  }
 
   function handleToggleSwithAnswers(){
     setAnswerStart(true);
@@ -418,11 +450,12 @@ useEffect(() => {
         <TabsTrigger value="answers" onClick={handleToggleSwithAnswers}>Answers</TabsTrigger>
         <TabsTrigger value="anonymous" onClick={handleToggleSwitchAnonymous}>Anonymous</TabsTrigger>
         <TabsTrigger value="saved" onClick={handleToggleSwithcSaved}>Saved Posts</TabsTrigger>
-        <TabsTrigger value="followers" onClick={handleToggleSwithFollowers}>Followers</TabsTrigger>
-        <TabsTrigger value="following" onClick={handleToggleSwithFollowing}>Following</TabsTrigger>
+        <TabsTrigger value="followers" onClick={fetchFollowers}>Followers</TabsTrigger>
+        <TabsTrigger value="following" onClick={fetchFollowing}>Following</TabsTrigger>
       </TabsList>
     </Tabs>
     </div>
+
     {(postType=='normal'||postType=='anonymous'||postType=='answers')&&
       <div className="border-y-[1px] border-black border-opacity-15 py-2 flex justify-between items-center">
         <div className="font-[600] opacity-80 ml-2">
@@ -559,15 +592,47 @@ useEffect(() => {
             </div>
                     :<div>{
                       // <NetworkList/> Will make a new component for followers and following list till then displaying no posts found.
-                      <div className="flex items-center justify-center flex-col mt-5 w-full">
-          <Image
-            src="/trash.png"
-            width={300}
-            height={300}
-            className=" w-[10rem] h-[9rem] rounded-full"
-            alt="Profile Pic"
-          />
-          <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+        //               <div className="flex items-center justify-center flex-col mt-5 w-full">
+        //   <Image
+        //     src="/trash.png"
+        //     width={300}
+        //     height={300}
+        //     className=" w-[10rem] h-[9rem] rounded-full"
+        //     alt="Profile Pic"
+        //   />
+        //   <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+        // </div>
+
+        //followerList
+
+        <div>
+          {
+            postType=='followers'?<div>
+            {
+              loadingFollowers?<Loader/>:
+              followers&&followers.length>0?<div>
+                {
+                  followers.map((follower:string, index:number)=>{
+                    return <div key={index}>{follower}</div>
+                  })
+                }
+              </div>:<div>No Followers Found...</div>
+            }
+            </div>:postType=='following'?<div>
+              {
+                loadingFollowing?<Loader/>:
+                following&&following.length>0?<div>
+                  {
+                    following.map((following:string, index:number)=>{
+                      return <div key={index}>{following}</div>
+                    })
+                  }
+                </div>:<div>
+                  No Following Found...
+                </div>
+              }
+            </div>:<div>Invalid Tab</div>
+          }
         </div>
                       }</div>
                   }

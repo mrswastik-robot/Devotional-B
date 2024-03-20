@@ -20,7 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { auth, db } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { collection, doc, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter, updateDoc } from "firebase/firestore";
 
 type Props = {
   answers: {
@@ -63,6 +63,8 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
   
   //to send in postvoteclient for voting system
   const [user] = useAuthState(auth);
+  const [followedUsers, setFollowedUsers] = useState<string[]>([]);
+  const [loadingFollowedUsers, setLoadingFollowedUsers] = useState(false);
   const [lastAnswer, setLastAnswer] = useState<AnswerType | null>(null);
   const [loading, setLoading] = useState(false);
   const [dispAnswer, setDispAnswer] = useState<AnswerType[]>([] as AnswerType[]);
@@ -117,6 +119,61 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
     fetchData();
   }, [postId, answers, commentAdded]);
+
+  // Fetch followed users on component mount
+  useEffect(() => {
+    const fetchFollowedUsers = async () => {
+      if (!user) return;
+
+      setLoadingFollowedUsers(true);
+      const userRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const followed = userData?.following || [];
+        setFollowedUsers(followed);
+      }
+
+      setLoadingFollowedUsers(false);
+    };
+
+    fetchFollowedUsers();
+  }, [user]);
+
+  const followUser = async (userId: string) => {
+    if (!user) return;
+
+    const userRef = doc(db, 'users', user.uid);
+    await updateDoc(userRef, {
+      following: arrayUnion(userId),
+    });
+
+    // Update the local state to reflect the followed user
+    setFollowedUsers((prevFollowed) => [...prevFollowed, userId]);
+    toast({
+      title: 'You are now following this user.',
+      variant: 'default',
+    });
+  };
+
+  const unfollowUser = async (userId: string) => {
+    if (!user) return;
+
+    const userRef = doc(db, 'users', user.uid);
+    await updateDoc(userRef, {
+      following: arrayRemove(userId),
+    });
+
+    // Update the local state to reflect the unfollowed user
+    setFollowedUsers((prevFollowed) => prevFollowed.filter((id) => id !== userId));
+    toast({
+      title: 'You have unfollowed this user.',
+      variant: 'default',
+    });
+  };
+
+  const isUserFollowed = (userId: string) => followedUsers.includes(userId);
 
   const loadMoreAnswers = async () => {
     setLoading(true);
@@ -196,7 +253,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
                 </Avatar>
                 {/* </div> */}
                 <span className="mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-white">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
-                {answer.anonymity ? null : (
+                {answer.anonymity || !user || answer.uid === user.uid ? null : (
               <div className=" flex space-x-1 mr-5">
                 <svg
                   viewBox="0 0 48 48"
@@ -219,16 +276,17 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
                   </g>
                 </svg>
 
-                <div
-                  className=" text-blue-500 text-xs mt-[0.87rem] p-0 hover:underline"
-                  onClick={() => {
-                    toast({
-                      title: " Feature coming soon ... ",
-                      variant: "feature",
-                    });
-                  }}
-                >
-                  Follow
+                <div>
+                {(
+                  <button
+                    className=" text-blue-500 text-xs mt-[0.87rem] p-0 hover:underline cursor-pointer"
+                    onClick={() => (isUserFollowed(answer.uid) ? unfollowUser(answer.uid) : followUser(answer.uid))}
+                  >
+                    <span className="sm:block hidden">
+                      {isUserFollowed(answer.uid) ? 'Following' : 'Follow'}
+                    </span>
+                  </button>
+                )}
                 </div>
               </div>
             )}
@@ -315,3 +373,4 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
   );
 };
 export default AnsPost;
+

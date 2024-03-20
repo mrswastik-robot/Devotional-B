@@ -320,19 +320,6 @@ const Navbar = ({}: Props) => {
             />
             </Link>
           </Button>
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setClicked("notebook");
-              toast({
-                title: "Feature Coming Soon",
-              })
-            }}
-          >
-            <UserRoundPlus
-              className={`w-5 h-5 ${clicked === "notebook" ? "text-red-500" : ""}`}
-            />
-          </Button>
           
           <Button variant="ghost" onClick={() =>{ 
             setClicked("notification"); 

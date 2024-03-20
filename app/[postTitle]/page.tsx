@@ -25,6 +25,7 @@ import {
   where,
   increment,
   updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
@@ -232,6 +233,25 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   
       console.log("Document written with ID: ", docRef.id);
 
+      // create a notification for the question owner
+      const notificationCollection = collection(db, "notifications");
+      const newNotificationRef = docc(notificationCollection);
+      await setDoc(newNotificationRef, {
+        type: "answer",
+        questionId: questionId,
+        questionTitle: queObject.title,
+        questionUid: queObject.uid,
+        answerId: docRef.id,
+        answerDescription: data.description,
+        answerUid: user?.uid,
+        answerName: user?.displayName,
+        answerProfilePic: user?.photoURL,
+        createdAt: serverTimestamp(),
+        read: false,
+      });
+
+
+      // Generate Keywords and Hashtags for the answer
       try {
         console.log("keyword Gen.....")
         const docRef = await addDoc(collection(db, 'keywords'), {

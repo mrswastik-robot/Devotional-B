@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 // import { useRouter } from "next/router";        this won't work as we are using next/navigation in Next.js 14
@@ -80,12 +80,13 @@ import { QuestionType } from "@/schemas/question";
 import { db , storage } from "@/utils/firebase";
 import { useSearchParams } from "next/navigation";
 
-import { addDoc, collection, doc, onSnapshot, serverTimestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 import MobileSidebar from "./MobileSidebar";
 
 import { useToast } from "./ui/use-toast";
+import { Separator } from "./ui/separator";
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -113,7 +114,10 @@ const Navbar = ({}: Props) => {
   const [progress , setProgress] = useState<number | null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
 
+  //for real-time notifications
+  const [notifications , setNotifications] = useState<any[]>([]);
 
+  //for algolia search
   const dispatch = useDispatch();
   const searchText = useSelector((state: RootState) => state.search.searchText);
 
@@ -189,6 +193,9 @@ const Navbar = ({}: Props) => {
   }
 
   }
+  
+
+  //just for that ' askQuestion ' button in the navbar
 
   async function createQuestionPost(data: Input) {
 
@@ -269,11 +276,31 @@ const Navbar = ({}: Props) => {
 
   const [user, loading] = useAuthState(auth);
 
+  //for real-time notifications
+  useEffect(() => {
+    if (user) {
+      const notificationsRef = collection(db, "notifications");
+      const q = query(notificationsRef, where("questionUid", "==", user.uid) , orderBy("createdAt", "desc"));
+  
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const newNotifications = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setNotifications(newNotifications);
+      });
+  
+      // Clean up the listener when the component unmounts
+      return unsubscribe;
+    }
+  }, [user]);
+
   const pathname = usePathname();
 
   if (pathname === "/auth") {
     return null;
   }
+    
 
 
   return (
@@ -321,16 +348,43 @@ const Navbar = ({}: Props) => {
             </Link>
           </Button>
           
-          <Button variant="ghost" onClick={() =>{ 
-            setClicked("notification"); 
-            toast({
-              title: "Feature Coming Soon",
-            })
-            }}>
-            <Bell
-              className={`w-5 h-5 ${clicked === 'notification' ? "text-red-500" : ""}`}
-            />
-          </Button>
+          {/* Notification Drop-down */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" onClick={() => setClicked("notification")}>
+                <Bell
+                  className={`h-5 w-5 ${clicked === 'notification' ? "text-red-500 " : ""}`}
+                />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                {notifications.map((notification) => (
+                  <DropdownMenuItem key={notification.id}>
+                    <Link href={`/${encodeURIComponent(notification.questionTitle.split(" ").join("-"))}`} className=" flex gap-2">
+                      <Image
+                      src={notification.answerProfilePic || "/nodp.webp"}
+                      alt="profile picture"
+                      width={24}
+                      height={24}
+                      className=" h-8 w-8 rounded-full my-auto"
+                      />
+                      <span>
+                        <span className="font-bold">{notification.answerName}</span> 
+                        answered your question <span className=" font-bold underline">{notification.questionTitle}</span>
+                      </span>
+                    </Link>
+                    <Separator orientation="horizontal" className=" absolute bottom-0 w-full" />
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
         </div>
         </div>
 

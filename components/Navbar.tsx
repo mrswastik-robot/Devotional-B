@@ -276,24 +276,46 @@ const Navbar = ({}: Props) => {
 
   const [user, loading] = useAuthState(auth);
 
-  //for real-time notifications
-  useEffect(() => {
-    if (user) {
-      const notificationsRef = collection(db, "notifications");
-      const q = query(notificationsRef, where("questionUid", "==", user.uid) , orderBy("createdAt", "desc"));
-  
-      const unsubscribe = onSnapshot(q, snapshot => {
-        const newNotifications = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setNotifications(newNotifications);
-      });
-  
-      // Clean up the listener when the component unmounts
-      return unsubscribe;
-    }
-  }, [user]);
+  //fetching real-time notifications
+useEffect(() => {
+  if (user) {
+    const notificationsRef = collection(db, "notifications");
+    const q1 = query(
+      notificationsRef, 
+      where("questionUid", "==", user.uid),
+      where("answerUid", "<", user.uid),
+      orderBy("createdAt", "desc")
+    );
+    const q2 = query(                    //had to do it like this in order to show the notification only when other users answer the question and not when the user answers his own question himself
+      notificationsRef, 
+      where("questionUid", "==", user.uid),
+      where("answerUid", ">", user.uid),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribe1 = onSnapshot(q1, snapshot => {
+      const newNotifications = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setNotifications(newNotifications);
+    });
+
+    const unsubscribe2 = onSnapshot(q2, snapshot => {
+      const newNotifications = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setNotifications(newNotifications);
+    });
+
+    // Clean up the listeners when the component unmounts
+    return () => {
+      unsubscribe1();
+      unsubscribe2();
+    };
+  }
+}, [user]);
 
   const pathname = usePathname();
 
@@ -357,7 +379,7 @@ const Navbar = ({}: Props) => {
                 />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent className="w-auto overflow-auto px-2 break-words">
               <DropdownMenuLabel>Notifications</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
@@ -372,7 +394,7 @@ const Navbar = ({}: Props) => {
                       className=" h-8 w-8 rounded-full my-auto"
                       />
                       <span>
-                        <span className="font-bold">{notification.answerName}</span> 
+                        <span className="font-bold">{notification.answerName} </span> 
                         answered your question <span className=" font-bold underline">{notification.questionTitle}</span>
                       </span>
                     </Link>

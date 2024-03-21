@@ -322,13 +322,16 @@ const Sidebar = (props: Props) => {
               </li>
 
               <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
-                <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
+                <Link href={'/notification'}>
+                <button>
                   <SheetClose className=" flex gap-2">
                     <Bell />
                     <p>Notifications</p>
                   </SheetClose>
                 </button>
+                </Link>
               </li>
+
               <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
                 <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
                   <SheetClose className=" flex gap-2">
@@ -337,6 +340,7 @@ const Sidebar = (props: Props) => {
                   </SheetClose>
                 </button>
               </li>
+              
               <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
                 <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
                   <SheetClose className=" flex gap-2">

@@ -90,7 +90,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   };
 
   const handleSave = async () => {
-    if (!user) {
+    if (!user||user.isAnonymous==true) {
       toast({
         title: " Please sign in to save posts ",
         variant: "destructive",
@@ -179,10 +179,10 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   //console.log("Id: ", post.uid, " ",  post.title);
 
   const handleFollow = async () => {
-    if (!user) {
+    if (!user||(user&&user.isAnonymous==true)) {
       toast({
         title: " Please login to follow others ",
-        variant: "default",
+        variant: "destructive",
       });
       return;
     }

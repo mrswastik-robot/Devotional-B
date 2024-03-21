@@ -573,7 +573,7 @@ const Navbar = ({}: Props) => {
               <DropdownMenuItem onClick={
                 () => {
                   auth.signOut();
-                  router.push("/auth");
+                  //router.push("/auth");
                 }
                 }>
                 Log out

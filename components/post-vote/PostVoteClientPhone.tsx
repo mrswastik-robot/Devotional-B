@@ -5,6 +5,9 @@ import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/utils/firebase";
+import { useToast } from "../ui/use-toast";
 
 import { doc, getDoc, setDoc, deleteDoc, onSnapshot , runTransaction , increment} from "firebase/firestore";
 import { db } from "@/utils/firebase";
@@ -24,6 +27,8 @@ const PostVoteClientPhone = ({
 }: Props) => {
   const [currentVote, setCurrentVote] = useState<"UP" | "DOWN" | null>(null);
   const [votesAmt, setVotesAmt] = useState<number>(0);
+  const [user, loading] = useAuthState(auth);
+  const { toast } = useToast();
 
   useEffect(() => {
     let docPath = `questions/${postId}`;
@@ -61,6 +66,16 @@ const PostVoteClientPhone = ({
   }, [postId, postType, questionId, userId]);
 
   const vote = async (type: "UP" | "DOWN") => {
+    
+    if(!loading&&!user||user?.isAnonymous==true)
+    {
+      toast({
+        title: " Please sign in to vote posts ",
+        variant: "destructive",
+      });
+      return;
+    }
+    else{
     let docPath = `questions/${postId}`;
   
     if (postType === "answers") {
@@ -107,6 +122,7 @@ const PostVoteClientPhone = ({
         });
       }
     });
+  }
   };
   
 

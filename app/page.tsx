@@ -96,6 +96,7 @@ export default function Home() {
   const [progress , setProgress] = useState<number | null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
   const [selectC, setSelectC] = useState<any>([]);
+  const [onFirstVisit, setOnFirstVisit] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>('');
 
@@ -205,8 +206,14 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if(!user && !loading)
+    if(!user && !loading && !onFirstVisit)
+    {
+      setOnFirstVisit(true);
       signingInAnonymously();
+    }
+    else if(!loading&&user){
+      setOnFirstVisit(true);
+    }
   }, [user, loading , router])
 
   const addDetails = async()=>{
@@ -240,7 +247,7 @@ export default function Home() {
 
   const timeout = setTimeout(() => {
     addDetails();
-    console.log("hii");
+    //console.log("hii");
   }, 3000);
 
 
@@ -466,7 +473,7 @@ export default function Home() {
           <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-3 text-sm leading-6'>
             <div className='flex rounded-md justify-between md:min-h-[5rem] gap-x-4 py-3'>
               {
-                isGuest === 'true' ? (
+                (isGuest === 'true' || user?.isAnonymous==true) ? (
                   <p className=" text-zinc-500">
                     You are currently logged in as a Guest. To post question you need to have an account.
                   </p>
@@ -482,14 +489,7 @@ export default function Home() {
             <div>
               <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="default"  className=" w-full" disabled={isGuest === 'true'} onClick={()=>{
-
-                      if(user?.isAnonymous){
-                        auth.signOut();
-                        router.push("/auth");
-                        return;
-                      }
-                    }}>Ask Question</Button>
+                    <Button variant="default"  className=" w-full" disabled={isGuest === 'true'||user?.isAnonymous==true}>Ask Question</Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[925px] max-h-[40rem] overflow-y-scroll ">
                     <DialogHeader>

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import { auth, db } from "@/utils/firebase";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -157,24 +157,38 @@ const LoginPage = (props: Props) => {
   };
 
   useEffect(() => {
-
     if (user) {
       const createUserDocument = async () => {
         const userRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(userRef);
-
-        if(!docSnap.exists())
-        {
+  
+        if (!docSnap.exists()) {
+          // User document doesn't exist, create it with basic data
           await setDoc(userRef, {
-            //savedPost is an array of postIds and left empty here , will be updated when user saves a post in Post.tsx
+            name: user.displayName || "", // Use user's display name or empty string
+            email: user.email || "", // Use user's email or empty string
+            profilePic: user.photoURL || "", // Use user's photo URL or empty string
+            //savedPosts: [], Initialize savedPost array
           });
+        } else {
+          // User document exists, check if name, email, and profilePic fields are missing
+          const userData = docSnap.data();
+          if (!userData.name || !userData.email || !userData.profilePic) {
+            // Update user document with missing fields
+            await updateDoc(userRef, {
+              name: userData.name || user.displayName || "", // Use existing or new display name
+              email: userData.email || user.email || "", // Use existing or new email
+              profilePic: userData.profilePic || user.photoURL || "", // Use existing or new photo URL
+            });
+          }
         }
-      }
+      };
+  
       router.push("/");
       createUserDocument();
     }
-
   }, [user, loading, router]);
+  
 
   return (
     <>

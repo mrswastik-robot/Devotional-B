@@ -516,7 +516,12 @@ const Navbar = ({}: Props) => {
                 </div>
                 </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => auth.signOut()}>
+              <DropdownMenuItem onClick={
+                () => {
+                  auth.signOut();
+                  router.push("/auth");
+                }
+                }>
                 Log out
               </DropdownMenuItem>
             </DropdownMenuContent>

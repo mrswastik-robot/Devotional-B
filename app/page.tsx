@@ -68,7 +68,7 @@ import { auth , db , storage } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter , useSearchParams } from "next/navigation";
 
-import { addDoc, collection, doc, onSnapshot, serverTimestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 
@@ -208,6 +208,73 @@ export default function Home() {
     if(!user && !loading)
       signingInAnonymously();
   }, [user, loading , router])
+
+  const addDetails = async()=>{
+    if(user){
+      const userRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(userRef);
+  
+        //console.log("UserDT: ", user, "N: ", user.displayName, "E: ", user.email, "P: ", user.photoURL);
+        if (!docSnap.exists()) {
+          // User document doesn't exist, create it with basic data
+          await setDoc(userRef, {
+            name: user.displayName || "", // Use user's display name or empty string
+            email: user.email || "", // Use user's email or empty string
+            profilePic: user.photoURL || "", // Use user's photo URL or empty string
+            //savedPosts: [], Initialize savedPost array
+          });
+        } else {
+          // User document exists, check if name, email, and profilePic fields are missing
+          const userData = docSnap.data();
+          if (!userData.name || !userData.email || !userData.profilePic || userData.email==="" || userData.profilePic==="" ) {
+            // Update user document with missing fields
+            await updateDoc(userRef, {
+              name: userData.name || user.displayName || "", // Use existing or new display name
+              email: userData.email || user.email || "", // Use existing or new email
+              profilePic: userData.profilePic || user.photoURL || "", // Use existing or new photo URL
+            });
+          }
+        }
+    }
+  }
+
+  const timeout = setTimeout(() => {
+    addDetails();
+    console.log("hii");
+  }, 3000);
+
+
+  useEffect(() => {
+    if (user) {
+      const createUserDocument = async () => {
+        const userRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(userRef);
+  
+        //console.log("UserD: ", user, "N: ", user.displayName, "E: ", user.email, "P: ", user.photoURL);
+        if (!docSnap.exists()) {
+          // User document doesn't exist, create it with basic data
+          await setDoc(userRef, {
+            name: user.displayName || "", // Use user's display name or empty string
+            email: user.email || "", // Use user's email or empty string
+            profilePic: user.photoURL || "", // Use user's photo URL or empty string
+            //savedPosts: [], Initialize savedPost array
+          });
+        } else {
+          // User document exists, check if name, email, and profilePic fields are missing
+          const userData = docSnap.data();
+          if (!userData.name || !userData.email || !userData.profilePic || userData.email==="" || userData.profilePic==="" ) {
+            // Update user document with missing fields
+            await updateDoc(userRef, {
+              name: userData.name || user.displayName || "", // Use existing or new display name
+              email: userData.email || user.email || "", // Use existing or new email
+              profilePic: userData.profilePic || user.photoURL || "", // Use existing or new photo URL
+            });
+          }
+        }
+      };
+      createUserDocument();
+    }
+  }, [user, loading, router]);
   
   
   //algolsearchClientff

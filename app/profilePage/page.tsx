@@ -15,6 +15,7 @@ import Loader from '@/components/ui/Loader';
 import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import UserDetails from "@/components/UserDetails";
 
 import {
   DropdownMenu,
@@ -613,7 +614,9 @@ useEffect(() => {
               followers&&followers.length>0?<div>
                 {
                   followers.map((follower:string, index:number)=>{
-                    return <div key={index}>{follower}</div>
+                    return <div key={index}>
+                      <UserDetails uid={follower}/>
+                    </div>
                   })
                 }
               </div>:<div>No Followers Found...</div>
@@ -624,7 +627,9 @@ useEffect(() => {
                 following&&following.length>0?<div>
                   {
                     following.map((following:string, index:number)=>{
-                      return <div key={index}>{following}</div>
+                      return <div key={index}>
+                        <UserDetails uid={following}/>
+                      </div>
                     })
                   }
                 </div>:<div>

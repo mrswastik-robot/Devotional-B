@@ -44,10 +44,17 @@ export async function generateMetadata({ params }: Props) : Promise<Metadata> {
     const postTitleWithSpaces = decodeURIComponent(params.postTitle as string).split("-").join(" ");
     const { post }= await fetchPost(postTitleWithSpaces);
     const metadata: Metadata = {
-        title: post[0].title,
-        description: post[0].description,
-        keywords: post[0].keywords,
+        title: post[0]?.title,
+        description: post[0]?.description,
+        keywords: post[0]?.keywords,
         // answerKeywords: post[0].answerKeywords
+        openGraph: {
+            title: post[0]?.title,
+            description: post[0]?.description,
+            type: "website",
+            locale: "en_US",
+            url: "https://devotional-b.vercel.app",
+        },
     };
     return metadata;
     

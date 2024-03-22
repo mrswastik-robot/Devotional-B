@@ -14,6 +14,21 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Devotional-B",
   description: "Get all your answers here.",
+  openGraph: {
+    title: "Devotional-B",
+    description: "Get all your answers here.",
+    type: "website",
+    locale: "en_US",
+    url: "https://devotional-b.vercel.app",
+    // images: [
+    //   {
+    //     url: "https://devotional-b.vercel.app/og.png",
+    //     width: 1200,
+    //     height: 630,
+    //     alt: "Devotional-B",
+    //   },
+    // ],
+  },
 };
 
 export default function RootLayout({

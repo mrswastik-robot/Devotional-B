@@ -380,7 +380,9 @@ useEffect(() => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-auto overflow-auto px-2 break-words">
-              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                {notifications.length === 0 ? "No new notifications" : "Notifications"}
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 {notifications.map((notification) => (

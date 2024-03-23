@@ -38,7 +38,7 @@ const RightHandFeed = (props: Props) => {
   useEffect(() => {
 
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(10));
+    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(7));
 
     const unsub = onSnapshot(q, async(snapshot) => {
       const postsData =[];
@@ -80,7 +80,7 @@ const RightHandFeed = (props: Props) => {
       <TableBody>
         {posts.map((post, index) => (
           <TableRow key={index}>
-            <Link href={`/${post.title.split(' ').join('-')}`}>
+            <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
             <TableCell className="text-[#195FAA] text-base">{post.title}</TableCell>
             </Link>
           </TableRow>

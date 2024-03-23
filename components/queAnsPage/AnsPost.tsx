@@ -98,6 +98,8 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
     const fetchData = async () => {
       setLoading(true);
 
+      if(postId)
+      {
       // Set up the initial query
       const ansQuery = query(
         collection(db, 'questions', postId, 'answers'),
@@ -113,6 +115,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
         setLastAnswer(newAnswers[newAnswers.length - 1]);
         if(newAnswers.length<5){setMoreAnswers(false)}else setMoreAnswers(true);
       }
+    } 
 
       setLoading(false);
     };

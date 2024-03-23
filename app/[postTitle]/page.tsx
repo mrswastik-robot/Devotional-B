@@ -335,6 +335,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         };
       } else {
         console.log("No such document!");
+        router.push("/404");
       }
     });
   }, [postTitleWithSpaces, postTitle]);

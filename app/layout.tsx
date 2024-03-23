@@ -12,7 +12,7 @@ import { GeistSans } from 'geist/font/sans';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Devotional-B",
+  title: "Devotional-B - A website devoted to devotees.",
   description: "Get all your answers here.",
   openGraph: {
     title: "Devotional-B",

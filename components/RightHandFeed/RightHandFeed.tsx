@@ -81,7 +81,7 @@ const RightHandFeed = (props: Props) => {
         {posts.map((post, index) => (
           <TableRow key={index}>
             <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-            <TableCell className="text-[#195FAA] text-base">{post.title}</TableCell>
+            <TableCell className="text-[#195FAA] text-base">{post.title.length>70?post.title.substring(0, 69)+"...":post.title}</TableCell>
             </Link>
           </TableRow>
         ))}

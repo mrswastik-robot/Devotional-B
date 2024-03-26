@@ -313,7 +313,7 @@ export default function Home() {
 
   async function createQuestionPost(data: Input) {
     
-    console.log("creating");
+    //console.log("creating");
 
     const docRef = await addDoc(collection(db, "questions"), {
       title: data.title,
@@ -382,6 +382,13 @@ export default function Home() {
     createQuestionPost(data);
     setNewPost((prev)=>!prev);
     
+  }
+
+  const guestHandler = ()=>{
+    if(user?.isAnonymous){
+    auth.signOut();
+    router.push("/auth");
+    }
   }
 
   const [searchTerm , setSearchTerm] = useState("");
@@ -488,9 +495,13 @@ export default function Home() {
 
             <div>
               <Dialog>
+                {
+                  isGuest === 'true'||user?.isAnonymous==true?
+                  <Button variant="default"  className=" w-full" onClick={guestHandler}>Ask Question</Button>:
                   <DialogTrigger asChild>
-                    <Button variant="default"  className=" w-full" disabled={isGuest === 'true'||user?.isAnonymous==true}>Ask Question</Button>
+                    <Button variant="default"  className=" w-full" >Ask Question</Button>
                   </DialogTrigger>
+  }
                   <DialogContent className="sm:max-w-[925px] max-h-[40rem] overflow-y-scroll ">
                     <DialogHeader>
                       <DialogTitle>Post Question</DialogTitle>

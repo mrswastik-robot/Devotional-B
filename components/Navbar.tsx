@@ -87,6 +87,8 @@ import MobileSidebar from "./MobileSidebar";
 
 import { useToast } from "./ui/use-toast";
 import { Separator } from "./ui/separator";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
+import { LuXCircle } from "react-icons/lu";
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -112,8 +114,10 @@ const Navbar = ({}: Props) => {
   //const [user, loading] = useAuthState(auth);
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [selectC, setSelectC] = useState<any>([]);
   const [progress , setProgress] = useState<number | null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>('');
 
   //for real-time notifications
   const [notifications , setNotifications] = useState<any[]>([]);
@@ -133,6 +137,24 @@ const Navbar = ({}: Props) => {
       anonymity: false,
     },
   });
+
+  const handleSelectChange = (newValue: string | undefined) => {
+    // setSelectedCategory(newValue);
+    if(!selectC.includes(newValue)){
+    setSelectC((prev:any)=>{
+      return [...prev, newValue]
+    })
+  }
+    //console.log(selectC);
+  };
+
+  const delCategories = (category:string)=>{
+    let newCategory=selectC.filter((cat:any)=>{
+      console.log(cat, " ", category);
+      return cat!=category;
+    })
+  setSelectC(newCategory);
+  }
 
   const uploadImage = async(file: any) => {
     if(file == null) return;
@@ -208,6 +230,7 @@ const Navbar = ({}: Props) => {
       name: user?.displayName,
       createdAt: serverTimestamp(),
       questionImageURL: imageUrl,
+      category: selectC,
       anonymity: data.anonymity,
       // ansNumbers: 0,
     });
@@ -280,6 +303,13 @@ const Navbar = ({}: Props) => {
   const signoutHandler = ()=>{
     auth.signOut();
     if(user?.isAnonymous){
+    router.push("/auth");
+    }
+  }
+
+  const guestHandler = ()=>{
+    if(user?.isAnonymous){
+    auth.signOut();
     router.push("/auth");
     }
   }
@@ -439,9 +469,13 @@ useEffect(() => {
 
         <div>
               <Dialog>
+                {
+                  isGuest === 'true'||user?.isAnonymous==true?
+                  <Button variant="outline"  className=" rounded-3xl w-full" onClick={guestHandler}>Ask Question</Button>:
                   <DialogTrigger asChild>
-                    <Button variant="outline"  className=" rounded-3xl w-full" disabled={isGuest === 'true'}>Ask Question</Button>
+                    <Button variant="outline"  className=" rounded-3xl w-full">Ask Question</Button>
                   </DialogTrigger>
+  }
                   <DialogContent className="sm:max-w-[925px] max-h-[55rem] overflow-y-scroll ">
                     <DialogHeader>
                       <DialogTitle>Post Question</DialogTitle>
@@ -504,6 +538,31 @@ useEffect(() => {
                                 <Image src={previewImg} alt="previewImage" width={250} height={250}/>
                               </div>
                             }
+                          </div>
+                          <div>
+                          <Select value={selectedCategory} onValueChange={handleSelectChange} >
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Select a Category" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Categories</SelectLabel>
+          <SelectItem value="How To">How To</SelectItem>
+          <SelectItem value="Help">Help</SelectItem>
+          <SelectItem value="Mystery/Haunted/Ghost">Mystery/Haunted/Ghost</SelectItem>
+          <SelectItem value="Astrology/Remedies/Occult">Astrology/Remedies/Occult</SelectItem>
+          <SelectItem value="GemStones/Rudraksha">GemStones/Rudraksha</SelectItem>
+          <SelectItem value="Others">Others</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+    <div className="flex">
+                              {
+                                selectC.map((category:string, index:number)=>{
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                })
+                              }
+                            </div>
                           </div>
                           <FormField
                             control={form.control}

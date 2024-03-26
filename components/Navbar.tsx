@@ -109,6 +109,7 @@ const Navbar = ({}: Props) => {
   const searchParams = useSearchParams();
   const isGuest = searchParams.get('isGuest');
   const [newPost, setNewPost] = useState(false);
+  //const [user, loading] = useAuthState(auth);
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
@@ -275,6 +276,13 @@ const Navbar = ({}: Props) => {
   const [clicked, setClicked] = useState("");
 
   const [user, loading] = useAuthState(auth);
+
+  const signoutHandler = ()=>{
+    auth.signOut();
+    if(user?.isAnonymous){
+    router.push("/auth");
+    }
+  }
 
   //fetching real-time notifications
 useEffect(() => {
@@ -587,20 +595,15 @@ useEffect(() => {
                 </DropdownMenuItem>
                 </Link>
                 <div className="mt-1 ml-2 mb-2">
-                <div className="flex items-center space-x-2">
-      <Switch id="airplane-mode" onCheckedChange={toggleTheme} checked={theme==='dark'}/>
+                <div className="flex items-center justify-between pr-1 space-x-2">
       <Label htmlFor="airplane-mode">Dark Mode</Label>
+      <Switch id="airplane-mode" onCheckedChange={toggleTheme} checked={theme==='dark'}/>
     </div>
                 </div>
                 </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={
-                () => {
-                  auth.signOut();
-                  //router.push("/auth");
-                }
-                }>
-                Log out
+              <DropdownMenuItem onClick={signoutHandler}>
+                {`${user.isAnonymous?"Sign Up":"Log Out"}`}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

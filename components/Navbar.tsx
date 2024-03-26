@@ -80,7 +80,7 @@ import { QuestionType } from "@/schemas/question";
 import { db , storage } from "@/utils/firebase";
 import { useSearchParams } from "next/navigation";
 
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where , getDocs, writeBatch } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 import MobileSidebar from "./MobileSidebar";
@@ -355,6 +355,29 @@ useEffect(() => {
   }
 }, [user]);
 
+
+//clear notifications
+const clearNotifications = async () => {
+  const batch = writeBatch(db);
+
+  // Get all the notifications documents for the current user
+  if(user){
+    const notificationsSnapshot = await getDocs(query(collection(db, "notifications"), where("questionUid", "==", user.uid)));
+  
+
+  // Add each document to the batch to be deleted
+  notificationsSnapshot.docs.forEach((doc) => {
+    batch.delete(doc.ref);
+  });
+
+  // Commit the batch
+  await batch.commit();
+
+}
+  // Clear the notifications state
+  setNotifications([]);
+};
+
   const pathname = usePathname();
 
   if (pathname === "/auth") {
@@ -418,8 +441,13 @@ useEffect(() => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-auto overflow-auto px-2 break-words">
-              <DropdownMenuLabel>
+              <DropdownMenuLabel className=" justify-between flex gap-8">
                 {notifications.length === 0 ? "No new notifications" : "Notifications"}
+                {notifications.length > 0 && (
+                  <button onClick={clearNotifications}>
+                    Clear
+                  </button>
+                )}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>

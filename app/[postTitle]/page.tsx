@@ -136,6 +136,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
 
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
+  //console.log("UserU: ", user);
   const [previewImg, setPreviewImg] = useState<any>(null);
 
   const uploadImage = async(file: any) => {
@@ -407,7 +408,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                     name="anonymity"
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-center justify-between rounded-lg  border-[1.6px] border-[#d3d7dd] p-2">                        <div className="">
-                          <FormLabel className="text-base">
+                          <FormLabel className={`text-base ${user?.isAnonymous?"opacity-50":""}`}>
                             Answer Anonymously
                           </FormLabel>
                           {/* <FormDescription>
@@ -419,6 +420,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                           <Switch className=""
                             checked={field.value}
                             onCheckedChange={field.onChange}
+                            disabled={user?.isAnonymous}
                           />
                         </FormControl>
                         </div>

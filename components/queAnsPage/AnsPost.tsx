@@ -190,7 +190,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
     );
 
     const ansSnapshot = await getDocs(ansQuery);
-
+    if(ansSnapshot.docs.length<=0){setMoreAnswers(false)}else setMoreAnswers(true);
     if (!ansSnapshot.empty) {
       const newAnswers = ansSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as AnswerType));
       setDispAnswer((prevAnswers) => [...prevAnswers, ...newAnswers]);

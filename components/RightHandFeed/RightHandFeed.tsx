@@ -69,7 +69,7 @@ const RightHandFeed = (props: Props) => {
 
   return (
 
-    <div className=' rounded-md bg-[#FFFFFF] dark:bg-[#262626]'>
+    <div className=' rounded-md max-h-[30rem] overflow-auto bg-[#FFFFFF] dark:bg-[#262626]'>
 
 <Table>
       <TableHeader>

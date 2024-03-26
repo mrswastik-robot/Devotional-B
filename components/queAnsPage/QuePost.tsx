@@ -140,10 +140,11 @@ useEffect(() => {
 }, [post.uid, user]);
 
 const handleFollow = async () => {
-  if (!user) {
+
+  if (!user||(user&&user.isAnonymous==true)) {
     toast({
       title: " Please login to follow others ",
-      variant: "default",
+      variant: "destructive",
     });
     return;
   }

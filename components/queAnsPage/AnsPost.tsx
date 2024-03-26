@@ -145,7 +145,14 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
   }, [user]);
 
   const followUser = async (userId: string) => {
-    if (!user) return;
+
+    if (!user||(user&&user.isAnonymous==true)) {
+      toast({
+        title: " Please login to follow others ",
+        variant: "destructive",
+      });
+      return;
+    }
 
     const userRef = doc(db, 'users', user.uid);
     await updateDoc(userRef, {
@@ -161,7 +168,13 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
   };
 
   const unfollowUser = async (userId: string) => {
-    if (!user) return;
+    if (!user||(user&&user.isAnonymous==true)) {
+      toast({
+        title: " Please login to follow others ",
+        variant: "destructive",
+      });
+      return;
+    }
 
     const userRef = doc(db, 'users', user.uid);
     await updateDoc(userRef, {

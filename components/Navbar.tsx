@@ -123,6 +123,7 @@ const Navbar = ({}: Props) => {
   const [notifications , setNotifications] = useState<any[]>([]);
   const [limitCount, setLimitCount] = useState(6); // Number of notifications to fetch at a time
   const [lastVisible, setLastVisible] = useState<any>(null);
+  const [showLoadMoreButton , setShowLoadMoreButton] = useState(true);
 
   //for algolia search
   const dispatch = useDispatch();
@@ -365,6 +366,9 @@ const Navbar = ({}: Props) => {
   }, [user, limitCount]);
 
   const loadMoreNotifications = () => {
+
+    setShowLoadMoreButton(false);
+
     if (lastVisible) {
       const notificationsRef = collection(db, "notifications");
       const nextQ1 = query(
@@ -526,7 +530,7 @@ const clearNotifications = async () => {
                 ))}
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              {notifications.length>0&&
+              {notifications.length>0&& showLoadMoreButton &&
               <div className="cursor-pointer w-full flex justify-center text-sm" onClick={loadMoreNotifications}>Load More</div>
               }
             </DropdownMenuContent>

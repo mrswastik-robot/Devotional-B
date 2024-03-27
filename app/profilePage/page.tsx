@@ -2,7 +2,7 @@
 
 import ProfileCard from "@/components/profilePage/ProfileCard";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef } from "react";
 import { useRouter } from "next/navigation";
 
 
@@ -63,6 +63,9 @@ type PostType = {
 const ProfilePage = (props: Props) => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
+
+  //for automating loadmore lazy load button ...
+  const loadMoreButtonRef = useRef<HTMLDivElement>(null);
 
   //followF
   const [followers, setFollowers] = useState<any>([]);
@@ -410,6 +413,31 @@ useEffect(() => {
       setLoadMore((prev)=>!prev)
     };
 
+
+    //useEffect for automting lazyload functionality
+  useEffect(() => {
+    if(morePosts){
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          handleLoadMore();
+        }
+      },
+      { threshold: 1 } // 1.0 means that when 100% of the target is visible within the element specified by the root option, the callback is invoked.
+    );
+  
+    if (loadMoreButtonRef.current) {
+      observer.observe(loadMoreButtonRef.current);
+    }
+  
+    return () => {
+      if (loadMoreButtonRef.current) {
+        observer.unobserve(loadMoreButtonRef.current);
+      }
+    };
+  }
+  }, [loadMoreButtonRef, handleLoadMore ]);
+
     const handleSortChange = ()=>{
       setStart(true);
       setAnonymousStart(true);
@@ -660,20 +688,26 @@ useEffect(() => {
           <div className="mt-2 mb-5">
             {isAnonymous ? (
               anonymousMorePosts ? (
-                <Button onClick={handleLoadMore}>LoadMore...</Button>
+                <div ref={loadMoreButtonRef}>
+                  <button onClick={handleLoadMore}></button>
+                </div>
               ) : (
                 <div>No More Posts...</div>
               )
             ):(
               isAnswers?(
                 answerMorePosts ? (
-                  <Button onClick={handleLoadMore}>LoadMore...</Button>
+                  <div ref={loadMoreButtonRef}>
+                  <button onClick={handleLoadMore}></button>
+                  </div>
                 ) : (
                   <div>No More Posts...</div>
                 )
               ):
                 morePosts ? (
-              <Button onClick={handleLoadMore}>LoadMore</Button>
+                  <div ref={loadMoreButtonRef}>
+                  <button onClick={handleLoadMore}></button>
+                </div>
             ) : (
               <div>No More Posts...</div>
             )

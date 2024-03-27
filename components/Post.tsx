@@ -167,7 +167,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   //for displaying 'more' button
   useEffect(() => {
     // Assuming a line height of around 20px
-    const maxHeight = 20 * 3; 
+    const maxHeight = 25 * 3; 
   
     if (pRef.current && pRef.current.offsetHeight > maxHeight) {
       setIsOverflowing(true);

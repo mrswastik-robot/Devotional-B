@@ -526,7 +526,9 @@ const clearNotifications = async () => {
                 ))}
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
+              {notifications.length>0&&
               <div className="cursor-pointer w-full flex justify-center text-sm" onClick={loadMoreNotifications}>Load More</div>
+              }
             </DropdownMenuContent>
           </DropdownMenu>
           

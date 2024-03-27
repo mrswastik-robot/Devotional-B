@@ -80,7 +80,7 @@ import { QuestionType } from "@/schemas/question";
 import { db , storage } from "@/utils/firebase";
 import { useSearchParams } from "next/navigation";
 
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where , getDocs, writeBatch } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where , getDocs, writeBatch, limit, startAfter } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 import MobileSidebar from "./MobileSidebar";
@@ -121,6 +121,8 @@ const Navbar = ({}: Props) => {
 
   //for real-time notifications
   const [notifications , setNotifications] = useState<any[]>([]);
+  const [limitCount, setLimitCount] = useState(6); // Number of notifications to fetch at a time
+  const [lastVisible, setLastVisible] = useState<any>(null);
 
   //for algolia search
   const dispatch = useDispatch();
@@ -315,46 +317,99 @@ const Navbar = ({}: Props) => {
   }
 
   //fetching real-time notifications
-useEffect(() => {
-  if (user) {
-    const notificationsRef = collection(db, "notifications");
-    const q1 = query(
-      notificationsRef, 
-      where("questionUid", "==", user.uid),
-      where("answerUid", "<", user.uid),
-      orderBy("createdAt", "desc")
-    );
-    const q2 = query(                    //had to do it like this in order to show the notification only when other users answer the question and not when the user answers his own question himself
-      notificationsRef, 
-      where("questionUid", "==", user.uid),
-      where("answerUid", ">", user.uid),
-      orderBy("createdAt", "desc")
-    );
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const notificationsRef = collection(db, "notifications");
+      const q1 = query(
+        notificationsRef,
+        where("questionUid", "==", user?.uid),
+        where("answerUid", "<", user?.uid),
+        orderBy("createdAt", "desc"),
+        limit(limitCount)
+      );
+      
+      const q2 = query(
+        notificationsRef,
+        where("questionUid", "==", user?.uid),
+        where("answerUid", "!=", user?.uid), // Filter out notifications where the answer is from the user
+        orderBy("createdAt", "desc"),
+        limit(limitCount)
+      );
 
-    const unsubscribe1 = onSnapshot(q1, snapshot => {
-      const newNotifications = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setNotifications(newNotifications);
-    });
+      const unsubscribe1 = onSnapshot(q1, (snapshot) => {
+        const newNotifications = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setNotifications(newNotifications);
+        setLastVisible(snapshot.docs[snapshot.docs.length - 1]); // Update last visible notification
+      });
 
-    const unsubscribe2 = onSnapshot(q2, snapshot => {
-      const newNotifications = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setNotifications(newNotifications);
-    });
+      const unsubscribe2 = onSnapshot(q2, (snapshot) => {
+        const newNotifications = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setNotifications(newNotifications);
+        setLastVisible(snapshot.docs[snapshot.docs.length - 1]); // Update last visible notification
+      });
 
-    // Clean up the listeners when the component unmounts
-    return () => {
-      unsubscribe1();
-      unsubscribe2();
+      // Clean up the listeners when the component unmounts
+      return () => {
+        unsubscribe1();
+        unsubscribe2();
+      };
     };
-  }
-}, [user]);
 
+    fetchNotifications();
+  }, [user, limitCount]);
+
+  const loadMoreNotifications = () => {
+    if (lastVisible) {
+      const notificationsRef = collection(db, "notifications");
+      const nextQ1 = query(
+        notificationsRef,
+        where("questionUid", "==", user?.uid),
+        where("answerUid", "<", user?.uid),
+        orderBy("createdAt", "desc"),
+        limit(limitCount),
+        startAfter(lastVisible)
+      );
+      
+      const nextQ2 = query(
+        notificationsRef,
+        where("questionUid", "==", user?.uid),
+        where("answerUid", "!=", user?.uid), // Filter out notifications where the answer is from the user
+        orderBy("createdAt", "desc"),
+        limit(limitCount),
+        startAfter(lastVisible)
+      );
+
+      const unsubscribeNext1 = onSnapshot(nextQ1, (snapshot) => {
+        const newNotifications = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setNotifications((prevNotifications) => [...prevNotifications, ...newNotifications]);
+        setLastVisible(snapshot.docs[snapshot.docs.length - 1]); // Update last visible notification
+      });
+
+      const unsubscribeNext2 = onSnapshot(nextQ2, (snapshot) => {
+        const newNotifications = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setNotifications((prevNotifications) => [...prevNotifications, ...newNotifications]);
+        setLastVisible(snapshot.docs[snapshot.docs.length - 1]); // Update last visible notification
+      });
+
+      // Clean up the listeners when the component unmounts
+      return () => {
+        unsubscribeNext1();
+        unsubscribeNext2();
+      };
+    }
+  };
 
 //clear notifications
 const clearNotifications = async () => {
@@ -450,7 +505,7 @@ const clearNotifications = async () => {
                 )}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup>
+              <DropdownMenuGroup className="max-h-[17rem] overflow-y-auto overflow-x-hidden">
                 {notifications.map((notification) => (
                   <DropdownMenuItem key={notification.id}>
                     <Link href={`/${encodeURIComponent(notification.questionTitle.split(" ").join("-"))}`} className=" flex gap-2">
@@ -471,7 +526,7 @@ const clearNotifications = async () => {
                 ))}
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              
+              <div className="cursor-pointer w-full flex justify-center text-sm" onClick={loadMoreNotifications}>Load More</div>
             </DropdownMenuContent>
           </DropdownMenu>
           

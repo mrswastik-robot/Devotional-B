@@ -355,7 +355,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           </Link>
           <button className="w-fit flex items-center gap-2">
             <ShareDialog
-              postLink={`/${post?.title?.split(" ").join("-")}`}
+              postLink={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
             />
           </button>
           <button

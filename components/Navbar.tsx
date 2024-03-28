@@ -509,7 +509,7 @@ const clearNotifications = async () => {
                 )}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup className="max-h-[17rem] overflow-y-auto overflow-x-hidden">
+              <DropdownMenuGroup className="max-h-[20rem] max-w-[20rem] overflow-y-auto overflow-x-hidden">
                 {notifications.map((notification) => (
                   <DropdownMenuItem key={notification.id}>
                     <Link href={`/${encodeURIComponent(notification.questionTitle.split(" ").join("-"))}`} className=" flex gap-2">

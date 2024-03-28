@@ -416,7 +416,7 @@ useEffect(() => {
 
     //useEffect for automting lazyload functionality
   useEffect(() => {
-    if(morePosts){
+    if(morePosts || anonymousMorePosts){
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -436,7 +436,7 @@ useEffect(() => {
       }
     };
   }
-  }, [loadMoreButtonRef, handleLoadMore ]);
+  }, [loadMoreButtonRef, handleLoadMore , morePosts , anonymousMorePosts]);
 
     const handleSortChange = ()=>{
       setStart(true);

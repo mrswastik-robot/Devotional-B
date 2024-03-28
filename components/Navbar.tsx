@@ -493,7 +493,7 @@ const clearNotifications = async () => {
           {/* Notification Drop-down */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="hover:bg-transparent" onClick={() => setClicked("notification")}>
+              <Button variant="ghost" className="hover:bg-transparent focus-visible:ring-0.1" onClick={() => setClicked("notification")}>
                 <Bell
                   className={`h-5 w-5 ${clicked === 'notification' ? "" : ""}`}
                 />

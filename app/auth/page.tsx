@@ -202,7 +202,7 @@ const LoginPage = (props: Props) => {
                   Devotional-B
                 </p>
                 <p className="mt-2 text-sm leading-4 text-slate-600">
-                  You must be logged in to perform this action.
+                  Your Personal Devotional Forum. Sign Up/Sign In to Continue.
                 </p>
               </div>
 
@@ -214,7 +214,7 @@ const LoginPage = (props: Props) => {
                     <span className=" text-blue-500">Privacy Policy</span>.
                   </p>
                   <button
-                    className=" md:mt-5 inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
                     onClick={signInWithGoogle}
                   >
                     <Image
@@ -241,16 +241,19 @@ const LoginPage = (props: Props) => {
                     Continue with Facebook
                   </button>
 
-                  <div className=" mt-2 w-full">
-                    <p className=" text-sm text-slate-600">
                       <button
-                        className="font-medium text-[#4285f4] hover:text-blue-600 w-full underline"
+                        className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
                         onClick={signingInAnonymously}
                       >
+                        <Image
+                      src="https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"
+                      alt="Google"
+                      width={18}
+                      height={18}
+                      className="h-[19px] w-[19px] "
+                    />
                         Continue as Guest
                       </button>
-                    </p>
-                  </div>
                 </div>
 
                 <div className="md:hidden flex w-full items-center gap-2 py-6 text-sm text-slate-600">
@@ -293,8 +296,8 @@ const LoginPage = (props: Props) => {
                       placeholder="Password"
                       onChange={(e) => setPassword(e.target.value)}
                     />
-                    <p className="mb-3 mt-2 text-sm text-gray-500">
-                      Reset your password?
+                    <p className="mb-5 mt-2 text-sm text-gray-500">
+                      {/* Reset your password? */}
                     </p>
 
                     <div className=" flex gap-2">

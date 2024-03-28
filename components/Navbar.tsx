@@ -482,10 +482,10 @@ const clearNotifications = async () => {
           </Link>
 
           <div className=" ml-3 space-x-5 flex">
-          <Button variant="ghost" onClick={() => setClicked("home")}>
+          <Button variant="ghost" className="hover:bg-transparent" onClick={() => setClicked("home")}>
             <Link href="/">
             <Home
-              className={`h-5 w-5 ${clicked === 'home' ? "text-red-500 " : ""}`}
+              className={`h-5 w-5 ${clicked === 'home' ? "" : ""}`}
             />
             </Link>
           </Button>
@@ -493,9 +493,9 @@ const clearNotifications = async () => {
           {/* Notification Drop-down */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" onClick={() => setClicked("notification")}>
+              <Button variant="ghost" className="hover:bg-transparent" onClick={() => setClicked("notification")}>
                 <Bell
-                  className={`h-5 w-5 ${clicked === 'notification' ? "text-red-500 " : ""}`}
+                  className={`h-5 w-5 ${clicked === 'notification' ? "" : ""}`}
                 />
               </Button>
             </DropdownMenuTrigger>

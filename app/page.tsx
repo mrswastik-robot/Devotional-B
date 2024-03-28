@@ -486,8 +486,7 @@ export default function Home() {
                   </p>
                 ) : (
                 <p className='text-zinc-500 font-semibold'>
-                  Your personal Devotional frontpage. Come here to check in with your
-                  favorite communities.
+                  Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
               </p>
                 )
               }

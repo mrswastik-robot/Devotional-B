@@ -509,7 +509,7 @@ const clearNotifications = async () => {
                 )}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup className="max-h-[20rem] max-w-[20rem] overflow-y-auto overflow-x-hidden">
+              <DropdownMenuGroup className="max-h-[21rem] max-w-[22rem] overflow-y-auto overflow-x-hidden">
                 {notifications.map((notification) => (
                   <DropdownMenuItem key={notification.id}>
                     <Link href={`/${encodeURIComponent(notification.questionTitle.split(" ").join("-"))}`} className=" flex gap-2">
@@ -520,9 +520,12 @@ const clearNotifications = async () => {
                       height={24}
                       className=" h-8 w-8 rounded-full my-auto"
                       />
-                      <span>
-                        <span className="font-bold">{notification.answerName} </span> 
-                        answered your question <span className=" font-bold underline">{notification.questionTitle}</span>
+                      <span className="flex flex-col overflow-hidden">
+                        <div>
+                        <span className="font-bold">{notification.answerName}</span> 
+                        <span className="text-sm"> commented on </span>
+                        </div>
+                        <span className=" font-bold underline overflow-hidden text-ellipsis whitespace-nowrap max-h-[2.4em] max-w-[15rem]">{notification.questionTitle}s</span>
                       </span>
                     </Link>
                     <Separator orientation="horizontal" className=" absolute bottom-0 w-full" />

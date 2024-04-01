@@ -541,6 +541,7 @@ export default function Home() {
                             render = {({field}) => (
                               <FormItem>
                                 <FormLabel>Description</FormLabel>
+                                <div className="border-2 border-black">
                                 <FormControl>
                                   <Controller
                                     control={form.control}
@@ -550,6 +551,7 @@ export default function Home() {
                                     )}
                                    /> 
                                 </FormControl>
+                                </div>
                                 <div className="text-sm opacity-70">This is the description, give more details about your question here.</div>
                                 <FormMessage/>
                               </FormItem>

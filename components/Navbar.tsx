@@ -455,7 +455,7 @@ const clearNotifications = async () => {
         href={`/`}
         className=" my-auto"
         >
-          <p className=" text-lg font-bold my-auto">Devotional-B</p>
+          <p className=" text-lg font-bold my-auto font-dmsans">Devotional-B</p>
         </Link>
         <Link
         href={`/profilePage`}

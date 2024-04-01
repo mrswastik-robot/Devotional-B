@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import {DM_Sans} from 'next/font/google'
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
@@ -8,6 +9,12 @@ import { StoreProvider } from "@/store/StoreProvider";
 import { Toaster } from "@/components/ui/toaster";
 
 import { GeistSans } from 'geist/font/sans';
+
+const dmSans_init = DM_Sans({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'],
+  variable: '--font-dmsans',
+})
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,7 +46,7 @@ export default function RootLayout({
   return (
     <StoreProvider>
       <html lang="en">
-        <body className={cn(GeistSans.className, "antialiased min-h-screen pt-12 bg-[#F1F2F2] dark:bg-[#181818]")}>
+        <body className={cn(GeistSans.className, `antialiased min-h-screen pt-12 bg-[#F1F2F2] dark:bg-[#181818] ${dmSans_init.variable}`)}>
           <Providers>
             <Navbar />
             <div className="md:container md:max-w-7xl md:mx-auto h-full pt-4 ">

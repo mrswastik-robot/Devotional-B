@@ -481,11 +481,11 @@ export default function Home() {
             <div className='flex rounded-md justify-between md:min-h-[5rem] gap-x-4 py-3'>
               {
                 (isGuest === 'true' || user?.isAnonymous==true) ? (
-                  <p className=" text-zinc-500">
+                  <p className=" text-zinc-500 font-dmsans">
                     You are currently logged in as a Guest. To post question you need to have an account.
                   </p>
                 ) : (
-                <p className='text-zinc-500 font-semibold'>
+                <p className='text-zinc-500 font-semibold font-dmsans'>
                   Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
               </p>
                 )

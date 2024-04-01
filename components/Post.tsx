@@ -297,7 +297,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           }
           
           <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-            <h1 className={`font-bold py-2 leading-6 text-[17px] text-[#282829] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
+            <h1 className={`font-bold font-dmsans py-2 leading-6 text-[17px] text-[#282829] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
           </Link>
@@ -320,7 +320,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           >
             {/* <EditorOutput content={post.content} /> */}
 
-            <p className="text-[#282829] dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
+            <p className="text-[#282829] font-dmsans dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
             {!isExpanded && isOverflowing && ( <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div>) }
 
             {/* {pRef.current?.clientHeight === 160 ? (

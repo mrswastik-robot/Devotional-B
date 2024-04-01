@@ -216,7 +216,7 @@ export const Tiptap = ({ onChange ,value  , setImageUpload , uploadImage , progr
     placeholder: `Write ...`,
     editorProps: {
       attributes: {
-        class: "prose rounded-lg border border-input   ring-offset-2 disabled:opacity-50  min-h-[10rem] p-4 py-[8rem]",
+        class: "prose rounded-lg  disabled:opacity-50  min-h-[10rem] p-4 py-[8rem]",
       },
     },
     

@@ -446,7 +446,7 @@ const clearNotifications = async () => {
 
 
   return (
-    <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#FFFFFF] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2">
+    <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#FFFFFF] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2 font-dmsans">
 
       {/* mobile Navbar */}
       <div className=" md:hidden flex justify-between px-2">

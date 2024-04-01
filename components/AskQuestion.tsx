@@ -176,14 +176,14 @@ function AskQuestion() {
   if(loading)
   {
     return(
-      <div className='w-[100%] lg:ml-64 md:ml-80 xl:ml-96'>
+      <div className='w-[100%] lg:ml-64 md:ml-80 xl:ml-96 font-dmsans'>
         <Loader />
       </div>
     )
   }
   else {
   return (
-    <div>
+    <div className="font-dmsans">
         <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-4 text-sm leading-6'>
             <div className='flex rounded-md justify-between md:min-h-[7.5rem] gap-x-4 py-3'>
               {

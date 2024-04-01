@@ -257,7 +257,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
             <div className=" flex space-x-2">
-            <span className=" mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-yellow-50">
+            <span className=" mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-yellow-50 font-dmsans">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
             {isAnonymous||isCurrentUser || !user ? null : (
@@ -285,7 +285,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
 
                 {(
-        <button className=" text-blue-500 text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer" onClick={handleFollow}>
+        <button className=" text-blue-500 font-dmsans text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer" onClick={handleFollow}>
           {isFollowing ? "Following" : "Follow"}
         </button>
       )}
@@ -351,9 +351,9 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             className="w-fit flex items-center gap-2"
           >
             <MessageSquare className="h-4 w-4" />{" "}
-            <span className=" sm:block hidden">{post.comments} Answers</span>
+            <span className=" sm:block hidden font-dmsans">{post.comments} Answers</span>
           </Link>
-          <button className="w-fit flex items-center gap-2">
+          <button className="w-fit flex items-center gap-2 font-dmsans">
             <ShareDialog
               postLink={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
             />
@@ -368,9 +368,9 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
               })}
             />{" "}
             {savedState ? (
-              <span className=" sm:block hidden">Saved</span>
+              <span className=" sm:block hidden font-dmsans">Saved</span>
             ) : (
-              <span className=" sm:block hidden">Save</span>
+              <span className=" sm:block hidden font-dmsans">Save</span>
             )}
           </button>
 

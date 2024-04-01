@@ -174,7 +174,7 @@ const Sidebar = (props: Props) => {
 
   return (
     <div
-      className=" space-y-4 py-4 flex flex-col h-full bg-[#FFFFFF] dark:bg-[#181818] text-black dark:text-white"
+      className="font-dmsans space-y-4 py-4 flex flex-col h-full bg-[#FFFFFF] dark:bg-[#181818] text-black dark:text-white"
     //   data-aos="fade-right"
     //   data-aos-easing="linear"
     //   data-aos-duration="1000"

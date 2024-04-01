@@ -42,7 +42,7 @@ const UserDetails = ({ uid }: { uid: string }) => {
     <div>
       {userDetail ? (
         <div>
-        <div className="flex mx-auto bg-[#FFFFFF] dark:bg-[#262626] p-3 rounded-lg">
+        <div className="flex mx-auto bg-[#FFFFFF] dark:bg-[#262626] p-3 rounded-lg font-dmsans">
   
           <div>
           <Image
@@ -57,7 +57,7 @@ const UserDetails = ({ uid }: { uid: string }) => {
   
   
           <div className="space-y-2 mx-5">
-            <h1 className=" text-base font-bold">{userDetail.name||"Unknown"}</h1>
+            <h1 className=" text-base font-bold font-dmsans">{userDetail.name||"Unknown"}</h1>
   
           </div>
         </div>

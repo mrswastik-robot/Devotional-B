@@ -140,14 +140,14 @@ const PostVoteClientPhone = ({
             "text-emerald-500 fill-emerald-500": currentVote === "UP",
           })}
         />
-        <p className=" text-sm text-zinc-500 ml-2 hover:text-zinc-700">
+        <p className=" text-sm text-zinc-500 ml-2 hover:text-zinc-700 font-dmsans">
           Support
         </p>
         {/* <Separator orientation="vertical" className=" h-7 my-1 ml-2 dark:text-zinc-400 text-zinc-500"/> */}
       </Button>
 
       {/* score */}
-      <p className="text-center py-2 font-medium text-sm text-zinc-900 dark:text-white">
+      <p className="text-center py-2 font-medium text-sm text-zinc-900 dark:text-white font-dmsans">
         {votesAmt||0}
       </p>
 

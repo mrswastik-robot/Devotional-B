@@ -354,7 +354,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         <meta name="description" content="This is a dynamic description" />
       </Head>
 
-    <div className="grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6">
+    <div className="grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6 font-dmsans">
       <div className=" md:col-span-5 col-span-2 order-first">
       <div className={`${ansLoading?"overflow-auto":""} max-h-screen`}>
         <div>

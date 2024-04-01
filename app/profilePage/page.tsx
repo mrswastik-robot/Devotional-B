@@ -463,7 +463,7 @@ useEffect(() => {
 
 
   return (
-    <div className='mt-0'>
+    <div className='mt-0 font-dmsans'>
         <ProfileCard user={user}/>
         {/* <div className='toggleSwitch flex items-center justify-center mt-5'>
         <label className="inline-flex items-center cursor-pointer">

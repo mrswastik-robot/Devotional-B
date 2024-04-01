@@ -253,7 +253,7 @@ const CommentBox = ({
   }
 
   return (
-    <div className=" border border-gray-300 pt-4 ">
+    <div className=" border border-gray-300 pt-4 font-dmsans">
       <Form {...form}>
         <form
           className="relative flex gap-1 overflow-hidden p-1 px-3"

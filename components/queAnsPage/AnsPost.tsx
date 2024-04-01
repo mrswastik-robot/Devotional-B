@@ -239,7 +239,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
   
   return (
 
-    <div className=" mt-3">
+    <div className=" mt-3 font-dmsans">
       {dispAnswer.length>0&&dispAnswer.map((answer: any, key) => (
 
         <div

@@ -192,8 +192,8 @@ const LoginPage = (props: Props) => {
 
   return (
     <>
-      <div className=" absolute bg-login-bg bg-cover bg-no-repeat left-0 top-0 h-full w-full "></div>
-      <div className="bg-[#F8FAFC] md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:top-1/2 md:left-1/2 items-center justify-center flex shadow-xl rounded-md max-w-[750px] min-h-[450px]">
+      <div className=" absolute bg-login-bg bg-cover bg-no-repeat left-0 top-0 h-full w-full font-dmsans"></div>
+      <div className="bg-[#F8FAFC] md:absolute md:-translate-x-1/2 md:-translate-y-1/2 md:top-1/2 md:left-1/2 items-center justify-center flex shadow-xl rounded-md max-w-[750px] min-h-[450px] font-dmsans">
         <div className="relative    w-full h-full  ">
           <div className="relative bg-[#F8FAFC] rounded-lg ">
             <div className="px-4 py-9 md:py-0">

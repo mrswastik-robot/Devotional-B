@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { db } from '@/utils/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { db, auth } from '@/utils/firebase';
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
 import Image from 'next/image';
 import { Separator } from './ui/separator';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { toast } from './ui/use-toast';
 
 type UserDetail = {
   name: string;
@@ -10,9 +12,10 @@ type UserDetail = {
   profilePic: string;
 };
 
-const UserDetails = ({ uid }: { uid: string }) => {
+const UserDetails = ({ uid, type, handleFchange }: { uid: string, type: string, handleFchange: Function }) => {
   const [userDetail, setUserDetails] = useState<UserDetail | null>(null);
-
+  const [user, loading] = useAuthState(auth);
+  //console.log("Type: ", type);
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
@@ -38,6 +41,82 @@ const UserDetails = ({ uid }: { uid: string }) => {
     fetchUserDetails();
   }, [uid]);
 
+  const handleUnfollow = async () => {
+    if (!user||(user&&user.isAnonymous==true)) {
+      toast({
+        title: " Please login to follow others ",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const userRef = doc(db, "users", user.uid);
+
+    try {
+      await updateDoc(userRef, {
+        following: arrayRemove(uid) // Unfollow if already following
+      });
+
+      const followerRef = doc(db, "users", uid);
+      await updateDoc(followerRef, {
+        followers: arrayRemove(user.uid),
+      });
+
+      // Show toast notification based on follow/unfollow action
+      toast({
+        title: "You have unfollowed this user ❌",
+        variant: "default",
+      });
+
+      handleFchange(uid);
+
+    } catch (error) {
+      console.error("Error updating following list:", error);
+      toast({
+        title: "Error updating following list",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleRemoveFollower = async()=>{
+    if (!user||(user&&user.isAnonymous==true)) {
+      toast({
+        title: " Please login to follow others ",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const userRef = doc(db, "users", user.uid);
+
+    try {
+      await updateDoc(userRef, {
+        followers: arrayRemove(uid) // Unfollow if already following
+      });
+
+      const followerRef = doc(db, "users", uid);
+      await updateDoc(followerRef, {
+        following: arrayRemove(user.uid),
+      });
+
+      // Show toast notification based on follow/unfollow action
+      toast({
+        title: "You have unfollowed this user ❌",
+        variant: "default",
+      });
+
+      handleFchange(uid);
+
+    } catch (error) {
+      console.error("Error updating following list:", error);
+      toast({
+        title: "Error updating following list",
+        variant: "destructive",
+      });
+    }
+  }
+
   return (
     <div>
       {userDetail ? (
@@ -60,6 +139,7 @@ const UserDetails = ({ uid }: { uid: string }) => {
             <h1 className=" text-base font-bold font-dmsans">{userDetail.name||"Unknown"}</h1>
   
           </div>
+          <div className="text-blue-500 font-dmsans text-sm mt-[0.20rem] p-0 hover:underline cursor-pointer" onClick={type=="following"?handleUnfollow:handleRemoveFollower}>{type=="following"?"Unfollow":"Remove"}</div>
         </div>
         <Separator className='h-1'/>
       </div>

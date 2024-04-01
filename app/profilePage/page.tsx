@@ -90,6 +90,8 @@ const ProfilePage = (props: Props) => {
   const [anonymousStart, setAnonymousStart] = useState<boolean>(true);
   const [morePosts, setMorePosts] = useState(false);
   const [sortType, setSortType] = useState("recent")
+  const [followChange, setFollowChange] = useState("")
+  const [removeF, setRemoveF] = useState("");
   const [reload, setReload] = useState(false);
   const {toast} = useToast();
   
@@ -364,6 +366,24 @@ const ProfilePage = (props: Props) => {
 
     //fetching the savedPosts from the 'users' collection
     // Fetching the savedPosts from the 'users' collection
+
+    useEffect(()=>{
+      if(postType=="following"&&followChange!=""){
+      let newList = following.filter((followi:string)=>{
+        return followi!=followChange;
+      })
+      setFollowing(newList)
+      }
+    }, [followChange])
+
+    useEffect(()=>{
+      if(postType=="followers"&&removeF!=""){
+        let newList = followers.filter((follower:string)=>{
+          return follower!=removeF;
+        })
+        setFollowers(newList)
+      }
+    }, [removeF])
 
 useEffect(() => {
   const fetchSavedPosts = async () => {
@@ -643,7 +663,7 @@ useEffect(() => {
                 {
                   followers.map((follower:string, index:number)=>{
                     return <div key={index}>
-                      <UserDetails uid={follower}/>
+                      <UserDetails uid={follower} type={"followers"} handleFchange={setRemoveF}/>
                     </div>
                   })
                 }
@@ -656,7 +676,7 @@ useEffect(() => {
                   {
                     following.map((following:string, index:number)=>{
                       return <div key={index}>
-                        <UserDetails uid={following}/>
+                        <UserDetails uid={following} type={"following"} handleFchange={setFollowChange}/>
                       </div>
                     })
                   }

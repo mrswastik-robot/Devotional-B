@@ -501,7 +501,7 @@ export default function Home() {
                     <Button variant="default"  className=" w-full" >Ask Question</Button>
                   </DialogTrigger>
   }
-                  <DialogContent className="sm:max-w-[925px] max-h-[40rem] overflow-y-scroll ">
+                  <DialogContent className="sm:max-w-[925px] max-h-[50rem] overflow-y-scroll ">
                     <DialogHeader>
                       <DialogTitle>Post Question</DialogTitle>
                       <DialogDescription>
@@ -570,7 +570,7 @@ export default function Home() {
                           <div>
                             <div className="text-sm font-medium mb-2">Category</div>
                           <Select value={selectedCategory} onValueChange={handleSelectChange} >
-      <SelectTrigger className="w-[11rem]">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a Category" />
       </SelectTrigger>
       <SelectContent>
@@ -592,6 +592,7 @@ export default function Home() {
                                 })
                               }
                             </div>
+                            <div className="text-sm opacity-70 mt-[0.45rem]">This is the category, you can choose multiple categories for your Question.</div>
                           </div>
                           <FormField
                             control={form.control}

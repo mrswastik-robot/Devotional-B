@@ -576,7 +576,7 @@ const clearNotifications = async () => {
                           </div>
                           <div>
                           <Select value={selectedCategory} onValueChange={handleSelectChange} >
-      <SelectTrigger className="w-[11rem]">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a Category" />
       </SelectTrigger>
       <SelectContent>
@@ -598,6 +598,7 @@ const clearNotifications = async () => {
                                 })
                               }
                             </div>
+                            <div className="text-sm opacity-70 mt-[0.45rem]">This is the category, you can choose multiple categories for your Question.</div>
                           </div>
                           <FormField
                             control={form.control}

@@ -410,6 +410,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                       <FormItem className="flex flex-row items-center justify-between rounded-lg  border-[1.6px] border-[#d3d7dd] p-2">                        <div className="">
                           <FormLabel className={`text-base ${user?.isAnonymous?"opacity-50":""}`}>
                             Answer Anonymously
+                            <div className="text-sm font-normal opacity-70">Hide your details while posting question</div>
                           </FormLabel>
                           {/* <FormDescription>
                             Answer question without revealing your identity.

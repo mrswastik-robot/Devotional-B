@@ -170,7 +170,7 @@ const handleFollow = async () => {
 
     // Show toast notification based on follow/unfollow action
     toast({
-      title: isFollowing ? "Unfollowed" : "Followed",
+      title: isFollowing ? "You have unfollowed this user ❌" : "You are now following this user ✅",
       variant: "default",
     });
 

@@ -10,6 +10,7 @@ import { Bookmark } from "lucide-react";
 import ShareDialog from "./ShareDialog";
 // import { Trash2 } from "lucide-react";
 import { AiTwotoneDelete } from "react-icons/ai";
+import { RiUserFollowLine } from "react-icons/ri";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -208,7 +209,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
       // Show toast notification based on follow/unfollow action
       toast({
-        title: isFollowing ? "Unfollowed" : "Followed",
+        title: isFollowing ? "You have unfollowed this user ❌" : "You are now following this user ✅",
         variant: "default",
       });
 
@@ -329,7 +330,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             ) : null} */}
             {!isExpanded && isOverflowing && (
               <div className="absolute bottom-0 md:bottom-[-0.16rem] left-0 w-full  text-right ">
-                <button className=" text-blue-500/80  hover:underline md:w-[8%] w-full backdrop-blur-none bg-white/50 dark:bg-transparent  text-right text-sm  " onClick={() => setIsExpanded(true)}>(more)</button>
+                <button className=" text-blue-500  hover:underline md:w-[8%] w-full backdrop-blur-none bg-white/50 dark:bg-transparent  text-right text-sm  " onClick={() => setIsExpanded(true)}>(more)</button>
               </div>
             )}
           </div>

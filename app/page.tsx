@@ -528,6 +528,7 @@ export default function Home() {
                               <FormControl>
                                 <Input className="" placeholder="Title for the question ..." {...field}/>
                               </FormControl>
+                              <div className="text-sm opacity-70">This is the title, write your question here.</div>
                               <FormMessage/>
                             </FormItem>
                           )}
@@ -549,6 +550,7 @@ export default function Home() {
                                     )}
                                    /> 
                                 </FormControl>
+                                <div className="text-sm opacity-70">This is the description, give more details about your question here.</div>
                                 <FormMessage/>
                               </FormItem>
                             )}
@@ -566,8 +568,9 @@ export default function Home() {
                             }
                           </div>
                           <div>
+                            <div className="text-sm font-medium mb-2">Category</div>
                           <Select value={selectedCategory} onValueChange={handleSelectChange} >
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="w-[11rem]">
         <SelectValue placeholder="Select a Category" />
       </SelectTrigger>
       <SelectContent>
@@ -596,19 +599,22 @@ export default function Home() {
                             render={({ field }) => (
                               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2">
                                 <div className="space-y-0.5">
-                                  <FormLabel className="text-base">
+                                  <FormLabel className="text-sm font-medium">
                                     Post Anonymously
+                                    <div className="text-sm font-normal opacity-70">Hide your details while posting question</div>
                                   </FormLabel>
                                   {/* <FormDescription>
                                     Post question without revealing your identity.
                                   </FormDescription> */}
                                 </div>
+                                <div className="mb-5">
                                 <FormControl>
                                   <Switch
                                     checked={field.value}
                                     onCheckedChange={field.onChange}
                                   />
                                 </FormControl>
+                                </div>
                               </FormItem>
                             )}
                           />

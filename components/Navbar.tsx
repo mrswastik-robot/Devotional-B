@@ -481,7 +481,182 @@ const clearNotifications = async () => {
             </p>
           </Link>
 
-          <div className=" ml-3 space-x-5 flex">
+          {/* search bar */}
+        <div className=" relative ml-5">
+          {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
+          <input type="text" 
+            value={searchText}
+            onChange={handleSearchText} 
+            placeholder="Search" 
+            className="w-[37rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  dispatch(triggerSearch());
+                }
+            }}
+          />
+          <Search className=" absolute left-2 top-1/2 transform text-gray-400 -translate-y-1/2 h-4 w-4" />
+        </div>
+        </div>
+
+        <div className="flex ">
+        <div>
+              <Dialog>
+                {
+                  isGuest === 'true'||user?.isAnonymous==true?
+                  <Button variant="outline"  className=" rounded-3xl w-full" onClick={guestHandler}>Ask Question</Button>:
+                  <DialogTrigger asChild>
+                    <Button variant="outline"  className=" rounded-3xl w-full">Ask Question</Button>
+                  </DialogTrigger>
+  }
+                  <DialogContent className="sm:max-w-[925px] max-h-[55rem] overflow-y-scroll ">
+                    <DialogHeader>
+                      <DialogTitle>Post Question</DialogTitle>
+                      <DialogDescription>
+                        Create your question here. Click post when you are done.
+                      </DialogDescription>
+                    </DialogHeader>
+                      {/* <Tiptap /> */}
+                     {/* <Textarea className="w-full min-h-[500px]" placeholder="What's your question?" /> */}
+
+                      <div className=" border border-gray-300 rounded-3xl p-4 cursor-pointer">
+                      <Form {...form}>
+                        <form
+                        className="relative space-y-3 "
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        >
+
+                          {/* Title */}
+                          <FormField
+                          control={form.control}
+                          name="title"
+                          render = {({field}) => (
+                            <FormItem>
+                              <FormLabel>Title</FormLabel>
+                              <FormControl>
+                                <Input className="" placeholder="Title for the question ..." {...field}/>
+                              </FormControl>
+                              <div className="text-sm opacity-70">This is the title, write your question here.</div>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
+
+                          {/* TipTap Editor */}
+                          <FormField
+                            control={form.control}
+                            name="description"
+                            render = {({field}) => (
+                              <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <FormControl>
+                                  <Controller
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                      <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress} />
+                                    )}
+                                   /> 
+                                </FormControl>
+                                <div className="text-sm opacity-70">This is the description, give more details about your question here.</div>
+                                <FormMessage/>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          {(progress||0)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
+                          {/* "0" to make upload percentage invisible when no image is selected */}
+                          {/* anonymity toggle */}
+                          <div>
+                            {
+                              previewImg&&<div className="w-full flex items-center justify-center">
+                                <Image src={previewImg} alt="previewImage" width={250} height={250}/>
+                              </div>
+                            }
+                          </div>
+                          <div>
+                          <Select value={selectedCategory} onValueChange={handleSelectChange} >
+      <SelectTrigger className="w-[11rem]">
+        <SelectValue placeholder="Select a Category" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Categories</SelectLabel>
+          <SelectItem value="How To">How To</SelectItem>
+          <SelectItem value="Help">Help</SelectItem>
+          <SelectItem value="Mystery/Haunted/Ghost">Mystery/Haunted/Ghost</SelectItem>
+          <SelectItem value="Astrology/Remedies/Occult">Astrology/Remedies/Occult</SelectItem>
+          <SelectItem value="GemStones/Rudraksha">GemStones/Rudraksha</SelectItem>
+          <SelectItem value="Others">Others</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+    <div className="flex">
+                              {
+                                selectC.map((category:string, index:number)=>{
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                })
+                              }
+                            </div>
+                          </div>
+                          <FormField
+                            control={form.control}
+                            name="anonymity"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2">
+                                <div className="space-y-0.5">
+                                  <FormLabel className="text-base">
+                                    Post Anonymously
+                                    <div className="text-sm font-normal opacity-70">Hide your details while posting question</div>
+                                  </FormLabel>
+                                  {/* <FormDescription>
+                                    Post question without revealing your identity.
+                                  </FormDescription> */}
+                                </div>
+                                <div className="mb-5">
+                                <FormControl>
+                                  <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                  />
+                                </FormControl>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+
+                          <DialogClose asChild>
+                              <Button type="submit" 
+                                className=" w-full"
+                                // disabled={isGuest === 'true'}
+                              >
+                                Post
+                              </Button>
+                          </DialogClose>
+                            
+                          
+
+                        </form>
+                      </Form>
+                      </div>
+
+                      {/* <div>
+                        <input type="file" onChange={(event) => {
+                          if(event.target.files) {
+                            setImageUpload(event.target.files[0]);
+                          }
+                        }}/>
+                        <Button onClick={uploadImage}>Upload Image</Button>
+                        <Progress value={progress} className=" w-[70%]"/>
+                      </div> */}
+
+                    
+                  </DialogContent>
+              </Dialog>
+              
+            </div>
+
+            <div className=" ml-5 flex">
           <Button variant="ghost" className="hover:bg-transparent" onClick={() => setClicked("home")}>
             <Link href="/">
             <Home
@@ -491,6 +666,7 @@ const clearNotifications = async () => {
           </Button>
           
           {/* Notification Drop-down */}
+          <div className="ml-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="hover:bg-transparent focus-visible:ring-0.1" onClick={() => setClicked("notification")}>
@@ -538,179 +714,11 @@ const clearNotifications = async () => {
               }
             </DropdownMenuContent>
           </DropdownMenu>
+          </div>
           
         </div>
-        </div>
 
-        {/* search bar */}
-        <div className=" relative ">
-          {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
-          <input type="text" 
-            value={searchText}
-            onChange={handleSearchText} 
-            placeholder="Search" 
-            className="w-[37rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
-            onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  dispatch(triggerSearch());
-                }
-            }}
-          />
-          <Search className=" absolute left-2 top-1/2 transform text-gray-400 -translate-y-1/2 h-4 w-4" />
-        </div>
-
-        <div>
-              <Dialog>
-                {
-                  isGuest === 'true'||user?.isAnonymous==true?
-                  <Button variant="outline"  className=" rounded-3xl w-full" onClick={guestHandler}>Ask Question</Button>:
-                  <DialogTrigger asChild>
-                    <Button variant="outline"  className=" rounded-3xl w-full">Ask Question</Button>
-                  </DialogTrigger>
-  }
-                  <DialogContent className="sm:max-w-[925px] max-h-[55rem] overflow-y-scroll ">
-                    <DialogHeader>
-                      <DialogTitle>Post Question</DialogTitle>
-                      <DialogDescription>
-                        Create your question here. Click post when you are done.
-                      </DialogDescription>
-                    </DialogHeader>
-                      {/* <Tiptap /> */}
-                     {/* <Textarea className="w-full min-h-[500px]" placeholder="What's your question?" /> */}
-
-                      <div className=" border border-gray-300 rounded-3xl p-4 cursor-pointer">
-                      <Form {...form}>
-                        <form
-                        className="relative space-y-3 "
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        >
-
-                          {/* Title */}
-                          <FormField
-                          control={form.control}
-                          name="title"
-                          render = {({field}) => (
-                            <FormItem>
-                              <FormLabel>Title</FormLabel>
-                              <FormControl>
-                                <Input className="" placeholder="Title for the question ..." {...field}/>
-                              </FormControl>
-                              <FormMessage/>
-                            </FormItem>
-                          )}
-                          />
-
-                          {/* TipTap Editor */}
-                          <FormField
-                            control={form.control}
-                            name="description"
-                            render = {({field}) => (
-                              <FormItem>
-                                <FormLabel>Description</FormLabel>
-                                <FormControl>
-                                  <Controller
-                                    control={form.control}
-                                    name="description"
-                                    render={({ field }) => (
-                                      <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress} />
-                                    )}
-                                   /> 
-                                </FormControl>
-                                <FormMessage/>
-                              </FormItem>
-                            )}
-                          />
-                          
-                          {(progress||0)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
-                          {/* "0" to make upload percentage invisible when no image is selected */}
-                          {/* anonymity toggle */}
-                          <div>
-                            {
-                              previewImg&&<div className="w-full flex items-center justify-center">
-                                <Image src={previewImg} alt="previewImage" width={250} height={250}/>
-                              </div>
-                            }
-                          </div>
-                          <div>
-                          <Select value={selectedCategory} onValueChange={handleSelectChange} >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a Category" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Categories</SelectLabel>
-          <SelectItem value="How To">How To</SelectItem>
-          <SelectItem value="Help">Help</SelectItem>
-          <SelectItem value="Mystery/Haunted/Ghost">Mystery/Haunted/Ghost</SelectItem>
-          <SelectItem value="Astrology/Remedies/Occult">Astrology/Remedies/Occult</SelectItem>
-          <SelectItem value="GemStones/Rudraksha">GemStones/Rudraksha</SelectItem>
-          <SelectItem value="Others">Others</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-    <div className="flex">
-                              {
-                                selectC.map((category:string, index:number)=>{
-                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
-                                })
-                              }
-                            </div>
-                          </div>
-                          <FormField
-                            control={form.control}
-                            name="anonymity"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2">
-                                <div className="space-y-0.5">
-                                  <FormLabel className="text-base">
-                                    Post Anonymously
-                                  </FormLabel>
-                                  {/* <FormDescription>
-                                    Post question without revealing your identity.
-                                  </FormDescription> */}
-                                </div>
-                                <FormControl>
-                                  <Switch
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-
-                          <DialogClose asChild>
-                              <Button type="submit" 
-                                className=" w-full"
-                                // disabled={isGuest === 'true'}
-                              >
-                                Post
-                              </Button>
-                          </DialogClose>
-                            
-                          
-
-                        </form>
-                      </Form>
-                      </div>
-
-                      {/* <div>
-                        <input type="file" onChange={(event) => {
-                          if(event.target.files) {
-                            setImageUpload(event.target.files[0]);
-                          }
-                        }}/>
-                        <Button onClick={uploadImage}>Upload Image</Button>
-                        <Progress value={progress} className=" w-[70%]"/>
-                      </div> */}
-
-                    
-                  </DialogContent>
-              </Dialog>
-              
-            </div>
-
-        <div className="flex gap-4">
+        <div className="flex gap-4 ml-5">
           {/* <ThemeToggler className=" mr-4" /> Theme option added on dropdown menu  */}
 
           {(user) ? (<div>
@@ -747,9 +755,9 @@ const clearNotifications = async () => {
                 </Link>
                 <div className="mt-1 ml-2 mb-2">
                 <div className="flex items-center justify-between pr-1 space-x-2">
-      <Label htmlFor="airplane-mode">Dark Mode</Label>
-      <Switch id="airplane-mode" onCheckedChange={toggleTheme} checked={theme==='dark'}/>
-    </div>
+                <Label htmlFor="airplane-mode">Dark Mode</Label>
+                <Switch id="airplane-mode" onCheckedChange={toggleTheme} checked={theme==='dark'}/>
+                </div>
                 </div>
                 </DropdownMenuGroup>
               <DropdownMenuSeparator />
@@ -780,6 +788,7 @@ const clearNotifications = async () => {
           )}
           
 
+        </div>
         </div>
       </div>
     </div>

@@ -162,7 +162,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
     // Update the local state to reflect the followed user
     setFollowedUsers((prevFollowed) => [...prevFollowed, userId]);
     toast({
-      title: 'You are now following this user.',
+      title: 'You are now following this user ✅',
       variant: 'default',
     });
   };
@@ -184,7 +184,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
     // Update the local state to reflect the unfollowed user
     setFollowedUsers((prevFollowed) => prevFollowed.filter((id) => id !== userId));
     toast({
-      title: 'You have unfollowed this user.',
+      title: 'You have unfollowed this user ❌',
       variant: 'default',
     });
   };

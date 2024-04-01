@@ -44,9 +44,9 @@ const ProfileCard = ({user}: Props) => {
   const otherUser:boolean=false;
   return (
     <div>
-      <div className="flex lg:justify-center mx-auto bg-[#FFFFFF] dark:bg-[#262626] p-5 rounded-lg font-dmsans">
+      <div className="flex mx-auto bg-[#FFFFFF] dark:bg-[#262626] p-5 rounded-lg font-dmsans">
 
-        <div>
+        <div className="ml-5">
         <Image
           src={user?.photoURL || '/nodp.webp'}
           width={300}

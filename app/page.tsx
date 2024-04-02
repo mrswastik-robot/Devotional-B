@@ -555,7 +555,7 @@ export default function Home() {
                                    /> 
                                 </FormControl>
                                 </div>
-                                <div className="text-[12px] text-sm opacity-70">This is the description, give more details about your question here.</div>
+                                <div className="text-[11px] text-sm opacity-70">This is the description, give more details about your question here.</div>
                                 <FormMessage/>
                               </FormItem>
                             )}

@@ -100,7 +100,7 @@ const MenuBar = ({ editor , setImageUpload , uploadImage , progress}) => {
   }
 
   return (
-    <div className=" flex items-left ml-1  rounded-lg  gap-x-4">
+    <div className=" flex items-left ml-1  gap-x-4">
       <div className=" flex gap-0 ">
           <button
             type="button"
@@ -232,7 +232,7 @@ export const Tiptap = ({ onChange ,value  , setImageUpload , uploadImage , progr
   return (
     <div className="">
       <MenuBar editor={editor} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress} />
-      <EditorContent editor={editor} className=" min-h-[10rem] rounded-lg"  />
+      <EditorContent editor={editor} className=" min-h-[10rem]"  />
       {
         progress != 0 &&
         

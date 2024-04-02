@@ -130,6 +130,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
   const [ansLoading, setAnsLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   //need the actual postId of the question to send to the PostVoteClient
   const [postId , setPostId] = useState<string>("");
@@ -383,6 +384,10 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                     render={({ field }) => (
                       <FormItem>
                         {/* <FormLabel>Write an answer...</FormLabel> */}
+                        <FormLabel>Description</FormLabel>
+                                <div className={`${isFocused?"border-black border-[2.3px]": "border-[2px] border-[#d3d7dd]"} rounded-lg`} onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      >
                         <FormControl>
                           <Controller
                             control={form.control}
@@ -390,6 +395,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
                             render={({ field }) => <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress}/>}
                           />
                         </FormControl>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}

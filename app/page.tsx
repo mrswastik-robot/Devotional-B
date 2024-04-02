@@ -97,6 +97,7 @@ export default function Home() {
   const [previewImg, setPreviewImg] = useState<any>(null);
   const [selectC, setSelectC] = useState<any>([]);
   const [onFirstVisit, setOnFirstVisit] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>('');
 
@@ -338,7 +339,7 @@ export default function Home() {
     try {
       console.log("keyword Gen.....")
       const docRef = await addDoc(collection(db, 'keywords'), {
-        prompt: `Generate some keywords and hashtags on topic ${data.title} and give it to me in array format without any formatting marks`,
+        prompt: `Generate some keywords and hashtags on topic ${data.title} and give it to me in "**Keywords:**["Keyword1", "Keyword2",...] **Hashtags:**["Hashtag1", "Hashtag2",...]" this format`,
       });
       console.log('Keyword Document written with ID: ', docRef.id);
   
@@ -541,7 +542,9 @@ export default function Home() {
                             render = {({field}) => (
                               <FormItem>
                                 <FormLabel>Description</FormLabel>
-                                <div className="border-2 border-black">
+                                <div className={`${isFocused?"border-black border-[2.1px]": "border-[1.2px]"} rounded-lg`} onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      >
                                 <FormControl>
                                   <Controller
                                     control={form.control}

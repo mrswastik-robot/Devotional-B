@@ -124,6 +124,7 @@ const Navbar = ({}: Props) => {
   const [limitCount, setLimitCount] = useState(6); // Number of notifications to fetch at a time
   const [lastVisible, setLastVisible] = useState<any>(null);
   const [showLoadMoreButton , setShowLoadMoreButton] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
 
   //for algolia search
   const dispatch = useDispatch();
@@ -248,7 +249,7 @@ const Navbar = ({}: Props) => {
     try {
       console.log("keyword Gen.....")
       const docRef = await addDoc(collection(db, 'keywords'), {
-        prompt: `Generate some keywords and hashtags on topic ${data.title}`,
+        prompt: `Generate some keywords and hashtags on topic ${data.title} and give it to me in "**Keywords:**["Keyword1", "Keyword2",...] **Hashtags:**["Hashtag1", "Hashtag2",...]" this format`,
       });
       console.log('Keyword Document written with ID: ', docRef.id);
   
@@ -257,11 +258,21 @@ const Navbar = ({}: Props) => {
         const data = snap.data();
         if (data && data.response) {
           console.log('RESPONSE: ' + data.response);
-          const keywordsString = `${data.response}`;
+          const keywordsStr = `${data.response}`;
+
+          const cleanedString = keywordsStr.replace(/\*|\`/g, '');
+
+          const splitString = cleanedString.split("Keywords:");
+          const keywordsString = splitString[1].split("Hashtags:")[0].trim();
+          const hashtagsString = splitString[1].split("Hashtags:")[1].trim();
+
+          const keywordsArray = JSON.parse(keywordsString);
+          const hashtagsArray = JSON.parse(hashtagsString);
 
           const questionDocRef = doc(db, 'questions', quesId);
           await updateDoc(questionDocRef, {
-          keywords: keywordsString, // Add your keywords here
+          keywords: keywordsArray,
+          hashtags: hashtagsArray
       });
         }
       });
@@ -549,6 +560,9 @@ const clearNotifications = async () => {
                             render = {({field}) => (
                               <FormItem>
                                 <FormLabel>Description</FormLabel>
+                                <div className={`${isFocused?"border-black border-[2.1px]": "border-[1.2px]"} rounded-lg`} onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      >
                                 <FormControl>
                                   <Controller
                                     control={form.control}
@@ -558,6 +572,7 @@ const clearNotifications = async () => {
                                     )}
                                    /> 
                                 </FormControl>
+                                </div>
                                 <div className="text-sm opacity-70">This is the description, give more details about your question here.</div>
                                 <FormMessage/>
                               </FormItem>

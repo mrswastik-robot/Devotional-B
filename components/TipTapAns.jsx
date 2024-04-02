@@ -216,7 +216,7 @@ export const Tiptap = ({ onChange ,value  , setImageUpload , uploadImage , progr
     placeholder: `Write ...`,
     editorProps: {
       attributes: {
-        class: "prose disabled:opacity-50  min-h-[10rem] p-4 py-[8rem]",
+        class: "disabled:opacity-50  min-h-[10rem] p-4 py-[8rem] focus:outline-none",
       },
     },
     

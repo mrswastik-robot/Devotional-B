@@ -26,6 +26,7 @@ import {
   increment,
   updateDoc,
   setDoc,
+  doc,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
@@ -201,6 +202,31 @@ const PostPage = ({ params: { postTitle } }: Props) => {
     }
   };
 
+  const [name, setName] = useState<string>(user?.displayName||"loading...");
+
+  useEffect(() => {
+    const fetchFollowersAndFollowing = async () => {
+      if (user?.uid) {
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const following = userData?.following?.length;
+          const followers = userData?.followers?.length;
+          const realName = userData?.name;
+          // Assuming followers and following fields exist in user data
+          setName(realName);
+          // setFollowersCount(followers || 0);
+          // setFollowingCount(following || 0);
+        }
+      }
+    };
+
+    fetchFollowersAndFollowing();
+  }, [user?.uid]);
+
+
   const form = useForm<Input>({
     resolver: zodResolver(AnswerDescriptionType),
     defaultValues: {
@@ -226,7 +252,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
       const docRef = await addDoc(collection(db, "questions", doc.id, "answers"), {
         description: data.description,
         uid: user?.uid,
-        name: user?.displayName,
+        name: name||user?.displayName,
         profilePic: user?.photoURL,
         createdAt: serverTimestamp(),
         answerImageURL: imageUrl,

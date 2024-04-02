@@ -19,6 +19,7 @@ const ProfileCard = ({user}: Props) => {
 
   const [followersCount, setFollowersCount] = useState<number>(0);
   const [followingCount, setFollowingCount] = useState<number>(0);
+  const [name, setName] = useState<string>(user?.displayName);
 
   useEffect(() => {
     const fetchFollowersAndFollowing = async () => {
@@ -30,7 +31,9 @@ const ProfileCard = ({user}: Props) => {
           const userData = userDoc.data();
           const following = userData?.following?.length;
           const followers = userData?.followers?.length;
+          const realName = userData?.name;
           // Assuming followers and following fields exist in user data
+          setName(realName);
           setFollowersCount(followers || 0);
           setFollowingCount(following || 0);
         }
@@ -59,7 +62,7 @@ const ProfileCard = ({user}: Props) => {
 
 
         <div className="lg:space-y-5 space-y-2 mx-5">
-          <h1 className="lg:text-4xl text-xl font-bold">{user?.displayName}</h1>
+          <h1 className="lg:text-4xl text-xl font-bold">{name}</h1>
           <div className=" flex gap-x-2 lg:mt-4 lg:text-base text-xs">
           <p>{followersCount} Followers</p>
             <svg

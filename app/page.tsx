@@ -251,6 +251,31 @@ export default function Home() {
     //console.log("hii");
   }, 3000);
 
+  const [name, setName] = useState<string>(user?.displayName||"loading...");
+
+  useEffect(() => {
+    const fetchFollowersAndFollowing = async () => {
+      if (user?.uid) {
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const following = userData?.following?.length;
+          const followers = userData?.followers?.length;
+          const realName = userData?.name;
+          // Assuming followers and following fields exist in user data
+          setName(realName);
+          // setFollowersCount(followers || 0);
+          // setFollowingCount(following || 0);
+        }
+      }
+    };
+
+    fetchFollowersAndFollowing();
+  }, [user?.uid]);
+
+
 
   useEffect(() => {
     if (user) {
@@ -321,7 +346,7 @@ export default function Home() {
       description: data.description,
       uid: user?.uid,
       profilePic: user?.photoURL,
-      name: user?.displayName,
+      name: name||user?.displayName,
       createdAt: serverTimestamp(),
       questionImageURL: imageUrl,
       category: selectC,

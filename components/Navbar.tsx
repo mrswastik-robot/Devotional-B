@@ -80,7 +80,7 @@ import { QuestionType } from "@/schemas/question";
 import { db , storage } from "@/utils/firebase";
 import { useSearchParams } from "next/navigation";
 
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where , getDocs, writeBatch, limit, startAfter } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where , getDocs, writeBatch, limit, startAfter, getDoc } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 import MobileSidebar from "./MobileSidebar";
@@ -89,6 +89,7 @@ import { useToast } from "./ui/use-toast";
 import { Separator } from "./ui/separator";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import { LuXCircle } from "react-icons/lu";
+import logo from '../public/logo.png'
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -231,7 +232,7 @@ const Navbar = ({}: Props) => {
       description: data.description,
       uid: user?.uid,
       profilePic: user?.photoURL,
-      name: user?.displayName,
+      name: name||user?.displayName,
       createdAt: serverTimestamp(),
       questionImageURL: imageUrl,
       category: selectC,
@@ -327,6 +328,30 @@ const Navbar = ({}: Props) => {
     router.push("/auth");
     }
   }
+
+  const [name, setName] = useState<string>(user?.displayName||"Loading...");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user?.uid) {
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const following = userData?.following?.length;
+          const followers = userData?.followers?.length;
+          const realName = userData?.name;
+          // Assuming followers and following fields exist in user data
+          setName(realName);
+          // setFollowersCount(followers || 0);
+          // setFollowingCount(following || 0);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [user?.uid]);
 
   //fetching real-time notifications
   useEffect(() => {
@@ -487,8 +512,8 @@ const clearNotifications = async () => {
         {/* logo */}
         <div className=" flex gap-[1rem]">
           <Link href="/" className="flex gap-2 items-center">
-            <p className="hidden text-zinc-700 dark:text-emerald-100 text-xl font-bold md:block">
-              Devotional-B
+            <p className="hidden text-zinc-700 dark:text-emerald-100 text-xl font-bold md:block mr-[4rem]">
+              <Image src={logo} alt="logo" width={160} height={60} />
             </p>
           </Link>
 
@@ -753,7 +778,7 @@ const clearNotifications = async () => {
             </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel>
+              <DropdownMenuLabel>{name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
               <Link href="/profilePage">
@@ -764,7 +789,7 @@ const clearNotifications = async () => {
                 </DropdownMenuItem>
                 </Link>
                 
-                <Link href="">
+                <Link href="/settings">
                 <DropdownMenuItem>
                   Settings
                 </DropdownMenuItem>

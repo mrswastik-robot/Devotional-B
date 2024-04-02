@@ -31,6 +31,7 @@ import {
   doc as docc,
   getDoc,
   updateDoc,
+  doc,
 } from "firebase/firestore";
 import { db, auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -150,6 +151,31 @@ const CommentBox = ({
 
   };
 
+  const [name, setName] = useState<string>(user?.displayName||"loading...");
+
+  useEffect(() => {
+    const fetchFollowersAndFollowing = async () => {
+      if (user?.uid) {
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const following = userData?.following?.length;
+          const followers = userData?.followers?.length;
+          const realName = userData?.name;
+          // Assuming followers and following fields exist in user data
+          setName(realName);
+          // setFollowersCount(followers || 0);
+          // setFollowingCount(following || 0);
+        }
+      }
+    };
+
+    fetchFollowersAndFollowing();
+  }, [user?.uid]);
+
+
   //fetching all the comments
   useEffect(() => {
     const fetchComments = async () => {
@@ -211,7 +237,7 @@ const CommentBox = ({
 
     const reply: ReplyType = {
       reply: replyText,
-      name: user?.displayName || "",
+      name: name||user?.displayName || "",
       profilePic: user?.photoURL || "",
       createdAt: serverTimestamp().toString(),
     };

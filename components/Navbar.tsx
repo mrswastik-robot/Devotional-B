@@ -547,7 +547,7 @@ const clearNotifications = async () => {
                               <FormControl>
                                 <Input className="" placeholder="Title for the question ..." {...field}/>
                               </FormControl>
-                              <div className="text-sm opacity-70">This is the title, write your question here.</div>
+                              <div className="text-[12px] opacity-70">This is the title, write your question here.</div>
                               <FormMessage/>
                             </FormItem>
                           )}
@@ -573,7 +573,7 @@ const clearNotifications = async () => {
                                    /> 
                                 </FormControl>
                                 </div>
-                                <div className="text-sm opacity-70">This is the description, give more details about your question here.</div>
+                                <div className="text-[12px] opacity-70">This is the description, give more details about your question here.</div>
                                 <FormMessage/>
                               </FormItem>
                             )}
@@ -613,7 +613,7 @@ const clearNotifications = async () => {
                                 })
                               }
                             </div>
-                            <div className="text-sm opacity-70 mt-[0.45rem]">This is the category, you can choose multiple categories for your Question.</div>
+                            <div className="text-[12px] opacity-70 mt-[0.45rem]">This is the category, you can choose multiple categories for your Question.</div>
                           </div>
                           <FormField
                             control={form.control}
@@ -623,7 +623,7 @@ const clearNotifications = async () => {
                                 <div className="space-y-0.5">
                                   <FormLabel className="text-base">
                                     Post Anonymously
-                                    <div className="text-sm font-normal opacity-70">Hide your details while posting question</div>
+                                    <div className="text-[12px] font-normal opacity-70">Hide your details while posting question</div>
                                   </FormLabel>
                                   {/* <FormDescription>
                                     Post question without revealing your identity.

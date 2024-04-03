@@ -615,6 +615,7 @@ const clearNotifications = async () => {
                             }
                           </div>
                           <div>
+                          <div className="text-sm font-medium mb-2">Category</div>
                           <Select value={selectedCategory} onValueChange={handleSelectChange} >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a Category" />

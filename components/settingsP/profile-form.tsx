@@ -92,32 +92,48 @@ export function ProfileForm() {
   const [user, loading] = useAuthState(auth);
 
   async function onSubmit(data: ProfileFormValues) {
-    
-    if(user){
-    const uid = user.uid;
-
-    const userDocRef = doc(db, 'users', uid);
-
-    try {
-      await updateDoc(userDocRef, {
-        name: data.name,
-        //dob: data.dob,
-        //username: data.username,
-        //email: data.email,
-        // Add other fields as needed
-      });
-      toast({
-        title: 'Profile Updated',
-        description: 'Your profile has been updated successfully.',
-      });
-    } catch (error) {
-      toast({
-        title: 'Error Updating Profile',
-        description: 'An error occurred while updating your profile.',
-      });
-      console.error('Error updating profile:', error);
+    if (user) {
+      const uid = user.uid;
+      const userDocRef = doc(db, 'users', uid);
+  
+      try {
+        const userData: {
+          name: string;
+          dob: Date | undefined;
+          username: string | undefined;
+          email: string | undefined;
+          bio: string | undefined;
+          [key: string]: string | Date | undefined; // Index signature
+        } = {
+          name: data.name,
+          dob: data.dob,
+          username: data.username,
+          email: data.email,
+          bio: data.bio,
+        };
+  
+        // Check if each field in userData exists in data before updating
+        const updatedData: any = {};
+        for (const key in userData) {
+          if (userData.hasOwnProperty(key) && userData[key] !== undefined) {
+            updatedData[key] = userData[key];
+          }
+        }
+  
+        await updateDoc(userDocRef, updatedData);
+  
+        toast({
+          title: 'Profile Updated',
+          description: 'Your profile has been updated successfully.',
+        });
+      } catch (error) {
+        toast({
+          title: 'Error Updating Profile',
+          description: 'An error occurred while updating your profile.',
+        });
+        console.error('Error updating profile:', error);
+      }
     }
-  }
   }
 
   return (

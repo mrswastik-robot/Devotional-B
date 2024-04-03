@@ -166,7 +166,7 @@ const ProfilePage = (props: Props) => {
     }
   };
 
-  console.log("user g: ", user);
+  //console.log("user g: ", user);
 
   useEffect(() => {
     //console.log("heyyyyyyyyyyy");

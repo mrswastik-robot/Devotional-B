@@ -34,7 +34,6 @@ const ProfileCard = ({user}: Props) => {
           const followers = userData?.followers?.length;
           const realName = userData?.name;
           const bioo = userData?.bio;
-          //console.log("Bio: ", bioo);
           // Assuming followers and following fields exist in user data
           setName(realName);
           setBio(bioo);
@@ -67,6 +66,7 @@ const ProfileCard = ({user}: Props) => {
 
         <div className="mx-5">
           <h1 className="lg:text-4xl text-xl font-bold">{name}</h1>
+          <div className={`${bio?"":"h-3"}`}></div>
           <div className="text-sm lg:text-base text-opacity-90">{bio}</div>
           <div className=" flex gap-x-2 mt-1 lg:text-base text-xs opacity-80">
           <p>{followersCount} Followers</p>

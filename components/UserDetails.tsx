@@ -10,6 +10,7 @@ type UserDetail = {
   name: string;
   email: string;
   profilePic: string;
+  bio: string;
 };
 
 const UserDetails = ({ uid, type, handleFchange }: { uid: string, type: string, handleFchange: Function }) => {
@@ -28,7 +29,8 @@ const UserDetails = ({ uid, type, handleFchange }: { uid: string, type: string, 
           setUserDetails({
             name: userData.name,
             email: userData.email,
-            profilePic: userData.profilePic
+            profilePic: userData.profilePic,
+            bio: userData.bio||""
           });
         } else {
           console.log('User document not found');
@@ -122,7 +124,6 @@ const UserDetails = ({ uid, type, handleFchange }: { uid: string, type: string, 
       {userDetail ? (
         <div>
         <div className="flex mx-auto bg-[#FFFFFF] dark:bg-[#262626] p-3 rounded-lg font-dmsans">
-  
           <div>
           <Image
             src={userDetail.profilePic || '/nodp.webp'}
@@ -133,13 +134,16 @@ const UserDetails = ({ uid, type, handleFchange }: { uid: string, type: string, 
           />
           {/* <p className=" mt-4 text-sm">Write a description about yourself ...</p> */}
           </div>
-  
-  
+          <div className='flex flex-col'>
+          <div className='flex'>
           <div className="space-y-2 mx-5">
             <h1 className=" text-base font-bold font-dmsans">{userDetail.name||"Unknown"}</h1>
   
           </div>
           <div className="text-blue-500 font-dmsans text-sm mt-[0.20rem] p-0 hover:underline cursor-pointer" onClick={type=="following"?handleUnfollow:handleRemoveFollower}>{type=="following"?"Unfollow":"Remove"}</div>
+          </div>
+          <div className='ml-5 text-sm mt-[0.20rem] opacity-80'>{userDetail.bio}</div>
+          </div>
         </div>
         <Separator className='h-1'/>
       </div>

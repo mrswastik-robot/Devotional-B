@@ -18,6 +18,7 @@ import {
 
 import { Album } from "../data/albums"
 import { playlists } from "../data/playlists"
+import Link from "next/link";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   album: Album
@@ -53,7 +54,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
 
     //console.log("Post: ", post)
   return (
-    <div className="w-[23rem] h-40">
+    <div className="lg:w-[23rem] w-[full] lg:h-40 h-[7.2rem]">
       <ContextMenu>
         <ContextMenuTrigger>
           <div className="overflow-hidden rounded-md">
@@ -82,17 +83,20 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
         </ContextMenuTrigger>
         <ContextMenuContent className="w-40">
           <ContextMenuItem>Save Post</ContextMenuItem>
-          <ContextMenuSub>
-            <ContextMenuSubTrigger>Add to Playlist</ContextMenuSubTrigger>
-          </ContextMenuSub>
           <ContextMenuSeparator />
           <ContextMenuItem>Like</ContextMenuItem>
           <ContextMenuItem>Share</ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
       <div className="mt-3 text-sm">
+      <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
         <h3 className="text-lg font-semibold leading-none">{post.title}</h3>
-        <p className="text-sm mt-[0.30rem]">{parse(`${post.description.length>65?post.description.substring(0, 64)+"...":post.description}`)}</p>
+      </Link>  
+      <div className="hidden lg:block">
+        {
+        <p className="text-sm mt-[0.30rem] overflow-hidden line-clamp-2 mb-8">{parse(`${post.description.length>65?post.description.substring(0, 64)+"...":post.description}`)}</p>
+}
+        </div>
       </div>
     </div>
   )

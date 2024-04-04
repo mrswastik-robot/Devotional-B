@@ -369,22 +369,6 @@ export default function MusicPage() {
 
   return (
     <>
-      <div className="md:hidden">
-        <Image
-          src="/examples/music-light.png"
-          width={1280}
-          height={1114}
-          alt="Music"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/music-dark.png"
-          width={1280}
-          height={1114}
-          alt="Music"
-          className="hidden dark:block"
-        />
-      </div>
       <div className="font-dmsans">
         <div className="border-t">
           <div className="bg-background">
@@ -402,9 +386,9 @@ export default function MusicPage() {
                           Recents
                         </TabsTrigger>
                       </TabsList>
-                      <div className="ml-auto mr-4">
-                        <Button>
-                          <PlusCircleIcon className="mr-2 h-4 w-4" />
+                      <div className="ml-auto lg:mr-4">
+                        <Button className="">
+                          <PlusCircleIcon className="hidden lg:block mr-2 h-4 w-4" />
                           Ask Question
                         </Button>
                       </div>
@@ -425,7 +409,7 @@ export default function MusicPage() {
                       </div>
                       <Separator className="my-4" />
                       <div className="flex flex-col gap-y-[5.5rem]">
-                          <div className="grid grid-cols-3 gap-4 pb-4 gap-y-[5.5rem]">
+                          <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 pb-4 gap-y-[5.5rem]">
                             {posts.map((post, index) => (
                                 <div key={index} className="mb-12">
                               <AlbumArtwork

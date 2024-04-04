@@ -69,6 +69,7 @@ type Props = {
 const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   const pRef = useRef<HTMLDivElement>(null);
 
+  //console.log("Answer Posr: ", post);
   const { toast } = useToast();
 
   const isAnonymous = post.anonymity;
@@ -297,11 +298,13 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           </div>
           }
           
+          <div className={`${post.title?"":"hidden"}`}>
           <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
             <h1 className={`font-bold font-dmsans py-2 leading-6 text-[17px] text-[#282829] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
           </Link>
+          </div>
 
           {/* <p className="mb-1">{parse(post.description)}</p> */}
           {post.questionImageURL ? (

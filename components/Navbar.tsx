@@ -491,7 +491,9 @@ const clearNotifications = async () => {
         href={`/`}
         className=" my-auto"
         >
-          <p className=" text-lg font-bold my-auto font-dmsans">Devotional-B</p>
+          <p className=" text-lg font-bold my-auto font-dmsans">
+          <Image src={logo} alt="logo" width={150} height={55} />
+          </p>
         </Link>
         <Link
         href={`/profilePage`}
@@ -779,7 +781,7 @@ const clearNotifications = async () => {
             </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>{name}</DropdownMenuLabel>
+              <DropdownMenuLabel>{`${user.isAnonymous?"Guest":name}`}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
               <Link href="/profilePage">
@@ -797,7 +799,7 @@ const clearNotifications = async () => {
                 </Link>
                 <div className="mt-1 ml-2 mb-2">
                 <div className="flex items-center justify-between pr-1 space-x-2">
-                <Label htmlFor="airplane-mode">Dark Mode</Label>
+                <Label htmlFor="airplane-mode" className="font-normal">Dark Mode</Label>
                 <Switch id="airplane-mode" onCheckedChange={toggleTheme} checked={theme==='dark'}/>
                 </div>
                 </div>

@@ -20,6 +20,7 @@ import {
   signInAnonymously,
 } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import logo from "../../public/logo.png"
 
 import { Button } from "@/components/ui/button";
 import {
@@ -198,8 +199,8 @@ const LoginPage = (props: Props) => {
           <div className="relative bg-[#F8FAFC] rounded-lg ">
             <div className="px-4 py-9 md:py-0">
               <div className="text-center">
-                <p className="mb-3 text-2xl font-semibold leading-5 text-slate-900">
-                  Devotional-B
+                <p className="mb-4 text-2xl font-semibold leading-5 text-slate-900 flex justify-center">
+                <Image src={logo} alt="logo" width={160} height={60} />
                 </p>
                 <p className="mt-2 text-sm leading-4 text-slate-600">
                   Your Personal Devotional Forum. Sign Up/Sign In to Continue.

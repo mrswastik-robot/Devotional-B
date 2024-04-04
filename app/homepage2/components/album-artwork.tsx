@@ -54,7 +54,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
 
     //console.log("Post: ", post)
   return (
-    <div className="lg:w-[23rem] w-[full] lg:h-40 h-[7.2rem]">
+    <div className="lg:w-[23rem] w-[full] lg:h-40 h-[7.7rem]">
       <ContextMenu>
         <ContextMenuTrigger>
           <div className="overflow-hidden rounded-md">

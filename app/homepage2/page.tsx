@@ -385,7 +385,7 @@ export default function MusicPage() {
           className="hidden dark:block"
         />
       </div>
-      <div className="">
+      <div className="font-dmsans">
         <div className="border-t">
           <div className="bg-background">
             <div className="">

@@ -87,6 +87,22 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   const [isFollowing, setIsFollowing] = useState(false); // State to track if the user is following this post's creator
   const [isCurrentUser, setIsCurrentUser] = useState(false); // State to track if the post's creator is the current user
 
+  const fetchQuestion = async()=>{
+    console.log("hii ", post.title, post.uid);
+    if(post.title==undefined){
+    if (post.uid) {
+      const questionRef = doc(db, "questions", post.uid);
+      const questionDoc = await getDoc(questionRef);
+ 
+      console.log(questionDoc, " * ", questionDoc.exists())
+      if (questionDoc.exists()) {
+        const questionData = questionDoc.data();
+        console.log(questionData);
+      }
+    }
+  }
+  }
+  
   const HandleDelete = () => {
     handleDelete(post.id);
   };
@@ -324,7 +340,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           >
             {/* <EditorOutput content={post.content} /> */}
 
-            <p className="text-[#282829] font-dmsans dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
+            <p onClick={fetchQuestion} className="text-[#282829] font-dmsans dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
             {!isExpanded && isOverflowing && ( <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div>) }
 
             {/* {pRef.current?.clientHeight === 160 ? (

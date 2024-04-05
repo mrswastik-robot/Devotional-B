@@ -16,6 +16,7 @@ import {
 import { AlbumArtwork } from "./components/album-artwork"
 import { listenNowAlbums, madeForYouAlbums } from "./data/albums"
 import { playlists } from "./data/playlists"
+import { Sidebar } from "./components/sidebar"
 
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { postData } from "@/lib/data";
@@ -372,7 +373,8 @@ export default function MusicPage() {
       <div className="font-dmsans">
         <div className="border-t">
           <div className="bg-background">
-            <div className="">
+            <div className="grid lg:grid-cols-5">
+            <Sidebar playlists={playlists} className="hidden lg:block" />
               <div className="col-span-3 lg:col-span-4 lg:border-l">
                 <div className="px-4 py-6">
                   <Tabs defaultValue="music" className="h-full space-y-6">

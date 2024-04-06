@@ -193,7 +193,7 @@ export default function MusicPage() {
      if (lastDoc) {
        q = query(
          collectionRef,
-         where("category", "==", selectedCategory),
+         where("category", "array-contains", selectedCategory),
          orderBy("createdAt", "desc"),
          startAfter(lastDoc),
          limit(limitValue)
@@ -201,7 +201,7 @@ export default function MusicPage() {
      } else {
        q = query(
          collectionRef,
-         where("category", "==", selectedCategory),
+         where("category", "array-contains", selectedCategory),
          orderBy("createdAt", "desc"),
          limit(limitValue)
        );
@@ -370,11 +370,11 @@ export default function MusicPage() {
 
   return (
     <>
-      <div className="font-dmsans">
-        <div className="border-t">
-          <div className="bg-background">
-            <div className="grid lg:grid-cols-5">
-            <Sidebar playlists={playlists} className="hidden lg:block" />
+      <div className="w-full">
+        <div className="border-t w-full">
+          <div className="bg-background w-full">
+            <div className="grid lg:grid-cols-5 w-full">
+            <Sidebar playlists={playlists} selectChange={handleSelectChange} currentC={selectedCategory||"all"} className="hidden lg:block" />
               <div className="col-span-3 lg:col-span-4 lg:border-l">
                 <div className="px-4 py-6">
                   <Tabs defaultValue="music" className="h-full space-y-6">

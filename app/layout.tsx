@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Providers from "@/components/ThemeProvider";
 import { StoreProvider } from "@/store/StoreProvider";
 import { Toaster } from "@/components/ui/toaster";
+// import {useRouter} from "next/router";
 
 import { GeistSans } from 'geist/font/sans';
 
@@ -43,6 +44,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  // const router = useRouter();
+  // const currPath = router.pathname;
+  // console.log("path: ", currPath);
   return (
     <StoreProvider>
       <html lang="en">

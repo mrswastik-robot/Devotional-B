@@ -11,6 +11,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs , doc , getDoc, deleteDoc, collectionGroup} from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Post from '@/components/Post';
+import AnswerPost from '../../components/AnswerPost'
 import Loader from '@/components/ui/Loader';
 import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
@@ -60,6 +61,22 @@ type PostType = {
   // Add any other fields as necessary
 };
 
+type AnswerType = {
+  id: string;
+  name: string;
+  description: string;
+  profilePic: string;
+  answerImageURL: any;
+  voteAmt: number;
+  //shares: number;
+  //comments: number;
+  questionId: string;
+  questionTitle: string;
+  createdAt: string;
+  anonymity: boolean;
+  uid: string;
+}
+
 const ProfilePage = (props: Props) => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
@@ -72,7 +89,7 @@ const ProfilePage = (props: Props) => {
   const [following, setFollowing] = useState<any>([]);
   const [loadingFollowers, setLoadingFollowers] = useState(true);
   const [loadingFollowing, setLoadingFollowing] = useState(true);
-  const [answers, setAnswers] = useState<PostType[]>([]);
+  const [answers, setAnswers] = useState<AnswerType[]>([]);
   const [answerLastDoc, setAnswerLastDoc] = useState<any>(null);
   const [answerStart, setAnswerStart] = useState<boolean>(true);
   const [answerMorePosts, setAnswerMorePosts] = useState(false);
@@ -116,6 +133,29 @@ const ProfilePage = (props: Props) => {
         setAnonymousQuestions((prevQuestions) => prevQuestions.filter((post) => post.id !== postId));
       }
   
+      
+    } catch (error) {
+      toast({
+        title:'Something went wrong',
+        variant:'destructive',
+      })
+      console.error('Error deleting post: ', error);
+    }
+  }
+
+  const handleAnswerDelete = async(postId:string)=>{
+    try {
+      // Delete the post from the 'questions' collection
+      const postRef = doc(db, 'answers', postId);
+      await deleteDoc(postRef);
+      toast({
+        title:'Deleted Sucessfully',
+        variant:'default',
+      })
+      // Remove the deleted post from the state
+      if (postType === 'answers') {
+        setAnswers((prevAnswers) => prevAnswers.filter((post) => post.id !== postId));
+      } 
       
     } catch (error) {
       toast({
@@ -273,85 +313,44 @@ const ProfilePage = (props: Props) => {
             }
           }
           else if(postType=="answers"){
-            const questionsRef = collection(db, 'questions');
-            const questionQuery = query(questionsRef,
-            orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),);
-            const questionSnapshot = await getDocs(questionQuery);
-            let count = 0;
-            const questionDoc = questionSnapshot.docs;
-              const totalPost=questionDoc.length;
-            if(answerStart){
-
-            if (!questionSnapshot.empty) {
-              
-              let totalAnswers: any[] | ((prevState: PostType[]) => PostType[])=[];
-              count=0;
-              while(count<totalPost&&totalAnswers.length<=7){
-              // Reference the 'answers' subcollection directly
-              
-              const answersCollectionRef = collection(questionDoc[count].ref, 'answers');
-      
-              const q = query(
-                answersCollectionRef,
-                // where("uid", "==", user.uid),
+            if (answerStart) {
+              q = query(
+                collection(db, "answers"),
+                where("uid", "==", user?.uid),
                 orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
+                limit(7)
               );
-      
               const snapshot = await getDocs(q);
-      
-              // Update state with the fetched answers
-              totalAnswers=
+              setAnswers(
                 snapshot.docs.map(
-                  (doc) => ({ id: doc.id, ...doc.data() } as PostType)
+                  (doc) => ({ id: doc.id, ...doc.data() } as AnswerType)
                 )
-      
-            //   const lstdoc = snapshot.docs[snapshot.docs.length - 1];
-            // // if (lstdoc) setAnswerMorePosts(true);
-            // // else setAnswerMorePosts(false);
-            // // setAnswerLastDoc(lstdoc);
-            setAnswerStart(false);
-            count++;
-            }
-            if(count<totalPost)setAnswerMorePosts(true)
-            else setAnswerMorePosts(false);
-            setAnswers(
-              totalAnswers
-            );
+              );
+              const lastdoc = snapshot.docs[snapshot.docs.length - 1];
+              if (lastdoc) setAnswerMorePosts(true);
+              else setAnswerMorePosts(false);
+              setAnswerLastDoc(lastdoc);
+              setAnswerStart(false);
+            } else {
+              const moreQ = query(
+                collection(db, "answers"),
+                where("uid", "==", user?.uid),
+                orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
+                startAfter(answerLastDoc),
+                limit(7)
+              );
 
-          }
-          }
-            else{
-
-              if (!questionSnapshot.empty) {
-                let intCount=0;
-                // Reference the 'answers' subcollection directly
-                  let totalAnswers:any =[];
-              while((count||0)<totalPost&&totalAnswers.length<=7&&intCount<7){
-                const answersCollectionRef = collection(questionDoc[count||0].ref, 'answers');
-        
-                const moreQ = query(
-                  answersCollectionRef,
-                  where("uid", "==", user?.uid),
-                  orderBy("createdAt", `${sortType=='recent'?"desc":"asc"}`),
-                );
-        
-                const moreSnapshot = await getDocs(moreQ);
-        
-                // Update state with the fetched answers
-                totalAnswers=moreSnapshot.docs.map(
-                    (doc) => ({ id: doc.id, ...doc.data() } as PostType)
-                  )
-                 intCount++;
-              }
-              if(count<totalPost)setAnswerMorePosts(true)
-            else setAnswerMorePosts(false);
+              const moreSnapshot = await getDocs(moreQ);
               setAnswers((prevAnswers) => [
                 ...prevAnswers,
-                ...totalAnswers,
+                ...moreSnapshot.docs.map(
+                  (doc) => ({ id: doc.id, ...doc.data() } as AnswerType)
+                ),
               ]);
-
-              }
-
+              const lastdoc = moreSnapshot.docs[moreSnapshot.docs.length - 1];
+              if (lastdoc) setAnswerMorePosts(true);
+              else setAnswerMorePosts(false);
+              setAnswerLastDoc(lastdoc);
             }
             }
           }
@@ -436,7 +435,7 @@ useEffect(() => {
 
     //useEffect for automting lazyload functionality
   useEffect(() => {
-    if(morePosts || anonymousMorePosts){
+    if(morePosts || anonymousMorePosts ||answerMorePosts){
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -633,7 +632,7 @@ useEffect(() => {
               answers.map((post, index) => (
                 // <Post key={index} post={post} />
                 <div key={index} className=" my-1">
-                  <Post post={post} isProfile={true} handleDelete={handleDelete} />
+                  <AnswerPost post={post} isProfile={true} handleDelete={handleAnswerDelete} />
                 </div>
               ))
             )

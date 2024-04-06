@@ -46,18 +46,18 @@ import {
 type Props = {
   post: {
     id: string;
-    title: string;
-    name: string;
-    description: string;
-    profilePic: string;
-    postImage: string;
-    likes: number;
-    comments: number;
-    shares: number;
-    questionImageURL: string;
-    createdAt: string;
-    anonymity: boolean;
-    uid: string; // User ID of the post creator
+  name: string;
+  description: string;
+  profilePic: string;
+  answerImageURL: any;
+  voteAmt: number;
+  //shares: number;
+  //comments: number;
+  questionId: string;
+  questionTitle: string;
+  createdAt: string;
+  anonymity: boolean;
+  uid: string
     // ansNumbers: number
   };
   // children: Element
@@ -87,163 +87,145 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   const [isFollowing, setIsFollowing] = useState(false); // State to track if the user is following this post's creator
   const [isCurrentUser, setIsCurrentUser] = useState(false); // State to track if the post's creator is the current user
 
-  const fetchQuestion = async()=>{
-    //console.log("hii ", post.title, post.uid);
-    if(post.title==undefined){
-    if (post.uid) {
-      const questionRef = doc(db, "questions", post.uid);
-      const questionDoc = await getDoc(questionRef);
- 
-      console.log(questionDoc, " * ", questionDoc.exists())
-      if (questionDoc.exists()) {
-        const questionData = questionDoc.data();
-        console.log(questionData);
-      }
-    }
-  }
-  }
   
   const HandleDelete = () => {
     handleDelete(post.id);
   };
 
-  const handleSave = async () => {
-    if (!user||user.isAnonymous==true) {
-      toast({
-        title: " Please sign in to save posts ",
-        variant: "destructive",
-      });
-      return;
-    }
+//   const handleSave = async () => {
+//     if (!user||user.isAnonymous==true) {
+//       toast({
+//         title: " Please sign in to save posts ",
+//         variant: "destructive",
+//       });
+//       return;
+//     }
 
-    const userRef = doc(db, "users", user.uid);
+//     const userRef = doc(db, "users", user.uid);
 
-    if (savedState) {
-      //post is currently saved remove it from saved posts
-      await updateDoc(userRef, {
-        savedPosts: arrayRemove(post.id),
-      });
-      toast({
-        title: " Post removed from saved ",
-        variant: "default",
-      });
-    } else {
-      //post is currently not saved add it to saved posts
-      await updateDoc(userRef, {
-        savedPosts: arrayUnion(post.id),
-      });
-      toast({
-        title: " Post saved ",
-        variant: "default",
-      });
-    }
+//     if (savedState) {
+//       //post is currently saved remove it from saved posts
+//       await updateDoc(userRef, {
+//         savedPosts: arrayRemove(post.id),
+//       });
+//       toast({
+//         title: " Post removed from saved ",
+//         variant: "default",
+//       });
+//     } else {
+//       //post is currently not saved add it to saved posts
+//       await updateDoc(userRef, {
+//         savedPosts: arrayUnion(post.id),
+//       });
+//       toast({
+//         title: " Post saved ",
+//         variant: "default",
+//       });
+//     }
 
-    setSavedState(!savedState);
-  };
+//     setSavedState(!savedState);
+//   };
 
-  useEffect(() => {
-    // Check if the current user is following the post's creator
-    if (user) {
-      const userRef = doc(db, "users", user.uid);
-      const unsubscribe = onSnapshot(userRef, (doc) => {
-        if (doc.exists()) {
-          const userData = doc.data();
-          setIsFollowing(userData.following.includes(post.uid)); // Update isFollowing based on the following list
-          setIsCurrentUser(user.uid === post.uid); // Check if the post's creator is the current user
-        }
-      });
+//   useEffect(() => {
+//     // Check if the current user is following the post's creator
+//     if (user) {
+//       const userRef = doc(db, "users", user.uid);
+//       const unsubscribe = onSnapshot(userRef, (doc) => {
+//         if (doc.exists()) {
+//           const userData = doc.data();
+//           setIsFollowing(userData.following.includes(post.uid)); // Update isFollowing based on the following list
+//           setIsCurrentUser(user.uid === post.uid); // Check if the post's creator is the current user
+//         }
+//       });
 
-      return () => unsubscribe();
-    }
-  }, [post.uid, user]);
+//       return () => unsubscribe();
+//     }
+//   }, [post.uid, user]);
 
   //fetching savedPosts from user's document
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (!user) return;
-      const userRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userRef);
+//   useEffect(() => {
+//     const fetchUser = async () => {
+//       if (!user) return;
+//       const userRef = doc(db, "users", user.uid);
+//       const userDoc = await getDoc(userRef);
 
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        const savedPosts = userData.savedPosts;
+//       if (userDoc.exists()) {
+//         const userData = userDoc.data();
+//         const savedPosts = userData.savedPosts;
 
-        // If the post is in the savedPosts array, set savedState to true
-        if (savedPosts.includes(post.id)) {
-          setSavedState(true);
-        } else {
-          // If the post is not in the savedPosts array, set savedState to false
-          // unless it's the recently saved post (post.id === savedPostId)
-          // setSavedState(post.id === savedPostId);
-        }
-      }
-    };
+//         // If the post is in the savedPosts array, set savedState to true
+//         if (savedPosts.includes(post.id)) {
+//           setSavedState(true);
+//         } else {
+//           // If the post is not in the savedPosts array, set savedState to false
+//           // unless it's the recently saved post (post.id === savedPostId)
+//           // setSavedState(post.id === savedPostId);
+//         }
+//       }
+//     };
 
-    fetchUser();
-  }, [post.id, user]);
+//     fetchUser();
+//   }, [post.id, user]);
 
   //for displaying 'more' button
-  useEffect(() => {
-    // Assuming a line height of around 20px
-    const maxHeight = 25 * 3; 
+//   useEffect(() => {
+//     // Assuming a line height of around 20px
+//     const maxHeight = 25 * 3; 
   
-    if (pRef.current && pRef.current.offsetHeight > maxHeight) {
-      setIsOverflowing(true);
-    } else {
-      setIsOverflowing(false);
-    }
-  }, [post.description]);
+//     if (pRef.current && pRef.current.offsetHeight > maxHeight) {
+//       setIsOverflowing(true);
+//     } else {
+//       setIsOverflowing(false);
+//     }
+//   }, [post.description]);
 
   //console.log("Id: ", post.uid, " ",  post.title);
 
-  const handleFollow = async () => {
-    if (!user||(user&&user.isAnonymous==true)) {
-      toast({
-        title: " Please login to follow others ",
-        variant: "destructive",
-      });
-      return;
-    }
+//   const handleFollow = async () => {
+//     if (!user||(user&&user.isAnonymous==true)) {
+//       toast({
+//         title: " Please login to follow others ",
+//         variant: "destructive",
+//       });
+//       return;
+//     }
 
-    const userRef = doc(db, "users", user.uid);
+//     const userRef = doc(db, "users", user.uid);
 
-    try {
-      await updateDoc(userRef, {
-        following: isFollowing
-          ? arrayRemove(post.uid) // Unfollow if already following
-          : arrayUnion(post.uid), // Follow if not following
-      });
+//     try {
+//       await updateDoc(userRef, {
+//         following: isFollowing
+//           ? arrayRemove(post.uid) // Unfollow if already following
+//           : arrayUnion(post.uid), // Follow if not following
+//       });
 
-      setIsFollowing(!isFollowing); // Update isFollowing state
+//       setIsFollowing(!isFollowing); // Update isFollowing state
 
-      // Update followers list of the post's creator
-      const postUserRef = doc(db, "users", post.uid);
-      await updateDoc(postUserRef, {
-        followers: isFollowing
-          ? arrayRemove(user.uid) // Remove follower if unfollowing
-          : arrayUnion(user.uid), // Add follower if following
-      });
+//       // Update followers list of the post's creator
+//       const postUserRef = doc(db, "users", post.uid);
+//       await updateDoc(postUserRef, {
+//         followers: isFollowing
+//           ? arrayRemove(user.uid) // Remove follower if unfollowing
+//           : arrayUnion(user.uid), // Add follower if following
+//       });
 
-      // Show toast notification based on follow/unfollow action
-      toast({
-        title: isFollowing ? "You have unfollowed this user ❌" : "You are now following this user ✅",
-        variant: "default",
-      });
+//       // Show toast notification based on follow/unfollow action
+//       toast({
+//         title: isFollowing ? "You have unfollowed this user ❌" : "You are now following this user ✅",
+//         variant: "default",
+//       });
 
-    } catch (error) {
-      console.error("Error updating following list:", error);
-      toast({
-        title: "Error updating following list",
-        variant: "destructive",
-      });
-    }
-  };
+//     } catch (error) {
+//       console.error("Error updating following list:", error);
+//       toast({
+//         title: "Error updating following list",
+//         variant: "destructive",
+//       });
+//     }
+//   };
 
 
   return (
-    <>
-    {
-      post.uid?
     <div className="rounded-md bg-white dark:bg-[#262626] shadow my-1">
       <div className="px-6 py-4 flex justify-between">
         {/* <PostVoteClient
@@ -305,11 +287,11 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                 </svg>
 
 
-                {(
+                {/* {(
         <button className=" text-blue-500 font-dmsans text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer" onClick={handleFollow}>
           {isFollowing ? "Following" : "Follow"}
         </button>
-      )}
+      )} */}
               </div>
             )}
             </div>
@@ -317,19 +299,19 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           </div>
           }
           
-          <div className={`${post.title?"":"hidden"}`}>
+          {/* <div className={`${post.title?"":"hidden"}`}>
           <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
             <h1 className={`font-bold font-dmsans py-2 leading-6 text-[17px] text-[#282829] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
           </Link>
-          </div>
+          </div> */}
 
           {/* <p className="mb-1">{parse(post.description)}</p> */}
-          {post.questionImageURL ? (
+          {post.answerImageURL ? (
             <div className="relative w-full h-60">
               <Image
-                src={post.questionImageURL}
+                src={post.answerImageURL}
                 layout="fill"
                 objectFit="cover"
                 alt="post image"
@@ -342,19 +324,21 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}
-
-            <p onClick={fetchQuestion} className="text-[#282829] font-dmsans dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
-            {!isExpanded && isOverflowing && ( <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div>) }
-
+            <Link
+            href={`/${post?.questionTitle?.split(" ").join("-")}`}
+            className="w-fit flex items-center gap-2"
+          >
+            <p className="text-[#282829] font-dmsans dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
+            </Link>
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
               
             ) : null} */}
-            {!isExpanded && isOverflowing && (
+            {/* {!isExpanded && isOverflowing && (
               <div className="absolute bottom-0 md:bottom-[-0.16rem] left-0 w-full  text-right ">
                 <button className=" text-blue-500  hover:underline md:w-[8%] w-full backdrop-blur-none bg-white/50 dark:bg-transparent  text-right text-sm  " onClick={() => setIsExpanded(true)}>(more)</button>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
@@ -363,25 +347,26 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
         {/* <div className=' sm:block md:hidden '> */}
         <PostVoteClientPhone
           postId={post.id}
-          postType="questions"
+          postType="answers"
           userId={user?.uid!}
+          questionId={post.questionId}
         />
         {/* </div> */}
 
         <div className=" flex gap-x-3">
           <Link
-            href={`/${post?.title?.split(" ").join("-")}`}
+            href={`/${post?.questionTitle?.split(" ").join("-")}`}
             className="w-fit flex items-center gap-2"
           >
             <MessageSquare className="h-4 w-4" />{" "}
-            <span className=" sm:block hidden font-dmsans">{post.comments} Answers</span>
+            <span className=" sm:block hidden font-dmsans">Comment</span>
           </Link>
           <button className="w-fit flex items-center gap-2 font-dmsans">
             <ShareDialog
-              postLink={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
+              postLink={`/${encodeURIComponent(post?.questionTitle?.split(" ").join("-"))}`}
             />
           </button>
-          <button
+          {/* <button
             className="w-fit flex items-center gap-2"
             onClick={handleSave}
           >
@@ -395,7 +380,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             ) : (
               <span className=" sm:block hidden font-dmsans">Save</span>
             )}
-          </button>
+          </button> */}
 
           {isProfile&&
           <AlertDialog>
@@ -425,9 +410,6 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
         </div>
       </div>
     </div>
-    :<div></div>
-}
-    </>
   );
 };
 

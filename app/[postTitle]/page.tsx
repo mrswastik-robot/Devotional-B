@@ -113,6 +113,8 @@ type AnswerType = {
   createdAt: string;
   anonymity: boolean;
   uid: string;
+  questionId: string;
+  questionTitle: string;
   // Add any other fields as necessary
 };
 
@@ -249,7 +251,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
       // Use the id of the question document to create the answer post in the 'answers' subcollection
       const questionId = doc.id;
       console.log("Ques Id ", doc.id);
-      const docRef = await addDoc(collection(db, "questions", doc.id, "answers"), {
+      const docRef = await addDoc(collection(db, "answers"), {
         description: data.description,
         uid: user?.uid,
         name: name||user?.displayName,
@@ -257,6 +259,8 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         createdAt: serverTimestamp(),
         answerImageURL: imageUrl,
         anonymity: data.anonymity,
+        questionId: doc.id,
+        questionTitle: postTitleWithSpaces,
       });
   
       console.log("Document written with ID: ", docRef.id);
@@ -280,32 +284,32 @@ const PostPage = ({ params: { postTitle } }: Props) => {
 
 
       // Generate Keywords and Hashtags for the answer
-      try {
-        console.log("keyword Gen.....")
-        const docRef = await addDoc(collection(db, 'keywords'), {
-          prompt: `Generate some keywords and hashtags on topic ${data.description}`,
-        });
-        console.log('Keyword Document written with ID: ', docRef.id);
+      // try {
+      //   console.log("keyword Gen.....")
+      //   const docRef = await addDoc(collection(db, 'keywords'), {
+      //     prompt: `Generate some keywords and hashtags on topic ${data.description}`,
+      //   });
+      //   console.log('Keyword Document written with ID: ', docRef.id);
     
-        // Listen for changes to the document
-        const unsubscribe = onSnapshot(docc(db, 'keywords', docRef.id), async(snap) => {
-          const data = snap.data();
-          if (data && data.response) {
-            console.log('RESPONSE: ' + data.response);
-            const keywordsString = `${data.response}`;
+      //   // Listen for changes to the document
+      //   const unsubscribe = onSnapshot(docc(db, 'keywords', docRef.id), async(snap) => {
+      //     const data = snap.data();
+      //     if (data && data.response) {
+      //       console.log('RESPONSE: ' + data.response);
+      //       const keywordsString = `${data.response}`;
   
-            const questionDocRef = docc(db, 'questions', questionId);
-            await updateDoc(questionDocRef, {
-            answerKeywords: keywordsString, // Add your keywords here
-        });
-          }
-        });
+      //       const questionDocRef = docc(db, 'questions', questionId);
+      //       await updateDoc(questionDocRef, {
+      //       answerKeywords: keywordsString, // Add your keywords here
+      //   });
+      //     }
+      //   });
     
-        // Stop listening after some time (for demonstration purposes)
-        setTimeout(() => unsubscribe(), 60000);
-      } catch (error) {
-        console.error('Error adding document: ', error);
-      }
+      //   // Stop listening after some time (for demonstration purposes)
+      //   setTimeout(() => unsubscribe(), 60000);
+      // } catch (error) {
+      //   console.error('Error adding document: ', error);
+      // }
 
       // Increment the ansNumbers field of the question
     // await updateDoc(docRef, {
@@ -313,7 +317,7 @@ const PostPage = ({ params: { postTitle } }: Props) => {
     // });
 
       //set the postId to the id of the question so that finally it can be sent to PostVoteClient for voting system.
-      setPostId(doc.id);
+      setPostId(doc.id); // lets see
       console.log(postId)
 
       //reset the form and image
@@ -345,14 +349,14 @@ const PostPage = ({ params: { postTitle } }: Props) => {
         setQueObject({ id: doc.id, ...doc.data() } as QuestionType);
   
         // Listener for the answers
-        const ansRef = collection(db, "questions", doc.id, "answers");
-        const qAns = query(ansRef, orderBy("createdAt", "desc")); // Order by 'createdAt' in descending order
+        const ansRef = collection(db, "answers");
+        const qAns = query(ansRef, where("questionTitle", "==", postTitleWithSpaces)); // Order by 'createdAt' in descending order
         const ansUnsub = onSnapshot(qAns, (snapshot) => {
           const answers = snapshot.docs.map((doc) => ({
             ...(doc.data() as AnswerType),
             id: doc.id,
           }));
-  
+          //console.log("Answerssss: ", answers);
           setAnswers(answers);
         });
   

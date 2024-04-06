@@ -215,8 +215,11 @@ const PostFeed = (props: Props) => {
     }
     for (const doc of snapshot.docs) {
       // Fetch the 'answers' subcollection for each question
-      const answersCollectionRef = collection(doc.ref, "answers");
-      const answersQuery = query(answersCollectionRef);
+      const answersCollectionRef = collection(db, "answers");
+      const answersQuery = query(
+        collection(db, 'answers'),
+        where("questionId", "==", doc.id),
+      );
       const answersSnapshot = await getDocs(answersQuery);
       const numAnswers = answersSnapshot.size;
 

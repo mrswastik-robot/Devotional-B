@@ -20,7 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { auth, db } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter, updateDoc, where } from "firebase/firestore";
 
 type Props = {
   answers: {
@@ -53,6 +53,8 @@ type AnswerType = {
   answerImageURL: string;
   createdAt: string;
   anonymity: boolean;
+  questionId: string;
+  questionTitle: string;
   // Add any other fields as necessary
 };
 
@@ -102,12 +104,14 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
       {
       // Set up the initial query
       const ansQuery = query(
-        collection(db, 'questions', postId, 'answers'),
+        collection(db, 'answers'),
+        where("questionTitle", "==", postTitleWithSpaces),
         orderBy('createdAt', 'desc'),
         limit(5) // Adjust the limit based on your preference
       );
 
       const ansSnapshot = await getDocs(ansQuery);
+      console.log("Answer array", ansSnapshot.docs);
 
       if (!ansSnapshot.empty) {
         const newAnswers = ansSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as AnswerType));
@@ -196,7 +200,8 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
     //console.log("hey ", lastAnswer)
     // Set up the query for the next batch
     let ansQuery = query(
-      collection(db, 'questions', postId, 'answers'),
+      collection(db, 'answers'),
+      where("questionTitle", "==", postTitleWithSpaces),
       orderBy('createdAt', 'desc'),
       startAfter(lastAnswer ? lastAnswer.createdAt : null), // If there is a last answer, start the query after it
       limit(5) // Adjust the limit based on your preference

@@ -38,7 +38,7 @@ const PostVoteClientPhone = ({
         console.error("questionId must be defined when postType is 'answers'");
         return;
       }
-      docPath = `questions/${questionId}/answers/${postId}`;
+      docPath = `answers/${postId}`;
     }
 
     // Fetch user's vote on mount
@@ -83,7 +83,7 @@ const PostVoteClientPhone = ({
         console.error("questionId must be defined when postType is 'answers'");
         return;
       }
-      docPath = `questions/${questionId}/answers/${postId}`;
+      docPath = `answers/${postId}`;
     }
   
     const voteValue = type === "UP" ? 1 : -1;

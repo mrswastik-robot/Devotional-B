@@ -456,7 +456,7 @@ export default function Home() {
   if(loading)
   {
     return(
-      <div className='w-[10%]  items-center justify-center flex mx-auto'>
+      <div className='w-[10%]  items-center justify-center flex mx-auto md:container md:max-w-7xl md:mx-auto'>
         <Loader />
       </div>
     )
@@ -465,6 +465,7 @@ export default function Home() {
   {
 
   return (
+    <div className="md:container md:max-w-7xl md:mx-auto ">
     <Suspense>
     <>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
@@ -692,6 +693,7 @@ export default function Home() {
       </div>
     </>
     </Suspense>
+    </div>
   );
                     }
 }

@@ -36,6 +36,8 @@ import {
   where,
 } from "firebase/firestore";
 
+import styled, { createGlobalStyle } from "styled-components";
+
 import {
   Select,
   SelectContent,
@@ -87,6 +89,11 @@ type PostType = {
 //   title: "Music App",
 //   description: "Example music app using the components.",
 // }
+
+const CustomContainer = styled.div`
+  height: 100%;
+  padding-top: 1rem;
+`;
 
 export default function MusicPage() {
 
@@ -373,9 +380,9 @@ export default function MusicPage() {
       <div className="w-full">
         <div className="border-t w-full">
           <div className="bg-background w-full">
-            <div className="grid lg:grid-cols-5 w-full">
+            <div className="grid lg:grid-cols-6 w-full">
             <Sidebar playlists={playlists} selectChange={handleSelectChange} currentC={selectedCategory||"all"} className="hidden lg:block" />
-              <div className="col-span-3 lg:col-span-4 lg:border-l">
+              <div className="col-span-3 lg:col-span-5 lg:border-l">
                 <div className="px-4 py-6">
                   <Tabs defaultValue="music" className="h-full space-y-6">
                     <div className="space-between flex items-center">
@@ -411,7 +418,7 @@ export default function MusicPage() {
                       </div>
                       <Separator className="my-4" />
                       <div className="flex flex-col gap-y-[5.5rem]">
-                          <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 pb-4 gap-y-[5.5rem]">
+                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-4 pb-4 gap-y-[5.5rem]">
                             {posts.map((post, index) => (
                                 <div key={index} className="mb-12">
                               <AlbumArtwork

@@ -35,6 +35,7 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <>
+    <div className="md:container md:max-w-7xl md:mx-auto ">
       <div className="md:hidden">
         <Image
           src="/examples/forms-light.png"
@@ -65,6 +66,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
           </aside>
           <div className="flex-1 lg:max-w-2xl">{children}</div>
         </div>
+      </div>
       </div>
     </>
   )

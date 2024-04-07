@@ -72,7 +72,7 @@ export default function PostPage({
 }) {
   return (
     
-            <div>
+            <div className="md:container md:max-w-7xl md:mx-auto ">
             <Navbar />
             <div className=" ">
             {children}

@@ -377,7 +377,7 @@ export default function MusicPage() {
 
   return (
     <>
-      <div className="w-full">
+      <div className="w-full font-dmsans">
         <div className="border-t w-full">
           <div className="bg-background w-full">
             <div className="grid lg:grid-cols-7 w-full">

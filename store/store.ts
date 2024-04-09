@@ -1,13 +1,17 @@
 
-import { configureStore } from '@reduxjs/toolkit'
-import searchReducer from './slice'
+import { configureStore , combineReducers } from '@reduxjs/toolkit'
+import {searchReducer} from './slice'
+import {postsReducer} from './slice'
+
+const rootReducer = combineReducers({
+    search: searchReducer,
+    posts: postsReducer,
+});
 
 export const store = () => {
-  return configureStore({
-    reducer: {
-        search: searchReducer,
-    }
-  })
+    return configureStore({
+        reducer: rootReducer,
+    });
 }
 
 // Infer the type of makeStore

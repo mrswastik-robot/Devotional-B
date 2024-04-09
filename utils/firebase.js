@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore , initializeFirestore, CACHE_SIZE_UNLIMITED } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
@@ -27,11 +27,19 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
 export const auth = getAuth();
-export const db = getFirestore(app);
+export const db = initializeFirestore(app, {
+    cacheSizeBytes: CACHE_SIZE_UNLIMITED
+});
 export const storage = getStorage(app);
 
+//caching
+// const firestoreSettings = initializeFirestore(app, {
+//     cacheSizeBytes: CACHE_SIZE_UNLIMITED
+// });
+
+
 //Enable offline persistence
-const firestore = getFirestore(app);
+// const firestore = getFirestore(app);
 // firestore.enablePersistence()
 //     .then(() => {
 //         // Offline persistence enabled successfully

@@ -44,6 +44,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/utils/firebase";
 import { doc  } from "firebase/firestore";
 
+//cache using Redux
+import { setPosts , addPosts , selectPosts } from "@/store/slice";
+
 type Props = {
   newPost: boolean;
 };
@@ -86,7 +89,12 @@ const PostFeed = (props: Props) => {
   //  }, [user]);
 
 
-  const [posts, setPosts] = useState<PostType[]>([]);
+  // const [posts, setPosts] = useState<PostType[]>([]);
+  //replacing the local state with Redux state
+  const posts = useSelector(selectPosts);
+  const dispatch = useDispatch();
+
+
   const limitValue: number = 7;
   const [lastDoc, setLastDoc] = useState<any>(null);
   const [loadMore, setLoadMore] = useState<any>(null);
@@ -237,10 +245,11 @@ const PostFeed = (props: Props) => {
     setLoadMore(lastDocument);
 
     if (addFirst && lastDoc == null) {
-      setPosts(postsData);
+      dispatch(setPosts(postsData));
       setAddFirst(false);
     } else {
-      setPosts((prevPosts) => [...prevPosts, ...postsData]);
+      //setPosts((prevPosts) => [...prevPosts, ...postsData]);
+      dispatch(addPosts(postsData));
     }
     setIsLoading(false);
     setPageLoaded(true);
@@ -267,7 +276,7 @@ const PostFeed = (props: Props) => {
   const { searchText, searchTriggered } = useSelector(
     (state: RootState) => state.search
   );
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();    //declared above for storing cache in Redux
 
   const searchClient = algoliasearch(
     "8XQGGZTFH3",

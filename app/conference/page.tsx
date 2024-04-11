@@ -19,7 +19,9 @@ type Props = {}
 const ConferencePage = (props: Props) => {
   return (
     <div className=' grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6 font-dmsans'>
-        <div className=' md:col-span-5 col-span-2 order-first rounded-md bg-white dark:bg-[#262626] shadow break-words overflow-hidden mt-1 font-dmsans'>
+        <div className=' md:col-span-5 col-span-2 order-first  '>
+
+          <div className=' w-full  bg-white dark:bg-[#262626] rounded-md shadow break-words overflow-hidden mt-1 font-dmsans'>
 
             <div className=''>
                 <div>
@@ -34,12 +36,13 @@ const ConferencePage = (props: Props) => {
 
             <div className=' max-w-[70%] p-4 gap-3'>
                 <div className=' '>
-                    <div className=' flex gap-3'>
+                    <div className=' flex gap-3 '>
                         <Image
                         src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAALVBMVEVHcEwOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5l//w8OAAAADnRSTlMAv9QQ52QelaZB9jVSd7YgM2MAAAEESURBVCiRfVJbEsQgCBPE+ub+x11QcV07s/lpMRog4JzBhwiIEIN3NyrwBtRfLvEP4KB84QvlMe65KYWxueXWmiQNrQUTKZNrLiWtkDm58Tny1rKOcWp1Y7MEwEJG+RFB1Nu0SAm83I9RZBsActMS7Kl3gceJqMWhMrQmgovMvU75R2T60VrSa6mMwgmt8WhJpUYi1ZcEzdhJkpIK7bdvP8MiNXuofpQ0RgC7HRz6YWkRiScjqrMgVVALcpnx0U5XE5gSmN/ajt71czDHCkzPupYu6dDkv4i9z4EM46+neyBrkV5LwlRz/rcmewOf99u9YO+852qqB3i0k90NHxISYepfxQ9lzhbYL6o6zQAAAABJRU5ErkJggg=='
-                        width={60}
-                        height={50}
+                        width={10}
+                        height={10}
                         alt='Conference'
+                        className=' w-9 h-9 mt-2'
                         />
                         <div className=' space-y-1'>
                             <div className=' text-gray-700 flex gap-2 py-4'>
@@ -55,7 +58,7 @@ const ConferencePage = (props: Props) => {
                 </div>
             </div>
 
-            <div className=' p-4 space-y-3 mt-7'>
+            <div className=' p-4 space-y-3 mt-4'>
                 <h1 className=' font-bold'>Date and Time</h1>
                 <div className=' flex gap-3'>
                     <CalendarCheck2 size={24} />
@@ -91,7 +94,7 @@ const ConferencePage = (props: Props) => {
                 </div>
             </div>
 
-            <div className=' text-base text-gray-700 p-4 mt-7 max-w-[80%]'>
+            <div className=' text-base text-gray-700 p-4 mt-3 max-w-[80%]'>
                 <div>
                     <p>
                     Are you aiming for a career as a commercial pilot? Besides being a childhood dream for many, a pilot profession offers a combination of salary, job security, and the opportunity to travel!
@@ -110,12 +113,12 @@ const ConferencePage = (props: Props) => {
                     
             </div>
 
-            <div className='text-base p-4 mt-7 max-w-[80%]'>
+            <div className='text-base p-4 mt-4 max-w-[80%]'>
                 <h1 className=' font-bold my-2'>Who is it for?</h1>
                 <p>Anyone seeking a life full of joy, meaning, and self-fulfillment can fly as an A320 or 8737 pilot at one of the leading airlines in India or elsewhere! No previous aviation experience is required to get started!</p>
             </div>
 
-            <div className='text-base p-4 mt-7 max-w-[80%]'>
+            <div className='text-base p-4 mt-4 max-w-[80%]'>
                 <h1 className=' font-bold my-2'>Here is the plan</h1>
                 <div className=' flex gap-2 ml-2'>
                 <svg
@@ -216,13 +219,9 @@ const ConferencePage = (props: Props) => {
                 
             </div>
 
-            <div className='p-4 mt-7'>
+            <div className='p-4 mt-4'>
               <div className=' flex gap-4'>
                 <h1 className=' text-xl font-bold'>Registration Link :</h1>
-                <p className=' text-blue-400 underline cursor-pointer mt-1'>https://devotional-b.vercel.app/conference</p>
-              </div>
-              <div className=' flex gap-4 mt-4'>
-                <h1 className=' text-xl font-bold'>Demo Link :</h1>
                 <p className=' text-blue-400 underline cursor-pointer mt-1'>https://devotional-b.vercel.app/conference</p>
               </div>
             </div>
@@ -281,6 +280,18 @@ const ConferencePage = (props: Props) => {
                 </div>
 
             </div>
+
+            </div>
+
+            <div className=' mt-3 p-4'>
+              <div
+                className="rounded-3xl border border-gray-300 p-4 cursor-pointer mx-2 md:mx-0 my-6"
+                // onClick={() => setIsCommentBoxOpen(false)}
+              >
+                Write a Answer...
+              </div>
+            </div>
+
 
         </div>
 

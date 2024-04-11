@@ -11,6 +11,7 @@ import { CalendarCheck2, HistoryIcon } from 'lucide-react';
 import { MapPin } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { History } from 'lucide-react';
+import { FileBadge } from 'lucide-react';
 
 
 type Props = {}
@@ -27,13 +28,12 @@ const ConferencePage = (props: Props) => {
                 <div className=' max-w-[70%]'>
                     <div className='p-4 space-y-7'>
                         <h1 className='text-3xl font-bold'>You are invited: Orientation day with a Leading Pilot Training Academy. </h1>
-                        <p className='text-sm text-gray-500'>Meet the BBA Training in Bengaluru on 13 April 2024 and clarify all the gray areas regarding pilot training and career prospects!</p>
                     </div>
                 </div>
             </div>
 
             <div className=' max-w-[70%] p-4 gap-3'>
-                <div className=' bg-[#F1F2F2] rounded-xl flex justify-between px-5 py-3'>
+                <div className=' '>
                     <div className=' flex gap-3'>
                         <Image
                         src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAALVBMVEVHcEwOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5kOg5l//w8OAAAADnRSTlMAv9QQ52QelaZB9jVSd7YgM2MAAAEESURBVCiRfVJbEsQgCBPE+ub+x11QcV07s/lpMRog4JzBhwiIEIN3NyrwBtRfLvEP4KB84QvlMe65KYWxueXWmiQNrQUTKZNrLiWtkDm58Tny1rKOcWp1Y7MEwEJG+RFB1Nu0SAm83I9RZBsActMS7Kl3gceJqMWhMrQmgovMvU75R2T60VrSa6mMwgmt8WhJpUYi1ZcEzdhJkpIK7bdvP8MiNXuofpQ0RgC7HRz6YWkRiScjqrMgVVALcpnx0U5XE5gSmN/ajt71czDHCkzPupYu6dDkv4i9z4EM46+neyBrkV5LwlRz/rcmewOf99u9YO+852qqB3i0k90NHxISYepfxQ9lzhbYL6o6zQAAAABJRU5ErkJggg=='
@@ -42,21 +42,14 @@ const ConferencePage = (props: Props) => {
                         alt='Conference'
                         />
                         <div className=' space-y-1'>
-                            <div className=' text-gray-700 flex gap-2'>
+                            <div className=' text-gray-700 flex gap-2 py-4'>
                                 <p>By <span className='text-black font-bold'>BAA Training</span></p>
-                                <p>643 Followers</p>
                             </div>
-                            <div className=' bg-pink-300 p-1 px-2 rounded-xl max-w-[70%]'>
-                                <p><span className=' font-bold text-sm'>3.6k attendes hosted</span></p>
-                            </div>
+                            
                         </div>
                     </div>
 
-                    <div className=' my-auto'>
-                        <Button className=' bg-purple-950'>
-                            Follow
-                        </Button>
-                    </div>
+                    
                     
 
                 </div>
@@ -89,10 +82,12 @@ const ConferencePage = (props: Props) => {
             <div className=' p-4 mt-7'>
                 <h1 className=' font-bold '>About this event</h1>
                 <div className=' flex gap-2 mt-2'>
-                    <div className=' p-2 bg-[#F1F2F2] rounded-lg'>
-                        <History size={24} />
-                    </div>
-                    <p className=' text-sm text-gray-700 mt-2'>9 Hours</p>
+                        <History size={24} className=' mt-2' />
+                        <p className=' text-sm text-gray-700 mt-2'>9 Hours</p>
+                </div>
+                <div className=' flex gap-2 my-2'>
+                  <FileBadge size={24} className=' mt-2'/>
+                  <p className=' text-sm text-gray-700 mt-2'>100 CME Credits</p>
                 </div>
             </div>
 
@@ -219,6 +214,17 @@ const ConferencePage = (props: Props) => {
                 <p>You all learn more about BAA Training, Europes leading ATO, its international locations, expert instructors, top-notch training methods, and more!</p>
                 </div>
                 
+            </div>
+
+            <div className='p-4 mt-7'>
+              <div className=' flex gap-4'>
+                <h1 className=' text-xl font-bold'>Registration Link :</h1>
+                <p className=' text-blue-400 underline cursor-pointer mt-1'>https://devotional-b.vercel.app/conference</p>
+              </div>
+              <div className=' flex gap-4 mt-4'>
+                <h1 className=' text-xl font-bold'>Demo Link :</h1>
+                <p className=' text-blue-400 underline cursor-pointer mt-1'>https://devotional-b.vercel.app/conference</p>
+              </div>
             </div>
 
             <div className=' p-4 my-7 max-w-[80%]'>

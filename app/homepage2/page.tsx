@@ -26,12 +26,14 @@ import Loader from "../../components/ui/Loader"
 
 import { db , storage} from "@/utils/firebase";
 import {
+  addDoc,
   collection,
   getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
+  serverTimestamp,
   startAfter,
   where,
 } from "firebase/firestore";
@@ -89,6 +91,7 @@ import { Tiptap } from "@/components/TipTapAns";
 
 
 import { EventType } from "@/schemas/event";
+import { title } from "process";
 
 type Input = z.infer<typeof EventType>;
 
@@ -96,28 +99,38 @@ type Props = {
   newPost: boolean;
 };
 
-type PostType = {
-  id: string;
-  name: string;
-  title: string;
-  description: string;
-  profilePic: string;
-  postImage: string;
-  likes: number;
-  shares: number;
-  comments: number;
-  questionImageURL: string;
-  createdAt: string;
-  anonymity: boolean;
-  ansNumbers: number;
-  uid:string;
-  // Add any other fields as necessary
-};
+// type PostType = {
+//   id: string;
+//   name: string;
+//   title: string;
+//   description: string;
+//   profilePic: string;
+//   postImage: string;
+//   likes: number;
+//   shares: number;
+//   comments: number;
+//   questionImageURL: string;
+//   createdAt: string;
+//   anonymity: boolean;
+//   ansNumbers: number;
+//   uid:string;
+//   // Add any other fields as necessary
+// };
 
-// export const metadata: Metadata = {
-//   title: "Music App",
-//   description: "Example music app using the components.",
-// }
+  type EventType = {
+    id: string;
+    title: string;
+    description: string;
+    eventImageURL: string;
+    dateOfEvent: string;
+    locationOfEvent: string;
+    durationOfEvent: number;
+    registrationLink: string;
+    uid: string;
+    createdAt: string;
+    name: string;
+    profilePic: string;
+  };
 
 const CustomContainer = styled.div`
   height: 100%;
@@ -127,6 +140,7 @@ const CustomContainer = styled.div`
 export default function MusicPage() {
 
   const { toast } = useToast();
+  const [user , loading] = useAuthState(auth);
 
   const form = useForm<Input>({
     resolver: zodResolver(EventType),
@@ -136,7 +150,7 @@ export default function MusicPage() {
       eventImageURL: "",
       // dateOfEvent: 0000/00/00,
       locationOfEvent: "",
-      durationOfEvent: 0,
+      // durationOfEvent:,
       registrationLink: "",
     },
   });
@@ -153,7 +167,7 @@ export default function MusicPage() {
 
 
    //old homepage stuff
-   const [posts, setPosts] = useState<PostType[]>([]);
+   const [posts, setPosts] = useState<EventType[]>([]);
    const limitValue: number = 6;
    const [lastDoc, setLastDoc] = useState<any>(null);
    const [loadMore, setLoadMore] = useState<any>(null);
@@ -176,151 +190,37 @@ export default function MusicPage() {
    //for automating loadmore lazy load button ...
    const loadMoreButtonRef = useRef<HTMLDivElement>(null);
  
-   useEffect(() => {
+   //extracting all events from the events collection using onSnapshot in a function
+   const getPosts = () => {
+    setIsLoading(true);
+    const q = query(
+      collection(db, "events"),
+      // where("category", "==", selectedCategory),
+      orderBy("createdAt", "desc"),
+      limit(limitValue)
+    );
+  
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const docs = querySnapshot.docs;
+      const lastDoc = docs[docs.length - 1];
+      setLoadMore(lastDoc);
+      const posts = docs.map((doc) => doc.data() as EventType);
+      setPosts(posts);
+      setIsLoading(false);
+      setPageLoaded(true);
+    });
+  
+    // Detach the listener when the component unmounts
+    return unsubscribe;
+  };
+  
+  useEffect(() => {
+    const unsubscribe = getPosts();
+    return () => unsubscribe();
+  }, []);
+
  
-     //old Code
-     // setIsLoading(true);
-     // console.log(selectedCategory);
-     // const collectionRef = collection(db, "questions");
- 
-     // let q;
-     // if (lastDoc) {
-     //   q = query(
-     //     collectionRef,
-     //     orderBy("createdAt", "desc"),
-     //     startAfter(lastDoc),
-     //     limit(limitValue)
-     //   );
-     // } else {
-     //   q = query(collectionRef, orderBy("createdAt", "desc"), limit(limitValue));
-     // }
- 
-     // const unsub = onSnapshot(q, async (snapshot) => {
-     //   const postsData: any = [];
- 
-     //   for (const doc of snapshot.docs) {
-     //     // Fetch the 'answers' subcollection for each question
-     //     const answersCollectionRef = collection(doc.ref, "answers");
-     //     const answersQuery = query(answersCollectionRef);
- 
-     //     const answersSnapshot = await getDocs(answersQuery);
-     //     const numAnswers = answersSnapshot.size;
- 
-     //     // Add the total number of answers to the question data
-     //     const questionData = {
-     //       id: doc.id,
-     //       comments: numAnswers,
-     //       ...doc.data(),
-     //     } as PostType;
- 
-     //     postsData.push(questionData);
-     //   }
- 
-     //   const lastDocument = snapshot.docs[snapshot.docs.length - 1];
-     //   setLoadMore(lastDocument);
-       
- 
-     //   if (addFirst && lastDoc == null) {
-     //     setPosts(postsData);
-     //     setAddFirst(false);
-     //   } else {
-     //     setPosts((prevPosts) => [...prevPosts, ...postsData]);
-     //   }
-     //   setIsLoading(false);
-     //   setPageLoaded(true);
-     // });
- 
-     // return () => {
-     //   unsub();
-     // };
-     //old code ends
- 
-     console.log("Last Doc ", lastDoc);
-     setIsLoading(true);
-   const collectionRef = collection(db, "questions");
-   let q;
- 
-   if (selectedCategory === "all") {
-     if (lastDoc) {
-       q = query(
-         collectionRef,
-         orderBy("createdAt", "desc"),
-         startAfter(lastDoc),
-         limit(limitValue)
-       );
-     } else {
-       q = query(collectionRef, orderBy("createdAt", "desc"), limit(limitValue));
-     }
-   } else {
-     if (lastDoc) {
-       q = query(
-         collectionRef,
-         where("category", "array-contains", selectedCategory),
-         orderBy("createdAt", "desc"),
-         startAfter(lastDoc),
-         limit(limitValue)
-       );
-     } else {
-       q = query(
-         collectionRef,
-         where("category", "array-contains", selectedCategory),
-         orderBy("createdAt", "desc"),
-         limit(limitValue)
-       );
-     }
-   }
    
-   //const postLength = 0;
-   const unsub = onSnapshot(q, async (snapshot) => {
-     const postsData:any = [];
-     if(snapshot.docs.length<limitValue){
-       console.log("Length ", snapshot.docs.length);
-       setMorePosts(false);
-     }
-     else{
-       setMorePosts(true);
-     }
-     for (const doc of snapshot.docs) {
-       // Fetch the 'answers' subcollection for each question
-       const answersCollectionRef = collection(doc.ref, "answers");
-       const answersQuery = query(answersCollectionRef);
-       const answersSnapshot = await getDocs(answersQuery);
-       const numAnswers = answersSnapshot.size;
- 
-       // Add the total number of answers to the question data
-       const questionData = {
-         id: doc.id,
-         comments: numAnswers,
-         ...doc.data(),
-       };
- 
-       postsData.push(questionData);
-     }
- 
-     const lastDocument = snapshot.docs[snapshot.docs.length - 1];
-     setLoadMore(lastDocument);
- 
-     if (addFirst && lastDoc == null) {
-       setPosts(postsData);
-       setAddFirst(false);
-     } else {
-       setPosts((prevPosts) => [...prevPosts, ...postsData]);
-     }
-     setIsLoading(false);
-     setPageLoaded(true);
-   });
- 
-   return () => {
-     unsub();
-   };
- 
-   }, [lastDoc, reload , selectedCategory]);
- 
-   const categorySelect = async()=>{
-     setPosts([]);
-     setLastDoc(null);
- 
-   }
 
 
    //image uploading stuff
@@ -385,10 +285,34 @@ export default function MusicPage() {
 
   }
 
+  async function createEventPost(data:Input)
+  {
+    const docRef = addDoc(collection(db, 'events'), {
+      title: data.title,
+      description: data.description,
+      eventImageURL: imageUrl,
+      dateOfEvent: data.dateOfEvent,
+      locationOfEvent: data.locationOfEvent,
+      durationOfEvent: data.durationOfEvent,
+      registrationLink: data.registrationLink,
+      uid: user?.uid,
+      createdAt: serverTimestamp(),
+      name: user?.displayName,
+      profilePic: user?.photoURL,
+    });
+
+    toast({
+      title: "Event Created",
+      description: "Your event has been created successfully.",
+    })
+  }
+
   function onSubmit(data: Input) {
-    eventImageURL: imageUrl;
-    console.log(imageUrl)
-    console.log(data);
+    // eventImageURL: imageUrl;
+    // console.log(imageUrl)
+    // console.log(data);
+
+    createEventPost(data);
 
     toast({
       title: "You submitted the following values:",

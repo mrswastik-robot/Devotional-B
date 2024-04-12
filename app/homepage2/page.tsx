@@ -24,7 +24,7 @@ import { postData } from "@/lib/data";
 import { Button } from "../../components/ui/button";
 import Loader from "../../components/ui/Loader"
 
-import { db } from "@/utils/firebase";
+import { db , storage} from "@/utils/firebase";
 import {
   collection,
   getDocs,
@@ -35,33 +35,62 @@ import {
   startAfter,
   where,
 } from "firebase/firestore";
+import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
+import imageCompression from 'browser-image-compression';
+
 
 import styled, { createGlobalStyle } from "styled-components";
 
+
+
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { DialogClose } from "@radix-ui/react-dialog";
 
-import algoliasearch from "algoliasearch/lite";
-// import algoliasearch from "algoliasearch";
-import { InstantSearch, SearchBox, Hits, Highlight } from "react-instantsearch";
-import { Search } from "lucide-react";
-import { add, set } from "date-fns";
-
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/store/store";
-import { triggerSearch } from "@/store/slice";
+import {
+  Form,
+  FormControl,
+  FormLabel,
+  FormField,
+  FormItem,
+  FormMessage,
+  FormDescription,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { useToast } from "@/components/ui/use-toast";
 
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/utils/firebase";
 import { doc  } from "firebase/firestore";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Controller } from "react-hook-form";
+import { Tiptap } from "@/components/TipTapAns";
+
+
+import { EventType } from "@/schemas/event";
+
+type Input = z.infer<typeof EventType>;
 
 type Props = {
   newPost: boolean;
@@ -93,9 +122,35 @@ type PostType = {
 const CustomContainer = styled.div`
   height: 100%;
   padding-top: 1rem;
-`;
+  `;
 
 export default function MusicPage() {
+
+  const { toast } = useToast();
+
+  const form = useForm<Input>({
+    resolver: zodResolver(EventType),
+    defaultValues: {
+      title: "",
+      description: "",
+      eventImageURL: "",
+      // dateOfEvent: 0000/00/00,
+      locationOfEvent: "",
+      durationOfEvent: 0,
+      registrationLink: "",
+    },
+  });
+
+  const [isFocused, setIsFocused] = useState(false);
+
+
+  //image uploading
+  const [imageUpload , setImageUpload] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [selectC, setSelectC] = useState<any>([]);
+  const [progress , setProgress] = useState<number | null>(0);
+  const [previewImg, setPreviewImg] = useState<any>(null);
+
 
    //old homepage stuff
    const [posts, setPosts] = useState<PostType[]>([]);
@@ -266,64 +321,91 @@ export default function MusicPage() {
      setLastDoc(null);
  
    }
+
+
+   //image uploading stuff
+   const uploadImage = async(file: any) => {
+    if(file == null) return;
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target) {
+          const imageUrl = event.target.result;
+          setPreviewImg(imageUrl);
+        } else {
+          console.error('Error reading file:', file);
+          setPreviewImg(null);
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImg(null);
+    }
+
+    const storageRef = ref(storage, `events/${file.name}`);
+
+    try {
+      // Set compression options
+    const options = {
+      maxSizeMB: 1, // Max size in megabytes
+      maxWidthOrHeight: 800, // Max width or height
+      useWebWorker: true, // Use web worker for better performance (optional)
+    };
+  
+      // Compress the image
+      
+      const compressedFile = await imageCompression(file, options);
+
+    //uploading compressed file
+    const uploadTask = uploadBytesResumable(storageRef, compressedFile);
+
+    uploadTask.on('state_changed', 
+    (snapshot:any) => {
+      // You can use this to display upload progress
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      setProgress(progress);
+    }, 
+    (error: any) => {
+      // Handle unsuccessful uploads
+      console.log('Upload failed', error);
+    }, 
+    () => {
+      // Upload completed successfully, now we can get the download URL
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        console.log('File available at', downloadURL);
+        // Save the URL to state or wherever you want to keep it
+        setImageUrl(downloadURL);
+      });
+    }
+  );}catch(err){
+    console.error('Error compressing or uploading image:', err);
+  }
+
+  }
+
+  function onSubmit(data: Input) {
+    eventImageURL: imageUrl;
+    console.log(imageUrl)
+    console.log(data);
+
+    toast({
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      ),
+    })
+  }
  
  
-   //algolia stuff
- 
-   // const [searchText, setSearchText] = useState<string>('');
-   const [searchResult, setSearchResult] = useState<any>(null);
- 
-   const { searchText, searchTriggered } = useSelector(
-     (state: RootState) => state.search
-   );
-   const dispatch = useDispatch();
- 
-   const searchClient = algoliasearch(
-     "8XQGGZTFH3",
-     "bd743f217017ce1ea457a8febb7404ef"
-   );
- 
-   const searchIndex = searchClient.initIndex("search_questions");
- 
-   // const handleSearchText = (e: ChangeEvent<HTMLInputElement>) => {
-   //   e.preventDefault();
-   //   setSearchText(e.target.value);
-   // }
- 
-   const handleSearch = async (queryText: string) => {
-     try {
-       const result = await searchIndex.search(queryText);
-       // console.log(result);
-       setSearchResult(result.hits);
-     } catch (error) {
-       console.log(error);
-       setSearchResult(null);
-     }
-   };
- 
-//    useEffect(() => {
-//      //console.log("In Post", props.newPost);
-//      setAddFirst(true);
-//      setLastDoc(null);
-//      setReload((prev) => !prev);
-//    }, [props.newPost]);
+   
  
    const loadMoreData = () => {
      setLastDoc(loadMore);
    };
- 
-   useEffect(() => {
-     if (searchText === "") {
-       setSearchResult(null);
-     }
-   }, [searchText]);
- 
-   useEffect(() => {
-     if (searchTriggered) {
-       handleSearch(searchText);
-       dispatch(triggerSearch());
-     }
-   }, [searchTriggered]);
  
  
    //useEffect for automting lazyload functionality
@@ -351,30 +433,6 @@ export default function MusicPage() {
    }, [loadMoreButtonRef, loadMoreData]);
    
 
-   //console.log("Postsssss: ", posts)
- 
-   //returning the searched results from algoia
-   function transformHitToPost(hit: any) {
-     return {
-       id: hit.objectID, // Algolia provides an unique objectID for each record
-       title: hit.title,
-       name: hit.name,
-       description: hit.description,
-       profilePic: hit.profilePic,
-       postImage: hit.postImage,
-       likes: hit.likes,
-       comments: hit.comments,
-       shares: hit.shares,
-       questionImageURL: hit.questionImageURL,
-       createdAt: hit.createdAt,
-       anonymity: hit.anonymity,
-       uid: hit.uid
-       // ansNumbers: hit.ansNumbers,
-       // add other necessary fields
-     };
-   }
-   //old homepage stuff ends
-
   return (
     <>
       <div className="w-full font-dmsans">
@@ -396,10 +454,236 @@ export default function MusicPage() {
                         </TabsTrigger>
                       </TabsList>
                       <div className="ml-auto lg:mr-4">
+                      <div>
+              <Dialog>
+                {
+                  
+                  <DialogTrigger asChild>
                         <Button className="">
                           <PlusCircleIcon className="hidden lg:block mr-2 h-4 w-4" />
-                          Ask Question
+                          Create Event
                         </Button>
+                  </DialogTrigger>
+  }
+                  <DialogContent className="sm:max-w-[925px] max-h-[55rem] overflow-y-scroll ">
+                    <DialogHeader>
+                      <DialogTitle>Create your Event</DialogTitle>
+                      <DialogDescription>
+                        Create your Event here. Click submit when you are done.
+                      </DialogDescription>
+                    </DialogHeader>
+                      {/* <Tiptap /> */}
+                     {/* <Textarea className="w-full min-h-[500px]" placeholder="What's your question?" /> */}
+
+                      <div className=" border border-gray-300 rounded-3xl p-4 cursor-pointer">
+                      <Form {...form}>
+                        <form
+                        className="relative space-y-3 "
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        >
+
+                          {/* Title */}
+                          <FormField
+                          control={form.control}
+                          name="title"
+                          render = {({field}) => (
+                            <FormItem>
+                              <FormLabel>Title</FormLabel>
+                              <FormControl>
+                                <Input className="" placeholder="Title for the Event ..." {...field}/>
+                              </FormControl>
+                              <div className="text-[12px] opacity-70">This is the title, write your question here.</div>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
+
+                          {/* EventImage */}
+                          <FormField
+                          control={form.control}
+                          name="eventImageURL"
+                          render = {({field}) => (
+                            <FormItem>
+                              <FormLabel>Event Image</FormLabel>
+                              <FormControl>
+                                <Input type="file" onChange={(event) => {
+                                  if(event.target.files) {
+                                    setImageUpload(event.target.files[0]);
+                                  }
+                                }}/>
+                              </FormControl>
+                              <div className="text-[12px] opacity-70">Upload an image for the Event.</div>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
+
+                          {/* TipTap Editor */}
+                          <FormField
+                            control={form.control}
+                            name="description"
+                            render = {({field}) => (
+                              <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <div className={`${isFocused?"border-black border-[2.1px]": "border-[1.2px]"} rounded-lg`} onFocus={() => setIsFocused(true)}
+                                  onBlur={() => setIsFocused(false)}
+                                  >
+                                <FormControl>
+                                  <Controller
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                      <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress} />
+                                    )}
+                                   /> 
+                                </FormControl>
+                                </div>
+                                <div className="text-[12px] opacity-70">This is the description, give more details about your question here.</div>
+                                <FormMessage/>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          {(progress||0)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
+                          {/* "0" to make upload percentage invisible when no image is selected */}
+                          {/* anonymity toggle */}
+                          <div>
+                            {
+                              previewImg&&<div className="w-full flex items-center justify-center">
+                                <Image src={previewImg} alt="previewImage" width={250} height={250}/>
+                              </div>
+                            }
+                          </div>
+
+                          {/* DateOfEvent */}
+                          <FormField
+                              control={form.control}
+                              name="dateOfEvent"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                  <FormLabel>Date of birth</FormLabel>
+                                  <Popover>
+                                    <PopoverTrigger asChild>
+                                      <FormControl>
+                                        <Button
+                                          variant={"outline"}
+                                          className={cn(
+                                            "w-[240px] pl-3 text-left font-normal",
+                                            !field.value && "text-muted-foreground"
+                                          )}
+                                        >
+                                          {field.value ? (
+                                            format(field.value, "PPP")
+                                          ) : (
+                                            <span>Pick a date</span>
+                                          )}
+                                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                        </Button>
+                                      </FormControl>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                      <Calendar
+                                        mode="single"
+                                        selected={field.value}
+                                        onSelect={field.onChange}
+                                        disabled={(date) =>
+                                          date > new Date() || date < new Date("1900-01-01")
+                                        }
+                                        initialFocus
+                                      />
+                                    </PopoverContent>
+                                  </Popover>
+                                  <FormDescription>
+                                    Your date of birth is used to calculate your age.
+                                  </FormDescription>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                          {/* Location of the Event */}
+                          <FormField
+                          control={form.control}
+                          name="locationOfEvent"
+                          render = {({field}) => (
+                            <FormItem>
+                              <FormLabel>Location of Event</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Location of the Event ..." {...field}/>
+                              </FormControl>
+                              <div className="text-[12px] opacity-70">This is the location of the event.</div>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
+
+                          <FormField
+                          control={form.control}
+                          name="durationOfEvent"
+                          render={({field}) => (
+                            <FormItem>
+                              <FormLabel>Duration of the Event</FormLabel>
+                              <FormControl>
+                                <Input type="number" placeholder="Duration of the Event" {...field}
+                                min={1}
+                                max={24}
+                                onChange={(e) => {
+                                  form.setValue('durationOfEvent', parseInt(e.target.value))
+                                }}
+                                />
+                              </FormControl>
+                              <div className="text-[12px] opacity-70">This is the duration of the event.</div>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
+
+                          <FormField
+                          control={form.control}
+                          name="registrationLink"
+                          render = {({field}) => (
+                            <FormItem>
+                              <FormLabel>Registration Link</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Registration Link ..." {...field}/>
+                              </FormControl>
+                              <div className="text-[12px] opacity-70">This is the registration link for the event.</div>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
+                          
+
+                          <DialogClose asChild>
+                              <Button type="submit" 
+                                className=" w-full"
+                                // disabled={isGuest === 'true'}
+                              >
+                                Post
+                              </Button>
+                          </DialogClose>
+                            
+                          
+
+                        </form>
+                      </Form>
+                      </div>
+
+                      {/* <div>
+                        <input type="file" onChange={(event) => {
+                          if(event.target.files) {
+                            setImageUpload(event.target.files[0]);
+                          }
+                        }}/>
+                        <Button onClick={uploadImage}>Upload Image</Button>
+                        <Progress value={progress} className=" w-[70%]"/>
+                      </div> */}
+
+                    
+                  </DialogContent>
+              </Dialog>
+              
+            </div>
                       </div>
                     </div>
                     <TabsContent

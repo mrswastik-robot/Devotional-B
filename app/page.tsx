@@ -569,8 +569,8 @@ export default function Home() {
                               <FormItem>
                                 <FormLabel>Description</FormLabel>
                                 <div className={`${isFocused?"border-black border-[2.1px]": "border-[1.2px]"} rounded-lg`} onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-      >
+                                  onBlur={() => setIsFocused(false)}
+                                  >
                                 <FormControl>
                                   <Controller
                                     control={form.control}

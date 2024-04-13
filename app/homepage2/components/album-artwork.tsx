@@ -37,18 +37,16 @@ type Props = {
     post: {
       id: string;
       title: string;
-      name: string;
       description: string;
-      profilePic: string;
-      postImage: string;
-      likes: number;
-      comments: number;
-      shares: number;
-      questionImageURL: string;
+      eventImageURL: string;
+      dateOfEvent: string;
+      locationOfEvent: string;
+      durationOfEvent: number;
+      registrationLink: string;
+      uid: string;
       createdAt: string;
-      anonymity: boolean;
-      uid: string; // User ID of the post creator
-      // ansNumbers: number
+      name: string;
+      profilePic: string;
     };
     // children: Element
     // id: string
@@ -126,7 +124,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
         <ContextMenuTrigger>
           <div className="overflow-hidden rounded-md relative">
             {
-            post.questionImageURL==undefined?    
+            post.eventImageURL== null ?    
             <Image
               src={FImage}
               alt="QuestionImage"
@@ -137,7 +135,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
               )}
             />:
             <Image
-              src={post.questionImageURL}
+              src={post.eventImageURL}
               alt="QuestionImage"
               width={900}
               height={500}
@@ -173,7 +171,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
         </ContextMenuContent>
       </ContextMenu>
       <div className="mt-3 text-sm">
-      <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
+      <Link href={`/EventDetailsPage/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
         <h3 className="text-lg font-semibold leading-none">{post.title}</h3>
       </Link>  
       <div className="hidden lg:block">

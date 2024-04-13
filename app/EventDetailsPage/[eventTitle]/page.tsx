@@ -45,6 +45,7 @@ import { Tiptap } from '@/components/TipTapAns';
 import imageCompression from 'browser-image-compression';
 import { get } from 'http';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import EventCommentPost from '@/components/eventDetailsPage/eventCommentPost';
 
 
 
@@ -70,6 +71,17 @@ type EventDetailsType = {
   profilePic: string
 }
 
+type EventCommentType = {
+  eventId: string
+  eventTitle: string
+  comment: string
+  uid: string
+  name: string
+  profilePic: string
+  createdAt: string
+  imageUrl: string
+}
+
 const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
   const router = useRouter();
@@ -85,6 +97,8 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
   //fetching evenDetails from the database based on the eventTitle
 
   const [eventObject , setEventObject] = useState<EventDetailsType>({} as EventDetailsType);
+  const [eventComment , setEventComment] = useState<EventCommentType[]>([] as EventCommentType[]);
+
 
   const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
@@ -95,6 +109,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
 
 
+  //fetching the event details from the database and all the comments related to that event at the same time
   useEffect(() => {
     const eventRef = collection(db, 'events');
     const q = query(eventRef, where('title', '==', eventTitleDecoded));
@@ -106,8 +121,29 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
           const data = doc.data() as EventDetailsType;
           setEventObject(data);
 
+          //listener for the comments of the event
+          const eventCommentsRef = collection(db, 'eventsComments');
+          const q = query(eventCommentsRef, where('eventId', '==', doc.id));
+          const commentsUnsub = onSnapshot(q, (snapshot) => {
+            const comments = snapshot.docs.map((doc) => {
+              const data = doc.data() as EventCommentType;
+              return {
+                eventId: data.eventId,
+                eventTitle: data.eventTitle,
+                comment: data.comment,
+                uid: data.uid,
+                name: data.name,
+                profilePic: data.profilePic,
+                createdAt: data.createdAt,
+                imageUrl: data.imageUrl
+              }
+            })
+            setEventComment(comments);
+          })
+
           return () => {
             eventsUnsub();
+            commentsUnsub();
           }
         }
         else
@@ -238,6 +274,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
   function onSubmit(data: Input) {
     createEventComment(data);
+    setIsCommentBoxOpen(true);
   }
 
 
@@ -392,7 +429,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               className="rounded-3xl border border-gray-300 p-4 cursor-pointer mx-2 md:mx-0 my-6"
               onClick={() => setIsCommentBoxOpen(false)}
             >
-              Write a Answer...
+              Write a Comment...
             </div>
           ) : (
             <div className=" rounded-3xl border border-gray-300 p-4 cursor-pointer">
@@ -408,7 +445,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                     render={({ field }) => (
                       <FormItem>
                         {/* <FormLabel>Write an answer...</FormLabel> */}
-                        <FormLabel>Description</FormLabel>
+                        <FormLabel>Comment Box</FormLabel>
                                 <div className={`${isFocused?"border-black border-[2.3px]": "border-[2px] border-[#d3d7dd]"} rounded-lg`} onFocus={() => setIsFocused(true)}
                                 onBlur={() => setIsFocused(false)}
                                 >
@@ -444,6 +481,12 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               </Form>
             </div>
           )}
+        </div>
+
+        <div>
+              {eventComment.map((comment, index) => (
+              <EventCommentPost key={index} eventComment={comment} />
+            ))}
         </div>
 
 

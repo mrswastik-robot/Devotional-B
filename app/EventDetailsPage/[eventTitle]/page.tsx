@@ -6,18 +6,46 @@ import React, { useEffect, useState } from 'react'
 
 import parse from 'html-react-parser';
 
+import {
+  Form,
+  FormControl,
+  FormLabel,
+  FormField,
+  FormItem,
+  FormMessage,
+  FormDescription,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from '@/components/ui/use-toast';
+
+import { useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
+
 import { Avatar, AvatarFallback , AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {Button} from '@/components/ui/button'
 
 import { CalendarCheck2, HistoryIcon } from 'lucide-react';
 import { MapPin } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { History } from 'lucide-react';
 import { FileBadge } from 'lucide-react';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from '@/utils/firebase';
-import { useRouter } from 'next/navigation';
+import { addDoc, collection, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
+import { db , auth , storage } from '@/utils/firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+
+import { z } from 'zod';
+import { eventCommentSchema } from '@/schemas/eventComment';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { Tiptap } from '@/components/TipTapAns';
+
+import imageCompression from 'browser-image-compression';
+import { get } from 'http';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
 
 
 type Props = {
@@ -25,6 +53,8 @@ type Props = {
     eventTitle: string
   }
 }
+
+type Input = z.infer<typeof eventCommentSchema>;
 
 type EventDetailsType = {
   title: string
@@ -44,6 +74,10 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
   const router = useRouter();
 
+  const { toast } = useToast();
+
+  const [user , loading] = useAuthState(auth);
+
   const eventTitleDecoded = decodeURIComponent(eventTitle as string).split("-").join(" ");
   console.log(eventTitleDecoded);
 
@@ -51,6 +85,15 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
   //fetching evenDetails from the database based on the eventTitle
 
   const [eventObject , setEventObject] = useState<EventDetailsType>({} as EventDetailsType);
+
+  const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
+  const [imageUpload, setImageUpload] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [progress , setProgress] = useState<number | null>(0);
+  const [previewImg, setPreviewImg] = useState<any>(null);
+
+
 
   useEffect(() => {
     const eventRef = collection(db, 'events');
@@ -82,6 +125,121 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
     const date = eventObject.dateOfEvent.toDate();
     dateString = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   }
+
+  //comment section for the event
+  const form = useForm<Input>({
+    resolver: zodResolver(eventCommentSchema),
+    defaultValues: {
+      comment: "",
+    },
+  });
+
+
+  const uploadImage = async(file: any) => {
+    if (file == null) return;
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target) {
+          const imageUrl = event.target.result;
+          setPreviewImg(imageUrl);
+        } else {
+          console.error('Error reading file:', file);
+          setPreviewImg(null);
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImg(null);
+    }
+
+    const storageRef = ref(storage, `events/${file.name}`);
+
+    try {
+      // Set compression options
+    const options = {
+      maxSizeMB: 1, // Max size in megabytes
+      maxWidthOrHeight: 800, // Max width or height
+      useWebWorker: true, // Use web worker for better performance (optional)
+    };
+  
+      // Compress the image
+      const compressedFile = await imageCompression(file, options);
+
+    const uploadTask = uploadBytesResumable(storageRef, compressedFile);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot: any) => {
+        // You can use this to display upload progress
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        setProgress(progress);
+      },
+      (error: any) => {
+        // Handle unsuccessful uploads
+        console.log("Upload failed", error);
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          // Save the URL to state or wherever you want to keep it
+          setImageUrl(downloadURL);
+        });
+      }
+    );
+    }catch(err){
+      console.log("Error compressing and uploading Image...")
+    }
+  };
+
+  async function createEventComment(data: Input) {
+
+    const eventRef = collection(db, 'events');
+    const q = query(eventRef, where('title', '==', eventTitleDecoded));
+    const snapshot = await getDocs(q);
+
+    if(!snapshot.empty)
+      {
+        const doc = snapshot.docs[0];
+
+        const eventId = doc.id;
+        const docRef = await addDoc(collection(db, "eventsComments"),{
+          eventId: eventId,
+          eventTitle: eventTitleDecoded,
+          comment: data.comment,
+          uid: user?.uid,
+          name: user?.displayName,
+          profilePic: user?.photoURL,
+          createdAt: new Date(),
+          imageUrl: imageUrl
+        })
+
+        console.log("Document written with ID: ", docRef.id);
+
+        toast({
+          title: "Comment Posted",
+        })
+        form.reset();
+        setImageUrl(null);
+        setProgress(0);
+        setPreviewImg(null);
+
+      }
+      else
+      {
+        console.log('No such event found');
+        router.push('/404');
+      }
+  }    
+
+  function onSubmit(data: Input) {
+    createEventComment(data);
+  }
+
 
 
   return (
@@ -227,14 +385,67 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
             </div>
 
-            <div className=' mt-3 p-4'>
-              <div
-                className="rounded-3xl border border-gray-300 p-4 cursor-pointer mx-2 md:mx-0 my-6"
-                // onClick={() => setIsCommentBoxOpen(false)}
-              >
-                Write a Answer...
-              </div>
+            {/* Comment box for the event */}
+            <div className=" mt-3">
+          {isCommentBoxOpen ? (
+            <div
+              className="rounded-3xl border border-gray-300 p-4 cursor-pointer mx-2 md:mx-0 my-6"
+              onClick={() => setIsCommentBoxOpen(false)}
+            >
+              Write a Answer...
             </div>
+          ) : (
+            <div className=" rounded-3xl border border-gray-300 p-4 cursor-pointer">
+              <Form {...form}>
+                <form
+                  className=" relative space-y-3 overflow-hidden"
+                  onSubmit={form.handleSubmit(onSubmit)}
+                >
+                  {/* TipTap Editor */}
+                  <FormField
+                    control={form.control}
+                    name="comment"
+                    render={({ field }) => (
+                      <FormItem>
+                        {/* <FormLabel>Write an answer...</FormLabel> */}
+                        <FormLabel>Description</FormLabel>
+                                <div className={`${isFocused?"border-black border-[2.3px]": "border-[2px] border-[#d3d7dd]"} rounded-lg`} onFocus={() => setIsFocused(true)}
+                                onBlur={() => setIsFocused(false)}
+                                >
+                        <FormControl>
+                          <Controller
+                            control={form.control}
+                            name="comment"
+                            render={({ field }) => <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress}/>}
+                          />
+                        </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+
+                  <div className=" space-x-2 flex items-end justify-end ">
+                    
+                    <Button variant="outline" className=" rounded-3xl"
+                    onClick={() => {setIsCommentBoxOpen(true); form.reset(); setImageUrl(null);}}
+                    >
+                      Cancel
+                    </Button>
+
+                    <Button type="submit" variant="outline" className=" rounded-3xl "
+                    >
+                      Post
+                    </Button>
+                  </div>
+                  
+                </form>
+              </Form>
+            </div>
+          )}
+        </div>
+
 
 
         </div>

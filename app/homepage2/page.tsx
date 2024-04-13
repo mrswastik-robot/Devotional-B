@@ -485,7 +485,7 @@ export default function MusicPage() {
                               name="dateOfEvent"
                               render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                  <FormLabel>Date of birth</FormLabel>
+                                  <FormLabel>Date of Event</FormLabel>
                                   <Popover>
                                     <PopoverTrigger asChild>
                                       <FormControl>
@@ -510,16 +510,16 @@ export default function MusicPage() {
                                         mode="single"
                                         selected={field.value}
                                         onSelect={field.onChange}
-                                        disabled={(date) =>
-                                          date > new Date() || date < new Date("1900-01-01")
-                                        }
+                                        // disabled={(date) =>
+                                        //   date > new Date() || date < new Date("1900-01-01")
+                                        // }
                                         initialFocus
                                       />
                                     </PopoverContent>
                                   </Popover>
-                                  <FormDescription>
-                                    Your date of birth is used to calculate your age.
-                                  </FormDescription>
+                                  {/* <FormDescription>
+                                    This is the date of the event.
+                                  </FormDescription> */}
                                   <FormMessage />
                                 </FormItem>
                               )}
@@ -535,7 +535,7 @@ export default function MusicPage() {
                               <FormControl>
                                 <Input placeholder="Location of the Event ..." {...field}/>
                               </FormControl>
-                              <div className="text-[12px] opacity-70">This is the location of the event.</div>
+                              {/* <div className="text-[12px] opacity-70">This is the location of the event.</div> */}
                               <FormMessage/>
                             </FormItem>
                           )}
@@ -556,7 +556,7 @@ export default function MusicPage() {
                                 }}
                                 />
                               </FormControl>
-                              <div className="text-[12px] opacity-70">This is the duration of the event.</div>
+                              {/* <div className="text-[12px] opacity-70">This is the duration of the event.</div> */}
                               <FormMessage/>
                             </FormItem>
                           )}
@@ -571,7 +571,7 @@ export default function MusicPage() {
                               <FormControl>
                                 <Input placeholder="Registration Link ..." {...field}/>
                               </FormControl>
-                              <div className="text-[12px] opacity-70">This is the registration link for the event.</div>
+                              {/* <div className="text-[12px] opacity-70">This is the registration link for the event.</div> */}
                               <FormMessage/>
                             </FormItem>
                           )}

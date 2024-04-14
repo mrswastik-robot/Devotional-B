@@ -266,10 +266,16 @@ export default function MusicPage() {
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       console.log('Upload is ' + progress + '% done');
       setProgress(progress);
+      
     }, 
     (error: any) => {
       // Handle unsuccessful uploads
       console.log('Upload failed', error);
+      toast({
+        title: "Upload Failed",
+        variant: "destructive",
+        description: "Your image could not be uploaded.",
+      })
     }, 
     () => {
       // Upload completed successfully, now we can get the download URL
@@ -277,6 +283,13 @@ export default function MusicPage() {
         console.log('File available at', downloadURL);
         // Save the URL to state or wherever you want to keep it
         setImageUrl(downloadURL);
+
+        form.setValue('eventImageURL', downloadURL);
+        toast({
+          title: "Image Uploading",
+          variant: "feature",
+          description: `Your image is 100% uploaded.`,
+        })
       });
     }
   );}catch(err){
@@ -284,6 +297,13 @@ export default function MusicPage() {
   }
 
   }
+
+  const handleImageFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setImageUpload(event.target.files[0]);
+      uploadImage(event.target.files[0]);
+    }
+  };
 
   async function createEventPost(data:Input)
   {
@@ -430,14 +450,15 @@ export default function MusicPage() {
                             <FormItem>
                               <FormLabel>Event Image</FormLabel>
                               <FormControl>
-                                <Input type="file" onChange={(event) => {
-                                  if(event.target.files) {
-                                    setImageUpload(event.target.files[0]);
-                                  }
-                                }}/>
+                                
+                                <Input
+                                type="file"
+                                onChange={handleImageFileSelect}
+
+                                />
                               </FormControl>
                               <div className="text-[12px] opacity-70">Upload an image for the Event.</div>
-                              <FormMessage/>
+                              <FormMessage/> 
                             </FormItem>
                           )}
                           />

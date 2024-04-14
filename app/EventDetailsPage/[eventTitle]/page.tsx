@@ -32,7 +32,7 @@ import { MapPin } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { History } from 'lucide-react';
 import { FileBadge } from 'lucide-react';
-import { addDoc, collection, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
+import { Timestamp, addDoc, collection, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { db , auth , storage } from '@/utils/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
@@ -61,7 +61,7 @@ type EventDetailsType = {
   title: string
   description: string
   eventImageURL: string
-  dateOfEvent: string
+  dateOfEvent: Timestamp
   locationOfEvent: string
   durationOfEvent: number
   registrationLink: string
@@ -158,9 +158,12 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
   let dateString;
   if (eventObject.dateOfEvent) {
-    const date = eventObject.dateOfEvent.toDate();
-    dateString = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const date = eventObject.dateOfEvent.toDate();
+  dateString = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   }
+
+
+
 
   //comment section for the event
   const form = useForm<Input>({

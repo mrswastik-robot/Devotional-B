@@ -27,7 +27,9 @@ import Loader from "../../components/ui/Loader"
 import { db , storage} from "@/utils/firebase";
 import {
   addDoc,
+  arrayUnion,
   collection,
+  getDoc,
   getDocs,
   limit,
   onSnapshot,
@@ -35,6 +37,7 @@ import {
   query,
   serverTimestamp,
   startAfter,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
@@ -43,7 +46,7 @@ import imageCompression from 'browser-image-compression';
 
 import styled, { createGlobalStyle } from "styled-components";
 
-
+import { LuXCircle } from "react-icons/lu";
 
 import {
   Dialog,
@@ -157,13 +160,18 @@ export default function MusicPage() {
 
   const [isFocused, setIsFocused] = useState(false);
 
-
+  type SelectedCategoriesType = Record<string, string[]>;
   //image uploading
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [selectC, setSelectC] = useState<any>([]);
+  const [selectedCategories, setSelectedCategories] = useState<SelectedCategoriesType>({});
+  const [selectedMainCategory, setSelectedMainCategory] = useState('');
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [progress , setProgress] = useState<number | null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
+  const [subCategoryy, setSubCategoryy] = useState<any>(["SubCategory1", "SubCategory2", "SubCategory3"]);
+  const [tempSubCategory, setTempSubCategory] = useState<any>([]);
 
 
    //old homepage stuff
@@ -285,9 +293,68 @@ export default function MusicPage() {
 
   }
 
+  //category stuff
+
+  const handleMainCategoryChange = (newValue: string) => {
+    setTempSubCategory([]);
+    if(!selectC.includes(newValue)){
+      setSelectC((prev:any)=>{
+        return [...prev, newValue]
+      })
+    }
+    setSelectedMainCategory(newValue);
+    handleCategorySelectChange(newValue, undefined);
+  };
+
+  const handleSubcategoryChange = (newValue: string) => {
+    if(!tempSubCategory.includes(newValue)){
+      setTempSubCategory((prev:any)=>{
+        return [...prev, newValue]
+      })
+    }
+    handleCategorySelectChange(selectedMainCategory, newValue);
+    setSelectedSubcategory(newValue);
+  };
+
+  const handleCategorySelectChange = (category: string, subcategory: string | undefined) => {
+    setSelectedCategories((prev: any) => {
+      const updatedCategories = { ...prev };
+      if (!updatedCategories[category]) {
+        updatedCategories[category] = [];
+      }
+      if (subcategory && !updatedCategories[category].includes(subcategory)) {
+        updatedCategories[category].push(subcategory);
+      }
+      return updatedCategories;
+    });
+    //console.log(selectedCategories);
+  };
+
+  const delCategories = (category:string)=>{
+    let newCategory=selectC.filter((cat:any)=>{
+      console.log(cat, " ", category);
+      return cat!=category;
+    })
+  setSelectC(newCategory);
+  delete selectedCategories[category]
+  //console.log(selectedCategories);
+  }
+
+  const delSubCategories = (category:string)=>{
+    let newSubCategory=tempSubCategory.filter((cat:any)=>{
+      return cat!=category;
+    })
+  setTempSubCategory(newSubCategory);
+  selectedCategories[selectedMainCategory]=selectedCategories[selectedMainCategory].filter((subcat)=>(
+    subcat!=category
+  ))
+  //console.log(selectedCategories);
+  }
+  //create event
+
   async function createEventPost(data:Input)
   {
-    const docRef = addDoc(collection(db, 'events'), {
+    const docRef = await addDoc(collection(db, 'events'), {
       title: data.title,
       description: data.description,
       eventImageURL: imageUrl,
@@ -301,10 +368,72 @@ export default function MusicPage() {
       profilePic: user?.photoURL,
     });
 
+    console.log("Event ID: ", docRef.id);
+    const event_id = docRef.id
+    
+    try {
+      for (const [mainCategory, subcategories] of Object.entries(selectedCategories)) {
+        // Update Firestore for main category
+        await updateDoc(doc(db, 'meta-data', 'v1', 'event-categories', mainCategory), {
+          Events: arrayUnion(docRef.id),
+        });
+  
+        // Update Firestore for each subcategory
+        for (const subcategory of subcategories) {
+          await updateDoc(doc(db, 'meta-data', 'v1', 'event-categories', mainCategory), {
+            [subcategory]: arrayUnion(docRef.id),
+          });
+        }
+      }
+  
+      // Clear selected categories after submission
+      setSelectedCategories({});
+    } catch (error) {
+      console.error('Error updating Firestore:', error);
+    }
+
     toast({
       title: "Event Created",
       description: "Your event has been created successfully.",
     })
+
+    try {
+      console.log("keyword Gen.....")
+      const docRef = await addDoc(collection(db, 'keywords'), {
+        prompt: `Generate some keywords and hashtags on topic ${data.title} and give it to me in "**Keywords:**["Keyword1", "Keyword2",...] **Hashtags:**["Hashtag1", "Hashtag2",...]" this format`,
+      });
+      console.log('Keyword Document written with ID: ', docRef.id);
+  
+      // Listen for changes to the document
+      const unsubscribe = onSnapshot(doc(db, 'keywords', docRef.id), async(snap) => {
+        const data = snap.data();
+        if (data && data.response) {
+          console.log('RESPONSE: ' + data.response);
+          const keywordsStr = `${data.response}`;
+
+          const cleanedString = keywordsStr.replace(/\*|\`/g, '');
+
+          const splitString = cleanedString.split("Keywords:");
+          const keywordsString = splitString[1].split("Hashtags:")[0].trim();
+          const hashtagsString = splitString[1].split("Hashtags:")[1].trim();
+
+          const keywordsArray = JSON.parse(keywordsString);
+          const hashtagsArray = JSON.parse(hashtagsString);
+
+          const questionDocRef = doc(db, 'events', event_id);
+          await updateDoc(questionDocRef, {
+          keywords: keywordsArray,
+          hashtags: hashtagsArray // Add your keywords here
+      });
+        }
+      });
+  
+      // Stop listening after some time (for demonstration purposes)
+      setTimeout(() => unsubscribe(), 60000);
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
+
   }
 
   function onSubmit(data: Input) {
@@ -331,7 +460,13 @@ export default function MusicPage() {
      setLastDoc(loadMore);
    };
  
- 
+   useEffect(()=>{
+    const getCat=async()=>{
+    //fetch all categories
+  }
+  getCat();
+  }, [])
+
    //useEffect for automting lazyload functionality
    useEffect(() => {
      if(morePosts){
@@ -389,7 +524,7 @@ export default function MusicPage() {
                         </Button>
                   </DialogTrigger>
   }
-                  <DialogContent className="sm:max-w-[925px] max-h-[55rem] overflow-y-scroll ">
+                  <DialogContent className="sm:max-w-[925px] max-h-[42rem] overflow-y-scroll ">
                     <DialogHeader>
                       <DialogTitle>Create your Event</DialogTitle>
                       <DialogDescription>
@@ -478,7 +613,64 @@ export default function MusicPage() {
                               </div>
                             }
                           </div>
-
+                          {/*Category thing*/}
+                          <div>
+                          
+                          <div className="text-sm font-medium mb-2">Category</div>
+                          <Select value={""} onValueChange={handleMainCategoryChange} >
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Select a Category" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Categories</SelectLabel>
+          <SelectItem value="How To">How To</SelectItem>
+          <SelectItem value="Help">Help</SelectItem>
+          <SelectItem value="Mystery|Haunted|Ghost">Mystery/Haunted/Ghost</SelectItem>
+          <SelectItem value="Astrology|Remedies|Occult">Astrology/Remedies/Occult</SelectItem>
+          <SelectItem value="GemStones|Rudraksha">GemStones/Rudraksha</SelectItem>
+          <SelectItem value="Others">Others</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+    <div className="flex">
+                              {
+                                selectC.map((category:string, index:number)=>{
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category.split("|").join("/")} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                })
+                              }
+                            </div>
+                            {/* Ls */}
+                            <div className="mt-3">
+                            {selectedMainCategory && (
+        <Select value={""} onValueChange={handleSubcategoryChange}>
+          <SelectTrigger>
+          <SelectValue placeholder={`Select subCategory for ${selectedMainCategory.split("|").join("/")}`} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+            <SelectLabel>Sub Categories</SelectLabel>
+              {
+                subCategoryy.map((subcategory:any, index:any)=>(
+                  <SelectItem key={index} value={subcategory}>{subcategory}</SelectItem>
+                ))
+              }
+              {/* Add more subcategories for other main categories */}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      )}
+      <div className="flex">
+                              {
+                                tempSubCategory.map((subcategory:string, index:number)=>{
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{subcategory} <span onClick={()=>{delSubCategories(subcategory)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                })
+                              }
+                            </div>
+                            </div>
+                            {/* */}
+                            <div className="text-[12px] opacity-70 mt-[0.45rem]">This is the category, you can choose multiple categories for your Question.</div>
+                          </div>
                           {/* DateOfEvent */}
                           <FormField
                               control={form.control}

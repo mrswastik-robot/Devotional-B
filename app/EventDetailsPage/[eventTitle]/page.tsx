@@ -66,6 +66,7 @@ type EventDetailsType = {
   durationOfEvent: number
   registrationLink: string
   uid: string
+  hashtags: Array<string>
   createdAt: string
   name: string
   profilePic: string
@@ -373,51 +374,14 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
                 <div>
                     <div className=' space-y-2'>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl'>
-                            Pilot Training
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            Aviation
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            Career
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            Training
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            BAA Training
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl'>
-                            Pilot Training
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            Aviation
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            Career
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            Training
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            BAA Training
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl'>
-                            Pilot Training
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            Aviation
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            Career
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            Training
-                        </Button>
-                        <Button className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
-                            BAA Training
-                        </Button>
+                        {eventObject.hashtags?(
+                          eventObject.hashtags.map((hashtag, index)=>{
+                            return <Button key={index} className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
+                            {hashtag}
+                            </Button>
+                          })
+                        ):<div>No Tags Found...</div>
+                        }
                     </div>
                 </div>
 

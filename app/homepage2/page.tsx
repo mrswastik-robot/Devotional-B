@@ -3,6 +3,7 @@
 import { Metadata } from "next"
 import Image from "next/image"
 import { PlusCircleIcon } from "lucide-react"
+import { X } from 'lucide-react';
 
 import { ScrollArea, ScrollBar } from "../../components/ui/scroll-area"
 import { Separator } from "../../components/ui/separator"
@@ -133,6 +134,7 @@ type Props = {
     createdAt: string;
     name: string;
     profilePic: string;
+    sponsors: string[];
   };
 
 const CustomContainer = styled.div`
@@ -155,6 +157,7 @@ export default function MusicPage() {
       locationOfEvent: "",
       // durationOfEvent:,
       registrationLink: "",
+      sponsors: [],
     },
   });
 
@@ -172,6 +175,9 @@ export default function MusicPage() {
   const [previewImg, setPreviewImg] = useState<any>(null);
   const [subCategoryy, setSubCategoryy] = useState<any>(["SubCategory1", "SubCategory2", "SubCategory3"]);
   const [tempSubCategory, setTempSubCategory] = useState<any>([]);
+
+  const [sponsors , setSponsors] = useState<string[]>([]);
+  const [sponsorInput , setSponsorInput] = useState<string>("");
 
 
    //old homepage stuff
@@ -382,6 +388,7 @@ export default function MusicPage() {
       locationOfEvent: data.locationOfEvent,
       durationOfEvent: data.durationOfEvent,
       registrationLink: data.registrationLink,
+      sponsors: sponsors,
       uid: user?.uid,
       createdAt: serverTimestamp(),
       name: user?.displayName,
@@ -639,22 +646,22 @@ export default function MusicPage() {
                           
                           <div className="text-sm font-medium mb-2">Category</div>
                           <Select value={""} onValueChange={handleMainCategoryChange} >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a Category" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Categories</SelectLabel>
-          <SelectItem value="How To">How To</SelectItem>
-          <SelectItem value="Help">Help</SelectItem>
-          <SelectItem value="Mystery|Haunted|Ghost">Mystery/Haunted/Ghost</SelectItem>
-          <SelectItem value="Astrology|Remedies|Occult">Astrology/Remedies/Occult</SelectItem>
-          <SelectItem value="GemStones|Rudraksha">GemStones/Rudraksha</SelectItem>
-          <SelectItem value="Others">Others</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-    <div className="flex">
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a Category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectLabel>Categories</SelectLabel>
+                                <SelectItem value="How To">How To</SelectItem>
+                                <SelectItem value="Help">Help</SelectItem>
+                                <SelectItem value="Mystery|Haunted|Ghost">Mystery/Haunted/Ghost</SelectItem>
+                                <SelectItem value="Astrology|Remedies|Occult">Astrology/Remedies/Occult</SelectItem>
+                                <SelectItem value="GemStones|Rudraksha">GemStones/Rudraksha</SelectItem>
+                                <SelectItem value="Others">Others</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                          <div className="flex">
                               {
                                 selectC.map((category:string, index:number)=>{
                                   return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category.split("|").join("/")} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
@@ -664,24 +671,24 @@ export default function MusicPage() {
                             {/* Ls */}
                             <div className="mt-3">
                             {selectedMainCategory && (
-        <Select value={""} onValueChange={handleSubcategoryChange}>
-          <SelectTrigger>
-          <SelectValue placeholder={`Select subCategory for ${selectedMainCategory.split("|").join("/")}`} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-            <SelectLabel>Sub Categories</SelectLabel>
-              {
-                subCategoryy.map((subcategory:any, index:any)=>(
-                  <SelectItem key={index} value={subcategory}>{subcategory}</SelectItem>
-                ))
-              }
-              {/* Add more subcategories for other main categories */}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      )}
-      <div className="flex">
+                              <Select value={""} onValueChange={handleSubcategoryChange}>
+                                <SelectTrigger>
+                                <SelectValue placeholder={`Select subCategory for ${selectedMainCategory.split("|").join("/")}`} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                  <SelectLabel>Sub Categories</SelectLabel>
+                                    {
+                                      subCategoryy.map((subcategory:any, index:any)=>(
+                                        <SelectItem key={index} value={subcategory}>{subcategory}</SelectItem>
+                                      ))
+                                    }
+                                    {/* Add more subcategories for other main categories */}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            )}
+                            <div className="flex">
                               {
                                 tempSubCategory.map((subcategory:string, index:number)=>{
                                   return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{subcategory} <span onClick={()=>{delSubCategories(subcategory)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
@@ -785,6 +792,57 @@ export default function MusicPage() {
                                 <Input placeholder="Registration Link ..." {...field}/>
                               </FormControl>
                               {/* <div className="text-[12px] opacity-70">This is the registration link for the event.</div> */}
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
+
+                          {/* //spnosors section */}
+                          <FormField
+                          control={form.control}
+                          name="sponsors"
+                          render={({field}) => (
+                            <FormItem>
+                              <FormLabel>Sponsors</FormLabel>
+                              <FormControl>
+                                <div className=" flex gap-2">
+                                <Input
+                                  placeholder="Sponsors"
+                                  value={sponsorInput}
+                                  onChange={(e) => setSponsorInput(e.target.value)}
+                                  onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                      setSponsors((prev) => [...prev, sponsorInput]);
+                                      setSponsorInput('');
+                                    }
+                                  }}
+                                />
+                                <Button
+                                type="button"
+                                onClick={() => {
+                                  setSponsors((prev) => [...prev, sponsorInput]);
+                                  setSponsorInput('');
+                                }}
+                                >Add</Button>
+                                </div>
+                              </FormControl>
+
+                             <div className=" flex">
+                              {sponsors.map((sponsor, index) => (
+                                <div key={index} className=" flex gap-1 p-2 rounded-3xl bg-[#F6F6F7]">
+                                  <p>{sponsor}</p>
+                                  <button type="button" onClick={() => {
+                                    const newSponsors = [...sponsors];
+                                    newSponsors.splice(index, 1);
+                                    setSponsors(newSponsors);
+                                  }}>
+                                    <X/>
+                                  </button>
+                                </div>
+                              ))}
+                              </div>
+
+                              <div className="text-[12px] opacity-70">Add sponsors for the event.</div>
                               <FormMessage/>
                             </FormItem>
                           )}

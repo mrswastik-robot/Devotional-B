@@ -13,6 +13,7 @@ export const EventType = z.object({
     locationOfEvent: z.string().max(500,{message: 'Location should not be this long'}),
     durationOfEvent: z.number().min(1).max(24),
     registrationLink: z.string(),
+    sponsors:z.array(z.string()).optional(),
     // createdAt: z.string(),
     // updatedAt: z.string(),
     // profilePic: z.string(),

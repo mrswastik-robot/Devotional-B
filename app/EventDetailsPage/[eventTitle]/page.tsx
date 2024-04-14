@@ -32,6 +32,8 @@ import { MapPin } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { History } from 'lucide-react';
 import { FileBadge } from 'lucide-react';
+import { Building } from 'lucide-react';
+
 import { Timestamp, addDoc, collection, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { db , auth , storage } from '@/utils/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -70,6 +72,7 @@ type EventDetailsType = {
   createdAt: string
   name: string
   profilePic: string
+  sponsors: Array<string>
 }
 
 type EventCommentType = {
@@ -107,6 +110,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
+  const [sponsors, setSponsors] = useState<string[]>([] as string[]);
 
 
 
@@ -136,7 +140,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 name: data.name,
                 profilePic: data.profilePic,
                 createdAt: data.createdAt,
-                imageUrl: data.imageUrl
+                imageUrl: data.imageUrl,
               }
             })
             setEventComment(comments);
@@ -465,77 +469,26 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             <CardHeader>
               <CardTitle>Sponsors</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-8">
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                  <AvatarFallback>OM</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    Olivia Martin
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    olivia.martin@email.com
-                  </p>
+            <CardContent className="grid gap-8 uppercase">
+
+              {eventObject.sponsors?(
+                eventObject.sponsors.map((sponsor, index)=>{
+                  return <div key={index} className="flex items-center gap-4">
+                  <Avatar className="hidden h-9 w-9 sm:flex">
+                    <AvatarImage src="/avatars/01.png" alt="Avatar" />
+                    <AvatarFallback><Building/></AvatarFallback>
+                  </Avatar>
+                  <div className="grid gap-1">
+                    <p className="text-sm font-medium leading-none">
+                      {sponsor}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/02.png" alt="Avatar" />
-                  <AvatarFallback>JL</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    Jackson Lee
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    jackson.lee@email.com
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/03.png" alt="Avatar" />
-                  <AvatarFallback>IN</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    Isabella Nguyen
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    isabella.nguyen@email.com
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/04.png" alt="Avatar" />
-                  <AvatarFallback>WK</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    William Kim
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    will@email.com
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/05.png" alt="Avatar" />
-                  <AvatarFallback>SD</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    Sofia Davis
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    sofia.davis@email.com
-                  </p>
-                </div>
-              </div>
+                }
+                )
+              ):<div>No Sponsors Found...</div>
+            }
+              
             </CardContent>
           </Card>
         </div>

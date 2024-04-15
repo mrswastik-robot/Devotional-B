@@ -182,7 +182,7 @@ export default function MusicPage() {
 
    //old homepage stuff
    const [posts, setPosts] = useState<EventType[]>([]);
-   const limitValue: number = 6;
+   const limitValue: number = 8;
    const [lastDoc, setLastDoc] = useState<any>(null);
    const [loadMore, setLoadMore] = useState<any>(null);
    const [isLoading, setIsLoading] = useState(false);
@@ -228,14 +228,89 @@ export default function MusicPage() {
     return unsubscribe;
   };
   
-  useEffect(() => {
-    const unsubscribe = getPosts();
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = getPosts();
+  //   return () => unsubscribe();
+  // }, []);
 
- 
+  //extracting ends 
    
+  //new fetchpost
+  useEffect(() => {
+ 
+    //console.log("Last Doc ", lastDoc);
+    setIsLoading(true);
+  const collectionRef = collection(db, "events");
+  let q;
 
+  if (selectedCategory === "all") {
+    if (lastDoc) {
+      q = query(
+        collectionRef,
+        orderBy("createdAt", "desc"),
+        startAfter(lastDoc),
+        limit(limitValue)
+      );
+    } else {
+      q = query(collectionRef, orderBy("createdAt", "desc"), limit(limitValue));
+    }
+  } else {
+    if (lastDoc) {
+      q = query(
+        collectionRef,
+        where("category", "array-contains", selectedCategory),
+        orderBy("createdAt", "desc"),
+        startAfter(lastDoc),
+        limit(limitValue)
+      );
+    } else {
+      q = query(
+        collectionRef,
+        where("category", "array-contains", selectedCategory),
+        orderBy("createdAt", "desc"),
+        limit(limitValue)
+      );
+    }
+  }
+  
+  //const postLength = 0;
+  const unsub = onSnapshot(q, async (snapshot) => {
+    const postsData:any = [];
+    if(snapshot.docs.length<limitValue){
+      console.log("Length ", snapshot.docs.length);
+      setMorePosts(false);
+    }
+    else{
+      setMorePosts(true);
+    }
+
+    const posts = snapshot.docs.map((doc) => doc.data() as EventType);
+
+    const lastDocument = snapshot.docs[snapshot.docs.length - 1];
+    setLoadMore(lastDocument);
+
+    if (addFirst && lastDoc == null) {
+      setPosts(posts);
+      setAddFirst(false);
+    } else {
+      setPosts((prevPosts) => [...prevPosts, ...posts]);
+    }
+    setIsLoading(false);
+    setPageLoaded(true);
+  });
+
+  return () => {
+    unsub();
+  };
+
+  }, [lastDoc, reload , selectedCategory]);
+
+  const categorySelect = async()=>{
+    setPosts([]);
+    setLastDoc(null);
+
+  }
+  //new fetchpsot ends
 
    //image uploading stuff
    const uploadImage = async(file: any) => {
@@ -390,6 +465,7 @@ export default function MusicPage() {
       registrationLink: data.registrationLink,
       sponsors: sponsors,
       uid: user?.uid,
+      category: selectC,
       createdAt: serverTimestamp(),
       name: user?.displayName,
       profilePic: user?.photoURL,

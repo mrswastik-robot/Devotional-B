@@ -4,7 +4,9 @@ import { ScrollArea } from "../../../components/ui/scroll-area"
 
 import { Playlist } from "../data/playlists"
 import { current } from "@reduxjs/toolkit"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { db } from "@/utils/firebase"
+import { collection, getDocs } from "firebase/firestore"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   playlists: Playlist[],
@@ -14,11 +16,27 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Sidebar({ className, playlists, selectChange, currentC }: SidebarProps) {
 
+  const [sidebarCategory, setSidebarCategory] = useState<any>();
+
   useEffect(()=>{
     const getCat=async()=>{
-    //fetch all categories
+      try {
+        const eventCategoriesRef = collection(db, 'meta-data', 'v1', 'event-categories');
+        const snapshot = await getDocs(eventCategoriesRef);
+    
+        const eventCategories:any = [];
+        snapshot.forEach(doc => {
+          eventCategories.push({ id: doc.id, ...doc.data() });
+        });
+    
+        return eventCategories;
+      } catch (error) {
+        console.error('Error fetching event categories:', error);
+        return [];
+      }
   }
-  getCat();
+  const category = getCat();
+  setSidebarCategory(category);
   }, [])
 
   //console.log("LS: ", selectChange);

@@ -117,7 +117,7 @@ const CustomContainer = styled.div`
   padding-top: 1rem;
   `;
 
-const CreatEventPage = (props: Props) => {
+const CreatEventPage = () => {
 
     const router = useRouter();
     const { toast } = useToast();

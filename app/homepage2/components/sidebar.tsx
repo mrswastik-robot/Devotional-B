@@ -7,6 +7,7 @@ import { current } from "@reduxjs/toolkit"
 import { useEffect, useState } from "react"
 import { db } from "@/utils/firebase"
 import { collection, getDocs } from "firebase/firestore"
+import Loader from "@/components/ui/Loader"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   playlists: Playlist[],
@@ -35,8 +36,11 @@ export function Sidebar({ className, playlists, selectChange, currentC }: Sideba
         return [];
       }
   }
-  const category = getCat();
-  setSidebarCategory(category);
+  const category = getCat().then(categories => {
+    setSidebarCategory(categories);
+  }).catch(error => {
+    console.error('Error:', error);
+  });
   }, [])
 
   //console.log("LS: ", selectChange);
@@ -47,6 +51,7 @@ export function Sidebar({ className, playlists, selectChange, currentC }: Sideba
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
             Discover
           </h2>
+          <ScrollArea className="h-[350px] px-1">
           <div className="space-y-1">
             <Button onClick={()=>{selectChange("all")}} variant={`${currentC=="all"?"secondary":"ghost"}`} className="w-full justify-start">
               {/* <svg
@@ -64,22 +69,36 @@ export function Sidebar({ className, playlists, selectChange, currentC }: Sideba
               </svg> */}
               All
             </Button>
-            <Button onClick={()=>{selectChange("How To")}} variant={`${currentC=="How To"?"secondary":"ghost"}`} className="w-full justify-start">
+            <div>
+              {
+                sidebarCategory?
+                sidebarCategory.map((categoryD:any, index:any)=>(
+                  <div key={index}>
+                    <Button onClick={()=>{selectChange(categoryD.id)}} variant={`${currentC==categoryD.id.split("|").join("/")?"secondary":"ghost"}`} className="w-full justify-start">
+                      {categoryD.id.split("|").join("/")}
+                    </Button>
+                  </div>
+                )):
+                <div><Loader/></div>
+              }
+            </div>
+            {/* <Button onClick={()=>{selectChange("How To")}} variant={`${currentC=="How To"?"secondary":"ghost"}`} className="w-full justify-start">
               How To
             </Button>
             <Button onClick={()=>{selectChange("Help")}} variant={`${currentC=="Help"?"secondary":"ghost"}`} className="w-full justify-start">
               Help
             </Button>
-            <Button onClick={()=>{selectChange("Mystery/Haunted/Ghost")}} variant={`${currentC=="Mystery/Haunted/Ghost"?"secondary":"ghost"}`} className="w-full justify-start">
+            <Button onClick={()=>{selectChange("Mystery|Haunted|Ghost")}} variant={`${currentC=="Mystery/Haunted/Ghost"?"secondary":"ghost"}`} className="w-full justify-start">
             Mystery/Haunted/Ghost
             </Button>
-            <Button onClick={()=>{selectChange("Astrology/Remedies/Occult")}} variant={`${currentC=="Astrology/Remedies/Occult"?"secondary":"ghost"}`} className="w-full justify-start">
+            <Button onClick={()=>{selectChange("Astrology|Remedies|Occult")}} variant={`${currentC=="Astrology/Remedies/Occult"?"secondary":"ghost"}`} className="w-full justify-start">
             Astrology/Remedies/Occult
             </Button>
-            <Button onClick={()=>{selectChange("GemStones/Rudraksha")}} variant={`${currentC=="GemStones/Rudraksha"?"secondary":"ghost"}`}className="w-full justify-start">
+            <Button onClick={()=>{selectChange("GemStones|Rudraksha")}} variant={`${currentC=="GemStones/Rudraksha"?"secondary":"ghost"}`}className="w-full justify-start">
             GemStones/Rudraksha
-            </Button>
+            </Button> */}
           </div>
+          </ScrollArea>
         </div>
         <div className="py-2">
           <h2 className="relative px-7 text-lg font-semibold tracking-tight">

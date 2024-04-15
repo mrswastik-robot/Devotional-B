@@ -151,7 +151,7 @@ const CreatEventPage = () => {
       const [previewImg, setPreviewImg] = useState<any>(null);
       const [subCategoryy, setSubCategoryy] = useState<any>(["SubCategory1", "SubCategory2", "SubCategory3"]);
       const [tempSubCategory, setTempSubCategory] = useState<any>([]);
-    
+      const [selectCategory, setSelectCategory] = useState<any>();
       const [sponsors , setSponsors] = useState<string[]>([]);
       const [sponsorInput , setSponsorInput] = useState<string>("");
       const [landmark, setLandmark] = useState<string>("");
@@ -212,6 +212,30 @@ const CreatEventPage = () => {
     
       //extracting ends 
        
+      useEffect(()=>{
+        const getCat=async()=>{
+          try {
+            const eventCategoriesRef = collection(db, 'meta-data', 'v1', 'event-categories');
+            const snapshot = await getDocs(eventCategoriesRef);
+        
+            const eventCategories:any = [];
+            snapshot.forEach(doc => {
+              eventCategories.push({ id: doc.id, ...doc.data() });
+            });
+        
+            return eventCategories;
+          } catch (error) {
+            console.error('Error fetching event categories:', error);
+            return [];
+          }
+      }
+      const category = getCat().then(categories => {
+        setSelectCategory(categories);
+      }).catch(error => {
+        console.error('Error:', error);
+      });
+      }, [])
+
       //new fetchpost
       useEffect(() => {
      
@@ -698,11 +722,17 @@ const CreatEventPage = () => {
                             <SelectContent>
                               <SelectGroup>
                                 <SelectLabel>Categories</SelectLabel>
-                                <SelectItem value="How To">How To</SelectItem>
-                                <SelectItem value="Help">Help</SelectItem>
-                                <SelectItem value="Mystery|Haunted|Ghost">Mystery/Haunted/Ghost</SelectItem>
-                                <SelectItem value="Astrology|Remedies|Occult">Astrology/Remedies/Occult</SelectItem>
-                                <SelectItem value="GemStones|Rudraksha">GemStones/Rudraksha</SelectItem>
+                                <div>
+              {
+                selectCategory?
+                selectCategory.map((categoryD:any, index:any)=>(
+                  <div key={index}>
+                    <SelectItem value={categoryD.id}>{categoryD.id.split("|").join("/")}</SelectItem>
+                  </div>
+                )):
+                <div><Loader/></div>
+              }
+            </div>
                                 <SelectItem value="Others">Others</SelectItem>
                               </SelectGroup>
                             </SelectContent>

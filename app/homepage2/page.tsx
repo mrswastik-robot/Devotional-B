@@ -96,6 +96,7 @@ import { Tiptap } from "@/components/TipTapAns";
 
 import { EventType } from "@/schemas/event";
 import { title } from "process";
+import Link from "next/link";
 
 type Input = z.infer<typeof EventType>;
 
@@ -620,12 +621,16 @@ export default function MusicPage() {
               <Dialog>
                 {
                   
-                  <DialogTrigger asChild>
+                  // <DialogTrigger asChild>
+                    <Link
+                    href={'/homepage2/createEvent'}
+                    >
                         <Button className="">
                           <PlusCircleIcon className="hidden lg:block mr-2 h-4 w-4" />
                           Create Event
                         </Button>
-                  </DialogTrigger>
+                      </Link>
+                  // </DialogTrigger>
   }
                   <DialogContent className="sm:max-w-[925px] max-h-[42rem] overflow-y-scroll ">
                     <DialogHeader>

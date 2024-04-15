@@ -348,8 +348,18 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                     <MapPin size={24} />
                 </div>
                 <div className=' flex-col gap-y-3'>
-                    <p className=' font-bold text-base'>{eventObject.locationOfEvent}</p>
-                    <p className=' text-sm'>2 Gangadhar Chetty Road Bengaluru, KA 560042</p>
+                      {
+                        eventObject.locationOfEvent && 
+                        (() => {
+                          const [location, landmark] = eventObject.locationOfEvent.split(', ');
+                          return (
+                            <>
+                              <p className=' font-bold text-base'>{location}</p>
+                              <p className=' text-sm'>{landmark}</p>
+                            </>
+                          )
+                        })()
+                      }
                     <div className=' flex gap-1'>
                         <p className=' text-base font-bold text-blue-400 hover:underline cursor-pointer'>Show Map</p>
                         <ChevronDown className='text-blue-400' size={24} />

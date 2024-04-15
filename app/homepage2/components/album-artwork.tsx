@@ -122,7 +122,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
     <div className="lg:w-[18.5rem] w-[full] lg:h-[8.1rem] h-[7.7rem]">
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="overflow-hidden rounded-md relative">
+          <div className="overflow-hidden rounded-md relative h-[10.15rem] w-[18.49rem]">
             {
             post.eventImageURL== null ?    
             <Image

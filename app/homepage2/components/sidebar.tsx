@@ -4,6 +4,7 @@ import { ScrollArea } from "../../../components/ui/scroll-area"
 
 import { Playlist } from "../data/playlists"
 import { current } from "@reduxjs/toolkit"
+import { useEffect } from "react"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   playlists: Playlist[],
@@ -12,6 +13,13 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Sidebar({ className, playlists, selectChange, currentC }: SidebarProps) {
+
+  useEffect(()=>{
+    const getCat=async()=>{
+    //fetch all categories
+  }
+  getCat();
+  }, [])
 
   //console.log("LS: ", selectChange);
   return (

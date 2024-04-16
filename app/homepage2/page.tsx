@@ -73,7 +73,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { format } from "date-fns"
+import { format, set } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
@@ -93,6 +93,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Controller } from "react-hook-form";
 import { Tiptap } from "@/components/TipTapAns";
+
+//for algolia event search
+import algoliasearch from "algoliasearch/lite";
+import { useSelector , useDispatch } from "react-redux";
+import { RootState } from "@/store/store";
+import { triggerEventSearch } from "@/store/slice";
 
 
 import { EventType } from "@/schemas/event";
@@ -596,6 +602,65 @@ export default function MusicPage() {
      };
    }
    }, [loadMoreButtonRef, loadMoreData]);
+
+
+   //algolia stuff
+
+  const dispatch = useDispatch();
+
+   const [searchResult , setSearchResult] = useState<any>([]);
+
+   const searchClient = algoliasearch("TEHQHAQR16" , "580c422314cda0e19c4f329d1a0efef3");
+
+   const searchIndex = searchClient.initIndex("search_events");
+
+   const { searchText , searchTriggered } = useSelector((state: RootState) => state.eventSearch);
+
+   const handleSearch = async(queryText: string) => {
+    try {
+      const result = await searchIndex.search(queryText);
+      setSearchResult(result.hits);
+    } catch (error) {
+      console.error('Error searching:', error);
+      setSearchResult(null);
+      
+    }
+   }
+
+   useEffect(() => {
+    if (searchText === "") {
+      setSearchResult(null);
+    }
+  }, [searchText]);
+
+  useEffect(() => {
+    if (searchTriggered) {
+      handleSearch(searchText);
+      dispatch(triggerEventSearch());
+    }
+  }, [searchTriggered]);
+
+
+  function transformHitToPost(hit: any) {
+    return{
+      id: hit.objectID,
+      title: hit.title,
+      description: hit.description,
+      eventImageURL: hit.eventImageURL,
+      dateOfEvent: hit.dateOfEvent,
+      locationOfEvent: hit.locationOfEvent,
+      durationOfEvent: hit.durationOfEvent,
+      registrationLink: hit.registrationLink,
+      uid: hit.uid,
+      createdAt: hit.createdAt,
+      category: hit.category,
+      name: hit.name,
+      profilePic: hit.profilePic,
+      sponsors: hit.sponsors,
+    }
+  }
+
+  
    
 
   return (
@@ -979,27 +1044,46 @@ export default function MusicPage() {
                         </div>
                       </div>
                       <Separator className="my-4" />
+
                       <div className="flex flex-col">
                           <div className="grid lg:grid-cols-4 grid-cols-1 gap-4 pb-4">
-                            {posts.map((post, index) => (
+                            {searchResult && searchResult.length > 0 ?(
+                              searchResult.map((hit: any) => {
+                                const post = transformHitToPost(hit);
+                                return (
+                                  <div key={post.id} className="mb-1">
+                                    <AlbumArtwork
+                                      post={post}
+                                    />
+                                  </div>
+                                );
+                              })
+                            ):(
+                              posts.map((post, index) => (
                                 <div key={index} className="mb-1">
                               <AlbumArtwork
                                 post={post}
                               />
                               </div>
-                            ))}
+                            ))
+                        
+                            )
+                            }
+
+                            
                           </div>
                           <div className="mb-5">
-                          <div className='w-[100]'>
-            { isLoading?<Loader/>:pageLoaded&&
-            <div ref={loadMoreButtonRef} className='mt-4'>
-              <button onClick={loadMoreData}></button>
-            </div>
-            }
-            </div>
-            <div className="w-full text-center mt-0">{!isLoading&&!morePosts&&<div>No more Posts...</div>}</div>
+                            <div className='w-[100]'>
+                            { isLoading?<Loader/>:pageLoaded&&
+                            <div ref={loadMoreButtonRef} className='mt-4'>
+                              <button onClick={loadMoreData}></button>
+                            </div>
+                            }
+                            </div>
+                          <div className="w-full text-center mt-0">{!isLoading&&!morePosts&&<div>No more Posts...</div>}</div>
                           </div>
                       </div>
+
                     </TabsContent>
                     <TabsContent
                       value="podcasts"

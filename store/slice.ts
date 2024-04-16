@@ -62,6 +62,25 @@ export const searchSlice = createSlice({
         }
     },
     });
+    
+
+//for algolia search but for events
+
+export const eventSearchSlice = createSlice({
+    name: "eventSearch",
+    initialState: {
+        searchText: "",
+        searchTriggered: false,
+    },
+    reducers: {
+        setSearchText: (state, action) => {
+        state.searchText = action.payload;
+        },
+        triggerSearch: (state) => {
+            state.searchTriggered = !state.searchTriggered;
+        }
+    },
+    });
 
 
 //algolia search
@@ -72,3 +91,7 @@ export const searchReducer = searchSlice.reducer;
 export const {setPosts , addPosts} = postsSlice.actions;
 export const postsReducer = postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts.posts;
+
+//algoia search for events
+export const { setSearchText: setEventSearchText , triggerSearch: triggerEventSearch } = eventSearchSlice.actions;
+export const eventSearchReducer = eventSearchSlice.reducer;

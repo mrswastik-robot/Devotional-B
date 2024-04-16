@@ -3,9 +3,12 @@ import { configureStore , combineReducers } from '@reduxjs/toolkit'
 import {searchReducer} from './slice'
 import {postsReducer} from './slice'
 
+import { eventSearchReducer } from './slice';
+
 const rootReducer = combineReducers({
     search: searchReducer,
     posts: postsReducer,
+    eventSearch: eventSearchReducer,
 });
 
 export const store = () => {

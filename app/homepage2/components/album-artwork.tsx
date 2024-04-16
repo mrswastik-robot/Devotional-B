@@ -120,11 +120,11 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
     setSavedState(!savedState);
   };
 
-  let dateString;
-  if (post.dateOfEvent) {
-  const date = post.dateOfEvent.toDate();
-  dateString = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  }
+  // let dateString;
+  // if (post.dateOfEvent) {
+  // const date = post.dateOfEvent.toDate();
+  // dateString = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  // }
 
     //console.log("Post: ", post)
   return (
@@ -184,7 +184,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
       <Link href={`/EventDetailsPage/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
         <h3 className="text-[17px] font-bold leading-none">{post.title.length>28?post.title.substring(0, 27)+"...":post.title}</h3>
       </Link>  
-      <div className="mt-[0.30rem] text-[14px] text-red-600 font-semibold">{dateString}</div>
+      {/* {dateString && <div className="mt-[0.30rem] text-[14px] text-red-600 font-semibold">{dateString}</div>} */}
       <div className="mt-[0.30rem] text-[14px] font-semibold opacity-85">{post.locationOfEvent}</div>
       <div className="hidden lg:block">
         {

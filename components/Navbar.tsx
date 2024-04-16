@@ -41,6 +41,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch , useSelector } from "react-redux";
 import { setSearchText , triggerSearch } from "@/store/slice";
 import { RootState } from "@/store/store";
+//for event search
+import { setEventSearchText , triggerEventSearch } from "@/store/slice";
+
 import { useTheme } from "next-themes";
 
 
@@ -130,6 +133,10 @@ const Navbar = ({}: Props) => {
   //for algolia search
   const dispatch = useDispatch();
   const searchText = useSelector((state: RootState) => state.search.searchText);
+  const eventSearchText = useSelector((state: RootState) => state.eventSearch.searchText);
+  
+  //different search box for events search through algolia
+  const [hideQueSearch, setHideQueSearch] = useState(false);
 
   const form = useForm<Input>({
     // mode: "onSubmit",
@@ -299,6 +306,12 @@ const Navbar = ({}: Props) => {
   const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     dispatch(setSearchText(e.target.value));
+  }
+
+  //event
+  const handleEventSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    dispatch(setEventSearchText(e.target.value));
   }
 
   const { theme, setTheme } = useTheme();
@@ -475,9 +488,19 @@ const clearNotifications = async () => {
 
   const pathname = usePathname();
 
+  useEffect(() => {
+    if(pathname === '/homepage2') {
+      setHideQueSearch(true);
+    } else {
+      setHideQueSearch(false);
+    }
+  }, [pathname]);
+
   if (pathname === "/auth") {
     return null;
   }
+
+  
     
 
 
@@ -520,7 +543,7 @@ const clearNotifications = async () => {
           </Link>
 
           {/* search bar */}
-        <div className=" relative ml-5">
+        { !hideQueSearch && <div className=" relative ml-5">
           {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
           <input type="text" 
             value={searchText}
@@ -535,6 +558,28 @@ const clearNotifications = async () => {
           />
           <Search className=" absolute left-2 top-1/2 transform text-gray-400 -translate-y-1/2 h-4 w-4" />
         </div>
+        }
+
+        {/* ye upar wala que search ka input tha , ab neeche event search ka input bana rhe */}
+
+        { hideQueSearch && <div className=" relative ml-5">
+          {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
+          <input type="text" 
+            value={eventSearchText}
+            onChange={handleEventSearchText}
+            placeholder="Search Events" 
+            className="w-[37rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  dispatch(triggerEventSearch());
+                }
+            }}
+          />
+          <Search className=" absolute left-2 top-1/2 transform text-gray-400 -translate-y-1/2 h-4 w-4" />
+        </div>
+        }
+
+
         </div>
 
         <div className="flex ">

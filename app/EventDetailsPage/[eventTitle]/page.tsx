@@ -28,6 +28,7 @@ import { Avatar, AvatarFallback , AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { CalendarCheck2, HistoryIcon } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { MapPin } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { History } from 'lucide-react';
@@ -41,6 +42,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { z } from 'zod';
 import { eventCommentSchema } from '@/schemas/eventComment';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Clock } from 'lucide-react';
 
 import { Tiptap } from '@/components/TipTapAns';
 
@@ -291,7 +293,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
     <div className=' grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6 font-dmsans'>
         <div className=' md:col-span-5 col-span-2 order-first  '>
 
-          <div className=' w-full  bg-white dark:bg-[#262626] rounded-md shadow break-words overflow-hidden mt-1 font-dmsans'>
+          <div className=' w-full  bg-white dark:bg-[#262626] rounded-md shadow break-words overflow-hidden mt-1 font-dmsans p-4'>
 
             <div className=''>
                 <div>
@@ -310,7 +312,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
             </div>
 
-            <div className=' max-w-[70%] p-4 gap-3'>
+            {/* <div className=' max-w-[70%] p-4 gap-3'>
                 <div className=' '>
                     <div className=' flex gap-3 '>
                         <Image
@@ -332,8 +334,9 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                     
 
                 </div>
-            </div>
+            </div> */}
 
+            <div className='flex gap-10'>
             <div className=' p-4 space-y-3 mt-4'>
                 <h1 className=' font-bold'>Date and Time</h1>
                 <div className=' flex gap-3'>
@@ -342,6 +345,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
             </div>
 
+            <div>
             <h1 className=' font-bold px-4 my-3 mt-7'>Location</h1>
             <div className=' px-4 flex gap-x-5'>
                 <div className=' mt-2'>
@@ -366,10 +370,14 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                     </div>
                 </div>
             </div>
+            </div>
+            </div>
 
             {/* Description of the Event */}
-            <div className='font-bold px-4 my-3 mt-7'>
-                <div className=' px-4'>
+            <h1 className='font-bold  px-4 my-3 mt-7 text-lg'>About this event</h1>
+            <div className='px-4 flex gap-2'><span><Clock/></span><div>{eventObject.durationOfEvent} hours</div></div>
+            <div className='font-medium px-4 my-3 mt-5'>
+                <div className=''>
                     <p className=' text-base'>{eventObject.description && parse(eventObject.description)}</p>
                 </div>
             </div>
@@ -378,12 +386,14 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             
             <div className='p-4 mt-4'>
               <div className=' flex gap-4'>
-                <h1 className=' text-xl font-bold'>Registration Link :</h1>
-                <p className=' text-blue-400 underline cursor-pointer mt-1'>{eventObject.registrationLink}</p>
+                <Badge>
+                <div className=' text-xl font-bold'>Registration Link :</div>
+                </Badge>
+                <p className=' text-blue-400 underline cursor-pointer text-lg mt-1'>{eventObject.registrationLink}</p>
               </div>
             </div>
 
-            <div className=' p-4 my-7 max-w-[80%]'>
+            <div className=' p-4 my-5 max-w-[80%]'>
                 <h1 className=' font-bold text-2xl mb-4 '>Tags</h1>
 
                 <div>
@@ -405,7 +415,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
             {/* Comment box for the event */}
             <div className=" mt-3">
-          {isCommentBoxOpen ? (
+          {false ? (
             <div
               className="rounded-3xl border border-gray-300 p-4 cursor-pointer mx-2 md:mx-0 my-6"
               onClick={() => setIsCommentBoxOpen(false)}
@@ -473,7 +483,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
 
         </div>
-
+       <div className="w-[21.3rem]">
         <div className=' sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
@@ -501,6 +511,34 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               
             </CardContent>
           </Card>
+        </div>
+        <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+        <Card>
+            <CardHeader>
+              <CardTitle>Created By</CardTitle>
+            </CardHeader>
+            <CardContent className="">
+
+            <div className="flex mb-1">
+              <div>
+            <Image
+                        src={eventObject.profilePic}
+                        width={10}
+                        height={10}
+                        alt='Conference'
+                        className=' w-10 h-10 rounded-full'
+                        />
+            </div>  
+          <div className="ml-4 space-y-1">
+            <p className="text-sm font-medium leading-none">{eventObject.name}</p>
+            <p className="text-sm text-muted-foreground">email@example.com</p>
+          </div>
+          <div className="ml-auto font-medium"></div>
+        </div>
+              
+            </CardContent>
+          </Card>
+        </div>
         </div>
     </div>
   )

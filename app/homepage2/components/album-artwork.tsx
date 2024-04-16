@@ -24,7 +24,8 @@ import { Album } from "../data/albums"
 import { playlists } from "../data/playlists"
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { Timestamp, arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { Button } from "@/components/ui/button";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   album: Album
@@ -39,12 +40,13 @@ type Props = {
       title: string;
       description: string;
       eventImageURL: string;
-      dateOfEvent: string;
+      dateOfEvent: Timestamp;
       locationOfEvent: string;
       durationOfEvent: number;
       registrationLink: string;
       uid: string;
       createdAt: string;
+      category: Array<string>;
       name: string;
       profilePic: string;
     };
@@ -117,8 +119,16 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
 
     setSavedState(!savedState);
   };
+
+  let dateString;
+  if (post.dateOfEvent) {
+  const date = post.dateOfEvent.toDate();
+  dateString = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
     //console.log("Post: ", post)
   return (
+    <div className="hover:shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] h-[21.1rem] w-[19.5rem] pl-[0.52rem] rounded-md pt-1 transition-all duration-300">
     <div className="lg:w-[18.5rem] w-[full] lg:h-[8.1rem] h-[7.7rem]">
       <ContextMenu>
         <ContextMenuTrigger>
@@ -172,14 +182,26 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
       </ContextMenu>
       <div className="mt-3 text-sm">
       <Link href={`/EventDetailsPage/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-        <h3 className="text-lg font-semibold leading-none">{post.title}</h3>
+        <h3 className="text-[17px] font-bold leading-none">{post.title.length>28?post.title.substring(0, 27)+"...":post.title}</h3>
       </Link>  
+      <div className="mt-[0.30rem] text-[14px] text-red-600 font-semibold">{dateString}</div>
+      <div className="mt-[0.30rem] text-[14px] font-semibold opacity-85">{post.locationOfEvent}</div>
       <div className="hidden lg:block">
         {
-        <p className="text-sm mt-[0.30rem] overflow-hidden line-clamp-2 mb-8">{parse(`${post.description.length>65?post.description.substring(0, 64)+"...":post.description}`)}</p>
+        <p className="mt-[0.30rem] overflow-hidden opacity-85 line-clamp-2 text-[15px]">{parse(`${post.description.length>84?post.description.substring(0, 83)+"...":post.description}`)}</p>
 }
         </div>
+        <div className="pt-[0.6rem]">
+          {
+            post?.category?.slice(0, 2).map((category, index)=>(
+              <Button key={index} className=' bg-[#F1F2F2] text-black hover:text-white rounded-3xl h-[1.7rem] mr-[0.4rem]'>
+                            {category}
+                            </Button>
+            ))
+}                 
+        </div>
       </div>
+    </div>
     </div>
   )
 }

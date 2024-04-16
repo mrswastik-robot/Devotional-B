@@ -38,6 +38,7 @@ import {
   query,
   serverTimestamp,
   startAfter,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -127,12 +128,13 @@ type Props = {
     title: string;
     description: string;
     eventImageURL: string;
-    dateOfEvent: string;
+    dateOfEvent: Timestamp;
     locationOfEvent: string;
     durationOfEvent: number;
     registrationLink: string;
     uid: string;
     createdAt: string;
+    category: Array<string>;
     name: string;
     profilePic: string;
     sponsors: string[];
@@ -977,10 +979,10 @@ export default function MusicPage() {
                         </div>
                       </div>
                       <Separator className="my-4" />
-                      <div className="flex flex-col gap-y-[5.5rem]">
-                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-4 pb-4 gap-y-[5.5rem]">
+                      <div className="flex flex-col">
+                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-4 pb-4">
                             {posts.map((post, index) => (
-                                <div key={index} className="mb-12">
+                                <div key={index} className="mb-1">
                               <AlbumArtwork
                                 post={post}
                               />

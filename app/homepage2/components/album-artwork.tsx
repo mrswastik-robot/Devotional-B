@@ -70,10 +70,10 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        const savedPosts = userData.savedPosts;
+        const savedEvents = userData.savedEvents;
 
         // If the post is in the savedPosts array, set savedState to true
-        if (savedPosts.includes(post.id)) {
+        if (savedEvents.includes(post.id)) {
           setSavedState(true);
         } else {
           // If the post is not in the savedPosts array, set savedState to false
@@ -100,19 +100,19 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
     if (savedState) {
       //post is currently saved remove it from saved posts
       await updateDoc(userRef, {
-        savedPosts: arrayRemove(post.id),
+        savedEvents: arrayRemove(post.id),
       });
       toast({
-        title: " Post removed from saved ",
+        title: " Event removed from saved ",
         variant: "default",
       });
     } else {
       //post is currently not saved add it to saved posts
       await updateDoc(userRef, {
-        savedPosts: arrayUnion(post.id),
+        savedEvents: arrayUnion(post.id),
       });
       toast({
-        title: " Post saved ",
+        title: " Event saved ",
         variant: "default",
       });
     }
@@ -128,7 +128,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
 
     //console.log("Post: ", post)
   return (
-    <div className="hover:shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] h-[21.1rem] w-[19.5rem] pl-[0.52rem] rounded-md pt-1 transition-all duration-300">
+    <div className="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] hover:shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] h-[21.1rem] w-[19.5rem] pl-[0.52rem] rounded-md pt-1 transition-all duration-300">
     <div className="lg:w-[18.5rem] w-[full] lg:h-[8.1rem] h-[7.7rem]">
       <ContextMenu>
         <ContextMenuTrigger>

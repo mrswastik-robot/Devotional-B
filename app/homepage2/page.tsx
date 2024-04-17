@@ -680,7 +680,7 @@ export default function MusicPage() {
             <div className="grid lg:grid-cols-7 w-full">
             <Sidebar playlists={playlists} selectChange={handleSelectChange} currentC={selectedCategory||"all"} className="hidden lg:block" />
               <div className="col-span-3 lg:col-span-6 lg:border-l">
-                <div className="px-4 py-6">
+                <div className="px-2 py-6">
                   <Tabs defaultValue="music" className="h-full space-y-6">
                     <div className="space-between flex items-center">
                       <TabsList>
@@ -1055,7 +1055,7 @@ export default function MusicPage() {
                       <Separator className="my-4" />
 
                       <div className="flex flex-col">
-                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-4 pb-4">
+                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-[1.55rem] pb-4">
                             {searchResult && searchResult.length > 0 ?(
                               searchResult.map((hit: any) => {
                                 const post = transformHitToPost(hit);

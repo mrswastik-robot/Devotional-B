@@ -194,8 +194,8 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
         <div className="pt-[0.6rem]">
           {
             post?.category?.slice(0, 2).map((category, index)=>(
-              <Button key={index} className=' bg-[#F1F2F2] text-black hover:text-white rounded-3xl h-[1.7rem] mr-[0.4rem]'>
-                            {category}
+              <Button key={index} className='text-black bg-slate-100 hover:text-white rounded-3xl h-[1.7rem] mr-[0.4rem]'>
+                            {category.split("|").join("/")}
                             </Button>
             ))
 }                 

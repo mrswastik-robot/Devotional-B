@@ -35,7 +35,7 @@ import { History } from 'lucide-react';
 import { FileBadge } from 'lucide-react';
 import { Building } from 'lucide-react';
 
-import { Timestamp, addDoc, collection, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
+import { Timestamp, addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { db , auth , storage } from '@/utils/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
@@ -113,6 +113,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
   const [progress , setProgress] = useState<number | null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
   const [sponsors, setSponsors] = useState<string[]>([] as string[]);
+  const [userData, setUserData] = useState<any>({});
 
 
 
@@ -162,6 +163,27 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
     )
   }
   ,[eventTitleDecoded])
+
+  useEffect(()=>{
+    console.log("chal bhai");
+    console.log(eventObject);
+    const fetchUserData = async () => {
+      try {
+        if(eventObject.uid){
+        const userRef = doc(db, "users", eventObject.uid);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          console.log("Creator ", userData);
+          setUserData(userData);
+        }
+      }
+      } catch (error) {
+        console.error("Error fetching followers:", error);
+      }
+    };
+    fetchUserData();
+  }, [eventObject]);
 
   let dateString;
   if (eventObject.dateOfEvent) {
@@ -513,7 +535,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
           </Card>
         </div>
         <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
-        <Card>
+        <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
               <CardTitle>Created By</CardTitle>
             </CardHeader>
@@ -522,16 +544,16 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             <div className="flex mb-1">
               <div>
             <Image
-                        src={eventObject.profilePic}
-                        width={10}
-                        height={10}
+                        src={userData.profilePic}
+                        width={250}
+                        height={250}
                         alt='Conference'
                         className=' w-10 h-10 rounded-full'
                         />
             </div>  
           <div className="ml-4 space-y-1">
-            <p className="text-sm font-medium leading-none">{eventObject.name}</p>
-            <p className="text-sm text-muted-foreground">email@example.com</p>
+            <p className="text-sm font-medium leading-none">{userData.name}</p>
+            <p className="text-sm text-muted-foreground">{userData.email}</p>
           </div>
           <div className="ml-auto font-medium"></div>
         </div>

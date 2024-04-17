@@ -631,7 +631,7 @@ export default function Home() {
                     <Button variant="default"  className=" w-full" >Ask Question</Button>
                   </DialogTrigger>
   }
-                  <DialogContent className="sm:max-w-[925px] max-h-[50rem] overflow-y-scroll ">
+                  <DialogContent className="sm:max-w-[925px] max-h-[42rem] overflow-y-scroll ">
                     <DialogHeader>
                       <DialogTitle>Post Question</DialogTitle>
                       <DialogDescription>
@@ -703,9 +703,9 @@ export default function Home() {
                           </div>
                           <div>
                             <div className="text-sm font-medium mb-2">Category</div>
-                          <Select value={selectedCategory} onValueChange={handleMainCategoryChange} >
+                          <Select value={""} onValueChange={handleMainCategoryChange} >
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a Category" />
+      <SelectValue placeholder="Select a Category" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

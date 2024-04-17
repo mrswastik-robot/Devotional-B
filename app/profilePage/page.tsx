@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 import { auth , db } from '@/utils/firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs , doc , getDoc, deleteDoc, collectionGroup} from 'firebase/firestore';
+import { collection, query , where , onSnapshot, orderBy, and, startAfter, limit, getDocs , doc , getDoc, deleteDoc, collectionGroup, Timestamp} from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Post from '@/components/Post';
 import AnswerPost from '../../components/AnswerPost'
@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import UserDetails from "@/components/UserDetails";
+import { AlbumArtwork } from "../homepage2/components/album-artwork";
 
 import {
   DropdownMenu,
@@ -77,6 +78,23 @@ type AnswerType = {
   uid: string;
 }
 
+type EventType = {
+  id: string;
+  title: string;
+  description: string;
+  eventImageURL: string;
+  dateOfEvent: Timestamp;
+  locationOfEvent: string;
+  durationOfEvent: number;
+  registrationLink: string;
+  uid: string;
+  createdAt: string;
+  category: Array<string>;
+  name: string;
+  profilePic: string;
+  sponsors: string[];
+};
+
 const ProfilePage = (props: Props) => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
@@ -114,6 +132,7 @@ const ProfilePage = (props: Props) => {
   
   //savedPosts
   const [ savedPosts , setSavedPosts] = useState<PostType[]>([]);
+  const [savedEvents, setSavedEvents] = useState<EventType[]>([]);
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
 
@@ -408,6 +427,29 @@ useEffect(() => {
   fetchSavedPosts();
 }, [user]);
 
+useEffect(() => {
+  const fetchSavedEvents = async () => {
+    if (!user) return;
+
+    const userRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      const savedEventIds = userData.savedEvents;
+      const savedEventsPromises = savedEventIds.map((EventId: string) => {
+        const EventRef = doc(db, 'events', EventId); // Replace 'questions' with the name of your posts collection
+        return getDoc(EventRef);
+      });
+
+      const savedEventsDocs = await Promise.all(savedEventsPromises);
+      const savedEvents = savedEventsDocs.map((doc) => ({ id: doc.id, ...doc.data() } as EventType));
+      setSavedEvents(savedEvents);
+    }
+  };
+
+  fetchSavedEvents();
+}, [user]);
 
     const handleToggleSwitchNormal = () => {
       setStart(true);
@@ -426,6 +468,11 @@ useEffect(() => {
       setPostType('saved');
       setIsAnonymous(false);
       // setStart(false);
+    }
+
+    const handleToggleSwithSavedEvents=()=>{
+      setPostType('savedEvents');
+      setIsAnonymous(false);
     }
 
     const handleLoadMore = () => {
@@ -482,7 +529,7 @@ useEffect(() => {
 
 
   return (
-    <div className='mt-0 font-dmsans md:container md:max-w-7xl md:mx-auto '>
+    <div className='mt-0 font-dmsans md:container md:max-w-[84rem] md:mx-auto '>
         <ProfileCard user={user}/>
         {/* <div className='toggleSwitch flex items-center justify-center mt-5'>
         <label className="inline-flex items-center cursor-pointer">
@@ -493,11 +540,12 @@ useEffect(() => {
       </div> */}
       <div className='toggleSwitch mt-2 overflow-auto'>
           <Tabs defaultValue="posts" className="w-full">
-      <TabsList className="grid gap-2 grid-cols-6 w-[650px]">
+      <TabsList className="grid gap-2 grid-cols-7 w-[725px]">
         <TabsTrigger value="posts" onClick={handleToggleSwitchNormal} >Posts</TabsTrigger>
         <TabsTrigger value="answers" onClick={handleToggleSwithAnswers}>Answers</TabsTrigger>
         <TabsTrigger value="anonymous" onClick={handleToggleSwitchAnonymous}>Anonymous</TabsTrigger>
         <TabsTrigger value="saved" onClick={handleToggleSwithcSaved}>Saved Posts</TabsTrigger>
+        <TabsTrigger value="savedEvents" onClick={handleToggleSwithSavedEvents}>Saved Events</TabsTrigger>
         <TabsTrigger value="followers" onClick={fetchFollowers}>Followers</TabsTrigger>
         <TabsTrigger value="following" onClick={fetchFollowing}>Following</TabsTrigger>
       </TabsList>
@@ -683,7 +731,30 @@ useEffect(() => {
                   No Following Found...
                 </div>
               }
-            </div>:<div>Invalid Tab</div>
+            </div>:<div>
+              {
+                postType=='savedEvents'?<div className="grid lg:grid-cols-4 grid-cols-1 gap-4 pb-4">
+                { savedEvents.length !== 0 ? (
+      savedEvents.map((post, index) => (
+        <div key={index} className="mb-1">
+          <AlbumArtwork post={post}/>
+        </div>
+      ))
+    ) : (
+      <div className="flex items-center justify-center flex-col mt-5 w-full">
+        <Image
+          src="/trash.png"
+          width={300}
+          height={300}
+          className=" w-[10rem] h-[9rem] rounded-full"
+          alt="Profile Pic"
+        />
+        <h1 className=" text-2xl text-zinc-500">You have no Saved Events</h1>
+      </div>
+    )}
+    </div>:<div>Invalid Tab</div>
+              }
+            </div>
           }
         </div>
                       }</div>

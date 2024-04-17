@@ -292,8 +292,17 @@ export default function MusicPage() {
     else{
       setMorePosts(true);
     }
+ 
+    const posts:any = [];
+    for (const doc of snapshot.docs) {
+      const eventData = {
+        id: doc.id,
+        ...doc.data(),
+      };
 
-    const posts = snapshot.docs.map((doc) => doc.data() as EventType);
+      posts.push(eventData);
+    }
+
 
     const lastDocument = snapshot.docs[snapshot.docs.length - 1];
     setLoadMore(lastDocument);

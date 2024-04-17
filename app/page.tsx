@@ -68,7 +68,7 @@ import { auth , db , storage } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter , useSearchParams } from "next/navigation";
 
-import { addDoc, collection, doc, getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 
@@ -90,16 +90,24 @@ export default function Home() {
   
   const { toast } = useToast();
 
+  type SelectedCategoriesType = Record<string, string[]>;
+
   //system image upload stuff
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
   const [selectC, setSelectC] = useState<any>([]);
+  const [selectedCategories, setSelectedCategories] = useState<SelectedCategoriesType>({});
+  const [selectedMainCategory, setSelectedMainCategory] = useState('');
+  const [subCategoryy, setSubCategoryy] = useState<any>(["SubCategory1", "SubCategory2", "SubCategory3"]);
+  const [tempSubCategory, setTempSubCategory] = useState<any>([]);
+  const [selectCategory, setSelectCategory] = useState<any>();
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [onFirstVisit, setOnFirstVisit] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>('');
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>('all');
 
   const handleSelectChange = (newValue: string | undefined) => {
     // setSelectedCategory(newValue);
@@ -172,12 +180,86 @@ export default function Home() {
 
   }
 
+  //category stuff
+
+  useEffect(()=>{
+    const getCat=async()=>{
+      try {
+        const eventCategoriesRef = collection(db, 'meta-data', 'v1', 'event-categories');
+        const snapshot = await getDocs(eventCategoriesRef);
+    
+        const eventCategories:any = [];
+        snapshot.forEach(doc => {
+          eventCategories.push({ id: doc.id, ...doc.data() });
+        });
+    
+        return eventCategories;
+      } catch (error) {
+        console.error('Error fetching event categories:', error);
+        return [];
+      }
+  }
+  const category = getCat().then(categories => {
+    setSelectCategory(categories);
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+  }, [])
+    
+  const handleMainCategoryChange = (newValue: string) => {
+    setTempSubCategory([]);
+    if(!selectC.includes(newValue)){
+      setSelectC((prev:any)=>{
+        return [...prev, newValue]
+      })
+    }
+    setSelectedMainCategory(newValue);
+    handleCategorySelectChange(newValue, undefined);
+  };
+
+  const handleSubcategoryChange = (newValue: string) => {
+    if(!tempSubCategory.includes(newValue)){
+      setTempSubCategory((prev:any)=>{
+        return [...prev, newValue]
+      })
+    }
+    handleCategorySelectChange(selectedMainCategory, newValue);
+    setSelectedSubcategory(newValue);
+  };
+
+  const handleCategorySelectChange = (category: string, subcategory: string | undefined) => {
+    setSelectedCategories((prev: any) => {
+      const updatedCategories = { ...prev };
+      if (!updatedCategories[category]) {
+        updatedCategories[category] = [];
+      }
+      if (subcategory && !updatedCategories[category].includes(subcategory)) {
+        updatedCategories[category].push(subcategory);
+      }
+      return updatedCategories;
+    });
+    //console.log(selectedCategories);
+  };
+
   const delCategories = (category:string)=>{
     let newCategory=selectC.filter((cat:any)=>{
       console.log(cat, " ", category);
       return cat!=category;
     })
   setSelectC(newCategory);
+  delete selectedCategories[category]
+  //console.log(selectedCategories);
+  }
+
+  const delSubCategories = (category:string)=>{
+    let newSubCategory=tempSubCategory.filter((cat:any)=>{
+      return cat!=category;
+    })
+  setTempSubCategory(newSubCategory);
+  selectedCategories[selectedMainCategory]=selectedCategories[selectedMainCategory].filter((subcat)=>(
+    subcat!=category
+  ))
+  //console.log(selectedCategories);
   }
 
   const signingInAnonymously = async () => {
@@ -360,6 +442,27 @@ export default function Home() {
       title: "Question Posted",
       description: "Your question has been posted successfully.",
     });
+
+    try {
+      for (const [mainCategory, subcategories] of Object.entries(selectedCategories)) {
+        // Update Firestore for main category
+        await updateDoc(doc(db, 'meta-data', 'v1', 'post-categories', mainCategory), {
+          Posts: arrayUnion(docRef.id),
+        });
+  
+        // Update Firestore for each subcategory
+        for (const subcategory of subcategories) {
+          await updateDoc(doc(db, 'meta-data', 'v1', 'post-categories', mainCategory), {
+            [subcategory]: arrayUnion(docRef.id),
+          });
+        }
+      }
+  
+      // Clear selected categories after submission
+      setSelectedCategories({});
+    } catch (error) {
+      console.error('Error updating Firestore:', error);
+    }
 
     try {
       console.log("keyword Gen.....")
@@ -600,18 +703,24 @@ export default function Home() {
                           </div>
                           <div>
                             <div className="text-sm font-medium mb-2">Category</div>
-                          <Select value={selectedCategory} onValueChange={handleSelectChange} >
+                          <Select value={selectedCategory} onValueChange={handleMainCategoryChange} >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a Category" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Categories</SelectLabel>
-          <SelectItem value="How To">How To</SelectItem>
-          <SelectItem value="Help">Help</SelectItem>
-          <SelectItem value="Mystery/Haunted/Ghost">Mystery/Haunted/Ghost</SelectItem>
-          <SelectItem value="Astrology/Remedies/Occult">Astrology/Remedies/Occult</SelectItem>
-          <SelectItem value="GemStones/Rudraksha">GemStones/Rudraksha</SelectItem>
+          <div>
+              {
+                selectCategory?
+                selectCategory.map((categoryD:any, index:any)=>(
+                  <div key={index}>
+                    <SelectItem value={categoryD.id}>{categoryD.id.split("|").join("/")}</SelectItem>
+                  </div>
+                )):
+                <div><Loader/></div>
+              }
+            </div>
           <SelectItem value="Others">Others</SelectItem>
         </SelectGroup>
       </SelectContent>
@@ -619,9 +728,36 @@ export default function Home() {
     <div className="flex">
                               {
                                 selectC.map((category:string, index:number)=>{
-                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category.split("|").join("/")} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
                                 })
                               }
+                            </div>
+                            <div className="mt-3">
+                            {selectedMainCategory && (
+                              <Select value={""} onValueChange={handleSubcategoryChange}>
+                                <SelectTrigger>
+                                <SelectValue placeholder={`Select subCategory for ${selectedMainCategory.split("|").join("/")}`} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                  <SelectLabel>Sub Categories</SelectLabel>
+                                    {
+                                      subCategoryy.map((subcategory:any, index:any)=>(
+                                        <SelectItem key={index} value={subcategory}>{subcategory}</SelectItem>
+                                      ))
+                                    }
+                                    {/* Add more subcategories for other main categories */}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            )}
+                            <div className="flex">
+                              {
+                                tempSubCategory.map((subcategory:string, index:number)=>{
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{subcategory} <span onClick={()=>{delSubCategories(subcategory)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                })
+                              }
+                            </div>
                             </div>
                             <div className="text-[12px] opacity-70 mt-[0.45rem]">This is the category, you can choose multiple categories for your Question.</div>
                           </div>

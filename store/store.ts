@@ -5,10 +5,13 @@ import {postsReducer} from './slice'
 
 import { eventSearchReducer } from './slice';
 
+import { eventReducer } from './slice';
+
 const rootReducer = combineReducers({
     search: searchReducer,
     posts: postsReducer,
     eventSearch: eventSearchReducer,
+    eventID: eventReducer,
 });
 
 export const store = () => {

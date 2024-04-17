@@ -82,6 +82,19 @@ export const eventSearchSlice = createSlice({
     },
     });
 
+//for storing event_id for additional event information page
+export const eventSlice = createSlice({
+    name: "event",
+    initialState: {
+        event_id: null,
+    },
+    reducers: {
+        setEventId: (state, action) => {
+        state.event_id = action.payload;
+        }
+    },
+});
+
 
 //algolia search
 export const { setSearchText , triggerSearch } = searchSlice.actions;
@@ -95,3 +108,7 @@ export const selectPosts = (state: RootState) => state.posts.posts;
 //algoia search for events
 export const { setSearchText: setEventSearchText , triggerSearch: triggerEventSearch } = eventSearchSlice.actions;
 export const eventSearchReducer = eventSearchSlice.reducer;
+
+// for event additional information
+export const { setEventId } = eventSlice.actions;
+export const eventReducer = eventSlice.reducer;

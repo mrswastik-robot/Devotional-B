@@ -11,6 +11,7 @@ export const EventType = z.object({
         required_error: 'Date of event is required',
     }),
     locationOfEvent: z.string().max(500,{message: 'Location should not be this long'}),
+    landmarkLocationOfEvent: z.string().optional(),
     durationOfEvent: z.number().min(1).max(24),
     registrationLink: z.string(),
     sponsors:z.array(z.string()).optional(),

@@ -701,7 +701,7 @@ useEffect(() => {
 
         //followerList
 
-        <div>
+        <div className="">
           {
             postType=='followers'?<div>
             {
@@ -741,15 +741,15 @@ useEffect(() => {
         </div>
       ))
     ) : (
-      <div className="flex items-center justify-center flex-col mt-5 w-full">
+      <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 ">
         <Image
           src="/trash.png"
           width={300}
           height={300}
-          className=" w-[10rem] h-[9rem] rounded-full"
+          className=" w-[10rem] h-[9rem] items-center justify-center flex mx-auto rounded-full"
           alt="Profile Pic"
         />
-        <h1 className=" text-2xl text-zinc-500">You have no Saved Events</h1>
+        <h1 className=" text-2xl text-zinc-500 text-center">You have no Saved Events</h1>
       </div>
     )}
     </div>:<div>Invalid Tab</div>

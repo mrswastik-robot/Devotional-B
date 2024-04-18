@@ -1069,7 +1069,7 @@ export default function MusicPage() {
                               })
                             ):(
                               posts.map((post, index) => (
-                                <div key={index} className="mb-1">
+                                <div key={index} className="mb-1 mx-auto md:mx-0">
                               <AlbumArtwork
                                 post={post}
                               />

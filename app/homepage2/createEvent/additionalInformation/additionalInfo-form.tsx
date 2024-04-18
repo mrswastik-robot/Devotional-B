@@ -110,10 +110,13 @@ const AdditionalForm = (props: Props) => {
         });
       } else {
         // If the sponsors field doesn't exist, set it
-        await updateDoc(eventRef, {
-          sponsors: sponsors,
-          locationOfEvent: docSnap.data().locationOfEvent + ", " + landmark,
-        });
+
+        //just a waste of space and time , the code is not ever going to reach here
+
+        // await updateDoc(eventRef, {
+        //   sponsors: sponsors,
+        //   locationOfEvent: docSnap?.data()?.locationOfEvent + ", " + landmark,
+        // });
       }
   
       console.log("Update successful");
@@ -121,6 +124,10 @@ const AdditionalForm = (props: Props) => {
         title: "Event Updated",
         description: "Event has been updated successfully.",
       });
+
+      router.push("/homepage2");
+
+
     } catch (error) {
       console.error("Error updating document: ", error);
     }
@@ -140,15 +147,6 @@ const AdditionalForm = (props: Props) => {
     // locationOfEvent: data.locationOfEvent + ", " + landmark;
 
     updateEvent(eventId, data);
-
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
     
   }
 
@@ -173,7 +171,7 @@ const AdditionalForm = (props: Props) => {
                       onChange={(e) => setLandmark(e.target.value)}
                     />
                   </FormControl>
-                  {/* <div className="text-[12px] opacity-70">This is the location of the event.</div> */}
+                  <div className="text-[12px] opacity-70">Optional*</div>
                   <FormMessage />
                 </FormItem>
             )}

@@ -48,21 +48,21 @@ type Input = z.infer<typeof EventType>;
 
 type Props = {};
 
-type EventType = {
-  id: string;
-  title: string;
-  description: string;
-  eventImageURL: string;
-  dateOfEvent: string;
-  locationOfEvent: string;
-  durationOfEvent: number;
-  registrationLink: string;
-  uid: string;
-  createdAt: string;
-  name: string;
-  profilePic: string;
-  sponsors: string[];
-};
+// type EventType = {
+//   id: string;
+//   title: string;
+//   description: string;
+//   eventImageURL: string;
+//   dateOfEvent: string;
+//   locationOfEvent: string;
+//   durationOfEvent: number;
+//   registrationLink: string;
+//   uid: string;
+//   createdAt: string;
+//   name: string;
+//   profilePic: string;
+//   sponsors: string[];
+// };
 
 const AdditionalForm = (props: Props) => {
   const router = useRouter();
@@ -70,10 +70,10 @@ const AdditionalForm = (props: Props) => {
   const { toast } = useToast();
 
   const form = useForm<Input>({
-    resolver: zodResolver(EventType),
+    // resolver: zodResolver(EventType),
     defaultValues: {
-      sponsors: [],
-      locationOfEvent: "",
+       sponsors: [],
+       locationOfEvent: "",
     },
   });
 
@@ -85,19 +85,37 @@ const AdditionalForm = (props: Props) => {
   const eventId = useSelector((state: RootState) => state.eventID.event_id);
   console.log(eventId);
 
-  async function onSubmit(data: Input) {
-    if (eventId === null) {
-      console.log("Event ID is null");
-      return;
-    }
+  async function updateEvent( eventId: string,data: Input )
+  {
+    const eventRef =  doc(db, "events", eventId);
 
-    const eventRef = doc(db, "events", eventId);
+    console.log(landmark);
+    console.log(sponsors);
+
+    // Append the landmark to the location of the event
+    const locationOfEvent = data.locationOfEvent + ", " + landmark;
+    console.log(locationOfEvent);
 
     try {
-      await updateDoc(eventRef, {
-        sponsors: sponsors,
-        locationOfEvent: data.locationOfEvent + " " + landmark,
-      });
+      // Get the current document
+      const docSnap = await getDoc(eventRef);
+  
+      // Check if the sponsors field exists
+      if (docSnap.exists() && docSnap.data().sponsors) {
+        // If the sponsors field exists, update it
+        console.log(docSnap.data().title)
+        await updateDoc(eventRef, {
+          sponsors: arrayUnion(...sponsors),
+          locationOfEvent: docSnap.data().locationOfEvent + ", " + landmark,
+        });
+      } else {
+        // If the sponsors field doesn't exist, set it
+        await updateDoc(eventRef, {
+          sponsors: sponsors,
+          locationOfEvent: docSnap.data().locationOfEvent + ", " + landmark,
+        });
+      }
+  
       console.log("Update successful");
       toast({
         title: "Event Updated",
@@ -106,6 +124,32 @@ const AdditionalForm = (props: Props) => {
     } catch (error) {
       console.error("Error updating document: ", error);
     }
+
+  }
+
+  function onSubmit(data: Input) {
+    if (eventId === null) {
+      toast({
+        title: "Event ID is null",
+        description: "Event ID is null. Please try again.",
+      });
+      console.log("Event ID is null");
+      return;
+    }
+
+    // locationOfEvent: data.locationOfEvent + ", " + landmark;
+
+    updateEvent(eventId, data);
+
+    toast({
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      ),
+    })
+    
   }
 
   return (
@@ -120,7 +164,6 @@ const AdditionalForm = (props: Props) => {
             control={form.control}
             name="locationOfEvent"
             render={({ field }) => (
-              <div className=" flex-col space-y-1">
                 <FormItem>
                   <FormLabel>Landmark</FormLabel>
                   <FormControl>
@@ -133,7 +176,6 @@ const AdditionalForm = (props: Props) => {
                   {/* <div className="text-[12px] opacity-70">This is the location of the event.</div> */}
                   <FormMessage />
                 </FormItem>
-              </div>
             )}
           />
 
@@ -197,9 +239,11 @@ const AdditionalForm = (props: Props) => {
               </FormItem>
             )}
           />
+
           <Button className=" w-full my-4" type="submit">
             Update
           </Button>
+
         </form>
       </Form>
     </div>

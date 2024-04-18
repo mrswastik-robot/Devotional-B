@@ -137,11 +137,11 @@ const CreatEventPage = () => {
           description: "",
           eventImageURL: "",
           // dateOfEvent: 0000/00/00,
-          // locationOfEvent: "",
+          locationOfEvent: "",
           landmarkLocationOfEvent: "",
           // durationOfEvent:,
           registrationLink: "",
-          // sponsors: [],
+          sponsors: [],
         },
       });
     
@@ -900,8 +900,8 @@ const CreatEventPage = () => {
                           )}
                           />
 
-                          {/* //spnosors section
-                          <FormField
+                          {/* //spnosors section */}
+                          {/* <FormField
                           control={form.control}
                           name="sponsors"
                           render={({field}) => (
@@ -950,6 +950,7 @@ const CreatEventPage = () => {
                             </FormItem>
                           )}
                           /> */}
+                          
                             <Button type="submit" 
                                 className=" w-full"
                                 // disabled={isGuest === 'true'}

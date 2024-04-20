@@ -120,13 +120,31 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
     setSavedState(!savedState);
   };
 
-  // let dateString;
-  // if (post.dateOfEvent) {
-  // const date = post.dateOfEvent.toDate();
-  // dateString = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  // }
+  console.log(typeof post.dateOfEvent, post.dateOfEvent);
 
-  //console.log("Post: ", post)
+
+  let dateString;
+    if (post.dateOfEvent) {
+      let date;
+      console.log('Type of post.dateOfEvent:', typeof post.dateOfEvent);
+      console.log('Value of post.dateOfEvent:', post.dateOfEvent);
+      if (typeof post.dateOfEvent === 'string') {
+        date = new Date(post.dateOfEvent);
+      } else if (typeof post.dateOfEvent === 'number') {
+        date = new Date(post.dateOfEvent * 1000); // Multiply by 1000 if your timestamp is in seconds
+      } else if (post.dateOfEvent.toDate !== undefined) {
+        date = post.dateOfEvent.toDate();
+      } else {
+        console.error('post.dateOfEvent is neither a string, a number, nor a Timestamp');
+        // Handle this case as appropriate for your application
+      }
+      if (date) {
+        dateString = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      }
+    }
+
+
+
   return (
     <div className="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] hover:shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] h-[21.1rem] w-[18.9rem] pl-[0.45rem] bg-white rounded-md pt-1 transition-all duration-300">
     <div className="lg:w-[18.5rem] w-[full] lg:h-[8.1rem] h-[7.7rem]">
@@ -184,7 +202,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
       <Link href={`/EventDetailsPage/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
         <h3 className="text-[17px] font-bold leading-none">{post.title.length>28?post.title.substring(0, 27)+"...":post.title}</h3>
       </Link>  
-      {/* {dateString && <div className="mt-[0.30rem] text-[14px] text-red-600 font-semibold">{dateString}</div>} */}
+      {dateString && <div className="mt-[0.30rem] text-[14px] text-red-600 font-semibold">{dateString}</div>}
       <div className="mt-[0.30rem] text-[14px] font-semibold opacity-85">{post.locationOfEvent}</div>
       <div className="hidden lg:block">
         {

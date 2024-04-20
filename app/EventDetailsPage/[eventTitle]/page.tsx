@@ -358,7 +358,8 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
             </div> */}
 
-            <div className='flex gap-10'>
+            <div className='md:flex gap-10 md:justify-between flex-row'>
+
             <div className=' p-4 space-y-3 mt-4'>
                 <h1 className=' font-bold'>Date and Time</h1>
                 <div className=' flex gap-3'>
@@ -393,22 +394,26 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
             </div>
             </div>
+
+            <div>
+              <h1 className='font-bold  px-4 my-3 mt-7 text-lg'>About this event</h1>
+              <div className='px-4 flex gap-2'><span><Clock/></span><div>{eventObject.durationOfEvent} hours</div></div>
+              
             </div>
 
-            {/* Description of the Event */}
-            <h1 className='font-bold  px-4 my-3 mt-7 text-lg'>About this event</h1>
-            <div className='px-4 flex gap-2'><span><Clock/></span><div>{eventObject.durationOfEvent} hours</div></div>
-            <div className='font-medium px-4 my-3 mt-5'>
-                <div className=''>
-                    <p className=' text-base'>{eventObject.description && parse(eventObject.description)}</p>
-                </div>
             </div>
 
+            <div className=' font-medium px-4 my-3 mt-7'>
+                  <div className=''>
+                      <p className=' text-lg'>{eventObject.description && parse(eventObject.description)}</p>
+                  </div>
+              </div>
 
+            
             
             <div className='p-4 mt-4'>
               <div className=' flex gap-4'>
-                <Badge>
+                <Badge className=' p-2'>
                 <div className=' text-xl font-bold'>Registration Link :</div>
                 </Badge>
                 <p className=' text-blue-400 underline cursor-pointer text-lg mt-1'>{eventObject.registrationLink}</p>
@@ -505,7 +510,9 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
 
         </div>
-       <div className="w-[21.3rem]">
+
+
+       <div className="w-[21.3rem] sticky top-[4.2rem] h-fit">
         <div className=' sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
@@ -534,6 +541,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </CardContent>
           </Card>
         </div>
+
         <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
@@ -561,6 +569,22 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </CardContent>
           </Card>
         </div>
+
+        <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+          <Card x-chunk="dashboard-01-chunk-5">
+              <CardHeader>
+                <CardTitle>Register</CardTitle>
+              </CardHeader>
+              <CardContent className="">
+                <p className=' text-base'>Register for this event on a single click</p>
+                <div className=' flex items-end justify-end mt-4'>
+                  <Button className=''>Register</Button>
+                </div>
+              </CardContent>
+          </Card>
+        </div>
+
+
         </div>
     </div>
   )

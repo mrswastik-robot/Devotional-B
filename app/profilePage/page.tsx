@@ -552,10 +552,10 @@ useEffect(() => {
     </Tabs>
     </div>
 
-    {(postType=='normal'||postType=='anonymous'||postType=='answers')&&
+    {(postType=='normal'||postType=='anonymous'||postType=='answers'|| postType=='saved' || postType=='savedEvents' || postType == 'followers' || postType == "following") &&
       <div className="border-y-[1px] border-black border-opacity-15 py-2 flex justify-between items-center">
         <div className="font-[600] opacity-80 ml-2">
-        {postType=='normal'?<div>Posts</div>:postType=='anonymous'?<div>Anonymous</div>:postType=='answers'?<div>Answers</div>:<div>Coming Soon</div>}
+        {postType=='normal'?<div>Posts</div>:postType=='anonymous'?<div>Anonymous</div>:postType=='answers'?<div>Answers</div>:postType=='saved'?<div>Saved Posts</div>:postType=='savedEvents'?<div>Saved Events</div>:postType=='followers'?<div>Followers</div>:<div>Following</div>}
         </div>
         <div className="mr-2">
 

@@ -28,15 +28,15 @@ const EventCommentPost = ({eventComment}: Props) => {
           key={eventComment.eventId}
           className="rounded-md bg-white dark:bg-[#262626] shadow my-3 space-y-0 break-words overflow-hidden" 
         >
-          <div className="px-6 py-5 ">
+          <div className="px-6 py-5">
             {/* <PostVoteClient
             //   postId={post.id}
             //   initialVotesAmt={_votesAmt}
             //   initialVote={_currentVote?.type}
             /> */}
 
-            <div className="w-0 flex-1">
-              <div className="flex max-h-40 mt-1 space-x-2 text-xs text-gray-500">
+            <div className="">
+              <div className="flex w-full max-h-40 mt-1 space-x-2 text-xs text-gray-500">
                 {/* <div> */}
                 <Avatar>
                   <div className=" relative w-full h-full aspect-square">
@@ -50,7 +50,7 @@ const EventCommentPost = ({eventComment}: Props) => {
                   <AvatarFallback>SP</AvatarFallback>
                 </Avatar>
                 {/* </div> */}
-                <span className="mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-white">{eventComment.name}</span>{" "}
+                <span className="mt-3  text-sm font-semibold text-[#0c0c0c] dark:text-white">{eventComment.name}</span>
                 </div>
                 {/* {formatTimeToNow(new Date(post.createdAt))} */}
               </div>

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React , {use, useState} from "react";
+import React , {use, useEffect, useState} from "react";
 
 import { Switch } from "@/components/ui/switch"
 import { useTheme } from "next-themes";
@@ -30,6 +30,17 @@ import {
     FormMessage,
     FormDescription,
   } from "@/components/ui/form";
+
+  import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { SheetClose } from "./ui/sheet";
@@ -49,11 +60,14 @@ import { db , storage  } from "@/utils/firebase";
 import { useSearchParams } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setCategoryE, categoryE, setChange } from "@/store/slice";
 import { useToast } from "./ui/use-toast";
+import Loader from "./ui/Loader";
+
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -65,6 +79,9 @@ const Sidebar = (props: Props) => {
     const [user , loading] = useAuthState(auth);
     const { theme, setTheme } = useTheme();
     const {toast} = useToast();
+    const categoryEvents = useSelector(categoryE);
+    const dispatch = useDispatch();
+    const [sidebarCategory, setSidebarCategory] = useState<any>();
 
   const toggleTheme = () => {
     if (theme === "light") {
@@ -82,6 +99,39 @@ const Sidebar = (props: Props) => {
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [progress , setProgress] = useState<number | null>(0);
+  const router = useRouter()
+  const pathname = usePathname();
+
+  useEffect(()=>{
+    const getCat=async()=>{
+      try {
+        const eventCategoriesRef = collection(db, 'meta-data', 'v1', 'event-categories');
+        const snapshot = await getDocs(eventCategoriesRef);
+    
+        const eventCategories:any = [];
+        snapshot.forEach(doc => {
+          eventCategories.push({ id: doc.id, ...doc.data() });
+        });
+    
+        return eventCategories;
+      } catch (error) {
+        console.error('Error fetching event categories:', error);
+        return [];
+      }
+  }
+  const category = getCat().then(categories => {
+    setSidebarCategory(categories);
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+  }, [])
+
+  console.log(categoryEvents);
+
+  const handleMainCategoryChange = (newValue: string) => {
+    dispatch(setCategoryE(newValue));
+    dispatch(setChange(false));
+  };
 
   const form = useForm<Input>({
     // mode: "onSubmit",
@@ -94,6 +144,8 @@ const Sidebar = (props: Props) => {
       anonymity: false,
     },
   });
+
+  //console.log("pathname: ", pathname);
 
   const uploadImage = async(file: any) => {
     if(file == null) return;
@@ -189,7 +241,7 @@ const Sidebar = (props: Props) => {
 
         <div className="  space-y-1">
           <div>
-            <ul className="flex flex-col space-y-9 justify-center mt-6 ">
+            <ul className="flex flex-col justify-center mt-6 ">
 
             {/* ask question dialog */}
             <div>
@@ -312,7 +364,7 @@ const Sidebar = (props: Props) => {
 
 
 
-              <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
+              <li className="cursor-pointer  hover:text-gray-600 hover:font-bold mt-9">
                   <Link className="" href="/">
                     <SheetClose className=" flex gap-2">
                           <Home />
@@ -321,7 +373,7 @@ const Sidebar = (props: Props) => {
                   </Link>
               </li>
 
-              <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
+              <li className="cursor-pointer  hover:text-gray-600 hover:font-bold bottom-0 mt-9">
                 <Link href={'/notification'}>
                 <button>
                   <SheetClose className=" flex gap-2">
@@ -331,8 +383,31 @@ const Sidebar = (props: Props) => {
                 </button>
                 </Link>
               </li>
-
-              <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
+              <li className={`cursor-pointer gap mt-5 hover:text-gray-600 hover:font-bold ${pathname=="/homepage2"?"":"hidden"}`}>
+              <Select onValueChange={handleMainCategoryChange} >
+      <SelectTrigger className="w-full text-[1rem] font-[405] mt-0">
+        <SelectValue placeholder="Select a Category" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Categories</SelectLabel>
+          <div>
+              {
+                sidebarCategory?
+                sidebarCategory.map((categoryD:any, index:any)=>(
+                  <div key={index}>
+                    <SelectItem value={categoryD.id}>{categoryD.id.split("|").join("/")}</SelectItem>
+                  </div>
+                )):
+                <div><Loader/></div>
+              }
+            </div>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+              </li>
+              
+              <li className={`cursor-pointer mt-8  hover:text-gray-600 hover:font-bold ${pathname=="/homepage2"?"hidden":""}`}>
                 <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
                   <SheetClose className=" flex gap-2">
                     <UserRoundPlus />
@@ -341,7 +416,7 @@ const Sidebar = (props: Props) => {
                 </button>
               </li>
               
-              <li className="cursor-pointer  hover:text-gray-600 hover:font-bold">
+              <li className={`cursor-pointer mt-9  hover:text-gray-600 hover:font-bold ${pathname=="/homepage2"?"hidden":""}`}>
                 <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
                   <SheetClose className=" flex gap-2">
                     <Newspaper />
@@ -351,7 +426,7 @@ const Sidebar = (props: Props) => {
               </li>
 
               <li>
-              <div className="flex items-center space-x-2">
+              <div className="flex gap-1 items-center mt-[1.8rem]">
                 <Switch id="airplane-mode" onCheckedChange={toggleTheme} checked={theme==='dark'}/>
                 <Label htmlFor="airplane-mode">Dark Mode</Label>
                 </div>

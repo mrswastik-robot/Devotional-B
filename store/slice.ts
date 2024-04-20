@@ -23,10 +23,14 @@ type PostType = {
   };
 interface PostState {
     posts : PostType[];
+    categoryE: string;
+    change: boolean;
 }
 
 const initialState: PostState = {
-    posts: []
+    posts: [],
+    categoryE: "all",
+    change: true,
 }
 
 //for storing cache using Redux
@@ -41,6 +45,12 @@ export const postsSlice = createSlice({
         addPosts: (state , action: PayloadAction<PostType[]>) => {
             state.posts = [...state.posts, ...action.payload];
         },
+        setCategoryE: (state, action: PayloadAction<string>)=>{
+            state.categoryE = action.payload;
+        }, 
+        setChange: (state, action)=>{
+            state.change = !state.change;
+        }
     }
 });
 
@@ -101,7 +111,9 @@ export const { setSearchText , triggerSearch } = searchSlice.actions;
 export const searchReducer = searchSlice.reducer;
 
 //caching
-export const {setPosts , addPosts} = postsSlice.actions;
+export const {setPosts , addPosts, setCategoryE, setChange} = postsSlice.actions;
+export const categoryE = (state: RootState) => state.posts.categoryE;
+export const change = (state: RootState) =>state.posts.change;
 export const postsReducer = postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts.posts;
 

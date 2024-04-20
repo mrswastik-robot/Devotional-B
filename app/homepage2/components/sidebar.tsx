@@ -8,6 +8,9 @@ import { useEffect, useState } from "react"
 import { db } from "@/utils/firebase"
 import { collection, getDocs } from "firebase/firestore"
 import Loader from "@/components/ui/Loader"
+import { setCategoryE, categoryE, change, setChange } from "@/store/slice";
+import { useSelector } from "react-redux"
+import { store } from "@/store/store"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   playlists: Playlist[],
@@ -18,6 +21,12 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Sidebar({ className, playlists, selectChange, currentC }: SidebarProps) {
 
   const [sidebarCategory, setSidebarCategory] = useState<any>();
+  const categoryEvents = useSelector(categoryE);
+  const changeE = useSelector(change);
+
+  useEffect(()=>{
+    selectChange(categoryEvents);
+  }, [changeE])
 
   useEffect(()=>{
     const getCat=async()=>{

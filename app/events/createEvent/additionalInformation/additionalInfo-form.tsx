@@ -125,7 +125,7 @@ const AdditionalForm = (props: Props) => {
         description: "Event has been updated successfully.",
       });
 
-      router.push("/homepage2");
+      router.push("/events");
 
 
     } catch (error) {

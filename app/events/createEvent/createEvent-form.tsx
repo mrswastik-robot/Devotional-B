@@ -114,6 +114,14 @@ type EventType = {
     name: string;
     profilePic: string;
     sponsors: string[];
+
+    preConferenceDate: string;
+    registrationStartDate: string;
+    registrationEndDate: string;
+    earlyBirdRegistrationFee: number;
+    lateRegistrationFee: number;
+    creditPoints: number;
+    contactNumber: number;
   };
 
 const CustomContainer = styled.div`
@@ -737,19 +745,19 @@ const CreatEventPage = () => {
                           <div>
                           <div className="text-sm font-medium mb-2">Event Type</div>
                           <Select value={eventMode} onValueChange={handleEventModeChange}>
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select Event Type" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Event Mode</SelectLabel>
-          <SelectItem value="Webinar">Webinar</SelectItem>
-          <SelectItem value="Offline">Offline</SelectItem>
-          <SelectItem value="Others">Others</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-    </div>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select Event Type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectLabel>Event Mode</SelectLabel>
+                                <SelectItem value="Webinar">Webinar</SelectItem>
+                                <SelectItem value="Offline">Offline</SelectItem>
+                                <SelectItem value="Others">Others</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                          </div>
                           {/*Category thing*/}
                           <div>
                           
@@ -762,16 +770,16 @@ const CreatEventPage = () => {
                               <SelectGroup>
                                 <SelectLabel>Categories</SelectLabel>
                                 <div>
-              {
-                selectCategory?
-                selectCategory.map((categoryD:any, index:any)=>(
-                  <div key={index}>
-                    <SelectItem value={categoryD.id}>{categoryD.id.split("|").join("/")}</SelectItem>
-                  </div>
-                )):
-                <div><Loader/></div>
-              }
-            </div>
+                                  {
+                                    selectCategory?
+                                    selectCategory.map((categoryD:any, index:any)=>(
+                                      <div key={index}>
+                                        <SelectItem value={categoryD.id}>{categoryD.id.split("|").join("/")}</SelectItem>
+                                      </div>
+                                    )):
+                                    <div><Loader/></div>
+                                  }
+                                </div>
                                 <SelectItem value="Others">Others</SelectItem>
                               </SelectGroup>
                             </SelectContent>

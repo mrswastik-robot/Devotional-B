@@ -75,6 +75,14 @@ type EventDetailsType = {
   name: string
   profilePic: string
   sponsors: Array<string>
+
+  preConferenceDate: Timestamp
+  registrationStartDate: Timestamp
+  registrationEndDate: Timestamp
+  earlyBirdRegistrationFee: number
+  lateRegistrationFee: number
+  creditPoints: number
+  contactNumber: number
 }
 
 type EventCommentType = {
@@ -396,7 +404,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div>
-              <h1 className='font-bold  px-4 my-3 mt-7 text-lg'>About this event</h1>
+              <h1 className='font-bold  px-4 my-3 mt-7 text-base'>Duration of the event</h1>
               <div className='px-4 flex gap-2'><span><Clock/></span><div>{eventObject.durationOfEvent} hours</div></div>
               
             </div>
@@ -407,11 +415,86 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                   <div className=''>
                       <p className=' text-lg'>{eventObject.description && parse(eventObject.description)}</p>
                   </div>
-              </div>
+            </div>
+
+            {
+              eventObject.preConferenceDate && (
+                <div className=' p-4 mt-7'>
+                  <div className=' flex gap-4'>
+                    <div className=' text-xl font-bold'>Pre-Conference Date :</div>
+                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                  </div>
+                </div>
+              )
+            }
+
+            {
+              eventObject.registrationStartDate && (
+                <div className=' p-4 mt-7'>
+                  <div className=' flex gap-4'>
+                    <div className=' text-xl font-bold'>Registration Start Date :</div>
+                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                  </div>
+                </div>
+              )
+            }
+
+            {
+              eventObject.registrationEndDate && (
+                <div className=' p-4 mt-7'>
+                  <div className=' flex gap-4'>
+                    <div className=' text-xl font-bold'>Registration End Date :</div>
+                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                  </div>
+                </div>
+              )
+            }
+
+            {
+              eventObject.earlyBirdRegistrationFee ? (
+                <div className=' p-4 mt-7'>
+                  <div className=' flex gap-4'>
+                    <div className=' text-xl font-bold'>Early Bird Registration Fee :</div>
+                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.earlyBirdRegistrationFee}</p>
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )
+            }
+
+            {
+              eventObject.lateRegistrationFee ? (
+                <div className=' p-4 mt-7'>
+                  <div className=' flex gap-4'>
+                    <div className=' text-xl font-bold'>Late Registration Fee :</div>
+                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.lateRegistrationFee}</p>
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )
+            }
+
+
+            {
+              eventObject.contactNumber ? (
+                <div className=' p-4 mt-7'>
+                  <div className=' flex
+                    gap-4'>
+                      <div className=' text-xl font-bold'>Contact Number :</div>
+                      <p className=' text-blue-400 underline cursor-pointer text-lg '><span className=' text-black'>+91</span> {eventObject.contactNumber}</p>
+                  </div>
+                </div>
+              ) : ( 
+                <></>
+              )
+            }
+            
 
             
             
-            <div className='p-4 mt-4'>
+            <div className='p-4 mt-7'>
               <div className=' flex gap-4'>
                 <Badge className=' p-2'>
                 <div className=' text-xl font-bold'>Registration Link :</div>
@@ -578,8 +661,27 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               <CardContent className="">
                 <p className=' text-base'>Register for this event on a single click</p>
                 <div className=' flex items-end justify-end mt-4'>
-                  <Button className=''>Register</Button>
+                  <Button className=' w-full'>Register</Button>
                 </div>
+              </CardContent>
+          </Card>
+        </div>
+
+        <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+          <Card x-chunk="dashboard-01-chunk-5">
+              <CardHeader>
+                <CardTitle>Credits</CardTitle>
+              </CardHeader>
+              <CardContent className="">
+                <h1 className=' text-4xl flex items-center justify-center mx-auto'>
+                  {
+                    eventObject.creditPoints 
+                    ?
+                    eventObject.creditPoints
+                    :
+                    0
+                  }
+                </h1>
               </CardContent>
           </Card>
         </div>

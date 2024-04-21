@@ -28,12 +28,14 @@ import Loader from "../../components/ui/Loader"
 import { db , storage} from "@/utils/firebase";
 import {
   addDoc,
+  and,
   arrayUnion,
   collection,
   getDoc,
   getDocs,
   limit,
   onSnapshot,
+  or,
   orderBy,
   query,
   serverTimestamp,
@@ -188,6 +190,7 @@ export default function MusicPage() {
   const [sponsors , setSponsors] = useState<string[]>([]);
   const [sponsorInput , setSponsorInput] = useState<string>("");
 
+  const [eventModeChange, setEventModeChange] = useState<string>("Webinar");
 
    //old homepage stuff
    const [posts, setPosts] = useState<EventType[]>([]);
@@ -256,18 +259,27 @@ export default function MusicPage() {
     if (lastDoc) {
       q = query(
         collectionRef,
+        or(
+        where("eventMode", "==", eventModeChange),
+        where("eventMode", "==", "Others"),
+        ),
         orderBy("createdAt", "desc"),
         startAfter(lastDoc),
         limit(limitValue)
       );
     } else {
-      q = query(collectionRef, orderBy("createdAt", "desc"), limit(limitValue));
+      q = query(collectionRef, or(where("eventMode", "==", eventModeChange), where("eventMode", "==", "Others"),), orderBy("createdAt", "desc"), limit(limitValue));
     }
   } else {
     if (lastDoc) {
       q = query(
         collectionRef,
-        where("category", "array-contains", selectedCategory),
+        and(
+          or(
+        where("eventMode", "==", eventModeChange),
+        where("eventMode", "==", "Others"),
+          ),
+        where("category", "array-contains", selectedCategory)),
         orderBy("createdAt", "desc"),
         startAfter(lastDoc),
         limit(limitValue)
@@ -275,7 +287,12 @@ export default function MusicPage() {
     } else {
       q = query(
         collectionRef,
-        where("category", "array-contains", selectedCategory),
+        and(
+          or(
+        where("eventMode", "==", eventModeChange),
+        where("eventMode", "==", "Others"),
+          ),
+        where("category", "array-contains", selectedCategory)),
         orderBy("createdAt", "desc"),
         limit(limitValue)
       );
@@ -321,7 +338,93 @@ export default function MusicPage() {
     unsub();
   };
 
-  }, [lastDoc, reload , selectedCategory]);
+  }, [lastDoc, reload , selectedCategory, eventModeChange]);
+
+  //offline event fetching
+  // useEffect(()=>{
+  //   if(eventModeChange=="Offline"){
+  //     //console.log("Last Doc ", lastDoc);
+  //     setIsLoading(true);
+  //   const collectionRef = collection(db, "events");
+  //   let q;
+  
+  //   if (selectedCategory === "all") {
+  //     if (lastDoc) {
+  //       q = query(
+  //         collectionRef,
+  //         where("eventMode", "==", "Offline"),
+  //         orderBy("createdAt", "desc"),
+  //         startAfter(lastDoc),
+  //         limit(limitValue)
+  //       );
+  //     } else {
+  //       q = query(collectionRef, where("eventMode", "==", "Offline"), orderBy("createdAt", "desc"), limit(limitValue));
+  //     }
+  //   } else {
+  //     if (lastDoc) {
+  //       q = query(
+  //         collectionRef,
+  //         and(
+  //         where("eventMode", "==", "Offline"),
+  //         where("category", "array-contains", selectedCategory)),
+  //         orderBy("createdAt", "desc"),
+  //         startAfter(lastDoc),
+  //         limit(limitValue)
+  //       );
+  //     } else {
+  //       q = query(
+  //         collectionRef,
+  //         and(
+  //         where("eventMode", "==", "Offline"),
+  //         where("category", "array-contains", selectedCategory)),
+  //         orderBy("createdAt", "desc"),
+  //         limit(limitValue)
+  //       );
+  //     }
+  //   }
+    
+  //   //const postLength = 0;
+  //   const unsub = onSnapshot(q, async (snapshot) => {
+  //     const postsData:any = [];
+  //     if(snapshot.docs.length<limitValue){
+  //       console.log("Length ", snapshot.docs.length);
+  //       setMorePosts(false);
+  //     }
+  //     else{
+  //       setMorePosts(true);
+  //     }
+   
+  //     const posts:any = [];
+  //     for (const doc of snapshot.docs) {
+  //       const eventData = {
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       };
+  
+  //       posts.push(eventData);
+  //     }
+  
+  
+  //     const lastDocument = snapshot.docs[snapshot.docs.length - 1];
+  //     setLoadMore(lastDocument);
+  
+  //     if (addFirst && lastDoc == null) {
+  //       setPosts(posts);
+  //       setAddFirst(false);
+  //     } else {
+  //       setPosts((prevPosts) => [...prevPosts, ...posts]);
+  //     }
+  //     setIsLoading(false);
+  //     setPageLoaded(true);
+  //   });
+  
+  //   return () => {
+  //     unsub();
+  //   };
+
+  // }
+  
+  // }, [lastDoc, reload , selectedCategory, eventModeChange]);
 
   const categorySelect = async()=>{
     setPosts([]);
@@ -681,15 +784,21 @@ export default function MusicPage() {
             <Sidebar playlists={playlists} selectChange={handleSelectChange} currentC={selectedCategory||"all"} className="hidden lg:block" />
               <div className="col-span-3 lg:col-span-6 lg:border-l">
                 <div className="px-2 py-6">
-                  <Tabs defaultValue="music" className="h-full space-y-6">
+                  <Tabs defaultValue="Webinar" className="h-full space-y-6">
                     <div className="space-between flex items-center">
                       <TabsList>
-                        <TabsTrigger value="music" className="relative">
-                          Feed Posts
+                        <TabsTrigger value="Webinar" className="relative" onClick={()=>{
+                          setPosts([]);
+                          setEventModeChange("Webinar");
+                        }}>
+                          Webinar
                         </TabsTrigger>
                         {/* <TabsTrigger value="podcasts">Podcasts</TabsTrigger> */}
-                        <TabsTrigger value="live" disabled>
-                          Recents
+                        <TabsTrigger value="Offline" onClick={()=>{
+                          setPosts([]);
+                          setEventModeChange("Offline");
+                        }}>
+                          Offline
                         </TabsTrigger>
                       </TabsList>
                       <div className="ml-auto lg:mr-4">
@@ -1039,13 +1148,13 @@ export default function MusicPage() {
                       </div>
                     </div>
                     <TabsContent
-                      value="music"
+                      value="Webinar"
                       className="border-none p-0 outline-none"
                     >
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                          <h2 className="text-2xl font-semibold tracking-tight">
-                            Feed
+                          <h2 className="text-xl font-semibold tracking-tight">
+                            Online Events
                           </h2>
                           <p className="text-sm text-muted-foreground">
                           Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
@@ -1095,18 +1204,58 @@ export default function MusicPage() {
 
                     </TabsContent>
                     <TabsContent
-                      value="podcasts"
+                      value="Offline"
                       className="h-full flex-col border-none p-0 data-[state=active]:flex"
                     >
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                          <h2 className="text-2xl font-semibold tracking-tight">
-                            New Posts
+                          <h2 className="text-xl font-semibold tracking-tight">
+                            Offline Events
                           </h2>
                           <p className="text-sm text-muted-foreground">
-                            Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
+                          Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
                           </p>
                         </div>
+                      </div>
+                      <Separator className="my-4" />
+
+                      <div className="flex flex-col">
+                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-[1.55rem] pb-4">
+                            {searchResult && searchResult.length > 0 ?(
+                              searchResult.map((hit: any) => {
+                                const post = transformHitToPost(hit);
+                                return (
+                                  <div key={post.id} className="mb-1">
+                                    <AlbumArtwork
+                                      post={post}
+                                    />
+                                  </div>
+                                );
+                              })
+                            ):(
+                              posts.map((post, index) => (
+                                <div key={index} className="mb-1 mx-auto md:mx-0">
+                              <AlbumArtwork
+                                post={post}
+                              />
+                              </div>
+                            ))
+                        
+                            )
+                            }
+
+                            
+                          </div>
+                          <div className="mb-5">
+                            <div className='w-[100]'>
+                            { isLoading?<Loader/>:pageLoaded&&
+                            <div ref={loadMoreButtonRef} className='mt-4'>
+                              <button onClick={loadMoreData}></button>
+                            </div>
+                            }
+                            </div>
+                          <div className="w-full text-center mt-0">{!isLoading&&!morePosts&&<div>No more Posts...</div>}</div>
+                          </div>
                       </div>
                     </TabsContent>
                   </Tabs>

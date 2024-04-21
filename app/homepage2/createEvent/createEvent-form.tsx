@@ -163,6 +163,7 @@ const CreatEventPage = () => {
       const [sponsors , setSponsors] = useState<string[]>([]);
       const [sponsorInput , setSponsorInput] = useState<string>("");
       const [landmark, setLandmark] = useState<string>("");
+      const [eventMode, setEventMode] = useState<string>("");
     
     
        //old homepage stuff
@@ -402,6 +403,11 @@ const CreatEventPage = () => {
           uploadImage(event.target.files[0]);
         }
       };
+
+      const handleEventModeChange = (newValue: string) => {
+        console.log(newValue);
+        setEventMode(newValue);
+      };
     
       //category stuff
     
@@ -476,6 +482,7 @@ const CreatEventPage = () => {
           registrationLink: data.registrationLink,
           sponsors: sponsors,
           uid: user?.uid,
+          eventMode: eventMode,
           category: selectC,
           createdAt: serverTimestamp(),
           name: user?.displayName,
@@ -725,6 +732,24 @@ const CreatEventPage = () => {
                               </div>
                             }
                           </div>
+
+                          {/* Event Type */}
+                          <div>
+                          <div className="text-sm font-medium mb-2">Event Type</div>
+                          <Select value={eventMode} onValueChange={handleEventModeChange}>
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Select Event Type" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Event Mode</SelectLabel>
+          <SelectItem value="Webinar">Webinar</SelectItem>
+          <SelectItem value="Offline">Offline</SelectItem>
+          <SelectItem value="Others">Others</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+    </div>
                           {/*Category thing*/}
                           <div>
                           

@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 const sidebarNavItems = [
   {
     title: "Form",
-    href: "/homepage2/createEvent",
+    href: "/events/createEvent",
   },
   {
     title: "Additional Information",
-    href: "/homepage2/createEvent/additionalInformation",
+    href: "/events/createEvent/additionalInformation",
   },
 ]
 

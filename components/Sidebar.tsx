@@ -383,7 +383,7 @@ const Sidebar = (props: Props) => {
                 </button>
                 </Link>
               </li>
-              <li className={`cursor-pointer gap mt-5 hover:text-gray-600 hover:font-bold ${pathname=="/homepage2"?"":"hidden"}`}>
+              <li className={`cursor-pointer gap mt-5 hover:text-gray-600 hover:font-bold ${pathname=="/events"?"":"hidden"}`}>
               <Select onValueChange={handleMainCategoryChange} >
       <SelectTrigger className="w-full text-[1rem] font-[405] mt-0">
         <SelectValue placeholder="Select a Category" />
@@ -407,7 +407,7 @@ const Sidebar = (props: Props) => {
     </Select>
               </li>
               
-              <li className={`cursor-pointer mt-8  hover:text-gray-600 hover:font-bold ${pathname=="/homepage2"?"hidden":""}`}>
+              <li className={`cursor-pointer mt-8  hover:text-gray-600 hover:font-bold ${pathname=="/events"?"hidden":""}`}>
                 <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
                   <SheetClose className=" flex gap-2">
                     <UserRoundPlus />
@@ -416,7 +416,7 @@ const Sidebar = (props: Props) => {
                 </button>
               </li>
               
-              <li className={`cursor-pointer mt-9  hover:text-gray-600 hover:font-bold ${pathname=="/homepage2"?"hidden":""}`}>
+              <li className={`cursor-pointer mt-9  hover:text-gray-600 hover:font-bold ${pathname=="/events"?"hidden":""}`}>
                 <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
                   <SheetClose className=" flex gap-2">
                     <Newspaper />

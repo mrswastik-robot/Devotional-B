@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import UserDetails from "@/components/UserDetails";
-import { AlbumArtwork } from "../homepage2/components/album-artwork";
+import { AlbumArtwork } from "../events/components/album-artwork";
 
 import {
   DropdownMenu,

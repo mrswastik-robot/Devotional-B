@@ -16,10 +16,10 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 
-import { AlbumArtwork } from "@/app/homepage2/components/album-artwork"
-import { listenNowAlbums, madeForYouAlbums } from "@/app/homepage2/data/albums"
-import { playlists } from "@/app/homepage2/data/playlists"
-import { Sidebar } from "@/app/homepage2/components/sidebar"
+import { AlbumArtwork } from "@/app/events/components/album-artwork"
+import { listenNowAlbums, madeForYouAlbums } from "@/app/events/data/albums"
+import { playlists } from "@/app/events/data/playlists"
+import { Sidebar } from "@/app/events/components/sidebar"
 
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { postData } from "@/lib/data";
@@ -521,7 +521,7 @@ const CreatEventPage = () => {
         })
 
         // router.push(`/EventDetailsPage/${data.title}`);
-        router.push(`/homepage2/createEvent/additionalInformation`)
+        router.push(`/events/createEvent/additionalInformation`)
     
         try {
           console.log("keyword Gen.....")

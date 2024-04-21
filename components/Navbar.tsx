@@ -489,7 +489,7 @@ const clearNotifications = async () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if(pathname === '/homepage2') {
+    if(pathname === '/events') {
       setHideQueSearch(true);
     } else {
       setHideQueSearch(false);

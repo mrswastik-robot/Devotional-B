@@ -32,6 +32,16 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -74,6 +84,11 @@ const AdditionalForm = (props: Props) => {
     defaultValues: {
        sponsors: [],
        locationOfEvent: "",
+       lateRegistrationFee: 0,
+       earlyBirdRegistrationFee: 0,
+       creditPoints: 0,
+       contactNumber: 0,
+
     },
   });
 
@@ -104,10 +119,41 @@ const AdditionalForm = (props: Props) => {
       if (docSnap.exists() && docSnap.data().sponsors) {
         // If the sponsors field exists, update it
         console.log(docSnap.data().title)
-        await updateDoc(eventRef, {
-          sponsors: arrayUnion(...sponsors),
-          locationOfEvent: docSnap.data().locationOfEvent + ", " + landmark,
-        });
+
+        // Declare updateData as an object with string keys and values of any type
+          const updateData: { [key: string]: any } = {
+            sponsors: arrayUnion(...sponsors),
+            locationOfEvent: docSnap.data().locationOfEvent + ", " + landmark,
+            
+          };
+
+          // Only add the date fields if they are not undefined or null
+          if (data.preConferenceDate !== undefined && data.preConferenceDate !== null) {
+            updateData.preConferenceDate = data.preConferenceDate;
+          }
+          if (data.registrationStartDate !== undefined && data.registrationStartDate !== null) {
+            updateData.registrationStartDate = data.registrationStartDate;
+          }
+          if (data.registrationEndDate !== undefined && data.registrationEndDate !== null) {
+            updateData.registrationEndDate = data.registrationEndDate;
+          }
+          
+          if (data.earlyBirdRegistrationFee !== undefined && data.earlyBirdRegistrationFee !== 0) {
+            updateData.earlyBirdRegistrationFee = data.earlyBirdRegistrationFee;
+          }
+          if (data.lateRegistrationFee !== undefined && data.lateRegistrationFee !== 0) {
+            updateData.lateRegistrationFee = data.lateRegistrationFee;
+          }
+          if (data.creditPoints !== undefined && data.creditPoints !== 0) {
+            updateData.creditPoints = data.creditPoints;
+          }
+          if (data.contactNumber !== undefined && data.contactNumber !== 0) {
+            updateData.contactNumber = data.contactNumber;
+          }
+
+
+
+        await updateDoc(eventRef, updateData);
       } else {
         // If the sponsors field doesn't exist, set it
 
@@ -155,7 +201,7 @@ const AdditionalForm = (props: Props) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className=" flex-col space-y-7"
+          className=" flex-col space-y-8"
         >
           {/* Location of the Event */}
           <FormField
@@ -237,6 +283,222 @@ const AdditionalForm = (props: Props) => {
               </FormItem>
             )}
           />
+
+          {/* CME Date */}
+          <FormField
+            control={form.control}
+            name="preConferenceDate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Pre-Conference CME Date</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      // disabled={(date) =>
+                      //   date > new Date() || date < new Date("1900-01-01")
+                      // }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                {/* <FormDescription>
+                  This is the date of the event.
+                </FormDescription> */}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          
+          {/* Registration Dates */}
+          <div className=" flex-col space-y-3 ">
+            <p className=" font-normal text-base">Registration Dates</p>
+          <FormField
+            control={form.control}
+            name="registrationStartDate"
+            render={({ field }) => (
+              <FormItem className="">
+                {/* <FormLabel className=" ">Registration Dates : </FormLabel> */}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Start date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      // disabled={(date) =>
+                      //   date > new Date() || date < new Date("1900-01-01")
+                      // }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="registrationEndDate"
+            render={({ field }) => (
+              <FormItem className="flex gap-4">
+                {/* <FormLabel className=" mt-5">Registration Dates : </FormLabel> */}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>End date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      // disabled={(date) =>
+                      //   date > new Date() || date < new Date("1900-01-01")
+                      // }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          </div>
+
+
+          {/* Early Bird Registration Fees */}
+          <FormField
+            control={form.control}
+            name="earlyBirdRegistrationFee"
+            render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Early Bird Registration Fee</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Registration Fees"
+                      {...field}
+                    />
+                  </FormControl>
+                  <div className="text-[12px] opacity-70">Optional*</div>
+                  <FormMessage />
+                </FormItem>
+            )}
+          />
+
+
+          {/* Late Registration Fees */}
+          <FormField
+            control={form.control}
+            name="lateRegistrationFee"
+            render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Late registration Fee</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Registration Fees"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+            )}
+          />
+
+          {/* Credit Points */}
+          <FormField
+            control={form.control}
+            name="creditPoints"
+            render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Credit Points</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter points"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+            )}
+          />
+
+
+          {/* Contact */}
+          <FormField
+            control={form.control}
+            name="contactNumber"
+            render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contact</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter 10 digit phone number"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+            )}
+          />
+
+          
 
           <Button className=" w-full my-4" type="submit">
             Update

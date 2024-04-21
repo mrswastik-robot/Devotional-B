@@ -1,6 +1,6 @@
 
 
-import {z} from 'zod';
+import {late, z} from 'zod';
 
 export const EventType = z.object({
     // id: z.string(),
@@ -15,6 +15,13 @@ export const EventType = z.object({
     durationOfEvent: z.number().min(1).max(24),
     registrationLink: z.string(),
     sponsors:z.array(z.string()).optional(),
+    preConferenceDate: z.date().optional(),
+    registrationStartDate: z.date().optional(),
+    registrationEndDate: z.date().optional(),
+    earlyBirdRegistrationFee: z.number().optional(),
+    lateRegistrationFee: z.number().optional(),
+    creditPoints: z.number().min(1).optional(),
+    contactNumber: z.number().min(10,{message: 'Number should be of exact 10 digits.'}).max(10,{message: 'Number should be of exact 10 digits.'}).optional(),
     // createdAt: z.string(),
     // updatedAt: z.string(),
     // profilePic: z.string(),

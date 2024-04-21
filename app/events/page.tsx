@@ -808,7 +808,7 @@ export default function MusicPage() {
                   
                   // <DialogTrigger asChild>
                     <Link
-                    href={'/homepage2/createEvent'}
+                    href={'/events/createEvent'}
                     >
                         <Button className="">
                           <PlusCircleIcon className="hidden lg:block mr-2 h-4 w-4" />

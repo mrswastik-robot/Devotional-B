@@ -1164,7 +1164,7 @@ export default function MusicPage() {
                       <Separator className="my-4" />
 
                       <div className="flex flex-col">
-                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-[1.55rem] pb-4">
+                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-[1rem] pb-4">
                             {searchResult && searchResult.length > 0 ?(
                               searchResult.map((hit: any) => {
                                 const post = transformHitToPost(hit);
@@ -1220,7 +1220,7 @@ export default function MusicPage() {
                       <Separator className="my-4" />
 
                       <div className="flex flex-col">
-                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-[1.55rem] pb-4">
+                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-[1rem] pb-4">
                             {searchResult && searchResult.length > 0 ?(
                               searchResult.map((hit: any) => {
                                 const post = transformHitToPost(hit);

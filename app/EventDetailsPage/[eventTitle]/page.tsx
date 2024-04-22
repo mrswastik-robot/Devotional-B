@@ -413,7 +413,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
             <div className=' font-medium px-4 my-3 mt-7'>
                   <div className=''>
-                      <p className=' text-lg'>{eventObject.description && parse(eventObject.description)}</p>
+                      <p className=' text-[16px]'>{eventObject.description && parse(eventObject.description)}</p>
                   </div>
             </div>
 
@@ -421,7 +421,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               eventObject.preConferenceDate && (
                 <div className=' p-4 mt-7'>
                   <div className=' flex gap-4'>
-                    <div className=' text-xl font-bold'>Pre-Conference Date :</div>
+                    <div className=' text-lg font-bold'>Pre-Conference Date :</div>
                     <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                   </div>
                 </div>
@@ -432,7 +432,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               eventObject.registrationStartDate && (
                 <div className=' p-4 mt-7'>
                   <div className=' flex gap-4'>
-                    <div className=' text-xl font-bold'>Registration Start Date :</div>
+                    <div className=' text-lg font-bold'>Registration Start Date :</div>
                     <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                   </div>
                 </div>
@@ -443,7 +443,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               eventObject.registrationEndDate && (
                 <div className=' p-4 mt-7'>
                   <div className=' flex gap-4'>
-                    <div className=' text-xl font-bold'>Registration End Date :</div>
+                    <div className=' text-lg font-bold'>Registration End Date :</div>
                     <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                   </div>
                 </div>
@@ -454,7 +454,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               eventObject.earlyBirdRegistrationFee ? (
                 <div className=' p-4 mt-7'>
                   <div className=' flex gap-4'>
-                    <div className=' text-xl font-bold'>Early Bird Registration Fee :</div>
+                    <div className=' text-lg font-bold'>Early Bird Registration Fee :</div>
                     <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.earlyBirdRegistrationFee}</p>
                   </div>
                 </div>
@@ -467,7 +467,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               eventObject.lateRegistrationFee ? (
                 <div className=' p-4 mt-7'>
                   <div className=' flex gap-4'>
-                    <div className=' text-xl font-bold'>Late Registration Fee :</div>
+                    <div className=' text-lg font-bold'>Late Registration Fee :</div>
                     <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.lateRegistrationFee}</p>
                   </div>
                 </div>
@@ -482,7 +482,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 <div className=' p-4 mt-7'>
                   <div className=' flex
                     gap-4'>
-                      <div className=' text-xl font-bold'>Contact Number :</div>
+                      <div className=' text-lg font-bold'>Contact Number :</div>
                       <p className=' text-blue-400 underline cursor-pointer text-lg '><span className=' text-black'>+91</span> {eventObject.contactNumber}</p>
                   </div>
                 </div>
@@ -496,8 +496,8 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             
             <div className='p-4 mt-7'>
               <div className=' flex gap-4'>
-                <Badge className=' p-2'>
-                <div className=' text-xl font-bold'>Registration Link :</div>
+                <Badge className=' p-2 py-1'>
+                <div className=' text-lg font-bold'>Registration Link :</div>
                 </Badge>
                 <p className=' text-blue-400 underline cursor-pointer text-lg mt-1'>{eventObject.registrationLink}</p>
               </div>
@@ -510,7 +510,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                     <div className=' space-y-2'>
                         {eventObject.hashtags?(
                           eventObject.hashtags.map((hashtag, index)=>{
-                            return <Button key={index} className=' bg-[#F1F2F2] text-black rounded-3xl ml-2'>
+                            return <Button key={index} className=' bg-[#F1F2F2] hover:text-white text-black rounded-3xl ml-2'>
                             {hashtag}
                             </Button>
                           })

@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -79,10 +80,11 @@ import Post from "@/components/Post";
 
 type Input = z.infer<typeof QuestionType>;
 
+type Props = {}
 
-export default function Home() {
+const CreateQuePage = (props: Props) => {
 
-  const router = useRouter();
+    const router = useRouter();
   const searchParams = useSearchParams();
   const isGuest = searchParams.get('isGuest');
   const [user, loading] = useAuthState(auth);
@@ -390,258 +392,286 @@ export default function Home() {
       createUserDocument();
     }
   }, [user, loading, router]);
-  
-  
-  //algolsearchClientff
-  
-  const [searchClient, setSearchClient] = useState<any>(null);
-  useEffect(() => {
-    setSearchClient(algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef'))
-  } , [])
-
-  // const client = algoliasearch('8XQGGZTFH3', 'bd743f217017ce1ea457a8febb7404ef')
 
 
-
-
-  const [description, setDescription] = useState("");
-  // console.log(description);
-
-  const form = useForm<Input>({
-    // mode: "onSubmit",
-    // mode: "onChange",
-    resolver: zodResolver(QuestionType),
-    defaultValues: {
-      title: "",
-      description: "",
-      questionImageURL: "",
-      anonymity: false,
-    },
-  });
-
-  async function createQuestionPost(data: Input) {
+    const form = useForm<Input>({
+        // mode: "onSubmit",
+        // mode: "onChange",
+        resolver: zodResolver(QuestionType),
+        defaultValues: {
+          title: "",
+          description: "",
+          questionImageURL: "",
+          anonymity: false,
+        },
+      });
     
-    //console.log("creating");
-
-    const docRef = await addDoc(collection(db, "questions"), {
-      title: data.title,
-      description: data.description,
-      uid: user?.uid,
-      profilePic: user?.photoURL,
-      name: name||user?.displayName,
-      createdAt: serverTimestamp(),
-      questionImageURL: imageUrl,
-      category: selectC,
-      anonymity: data.anonymity,
-      // ansNumbers: 0,
-    });
-
-    const quesId = docRef.id;
-
-    toast({
-      title: "Question Posted",
-      description: "Your question has been posted successfully.",
-    });
-
-    try {
-      for (const [mainCategory, subcategories] of Object.entries(selectedCategories)) {
-        // Update Firestore for main category
-        await updateDoc(doc(db, 'meta-data', 'v1', 'post-categories', mainCategory), {
-          Posts: arrayUnion(docRef.id),
+      async function createQuestionPost(data: Input) {
+        
+        //console.log("creating");
+    
+        const docRef = await addDoc(collection(db, "questions"), {
+          title: data.title,
+          description: data.description,
+          uid: user?.uid,
+          profilePic: user?.photoURL,
+          name: name||user?.displayName,
+          createdAt: serverTimestamp(),
+          questionImageURL: imageUrl,
+          category: selectC,
+          anonymity: data.anonymity,
+          // ansNumbers: 0,
         });
-  
-        // Update Firestore for each subcategory
-        for (const subcategory of subcategories) {
-          await updateDoc(doc(db, 'meta-data', 'v1', 'post-categories', mainCategory), {
-            [subcategory]: arrayUnion(docRef.id),
+    
+        const quesId = docRef.id;
+    
+        toast({
+          title: "Question Posted",
+          description: "Your question has been posted successfully.",
+        });
+
+        router.push(`/`);
+    
+        try {
+          for (const [mainCategory, subcategories] of Object.entries(selectedCategories)) {
+            // Update Firestore for main category
+            await updateDoc(doc(db, 'meta-data', 'v1', 'post-categories', mainCategory), {
+              Posts: arrayUnion(docRef.id),
+            });
+      
+            // Update Firestore for each subcategory
+            for (const subcategory of subcategories) {
+              await updateDoc(doc(db, 'meta-data', 'v1', 'post-categories', mainCategory), {
+                [subcategory]: arrayUnion(docRef.id),
+              });
+            }
+          }
+      
+          // Clear selected categories after submission
+          setSelectedCategories({});
+        } catch (error) {
+          console.error('Error updating Firestore:', error);
+        }
+    
+        try {
+          console.log("keyword Gen.....")
+          const docRef = await addDoc(collection(db, 'keywords'), {
+            prompt: `Generate some keywords and hashtags on topic ${data.title} and give it to me in "**Keywords:**["Keyword1", "Keyword2",...] **Hashtags:**["Hashtag1", "Hashtag2",...]" this format`,
           });
+          console.log('Keyword Document written with ID: ', docRef.id);
+      
+          // Listen for changes to the document
+          const unsubscribe = onSnapshot(doc(db, 'keywords', docRef.id), async(snap) => {
+            const data = snap.data();
+            if (data && data.response) {
+              console.log('RESPONSE: ' + data.response);
+              const keywordsStr = `${data.response}`;
+    
+              const cleanedString = keywordsStr.replace(/\*|\`/g, '');
+    
+              const splitString = cleanedString.split("Keywords:");
+              const keywordsString = splitString[1].split("Hashtags:")[0].trim();
+              const hashtagsString = splitString[1].split("Hashtags:")[1].trim();
+    
+              const keywordsArray = JSON.parse(keywordsString);
+              const hashtagsArray = JSON.parse(hashtagsString);
+    
+              const questionDocRef = doc(db, 'questions', quesId);
+              await updateDoc(questionDocRef, {
+              keywords: keywordsArray,
+              hashtags: hashtagsArray // Add your keywords here
+          });
+            }
+          });
+      
+          // Stop listening after some time (for demonstration purposes)
+          setTimeout(() => unsubscribe(), 60000);
+        } catch (error) {
+          console.error('Error adding document: ', error);
+        }
+    
+        console.log("Document written with ID: ", docRef.id);
+        //console.log(data);
+      }
+    
+      function onSubmit(data: Input) {
+        // console.log(data);
+    
+        createQuestionPost(data);
+        setNewPost((prev)=>!prev);
+        
+      }
+    
+      const guestHandler = ()=>{
+        if(user?.isAnonymous){
+        auth.signOut();
+        router.push("/auth");
         }
       }
-  
-      // Clear selected categories after submission
-      setSelectedCategories({});
-    } catch (error) {
-      console.error('Error updating Firestore:', error);
-    }
-
-    try {
-      console.log("keyword Gen.....")
-      const docRef = await addDoc(collection(db, 'keywords'), {
-        prompt: `Generate some keywords and hashtags on topic ${data.title} and give it to me in "**Keywords:**["Keyword1", "Keyword2",...] **Hashtags:**["Hashtag1", "Hashtag2",...]" this format`,
-      });
-      console.log('Keyword Document written with ID: ', docRef.id);
-  
-      // Listen for changes to the document
-      const unsubscribe = onSnapshot(doc(db, 'keywords', docRef.id), async(snap) => {
-        const data = snap.data();
-        if (data && data.response) {
-          console.log('RESPONSE: ' + data.response);
-          const keywordsStr = `${data.response}`;
-
-          const cleanedString = keywordsStr.replace(/\*|\`/g, '');
-
-          const splitString = cleanedString.split("Keywords:");
-          const keywordsString = splitString[1].split("Hashtags:")[0].trim();
-          const hashtagsString = splitString[1].split("Hashtags:")[1].trim();
-
-          const keywordsArray = JSON.parse(keywordsString);
-          const hashtagsArray = JSON.parse(hashtagsString);
-
-          const questionDocRef = doc(db, 'questions', quesId);
-          await updateDoc(questionDocRef, {
-          keywords: keywordsArray,
-          hashtags: hashtagsArray // Add your keywords here
-      });
-        }
-      });
-  
-      // Stop listening after some time (for demonstration purposes)
-      setTimeout(() => unsubscribe(), 60000);
-    } catch (error) {
-      console.error('Error adding document: ', error);
-    }
-
-    console.log("Document written with ID: ", docRef.id);
-    //console.log(data);
-  }
-
-  function onSubmit(data: Input) {
-    // console.log(data);
-
-    createQuestionPost(data);
-    setNewPost((prev)=>!prev);
     
-  }
-
-  const guestHandler = ()=>{
-    if(user?.isAnonymous){
-    auth.signOut();
-    router.push("/auth");
-    }
-  }
-
-  const [searchTerm , setSearchTerm] = useState("");
-
-  function transformHitToPost(hit: any) {
-    return {
-      id: hit.objectID, // Algolia provides an unique objectID for each record
-      title: hit.title,
-      name: hit.name,
-      description: hit.description,
-      profilePic: hit.profilePic,
-      postImage: hit.postImage,
-      likes: hit.likes,
-      comments: hit.comments,
-      shares: hit.shares,
-      questionImageURL: hit.questionImageURL,
-      createdAt: hit.createdAt,
-      anonymity: hit.anonymity,
-      // ansNumbers: hit.ansNumbers,
-      // add other necessary fields
-    };
-  }
-
-  const searchClasses = {
-    root: 'flex flex-col space-y-2 ',
-    form: 'flex flex-col space-y-2 ',
-    input: 'w-full border border-gray-300 rounded-lg p-2 pl-10',
-    // submit: 'bg-emerald-500 text-white rounded-lg p-2',
-    submit: 'hidden',
-    reset: 'hidden',
-    // loadingIndicator: 'text-red-500',
-    // submitIcon: 'h-5 w-5',
-    // resetIcon: 'h-5 w-5',
-    // loadingIcon: 'h-5 w-5',
-  };
-
-  // form.watch();
-
-  if(loading)
-  {
-    return(
-      <div className='w-[10%]  items-center justify-center flex mx-auto md:container md:max-w-7xl md:mx-auto'>
-        <Loader />
-      </div>
-    )
-  }
-  else
-  {
-
   return (
-    <div className="md:container md:max-w-7xl md:mx-auto ">
-    <Suspense>
-    <>
-    {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6 font-dmsans'>
-        
-        {/* <TopFeedCard /> */}
-      
-        
-      <div className=" col-span-5 ">
-        {/* {
-          searchClient && (
-            <InstantSearch searchClient={searchClient} indexName="search_questions" >
+    <div>
+        <div className="  w-full cursor-pointer">
+                      <Form {...form}>
+                        <form
+                        className="relative space-y-9 "
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        >
 
-              <div className="relative">
-              <SearchBox classNames={searchClasses} searchAsYouType={true} placeholder="Search ..." />
-              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-700" />
+                          {/* Title */}
+                          <FormField
+                          control={form.control}
+                          name="title"
+                          render = {({field}) => (
+                            <FormItem>
+                              <FormLabel>Title</FormLabel>
+                              <FormControl>
+                                <Input className="" placeholder="Title for the question ..." {...field}/>
+                              </FormControl>
+                              <div className="text-[12px] opacity-70">This is the title, write your question here.</div>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          />
 
-              </div>
+                          {/* TipTap Editor */}
+                          <FormField
+                            control={form.control}
+                            name="description"
+                            render = {({field}) => (
+                              <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <div className={`${isFocused?"border-black border-[2.1px]": "border-[1.2px]"} rounded-lg`} onFocus={() => setIsFocused(true)}
+                                  onBlur={() => setIsFocused(false)}
+                                  >
+                                <FormControl>
+                                  <Controller
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                      <Tiptap {...field} setImageUpload={setImageUpload} uploadImage={uploadImage} progress={progress} />
+                                    )}
+                                   /> 
+                                </FormControl>
+                                </div>
+                                <div className="text-[12px] opacity-70">This is the description, give more details about your question here.</div>
+                                <FormMessage/>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          {(progress||0)>0&&<span className='pt-3'>{`${Math.ceil((progress||0))} % Uploaded`}</span>}
+                          {/* "0" to make upload percentage invisible when no image is selected */}
+                          {/* anonymity toggle */}
 
-              
-              <Hits  hitComponent={({hit}) => <Post post={transformHitToPost(hit)} />} />
-              
-            </InstantSearch>
-          )
-        } */}
-        <CustomFeed newPost = {newPost}/>
-        </div>
-        {/* <CustomFeed /> */}
-
-
-        {/* subreddit info */}
-        <div className='col-span-4 lg:col-span-2 lg:sticky lg:top-[4.2rem] overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-3'>
-          {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
-            <p className='font-semibold py-3 flex items-center gap-1.5'>
-              <HomeIcon className='h-4 w-4' />
-              Home
-            </p>
-          </div> */}
-          <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-3 text-sm leading-6'>
-            <div className='flex rounded-md justify-between md:min-h-[5rem] gap-x-4 py-3'>
+                          <div>
+                            {
+                              previewImg&&<div className="w-full flex items-center justify-center">
+                                <Image src={previewImg} alt="previewImage" width={250} height={250}/>
+                              </div>
+                            }
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium mb-2">Category</div>
+                          <Select value={""} onValueChange={handleMainCategoryChange} >
+      <SelectTrigger className="w-full">
+      <SelectValue placeholder="Select a Category" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Categories</SelectLabel>
+          <div>
               {
-                (isGuest === 'true' || user?.isAnonymous==true) ? (
-                  <p className=" text-zinc-500 font-dmsans">
-                    You are currently logged in as a Guest. To post question you need to have an account.
-                  </p>
-                ) : (
-                <p className='text-zinc-500 font-semibold font-dmsans'>
-                  Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
-              </p>
-                )
+                selectCategory?
+                selectCategory.map((categoryD:any, index:any)=>(
+                  <div key={index}>
+                    <SelectItem value={categoryD.id}>{categoryD.id.split("|").join("/")}</SelectItem>
+                  </div>
+                )):
+                <div><Loader/></div>
               }
             </div>
+          <SelectItem value="Others">Others</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+    <div className="flex">
+                              {
+                                selectC.map((category:string, index:number)=>{
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category.split("|").join("/")} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                })
+                              }
+                            </div>
+                            <div className="mt-3">
+                            {selectedMainCategory && (
+                              <Select value={""} onValueChange={handleSubcategoryChange}>
+                                <SelectTrigger>
+                                <SelectValue placeholder={`Select subCategory for ${selectedMainCategory.split("|").join("/")}`} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                  <SelectLabel>Sub Categories</SelectLabel>
+                                    {
+                                      subCategoryy.map((subcategory:any, index:any)=>(
+                                        <SelectItem key={index} value={subcategory}>{subcategory}</SelectItem>
+                                      ))
+                                    }
+                                    {/* Add more subcategories for other main categories */}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            )}
+                            <div className="flex">
+                              {
+                                tempSubCategory.map((subcategory:string, index:number)=>{
+                                  return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{subcategory} <span onClick={()=>{delSubCategories(subcategory)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
+                                })
+                              }
+                            </div>
+                            </div>
+                            <div className="text-[12px] opacity-70 mt-[0.45rem]">This is the category, you can choose multiple categories for your Question.</div>
+                          </div>
+                          <FormField
+                            control={form.control}
+                            name="anonymity"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2">
+                                <div className="space-y-0.5">
+                                  <FormLabel className="text-sm font-medium">
+                                    Post Anonymously
+                                    <div className="text-[12px] font-normal opacity-70">Hide your details while posting question</div>
+                                  </FormLabel>
+                                  {/* <FormDescription>
+                                    Post question without revealing your identity.
+                                  </FormDescription> */}
+                                </div>
+                                <div className="mb-5">
+                                <FormControl>
+                                  <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                  />
+                                </FormControl>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
 
-            <div>
-              <Link href={'/createQue'}>
-                <Button className=" w-full">
-                  Ask a Question
-                </Button>
-              </Link>
-            </div>
-          </dl>
+                              <Button type="submit" 
+                                className=" w-full"
+                                // disabled={isGuest === 'true'}
+                              >
+                                Post
+                              </Button>
+                            
+                          
 
-          {/* <RightHandFeed />           */}
-          <div className=' sm:block hidden col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg border border-gray-100 order-last'>
-            <RightHandFeed />
-          </div>
+                        </form>
+                      </Form>
+                      </div>
 
-        </div>
-        
-      </div>
-    </>
-    </Suspense>
     </div>
-  );
-                    }
+  )
 }
+
+export default CreateQuePage

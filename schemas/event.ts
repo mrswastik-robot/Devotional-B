@@ -22,6 +22,7 @@ export const EventType = z.object({
     lateRegistrationFee: z.number().optional(),
     creditPoints: z.number().min(1).optional(),
     contactNumber: z.number().min(10,{message: 'Number should be of exact 10 digits.'}).max(10,{message: 'Number should be of exact 10 digits.'}).optional(),
+    isVisible: z.boolean().optional(),
     // createdAt: z.string(),
     // updatedAt: z.string(),
     // profilePic: z.string(),

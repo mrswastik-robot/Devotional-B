@@ -45,6 +45,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Switch } from "@/components/ui/switch";
 
 import { z } from "zod";
 import { EventType } from "@/schemas/event";
@@ -88,6 +89,7 @@ const AdditionalForm = (props: Props) => {
        earlyBirdRegistrationFee: 0,
        creditPoints: 0,
        contactNumber: 0,
+       isVisible: true,
 
     },
   });
@@ -127,6 +129,7 @@ const AdditionalForm = (props: Props) => {
           const updateData: { [key: string]: any } = {
             sponsors: arrayUnion(...sponsors),
             locationOfEvent: docSnap.data().locationOfEvent + ", " + landmark,
+            isVisible: data.isVisible,
             
           };
 
@@ -500,6 +503,28 @@ const AdditionalForm = (props: Props) => {
                 </FormItem>
             )}
           />
+
+          {/* Always true Switch */}
+          <FormField
+              control={form.control}
+              name="isVisible"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">Visible</FormLabel>
+                    
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled
+                      aria-readonly
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
           
 

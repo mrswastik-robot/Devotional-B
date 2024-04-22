@@ -596,34 +596,6 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
 
        <div className="w-[21.3rem] sticky top-[4.2rem] h-fit">
-        <div className=' sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last'>
-        <Card x-chunk="dashboard-01-chunk-5">
-            <CardHeader>
-              <CardTitle>Sponsors</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-8 uppercase">
-
-              {eventObject.sponsors?(
-                eventObject.sponsors.map((sponsor, index)=>{
-                  return <div key={index} className="flex items-center gap-4">
-                  <Avatar className="hidden h-9 w-9 sm:flex">
-                    <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                    <AvatarFallback><Building/></AvatarFallback>
-                  </Avatar>
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      {sponsor}
-                    </p>
-                  </div>
-                </div>
-                }
-                )
-              ):<div>No Sponsors Found...</div>
-            }
-              
-            </CardContent>
-          </Card>
-        </div>
 
         <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
         <Card x-chunk="dashboard-01-chunk-5">
@@ -683,6 +655,35 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                   }
                 </h1>
               </CardContent>
+          </Card>
+        </div>
+
+        <div className=' sm:block mt-3 hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last'>
+        <Card x-chunk="dashboard-01-chunk-5">
+            <CardHeader>
+              <CardTitle>Sponsors</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-8 uppercase">
+
+              {eventObject.sponsors?(
+                eventObject.sponsors.map((sponsor, index)=>{
+                  return <div key={index} className="flex items-center gap-4">
+                  <Avatar className="hidden h-9 w-9 sm:flex">
+                    <AvatarImage src="/avatars/01.png" alt="Avatar" />
+                    <AvatarFallback><Building/></AvatarFallback>
+                  </Avatar>
+                  <div className="grid gap-1">
+                    <p className="text-sm font-medium leading-none">
+                      {sponsor}
+                    </p>
+                  </div>
+                </div>
+                }
+                )
+              ):<div>No Sponsors Found...</div>
+            }
+              
+            </CardContent>
           </Card>
         </div>
 

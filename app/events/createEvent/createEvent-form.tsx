@@ -500,7 +500,18 @@ const CreatEventPage = () => {
         console.log("Event ID: ", docRef.id);
         const event_id = docRef.id
 
-        dispatch(setEventId(event_id));
+        //dispatch(setEventId(event_id)); 
+
+        //storing value of eventId in sessional storage
+          const devotionalEventId = sessionStorage.getItem('devotionalEventId');
+        
+          if (!devotionalEventId) {
+            // If "devotionalEventId" is not already present, store "eventId"
+            sessionStorage.setItem('devotionalEventId', event_id);
+          } else {
+            // If "devotionalEventId" is already present, update it with the new "eventId"
+            sessionStorage.setItem('devotionalEventId', event_id);
+          }
         
         try {
           for (const [mainCategory, subcategories] of Object.entries(selectedCategories)) {

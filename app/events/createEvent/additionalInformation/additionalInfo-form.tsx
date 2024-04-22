@@ -97,7 +97,10 @@ const AdditionalForm = (props: Props) => {
 
   const [landmark, setLandmark] = useState<string>("");
 
-  const eventId = useSelector((state: RootState) => state.eventID.event_id);
+  //const eventId = useSelector((state: RootState) => state.eventID.event_id);
+
+  //fetching eventId from sessional storage
+  const eventId = sessionStorage.getItem('devotionalEventId');
   console.log(eventId);
 
   async function updateEvent( eventId: string,data: Input )

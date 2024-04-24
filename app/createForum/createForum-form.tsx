@@ -78,7 +78,7 @@ import algoliasearch from "algoliasearch/lite";
 import { InstantSearch , SearchBox , Hits, Highlight } from "react-instantsearch";
 import Post from "@/components/Post";
 
-type Input = z.infer<typeof QuestionType>;
+type Input = z.infer<typeof ForumType>;
 
 type Props = {}
 

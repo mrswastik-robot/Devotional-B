@@ -539,7 +539,7 @@ const CreatEventPage = () => {
           description: "Your event has been created successfully.",
         })
 
-        // router.push(`/EventDetailsPage/${data.title}`);
+        // router.push(`/event-details/${data.title}`);
         router.push(`/events/createEvent/additionalInformation`)
     
         try {

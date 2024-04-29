@@ -584,7 +584,7 @@ const clearNotifications = async () => {
 
         <div className="flex ">
         <div>
-          {hideQueSearch&&pathname!='/events'&&
+          {!pathname.includes("EventDetailsPage")&&pathname!='/events'&&
               <Dialog>
                 {
                   isGuest === 'true'||user?.isAnonymous==true?

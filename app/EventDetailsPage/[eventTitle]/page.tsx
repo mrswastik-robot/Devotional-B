@@ -15,6 +15,7 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -337,7 +338,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
                 <div className=' max-w-[70%]'>
                     <div className='p-4 space-y-7'>
-                        <h1 className='text-3xl font-bold'>{eventObject.title}</h1>
+                        <h1 className='text-[21px] font-bold'>{eventObject.title}</h1>
                     </div>
                 </div>
             </div>
@@ -368,7 +369,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
             <div className='md:flex gap-10 md:justify-between flex-row'>
 
-            <div className=' p-4 space-y-3 mt-4'>
+            <div className=' p-4 space-y-3 mt-3'>
                 <h1 className=' font-bold'>Date and Time</h1>
                 <div className=' flex gap-3'>
                     <CalendarCheck2 size={24} />
@@ -377,7 +378,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div>
-            <h1 className=' font-bold px-4 my-3 mt-7'>Location</h1>
+            <h1 className=' font-bold px-4 my-3 mt-6'>Location</h1>
             <div className=' px-4 flex gap-x-5'>
                 <div className=' mt-2'>
                     <MapPin size={24} />
@@ -404,97 +405,14 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div>
-              <h1 className='font-bold  px-4 my-3 mt-7 text-base'>Duration of the event</h1>
+              <h1 className='font-bold  px-4 my-3 mt-6 text-base'>Duration of the event</h1>
               <div className='px-4 flex gap-2'><span><Clock/></span><div>{eventObject.durationOfEvent} hours</div></div>
               
             </div>
 
             </div>
 
-            <div className=' font-medium px-4 my-3 mt-7'>
-                  <div className=''>
-                      <p className=' text-[16px]'>{eventObject.description && parse(eventObject.description)}</p>
-                  </div>
-            </div>
-
-            {
-              eventObject.preConferenceDate && (
-                <div className=' p-4 mt-7'>
-                  <div className=' flex gap-4'>
-                    <div className=' text-lg font-bold'>Pre-Conference Date :</div>
-                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                  </div>
-                </div>
-              )
-            }
-
-            {
-              eventObject.registrationStartDate && (
-                <div className=' p-4 mt-7'>
-                  <div className=' flex gap-4'>
-                    <div className=' text-lg font-bold'>Registration Start Date :</div>
-                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                  </div>
-                </div>
-              )
-            }
-
-            {
-              eventObject.registrationEndDate && (
-                <div className=' p-4 mt-7'>
-                  <div className=' flex gap-4'>
-                    <div className=' text-lg font-bold'>Registration End Date :</div>
-                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                  </div>
-                </div>
-              )
-            }
-
-            {
-              eventObject.earlyBirdRegistrationFee ? (
-                <div className=' p-4 mt-7'>
-                  <div className=' flex gap-4'>
-                    <div className=' text-lg font-bold'>Early Bird Registration Fee :</div>
-                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.earlyBirdRegistrationFee}</p>
-                  </div>
-                </div>
-              ) : (
-                <></>
-              )
-            }
-
-            {
-              eventObject.lateRegistrationFee ? (
-                <div className=' p-4 mt-7'>
-                  <div className=' flex gap-4'>
-                    <div className=' text-lg font-bold'>Late Registration Fee :</div>
-                    <p className=' text-blue-400 underline cursor-pointer text-lg '>{eventObject.lateRegistrationFee}</p>
-                  </div>
-                </div>
-              ) : (
-                <></>
-              )
-            }
-
-
-            {
-              eventObject.contactNumber ? (
-                <div className=' p-4 mt-7'>
-                  <div className=' flex
-                    gap-4'>
-                      <div className=' text-lg font-bold'>Contact Number :</div>
-                      <p className=' text-blue-400 underline cursor-pointer text-lg '><span className=' text-black'>+91</span> {eventObject.contactNumber}</p>
-                  </div>
-                </div>
-              ) : ( 
-                <></>
-              )
-            }
-            
-
-            
-            
-            <div className='p-4 mt-7'>
+            <div className='p-4 mt-5'>
               <div className=' flex gap-4'>
                 <Badge className=' p-2 py-1'>
                 <div className=' text-lg font-bold'>Registration Link :</div>
@@ -503,16 +421,68 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
               </div>
             </div>
 
-            <div className=' p-4 my-5 max-w-[80%]'>
-                <h1 className=' font-bold text-2xl mb-4 '>Tags</h1>
+            <div className=' p-4 mt-5'>
+            <h1 className=' font-bold text-[16px] mb-4 '>Description</h1>
+            <div className=' font-medium my-3 mt-6'>
+                  <div className=''>
+                      <p className=' text-[16px]'>{eventObject.description && parse(eventObject.description)}</p>
+                  </div>
+            </div>
+            </div>
+
+            <div>
+            <Table className='p-0 m-0' aria-label="Example static collection table">
+      <TableHeader>
+        <TableColumn className='text-[18px]'>Event Info</TableColumn>
+        <TableColumn className="text-[18px]">Details</TableColumn>
+
+      </TableHeader>
+      <TableBody>
+        <TableRow key="1">
+          <TableCell>Pre-Conference Date :</TableCell>
+          <TableCell className='text-blue-400 underline cursor-pointer'>{eventObject.preConferenceDate&&eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</TableCell>
+
+        </TableRow>
+        <TableRow key="2">
+          <TableCell>Registration Start Date :</TableCell>
+          <TableCell className='text-blue-400 underline cursor-pointer'>{eventObject.registrationStartDate&&eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</TableCell>
+        </TableRow>
+        <TableRow key="3">
+          <TableCell>Registration End Date :</TableCell>
+          <TableCell className='text-blue-400 underline cursor-pointer'>{eventObject.registrationEndDate&&eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</TableCell>
+     
+        </TableRow>
+        <TableRow key="4">
+          <TableCell>Early Bird Registration Fee :</TableCell>
+          <TableCell className='text-blue-400 cursor-pointer'>{`₹ ${eventObject.earlyBirdRegistrationFee}`}</TableCell>
+
+        </TableRow>
+
+        <TableRow key="4">
+          <TableCell>Late Registration Fee :</TableCell>
+          <TableCell className="text-blue-400 cursor-pointer">{`₹ ${eventObject.lateRegistrationFee}`}</TableCell>
+
+        </TableRow>
+
+        <TableRow key="4">
+          <TableCell>Contact Number :</TableCell>
+          <TableCell className="text-blue-400 underline cursor-pointer">{eventObject.contactNumber}</TableCell>
+
+        </TableRow>
+      </TableBody>
+    </Table>
+            </div>
+
+            <div className=' p-4 mb-5 mt-2'>
+                <h1 className=' font-bold text-[18px] mb-4 '>Tags</h1>
 
                 <div>
                     <div className=' space-y-2'>
                         {eventObject.hashtags?(
                           eventObject.hashtags.map((hashtag, index)=>{
-                            return <Button key={index} className=' bg-[#F1F2F2] hover:text-white text-black rounded-3xl ml-2'>
+                            return <span key={index} className='text-blue-600 ml-2'>
                             {hashtag}
-                            </Button>
+                            </span>
                           })
                         ):<div>No Tags Found...</div>
                         }

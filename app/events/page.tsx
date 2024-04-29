@@ -2,7 +2,7 @@
 
 import { Metadata } from "next"
 import Image from "next/image"
-import { PlusCircleIcon } from "lucide-react"
+import { MailIcon, PlusCircleIcon } from "lucide-react"
 import { X } from 'lucide-react';
 
 import { ScrollArea, ScrollBar } from "../../components/ui/scroll-area"
@@ -803,6 +803,14 @@ export default function MusicPage() {
                       </TabsList>
                       <div className="ml-auto lg:mr-4">
                       <div>
+                      <Link
+                    href={"mailto:abhijeetgupta989@gmail.com"}
+                    >
+                        <Button className=" mr-2">
+                          <MailIcon className="hidden lg:block mr-2 h-4 w-4" />
+                          Mail To
+                        </Button>
+                      </Link>
               <Dialog>
                 {
                   

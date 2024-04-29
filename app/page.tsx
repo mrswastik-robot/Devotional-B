@@ -569,19 +569,19 @@ export default function Home() {
   {
 
   return (
-    <div className="md:container md:max-w-9xl md:mx-auto ">
+    <div className="md:container md:max-w-[100rem] md:mx-auto ">
     <Suspense>
     <>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
       <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-9 gap-y-4 md:gap-x-4 pb-6 font-dmsans md:ml-[4rem]'>
         
         {/* <TopFeedCard /> */}
-        <div className=" sm:block hidden col-span-2 sticky lg:top-[4.2rem]">
+        <div className=" sm:block hidden col-span-2 sticky lg:top-[4.2rem] max-w-[20rem]">
           <Sidebar playlists={[]} />
         </div>
       
         
-      <div className=" col-span-5 ">
+      <div className=" col-span-4 ">
         {/* {
           searchClient && (
             <InstantSearch searchClient={searchClient} indexName="search_questions" >
@@ -604,7 +604,7 @@ export default function Home() {
 
 
         {/* subreddit info */}
-        <div className='col-span-2 lg:col-span-2 lg:sticky lg:top-[4.2rem] overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-3'>
+        <div className='col-span-2 lg:col-span-3 mr-[5rem] lg:sticky lg:top-[4.2rem] overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-3'>
           {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
             <p className='font-semibold py-3 flex items-center gap-1.5'>
               <HomeIcon className='h-4 w-4' />

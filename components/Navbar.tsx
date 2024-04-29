@@ -543,13 +543,13 @@ const clearNotifications = async () => {
           </Link>
 
           {/* search bar */}
-        { !hideQueSearch && <div className=" relative ml-5">
+        { !hideQueSearch && <div className=" relative ml-[18.1px]">
           {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
           <input type="text" 
             value={searchText}
             onChange={handleSearchText} 
             placeholder="Search" 
-            className="w-[37rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
+            className="w-[38rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerSearch());
@@ -584,6 +584,7 @@ const clearNotifications = async () => {
 
         <div className="flex ">
         <div>
+          {hideQueSearch&&pathname!='/events'&&
               <Dialog>
                 {
                   isGuest === 'true'||user?.isAnonymous==true?
@@ -742,7 +743,7 @@ const clearNotifications = async () => {
                     
                   </DialogContent>
               </Dialog>
-              
+}
             </div>
 
             <div className=" ml-5 flex">

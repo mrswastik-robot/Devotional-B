@@ -25,7 +25,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Sidebar({ className, playlists }: SidebarProps) {
   return (
-    <div className={cn("pb-1 border border-gray-300 rounded-lg sticky lg:top-[4.2rem]", className)}>
+    <div className={cn("pb-1 border border-gray-300 rounded-lg sticky lg:top-[4.2rem] bg-[#ffffff]", className)}>
       <div className="space-y-4 py-4">
         <div className=" py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">

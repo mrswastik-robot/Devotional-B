@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@next/third-parties": "^14.2.3",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -51,7 +52,7 @@
     "image-compressor": "^2.0.3",
     "image-size": "^1.1.1",
     "lucide-react": "^0.323.0",
-    "next": "^14.1.0",
+    "next": "^14.2.3",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-day-picker": "^8.10.0",

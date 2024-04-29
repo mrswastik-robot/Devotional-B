@@ -425,7 +425,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             <h1 className=' font-bold text-[16px] mb-4 '>Description</h1>
             <div className=' font-medium my-3 mt-6'>
                   <div className=''>
-                      <p className=' text-[16px]'>{eventObject.description && parse(eventObject.description)}</p>
+                      <p className=' text-[16px] font-normal'>{eventObject.description && parse(eventObject.description)}</p>
                   </div>
             </div>
             </div>

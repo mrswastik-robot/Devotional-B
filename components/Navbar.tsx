@@ -549,7 +549,7 @@ const clearNotifications = async () => {
             value={searchText}
             onChange={handleSearchText} 
             placeholder="Search" 
-            className="w-[38rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
+            className="lg:w-[38rem] w-[22rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerSearch());
@@ -568,7 +568,7 @@ const clearNotifications = async () => {
             value={eventSearchText}
             onChange={handleEventSearchText}
             placeholder="Search Events" 
-            className="w-[37rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
+            className="lg:w-[37rem] w-[22rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerEventSearch());
@@ -583,15 +583,17 @@ const clearNotifications = async () => {
         </div>
 
         <div className="flex ">
-        <div>
+        <div className="hidden lg:inline">
           {!pathname.includes("event-details")&&pathname!='/events'&&
               <Dialog>
                 {
                   isGuest === 'true'||user?.isAnonymous==true?
                   <Button variant="outline"  className=" rounded-3xl w-full" onClick={guestHandler}>Ask Question</Button>:
-                  <DialogTrigger asChild>
+                  // <DialogTrigger asChild>
+                  <Link href={'/createQue'}>
                     <Button variant="outline"  className=" rounded-3xl w-full">Ask Question</Button>
-                  </DialogTrigger>
+                  </Link>
+                  // </DialogTrigger>
   }
                   <DialogContent className="sm:max-w-[925px] max-h-[55rem] overflow-y-scroll ">
                     <DialogHeader>

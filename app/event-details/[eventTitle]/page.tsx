@@ -367,7 +367,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
             </div> */}
 
-            <div className='md:flex gap-10 md:justify-between flex-row'>
+            <div className='md:flex gap-10 md:justify-between flex-row border border-black rounded-md m-4'>
 
             <div className=' p-4 space-y-3 mt-3'>
                 <h1 className=' font-bold'>Date and Time</h1>
@@ -377,8 +377,8 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
             </div>
 
-            <div>
-            <h1 className=' font-bold px-4 my-3 mt-6'>Location</h1>
+            <div className="mb-4">
+            <h1 className=' font-bold px-4 my-3 lg:mt-6'>Location</h1>
             <div className=' px-4 flex gap-x-5'>
                 <div className=' mt-2'>
                     <MapPin size={24} />
@@ -404,8 +404,8 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
             </div>
 
-            <div>
-              <h1 className='font-bold  px-4 my-3 mt-6 text-base'>Duration of the event</h1>
+            <div className='mb-6'>
+              <h1 className='font-bold px-4 my-3 mt-6 text-base'>Duration of the event</h1>
               <div className='px-4 flex gap-2'><span><Clock/></span><div>{eventObject.durationOfEvent} hours</div></div>
               
             </div>
@@ -417,12 +417,12 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 <Badge className=' p-2 py-1'>
                 <div className=' text-lg font-bold'>Registration Link :</div>
                 </Badge>
-                <p className=' text-blue-400 underline cursor-pointer text-lg mt-1'>{eventObject.registrationLink}</p>
+                <a target='_blank' href="#" className=' text-blue-400 underline cursor-pointer text-lg mt-1'>{eventObject.registrationLink}</a>
               </div>
             </div>
 
-            <div className=' p-4 mt-5'>
-            <h1 className=' font-bold text-[16px] mb-4 '>Description</h1>
+            <div className=' p-4 mt-1'>
+            <h1 className=' font-bold text-[18px] mb-4 '>Description</h1>
             <div className=' font-medium my-3 mt-6'>
                   <div className=''>
                       <p className=' text-[16px] font-normal'>{eventObject.description && parse(eventObject.description)}</p>
@@ -430,48 +430,43 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
             </div>
 
-            <div>
-            <Table className='p-0 m-0' aria-label="Example static collection table">
-      <TableHeader>
-        <TableColumn className='text-[18px]'>Event Info</TableColumn>
-        <TableColumn className="text-[18px]">Details</TableColumn>
+            <div className='rounded-md p-4'>
+  <table className='border border-black border-collapse w-full rounded-md'>
+    <thead>
+      <tr>
+        <th className='text-[18px] border border-black'>Event Info</th>
+        <th className="text-[18px] border border-black">Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td className='border border-black'>Pre-Conference Date :</td>
+        <td className='text-blue-400 underline cursor-pointer border border-black'>{eventObject.preConferenceDate && eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+      </tr>
+      <tr>
+        <td className='border border-black'>Registration Start Date :</td>
+        <td className='text-blue-400 underline cursor-pointer border border-black'>{eventObject.registrationStartDate && eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+      </tr>
+      <tr>
+        <td className='border border-black'>Registration End Date :</td>
+        <td className='text-blue-400 underline cursor-pointer border border-black'>{eventObject.registrationEndDate && eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+      </tr>
+      <tr>
+        <td className='border border-black'>Early Bird Registration Fee :</td>
+        <td className='text-blue-400 cursor-pointer border border-black'>{`₹ ${eventObject.earlyBirdRegistrationFee}`}</td>
+      </tr>
+      <tr>
+        <td className='border border-black'>Late Registration Fee :</td>
+        <td className="text-blue-400 cursor-pointer border border-black">{`₹ ${eventObject.lateRegistrationFee}`}</td>
+      </tr>
+      <tr>
+        <td className='border border-black'>Contact Number :</td>
+        <td className="text-blue-400 underline cursor-pointer border border-black">{eventObject.contactNumber}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-      </TableHeader>
-      <TableBody>
-        <TableRow key="1">
-          <TableCell>Pre-Conference Date :</TableCell>
-          <TableCell className='text-blue-400 underline cursor-pointer'>{eventObject.preConferenceDate&&eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</TableCell>
-
-        </TableRow>
-        <TableRow key="2">
-          <TableCell>Registration Start Date :</TableCell>
-          <TableCell className='text-blue-400 underline cursor-pointer'>{eventObject.registrationStartDate&&eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</TableCell>
-        </TableRow>
-        <TableRow key="3">
-          <TableCell>Registration End Date :</TableCell>
-          <TableCell className='text-blue-400 underline cursor-pointer'>{eventObject.registrationEndDate&&eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</TableCell>
-     
-        </TableRow>
-        <TableRow key="4">
-          <TableCell>Early Bird Registration Fee :</TableCell>
-          <TableCell className='text-blue-400 cursor-pointer'>{`₹ ${eventObject.earlyBirdRegistrationFee}`}</TableCell>
-
-        </TableRow>
-
-        <TableRow key="4">
-          <TableCell>Late Registration Fee :</TableCell>
-          <TableCell className="text-blue-400 cursor-pointer">{`₹ ${eventObject.lateRegistrationFee}`}</TableCell>
-
-        </TableRow>
-
-        <TableRow key="4">
-          <TableCell>Contact Number :</TableCell>
-          <TableCell className="text-blue-400 underline cursor-pointer">{eventObject.contactNumber}</TableCell>
-
-        </TableRow>
-      </TableBody>
-    </Table>
-            </div>
 
             <div className=' p-4 mb-5 mt-2'>
                 <h1 className=' font-bold text-[18px] mb-4 '>Tags</h1>
@@ -492,6 +487,105 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             </div>
+
+            <div className="top-0 h-fit">
+
+        <div className='mt-1 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+        <Card x-chunk="dashboard-01-chunk-5">
+            <CardHeader>
+              <CardTitle>Created By</CardTitle>
+              <div className='text-sm text-muted-foreground'>Moderator/Creator of this event.</div>
+            </CardHeader>
+            <CardContent className="">
+
+            <div className="flex mb-1">
+              <div>
+            <Image
+                        src={userData.profilePic}
+                        width={250}
+                        height={250}
+                        alt='Conference'
+                        className=' w-10 h-10 rounded-full'
+                        />
+            </div>  
+          <div className="ml-4 space-y-1">
+          <p className="text-sm font-medium leading-none">{userData.name}</p>
+            <p className="text-sm text-muted-foreground">{userData.email}</p>
+          </div>
+          <div className="ml-auto font-medium"></div>
+        </div>
+              
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className='mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+          <Card x-chunk="dashboard-01-chunk-5">
+              <CardHeader className='text-sm pb-1'>
+                <CardTitle>Register</CardTitle>
+                <div className='text-sm text-muted-foreground'>Verify the third-party sites before entering data.</div>
+              </CardHeader>
+              <CardContent className="">
+                <p className=' text-base'>Register for this event on a single click</p>
+                <div className=' flex items-end justify-end mt-4'>
+                  <Button className=' w-full'><a target='_blabk' href="#">Register now</a></Button>
+                </div>
+              </CardContent>
+          </Card>
+        </div>
+
+        <div className='mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+          <Card x-chunk="dashboard-01-chunk-5">
+              <CardHeader>
+                <CardTitle>Credits</CardTitle>
+                <div className='text-sm text-muted-foreground'>Few events comes with Govt. recognized credits. <span className='text-black'>Check Info*</span></div>
+              </CardHeader>
+              <CardContent className="">
+                <h1 className=' text-4xl flex items-center justify-center mx-auto'>
+                  {
+                    eventObject.creditPoints 
+                    ?
+                    eventObject.creditPoints
+                    :
+                    0
+                  }
+                </h1>
+              </CardContent>
+          </Card>
+        </div>
+
+        <div className=' mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last'>
+        <Card x-chunk="dashboard-01-chunk-5">
+            <CardHeader>
+              <CardTitle>Sponsors</CardTitle>
+              <div className='text-sm text-muted-foreground'>Either sponsoring this event or this post.</div>
+            </CardHeader>
+            <CardContent className="grid gap-8 uppercase">
+
+              {eventObject.sponsors?(
+                eventObject.sponsors.map((sponsor, index)=>{
+                  return <div key={index} className="flex items-center gap-4">
+                  <Avatar className="hidden h-9 w-9 sm:flex">
+                    <AvatarImage src="/avatars/01.png" alt="Avatar" />
+                    <AvatarFallback><Building/></AvatarFallback>
+                  </Avatar>
+                  <div className="grid gap-1">
+                    <p className="text-sm font-medium leading-none">
+                      {sponsor}
+                    </p>
+                  </div>
+                </div>
+                }
+                )
+              ):<div>No Sponsors Found...</div>
+            }
+              
+            </CardContent>
+          </Card>
+        </div>
+
+
+        </div>
 
             {/* Comment box for the event */}
             <div className=" mt-3">
@@ -565,12 +659,13 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         </div>
 
 
-       <div className="w-[21.3rem] sticky top-[4.2rem] h-fit">
+       <div className="w-[21.3rem] top-0 h-fit md:hidden lg:block">
 
-        <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+        <div className='mt-1 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
               <CardTitle>Created By</CardTitle>
+              <div className='text-sm text-muted-foreground'>Moderator/Creator of this event.</div>
             </CardHeader>
             <CardContent className="">
 
@@ -585,7 +680,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                         />
             </div>  
           <div className="ml-4 space-y-1">
-            <p className="text-sm font-medium leading-none">{userData.name}</p>
+          <p className="text-sm font-medium leading-none">{userData.name}</p>
             <p className="text-sm text-muted-foreground">{userData.email}</p>
           </div>
           <div className="ml-auto font-medium"></div>
@@ -597,13 +692,14 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
         <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
           <Card x-chunk="dashboard-01-chunk-5">
-              <CardHeader>
+              <CardHeader className='text-sm pb-1'>
                 <CardTitle>Register</CardTitle>
+                <div className='text-sm text-muted-foreground'>Verify the third-party sites before entering data.</div>
               </CardHeader>
               <CardContent className="">
                 <p className=' text-base'>Register for this event on a single click</p>
                 <div className=' flex items-end justify-end mt-4'>
-                  <Button className=' w-full'>Register</Button>
+                  <Button className=' w-full'><a target='_blabk' href="#">Register now</a></Button>
                 </div>
               </CardContent>
           </Card>
@@ -613,6 +709,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
           <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader>
                 <CardTitle>Credits</CardTitle>
+                <div className='text-sm text-muted-foreground'>Few events comes with Govt. recognized credits. <span className='text-black'>Check Info*</span></div>
               </CardHeader>
               <CardContent className="">
                 <h1 className=' text-4xl flex items-center justify-center mx-auto'>
@@ -632,6 +729,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
               <CardTitle>Sponsors</CardTitle>
+              <div className='text-sm text-muted-foreground'>Either sponsoring this event or this post.</div>
             </CardHeader>
             <CardContent className="grid gap-8 uppercase">
 

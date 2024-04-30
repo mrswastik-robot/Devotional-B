@@ -23,12 +23,14 @@ type PostType = {
   };
 interface PostState {
     posts : PostType[];
+    categoryQ: string;
     categoryE: string;
     change: boolean;
 }
 
 const initialState: PostState = {
     posts: [],
+    categoryQ: "all",
     categoryE: "all",
     change: true,
 }
@@ -48,6 +50,9 @@ export const postsSlice = createSlice({
         setCategoryE: (state, action: PayloadAction<string>)=>{
             state.categoryE = action.payload;
         }, 
+        setCategoryQ: (state, action: PayloadAction<string>)=>{
+            state.categoryQ = action.payload;
+        },
         setChange: (state, action)=>{
             state.change = !state.change;
         }
@@ -111,8 +116,9 @@ export const { setSearchText , triggerSearch } = searchSlice.actions;
 export const searchReducer = searchSlice.reducer;
 
 //caching
-export const {setPosts , addPosts, setCategoryE, setChange} = postsSlice.actions;
+export const {setPosts , addPosts, setCategoryE, setChange, setCategoryQ} = postsSlice.actions;
 export const categoryE = (state: RootState) => state.posts.categoryE;
+export const categoryQ = (state: RootState) => state.posts.categoryQ;
 export const change = (state: RootState) =>state.posts.change;
 export const postsReducer = postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts.posts;

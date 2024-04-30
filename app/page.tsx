@@ -569,14 +569,14 @@ export default function Home() {
   {
 
   return (
-    <div className="md:container md:max-w-[100rem] md:mx-auto ">
+    <div className="lg:container lg:max-w-[100rem] lg:mx-auto ">
     <Suspense>
     <>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
-      <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-9 gap-y-4 md:gap-x-4 pb-6 font-dmsans md:ml-[4rem]'>
+      <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-9 gap-y-4 md:gap-x-4 pb-6 font-dmsans lg:ml-[4rem]'>
         
         {/* <TopFeedCard /> */}
-        <div className=" sm:block hidden col-span-2 sticky lg:top-[4.2rem] max-w-[20rem]">
+        <div className="hidden lg:block col-span-2 sticky lg:top-[4.2rem] max-w-[20rem]">
           <Sidebar playlists={[]} />
         </div>
       
@@ -604,7 +604,7 @@ export default function Home() {
 
 
         {/* subreddit info */}
-        <div className='col-span-2 lg:col-span-3 mr-[5rem] lg:sticky lg:top-[4.2rem] overflow-hidden h-fit rounded-lg  order-first md:order-last space-y-3'>
+        <div className='col-span-3 lg:col-span-3 lg:mr-[5rem] lg:sticky lg:top-[4.2rem] overflow-hidden h-fit rounded-lg  order-first lg:order-last space-y-3'>
           {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
             <p className='font-semibold py-3 flex items-center gap-1.5'>
               <HomeIcon className='h-4 w-4' />
@@ -612,7 +612,7 @@ export default function Home() {
             </p>
           </div> */}
           <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-3 text-sm leading-6'>
-            <div className='flex rounded-md justify-between md:min-h-[5rem] gap-x-4 py-3'>
+            <div className='flex rounded-md justify-between md:min-h-[3rem] lg:min-h-[5rem] gap-x-4 py-3 md:justify-center'>
               {
                 (isGuest === 'true' || user?.isAnonymous==true) ? (
                   <p className=" text-zinc-500 font-dmsans">
@@ -636,7 +636,7 @@ export default function Home() {
           </dl>
 
           {/* <RightHandFeed />           */}
-          <div className=' sm:block hidden col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg border border-gray-100 order-last'>
+          <div className='hidden lg:block col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg border border-gray-100 order-last'>
             <RightHandFeed />
           </div>
 

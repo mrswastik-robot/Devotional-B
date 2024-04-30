@@ -408,10 +408,10 @@ const Sidebar = (props: Props) => {
               </li>
               
               <li className={`cursor-pointer mt-8  hover:text-gray-600 hover:font-bold ${pathname=="/events"?"hidden":""}`}>
-                <button className="" onClick={() => toast({title: "Feature coming soon ...", variant:"feature"})}>
+                <button className="">
                   <SheetClose className=" flex gap-2">
                     <UserRoundPlus />
-                    <p>Followers</p>
+                    <a href="/profilePage">Followers</a>
                   </SheetClose>
                 </button>
               </li>

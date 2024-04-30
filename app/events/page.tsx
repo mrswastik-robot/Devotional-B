@@ -804,10 +804,11 @@ export default function MusicPage() {
                       <div className="ml-auto lg:mr-4">
                       <div>
                       <Link
+                      className="hidden lg:inline"
                     href={"mailto:abhijeetgupta989@gmail.com"}
                     >
                         <Button className=" mr-2">
-                          <MailIcon className="hidden lg:block mr-2 h-4 w-4" />
+                          <MailIcon className="mr-2 h-4 w-4" />
                           Mail To
                         </Button>
                       </Link>
@@ -1172,7 +1173,7 @@ export default function MusicPage() {
                       <Separator className="my-4" />
 
                       <div className="flex flex-col">
-                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-[1rem] pb-4">
+                          <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-[1rem] pb-4">
                             {searchResult && searchResult.length > 0 ?(
                               searchResult.map((hit: any) => {
                                 const post = transformHitToPost(hit);
@@ -1228,7 +1229,7 @@ export default function MusicPage() {
                       <Separator className="my-4" />
 
                       <div className="flex flex-col">
-                          <div className="grid lg:grid-cols-4 grid-cols-1 gap-[1rem] pb-4">
+                          <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-[1rem] pb-4">
                             {searchResult && searchResult.length > 0 ?(
                               searchResult.map((hit: any) => {
                                 const post = transformHitToPost(hit);

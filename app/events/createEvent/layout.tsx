@@ -31,7 +31,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
       
       <div className=" space-y-6 p-10 pb-16  bg-white dark:bg-[#262626] rounded-md font-dmsans">
         <div className="space-y-0.5">
-          <h2 className="text-2xl font-bold tracking-tight">Create your Event here</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Create your event here</h2>
           <p className="text-muted-foreground">
             Fill the form to create your event.
           </p>

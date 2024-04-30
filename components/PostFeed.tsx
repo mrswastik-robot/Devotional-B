@@ -3,6 +3,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Post from "./Post";
 import { postData } from "@/lib/data";
+import { setCategoryQ, categoryQ } from "@/store/slice";
 
 import { Button } from "./ui/button";
 import Loader from "./ui/Loader";
@@ -93,6 +94,7 @@ const PostFeed = (props: Props) => {
   //replacing the local state with Redux state
   const posts = useSelector(selectPosts);
   const dispatch = useDispatch();
+  const categoryPosts = useSelector(categoryQ);
 
 
   const limitValue: number = 7;
@@ -107,12 +109,16 @@ const PostFeed = (props: Props) => {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>('all');
 
   const handleSelectChange = (newValue: string | undefined) => {
-    setPosts([]);
+    dispatch(setPosts([]));
     setLastDoc(null);
     setMorePosts(true);
     setSelectedCategory(newValue);
     console.log(selectedCategory);
   };
+
+  useEffect(()=>{
+    handleSelectChange(categoryPosts);
+  }, [categoryPosts])
 
   //for automating loadmore lazy load button ...
   const loadMoreButtonRef = useRef<HTMLDivElement>(null);
@@ -196,7 +202,7 @@ const PostFeed = (props: Props) => {
     if (lastDoc) {
       q = query(
         collectionRef,
-        where("category", "==", selectedCategory),
+        where("category", "array-contains", selectedCategory),
         orderBy("createdAt", "desc"),
         startAfter(lastDoc),
         limit(limitValue)
@@ -204,7 +210,7 @@ const PostFeed = (props: Props) => {
     } else {
       q = query(
         collectionRef,
-        where("category", "==", selectedCategory),
+        where("category", "array-contains", selectedCategory),
         orderBy("createdAt", "desc"),
         limit(limitValue)
       );

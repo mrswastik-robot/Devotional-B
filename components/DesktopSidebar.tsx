@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { setCategoryQ, categoryQ } from "@/store/slice";
+import Link from "next/link";
 
 // import { Playlist } from "../data/playlists"
 
@@ -107,12 +108,15 @@ export function Sidebar({ className, playlists }: SidebarProps) {
           <ScrollArea className="h-[300px] px-1">
             <div className="space-y-1 p-2">
               {
+                <Link href="/createForum">
                 <Button
                   className="w-full flex items-center justify-center gap-3"
                 >
                   <PlusCircleIcon/>
                   Create Forum
-                </Button>}
+                </Button>
+                </Link>
+                }
             </div>
           </ScrollArea>
         </div>

@@ -12,6 +12,10 @@ import ShareDialog from "./ShareDialog";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { RiUserFollowLine } from "react-icons/ri";
 
+import { useDispatch, useSelector } from "react-redux";
+import { userCache } from "@/store/slice";
+import { updateUserCache } from "@/store/slice";
+
 import Link from "next/link";
 import Image from "next/image";
 
@@ -42,6 +46,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+type UserData={
+  following: Array<string>;
+  followers: Array<string>;
+  name: string;
+  email: string;
+};
 
 type Props = {
   post: {
@@ -68,7 +78,8 @@ type Props = {
 
 const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   const pRef = useRef<HTMLDivElement>(null);
-
+  const dispatch = useDispatch();
+  const userCacheData = useSelector(userCache);
   //console.log("Answer Posr: ", post);
   const { toast } = useToast();
 
@@ -143,19 +154,35 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
   useEffect(() => {
     // Check if the current user is following the post's creator
-    if (user) {
-      const userRef = doc(db, "users", user.uid);
-      const unsubscribe = onSnapshot(userRef, (doc) => {
-        if (doc.exists()) {
-          const userData = doc.data();
-          setIsFollowing(userData.following.includes(post.uid)); // Update isFollowing based on the following list
-          setIsCurrentUser(user.uid === post.uid); // Check if the post's creator is the current user
+    if(post.uid && !userCacheData[post.uid]){
+      const fetchUserData = async () =>{
+        if (user) {
+          const userRef = doc(db, "users", user.uid);
+          const unsubscribe = onSnapshot(userRef, (doc) => {
+            if (doc.exists()) {
+              const userData = doc.data() as UserData;
+              setIsFollowing(userData.following.includes(post.uid)); // Update isFollowing based on the following list
+              setIsCurrentUser(user.uid === post.uid); // Check if the post's creator is the current user
+              dispatch(updateUserCache({uid:post.uid, userData}));
+            }
+          });
+    
+        return () => unsubscribe();
         }
-      });
-
-      return () => unsubscribe();
+        //const userData = {id: post.uid};
+      };
+      fetchUserData();
     }
-  }, [post.uid, user]);
+    else{
+        //console.log("FollowCache: ", userCacheData[post.uid]);
+        setIsFollowing(userCacheData[post.uid].following.includes(post.uid));
+        if(user){
+        setIsCurrentUser(user.uid === post.uid);
+        }
+    }
+
+
+  }, [post.uid, userCacheData, dispatch]);
 
   //fetching savedPosts from user's document
   useEffect(() => {

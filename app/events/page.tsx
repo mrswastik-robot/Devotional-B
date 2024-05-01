@@ -777,13 +777,15 @@ export default function MusicPage() {
 
   return (
     <>
-      <div className="w-full font-dmsans">
-        <div className="border-t w-full">
-          <div className="bg-background w-full">
-            <div className="grid lg:grid-cols-7 w-full">
-            <Sidebar playlists={playlists} selectChange={handleSelectChange} currentC={selectedCategory||"all"} className="hidden lg:block" />
-              <div className="col-span-3 lg:col-span-6 lg:border-l">
-                <div className="px-2 py-6">
+      <div className="lg:container lg:max-w-[86rem] lg:mx-auto font-dmsans mt-1">
+        <div className="flex">
+          <div className="max-w-[22.5rem] ">
+        <Sidebar playlists={playlists} selectChange={handleSelectChange} currentC={selectedCategory||"all"} className="hidden lg:block bg-[#ffffff] mr-4 rounded-md" />
+        </div>
+          <div className="bg-background rounded-md pl-[15px]">
+            <div className="">
+              <div className="">
+                <div className="px-2 py-6 md:w-[63rem] block">
                   <Tabs defaultValue="Webinar" className="h-full space-y-6">
                     <div className="space-between flex items-center">
                       <TabsList>
@@ -1173,7 +1175,7 @@ export default function MusicPage() {
                       <Separator className="my-4" />
 
                       <div className="flex flex-col">
-                          <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-[1rem] pb-4">
+                          <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-[1rem] pb-4">
                             {searchResult && searchResult.length > 0 ?(
                               searchResult.map((hit: any) => {
                                 const post = transformHitToPost(hit);
@@ -1229,7 +1231,7 @@ export default function MusicPage() {
                       <Separator className="my-4" />
 
                       <div className="flex flex-col">
-                          <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-[1rem] pb-4">
+                          <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-[1rem] pb-4">
                             {searchResult && searchResult.length > 0 ?(
                               searchResult.map((hit: any) => {
                                 const post = transformHitToPost(hit);

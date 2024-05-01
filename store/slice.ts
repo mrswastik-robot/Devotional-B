@@ -21,11 +21,20 @@ type PostType = {
     uid:string;
     // Add any other fields as necessary
   };
+
+type UserData={
+    following: Array<string>;
+    followers: Array<string>;
+    name: string;
+    email: string;
+};
+
 interface PostState {
     posts : PostType[];
     categoryQ: string;
     categoryE: string;
     change: boolean;
+    userCache: Record<string, UserData>; // UserData represents the structure of user data related to posts
 }
 
 const initialState: PostState = {
@@ -33,6 +42,7 @@ const initialState: PostState = {
     categoryQ: "all",
     categoryE: "all",
     change: true,
+    userCache: {},
 }
 
 //for storing cache using Redux
@@ -43,6 +53,9 @@ export const postsSlice = createSlice({
     reducers: {
         setPosts: (state , action: PayloadAction<PostType[]>) => {
             state.posts = action.payload;
+        },
+        updateUserCache: (state, action: PayloadAction<{ uid: string; userData: UserData }>) => {
+            state.userCache[action.payload.uid] = action.payload.userData;
         },
         addPosts: (state , action: PayloadAction<PostType[]>) => {
             state.posts = [...state.posts, ...action.payload];
@@ -116,9 +129,10 @@ export const { setSearchText , triggerSearch } = searchSlice.actions;
 export const searchReducer = searchSlice.reducer;
 
 //caching
-export const {setPosts , addPosts, setCategoryE, setChange, setCategoryQ} = postsSlice.actions;
+export const {setPosts , addPosts, setCategoryE, setChange, setCategoryQ, updateUserCache} = postsSlice.actions;
 export const categoryE = (state: RootState) => state.posts.categoryE;
 export const categoryQ = (state: RootState) => state.posts.categoryQ;
+export const userCache = (state: RootState) => state.posts.userCache;
 export const change = (state: RootState) =>state.posts.change;
 export const postsReducer = postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts.posts;

@@ -2,6 +2,8 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { setCategoryQ, categoryQ } from "@/store/slice";
+import { auth , storage } from "@/utils/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 import Link from "next/link";
 
 // import { Playlist } from "../data/playlists"
@@ -39,6 +41,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
 
   const sidebarCategory = ["Afterlife", "Astrology/Remedies/Occult", "Death", "Festivals", "GemStones/Rudraksha", "Help", "How to", "Meditation", "Miracles and Spirituality", "Mystery/Haunted/Ghost", "Mythology", "Religious Text", "Rituals", "Science and Religion", "Worship"]
   const categoryPosts = useSelector(categoryQ);
+  const [user, loading] = useAuthState(auth);
   const dispatch = useDispatch();
 
   const selectChange = (category: any)=>{
@@ -46,7 +49,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
   }
 
   return (
-    <div className={cn("pb-1 border border-gray-300 rounded-lg sticky lg:top-[4.2rem] max-h-[40rem] bg-[#ffffff]", className)}>
+    <div className={cn("pb-1 border border-gray-300 rounded-lg sticky lg:top-[4.2rem] max-h-[40.5rem] bg-[#ffffff]", className)}>
       <div className="space-y-4 py-4">
         <div className="px-1 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
@@ -107,16 +110,30 @@ export function Sidebar({ className, playlists }: SidebarProps) {
           </h2>
           <ScrollArea className="h-[300px] px-1">
             <div className="space-y-1 p-2">
+            <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-300  px-6 py-3 pt-0 text-sm leading-6'>
+            <div className='flex rounded-md justify-between md:min-h-[3rem] lg:min-h-[1rem] gap-x-4 py-3 md:justify-center'>
               {
-                <Link href="/createForum">
-                <Button
-                  className="w-full flex items-center justify-center gap-3"
-                >
-                  <PlusCircleIcon/>
-                  Create Forum
+                (user?.isAnonymous==true) ? (
+                  <p className=" text-zinc-500 font-dmsans">
+                    You are currently logged in as a Guest. To create forum you need to have an account.
+                  </p>
+                ) : (
+                <p className='text-zinc-500 font-semibold font-dmsans'>
+                  Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
+              </p>
+                )
+              }
+            </div>
+
+            <div>
+              <Link href={'/createForum'}>
+                <Button className=" w-full gap-2">
+                  <PlusCircleIcon></PlusCircleIcon>
+                  Create a Forum
                 </Button>
-                </Link>
-                }
+              </Link>
+            </div>
+          </dl>
             </div>
           </ScrollArea>
         </div>

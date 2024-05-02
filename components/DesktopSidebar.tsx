@@ -49,7 +49,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
   }
 
   return (
-    <div className={cn("pb-1 border border-gray-300 rounded-lg sticky lg:top-[4.2rem] max-h-[40.5rem] bg-[#ffffff]", className)}>
+    <div className={cn("pb-1 rounded-lg sticky lg:top-[69px] max-h-[40.5rem] dark:bg-[#262626] bg-[#ffffff]", className)}>
       <div className="space-y-4 py-4">
         <div className="px-1 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
@@ -111,7 +111,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
           <ScrollArea className="h-[300px] px-1">
             <div className="space-y-1 p-2">
             <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-300  px-6 py-3 pt-0 text-sm leading-6'>
-            <div className='flex rounded-md justify-between md:min-h-[3rem] lg:min-h-[1rem] gap-x-4 py-3 md:justify-center'>
+            <div className='flex rounded-md justify-between md:min-h-[3rem] lg:min-h-[1rem] gap-x-4 py-3 md:justify-center dark:border-0'>
               {
                 (user?.isAnonymous==true) ? (
                   <p className=" text-zinc-500 font-dmsans">

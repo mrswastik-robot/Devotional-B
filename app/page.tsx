@@ -576,7 +576,7 @@ export default function Home() {
       <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-9 gap-y-4 md:gap-x-4 pb-6 font-dmsans lg:ml-[4rem]'>
         
         {/* <TopFeedCard /> */}
-        <div className="hidden lg:block col-span-2 sticky lg:top-[4.2rem] max-w-[20rem]">
+        <div className="hidden lg:block col-span-2 sticky lg:top-[4.2rem] max-w-[20rem] lg:ml-[6px]">
           <Sidebar playlists={[]} />
         </div>
       
@@ -604,7 +604,7 @@ export default function Home() {
 
 
         {/* subreddit info */}
-        <div className='col-span-3 lg:col-span-3 lg:mr-[5rem] lg:sticky lg:top-[4.2rem] overflow-hidden h-fit rounded-lg  order-first lg:order-last space-y-3'>
+        <div className='col-span-3 lg:col-span-3 lg:mr-[73px] lg:sticky lg:top-[4.2rem] overflow-hidden h-fit rounded-lg  order-first lg:order-last space-y-3'>
           {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
             <p className='font-semibold py-3 flex items-center gap-1.5'>
               <HomeIcon className='h-4 w-4' />

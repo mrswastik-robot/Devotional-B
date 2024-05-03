@@ -5,6 +5,7 @@ export const ForumType = z.object({
     uniqueForumName: z.string().min(3,{message: 'Title must be at least 5 characters long'}),
     name: z.string(),
     description: z.string().optional(),
+    forumLogo: z.string().optional(),
     imageURL: z.string().optional(),
     bannerImageURL: z.string().optional(),
     rules: z.string().optional(),

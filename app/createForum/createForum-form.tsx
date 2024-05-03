@@ -124,6 +124,7 @@ const CreateForumPage = (props: Props) => {
     console.log(selectC);
   };
 
+  //for uploading banner image
   const uploadImage = async(file: any) => {
     if(file == null) return;
 
@@ -176,7 +177,7 @@ const CreateForumPage = (props: Props) => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         console.log('File available at', downloadURL);
         // Save the URL to state or wherever you want to keep it
-        setImageUrl(downloadURL);
+        setBannerImgUrl(downloadURL);
       });
     }
   );}catch(err){
@@ -185,7 +186,7 @@ const CreateForumPage = (props: Props) => {
 
   }
 
-  const uploadBannerImage = async(file: any) => {
+  const uploadForumLogo = async(file: any) => {
     if(file == null) return;
 
     if (file) {
@@ -225,8 +226,8 @@ const CreateForumPage = (props: Props) => {
     (snapshot:any) => {
       // You can use this to display upload progress
       const bannerProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
-      setBannerProgress(progress);
+      console.log('Upload is ' + bannerProgress + '% done');
+      setBannerProgress(bannerProgress);
     }, 
     (error: any) => {
       // Handle unsuccessful uploads
@@ -237,7 +238,7 @@ const CreateForumPage = (props: Props) => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         console.log('File available at', downloadURL);
         // Save the URL to state or wherever you want to keep it
-        setBannerImgUrl(downloadURL);
+        setImageUrl(downloadURL);
       });
     }
   );}catch(err){
@@ -328,134 +329,134 @@ const CreateForumPage = (props: Props) => {
   //console.log(selectedCategories);
   }
 
-  const signingInAnonymously = async () => {
+  // const signingInAnonymously = async () => {
 
-    // guests should not be able to post questions
-    // const isGuest = true;
+  //   // guests should not be able to post questions
+  //   // const isGuest = true;
 
-    // Generate a unique 4-digit number
-    const uniqueNumber = Math.floor(1000 + Math.random() * 9000);
+  //   // Generate a unique 4-digit number
+  //   const uniqueNumber = Math.floor(1000 + Math.random() * 9000);
 
-    await signInAnonymously(auth)
-      .then(async (userCredential) => {
-        const user = userCredential.user;
-        // console.log(user);
-        // Update user's profile
-        await updateProfile(user, {
-          // displayName: anonymousUserName, // Set displayName to anonymousUser
-          displayName: `Guest${uniqueNumber}`, // Set displayName to "Guest1234"
-          photoURL:
-            "https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png", // Set photoURL to a default image URL
-        });
-        router.push("/?isGuest=true");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  //   await signInAnonymously(auth)
+  //     .then(async (userCredential) => {
+  //       const user = userCredential.user;
+  //       // console.log(user);
+  //       // Update user's profile
+  //       await updateProfile(user, {
+  //         // displayName: anonymousUserName, // Set displayName to anonymousUser
+  //         displayName: `Guest${uniqueNumber}`, // Set displayName to "Guest1234"
+  //         photoURL:
+  //           "https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png", // Set photoURL to a default image URL
+  //       });
+  //       router.push("/?isGuest=true");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
-  useEffect(() => {
-    if(!user && !loading && !onFirstVisit)
-    {
-      setOnFirstVisit(true);
-      signingInAnonymously();
-    }
-    else if(!loading&&user){
-      setOnFirstVisit(true);
-    }
-  }, [user, loading , router])
+  // useEffect(() => {
+  //   if(!user && !loading && !onFirstVisit)
+  //   {
+  //     setOnFirstVisit(true);
+  //     signingInAnonymously();
+  //   }
+  //   else if(!loading&&user){
+  //     setOnFirstVisit(true);
+  //   }
+  // }, [user, loading , router])
 
-  const addDetails = async()=>{
-    if(user){
-      const userRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(userRef);
+  // const addDetails = async()=>{
+  //   if(user){
+  //     const userRef = doc(db, "users", user.uid);
+  //       const docSnap = await getDoc(userRef);
   
-        //console.log("UserDT: ", user, "N: ", user.displayName, "E: ", user.email, "P: ", user.photoURL);
-        if (!docSnap.exists()) {
-          // User document doesn't exist, create it with basic data
-          await setDoc(userRef, {
-            name: user.displayName || "", // Use user's display name or empty string
-            email: user.email || "", // Use user's email or empty string
-            profilePic: user.photoURL || "", // Use user's photo URL or empty string
-            //savedPosts: [], Initialize savedPost array
-          });
-        } else {
-          // User document exists, check if name, email, and profilePic fields are missing
-          const userData = docSnap.data();
-          if (!userData.name || !userData.email || !userData.profilePic || userData.email==="" || userData.profilePic==="" ) {
-            // Update user document with missing fields
-            await updateDoc(userRef, {
-              name: userData.name || user.displayName || "", // Use existing or new display name
-              email: userData.email || user.email || "", // Use existing or new email
-              profilePic: userData.profilePic || user.photoURL || "", // Use existing or new photo URL
-            });
-          }
-        }
-    }
-  }
+  //       //console.log("UserDT: ", user, "N: ", user.displayName, "E: ", user.email, "P: ", user.photoURL);
+  //       if (!docSnap.exists()) {
+  //         // User document doesn't exist, create it with basic data
+  //         await setDoc(userRef, {
+  //           name: user.displayName || "", // Use user's display name or empty string
+  //           email: user.email || "", // Use user's email or empty string
+  //           profilePic: user.photoURL || "", // Use user's photo URL or empty string
+  //           //savedPosts: [], Initialize savedPost array
+  //         });
+  //       } else {
+  //         // User document exists, check if name, email, and profilePic fields are missing
+  //         const userData = docSnap.data();
+  //         if (!userData.name || !userData.email || !userData.profilePic || userData.email==="" || userData.profilePic==="" ) {
+  //           // Update user document with missing fields
+  //           await updateDoc(userRef, {
+  //             name: userData.name || user.displayName || "", // Use existing or new display name
+  //             email: userData.email || user.email || "", // Use existing or new email
+  //             profilePic: userData.profilePic || user.photoURL || "", // Use existing or new photo URL
+  //           });
+  //         }
+  //       }
+  //   }
+  // }
 
-  const timeout = setTimeout(() => {
-    addDetails();
-    //console.log("hii");
-  }, 3000);
+  // const timeout = setTimeout(() => {
+  //   addDetails();
+  //   //console.log("hii");
+  // }, 3000);
 
   const [name, setName] = useState<string>(user?.displayName||"loading...");
 
-  useEffect(() => {
-    const fetchFollowersAndFollowing = async () => {
-      if (user?.uid) {
-        const userRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userRef);
+  // useEffect(() => {
+  //   const fetchFollowersAndFollowing = async () => {
+  //     if (user?.uid) {
+  //       const userRef = doc(db, "users", user.uid);
+  //       const userDoc = await getDoc(userRef);
 
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          const following = userData?.following?.length;
-          const followers = userData?.followers?.length;
-          const realName = userData?.name;
-          // Assuming followers and following fields exist in user data
-          setName(realName);
-          // setFollowersCount(followers || 0);
-          // setFollowingCount(following || 0);
-        }
-      }
-    };
+  //       if (userDoc.exists()) {
+  //         const userData = userDoc.data();
+  //         const following = userData?.following?.length;
+  //         const followers = userData?.followers?.length;
+  //         const realName = userData?.name;
+  //         // Assuming followers and following fields exist in user data
+  //         setName(realName);
+  //         // setFollowersCount(followers || 0);
+  //         // setFollowingCount(following || 0);
+  //       }
+  //     }
+  //   };
 
-    fetchFollowersAndFollowing();
-  }, [user?.uid]);
+  //   fetchFollowersAndFollowing();
+  // }, [user?.uid]);
 
 
 
-  useEffect(() => {
-    if (user) {
-      const createUserDocument = async () => {
-        const userRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(userRef);
+  // useEffect(() => {
+  //   if (user) {
+  //     const createUserDocument = async () => {
+  //       const userRef = doc(db, "users", user.uid);
+  //       const docSnap = await getDoc(userRef);
   
-        //console.log("UserD: ", user, "N: ", user.displayName, "E: ", user.email, "P: ", user.photoURL);
-        if (!docSnap.exists()) {
-          // User document doesn't exist, create it with basic data
-          await setDoc(userRef, {
-            name: user.displayName || "", // Use user's display name or empty string
-            email: user.email || "", // Use user's email or empty string
-            profilePic: user.photoURL || "", // Use user's photo URL or empty string
-            //savedPosts: [], Initialize savedPost array
-          });
-        } else {
-          // User document exists, check if name, email, and profilePic fields are missing
-          const userData = docSnap.data();
-          if (!userData.name || !userData.email || !userData.profilePic || userData.email==="" || userData.profilePic==="" ) {
-            // Update user document with missing fields
-            await updateDoc(userRef, {
-              name: userData.name || user.displayName || "", // Use existing or new display name
-              email: userData.email || user.email || "", // Use existing or new email
-              profilePic: userData.profilePic || user.photoURL || "", // Use existing or new photo URL
-            });
-          }
-        }
-      };
-      createUserDocument();
-    }
-  }, [user, loading, router]);
+  //       //console.log("UserD: ", user, "N: ", user.displayName, "E: ", user.email, "P: ", user.photoURL);
+  //       if (!docSnap.exists()) {
+  //         // User document doesn't exist, create it with basic data
+  //         await setDoc(userRef, {
+  //           name: user.displayName || "", // Use user's display name or empty string
+  //           email: user.email || "", // Use user's email or empty string
+  //           profilePic: user.photoURL || "", // Use user's photo URL or empty string
+  //           //savedPosts: [], Initialize savedPost array
+  //         });
+  //       } else {
+  //         // User document exists, check if name, email, and profilePic fields are missing
+  //         const userData = docSnap.data();
+  //         if (!userData.name || !userData.email || !userData.profilePic || userData.email==="" || userData.profilePic==="" ) {
+  //           // Update user document with missing fields
+  //           await updateDoc(userRef, {
+  //             name: userData.name || user.displayName || "", // Use existing or new display name
+  //             email: userData.email || user.email || "", // Use existing or new email
+  //             profilePic: userData.profilePic || user.photoURL || "", // Use existing or new photo URL
+  //           });
+  //         }
+  //       }
+  //     };
+  //     createUserDocument();
+  //   }
+  // }, [user, loading, router]);
 
 
     const form = useForm<Input>({
@@ -467,6 +468,7 @@ const CreateForumPage = (props: Props) => {
             name: "",
             description: "",
             imageURL: "",
+            forumLogo: "",
             bannerImageURL: "",
             rules: "",
         },
@@ -492,7 +494,7 @@ const CreateForumPage = (props: Props) => {
           // ansNumbers: 0,
         });
     
-        const quesId = docRef.id;
+        //const quesId = docRef.id;
     
         toast({
           title: "Forum Created",
@@ -618,6 +620,43 @@ const CreateForumPage = (props: Props) => {
                           )}
                           />
 
+                          <FormField
+                          control={form.control}
+                          name="forumLogo"
+                          render = {({field}) => (
+                            <FormItem>
+                              <FormLabel>Upload forum logo</FormLabel>
+                              <FormControl>
+                                <Input type="file" onChange={(e) => {
+                                  if(e.target.files){
+                                  uploadForumLogo(e.target.files[0])
+                                  }
+
+                                  }} className="" placeholder="Give a name to your Forum" />
+                              </FormControl>
+                              <div className="text-[12px] opacity-70">Upload a logo for your Forum here.</div>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                          
+                          />
+                          <div>
+                          <div>
+                            {
+                              bannerPreviewImg&&<div className="w-full flex items-center justify-center">
+                                <Image src={bannerPreviewImg} alt="previewImage" width={250} height={250}/>
+                              </div>
+                            }
+                          </div>
+                          <div>
+                          {
+                          (bannerProgress||0)>0&&
+                          <Progress value={bannerProgress} className=" w-full z-10"/>
+                          }
+                          </div>
+                          {(bannerProgress||0)>0&&<span className='pt-3'>{`${Math.ceil((bannerProgress||0))} % Uploaded`}</span>}
+                          </div>
+
                           {/* TipTap Editor */}
                           <FormField
                             control={form.control}
@@ -638,7 +677,7 @@ const CreateForumPage = (props: Props) => {
                                    /> 
                                 </FormControl>
                                 </div>
-                                <div className="text-[12px] opacity-70">This is the description, give more details about your question here.</div>
+                                <div className="text-[12px] opacity-70">Give a description and set banner of your forum from here.</div>
                                 <FormMessage/>
                               </FormItem>
                             )}
@@ -724,7 +763,7 @@ const CreateForumPage = (props: Props) => {
                               <FormControl>
                                 <Input className="" placeholder="Set Some Rules for your Forum" {...field}/>
                               </FormControl>
-                              <div className="text-[12px] opacity-70">Here you can set some Rules for the forum</div>
+                              <div className="text-[12px] opacity-70">Here you can write some Rules for the forum</div>
                               <FormMessage/>
                             </FormItem>
                           )}

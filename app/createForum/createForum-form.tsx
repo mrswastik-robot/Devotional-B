@@ -479,7 +479,7 @@ const CreateForumPage = (props: Props) => {
         //console.log("creating");
     
         const docRef = await addDoc(collection(db, "forums"), {
-          uniqueForumName: data.uniqueForumName,
+          uniqueForumName: data.uniqueForumName.split(" ").join("-"),
           name: data.name,
           description: data.description,
           uid: user?.uid,

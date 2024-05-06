@@ -147,7 +147,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                 />
               </div>
             </div>
-      <div className="h-18 bg-white rounded-b-md">
+      <div className="h-18 bg-white rounded-b-lg">
         <div className="mx-auto container px-12 py-2 flex relative flex-col">
           {/* <div className="w-16 absolute h-16 bottom-6 rounded-full bg-green-400 border-white border-2" /> */}
           <Avatar className="w-24 absolute h-24 bottom-6 rounded-full border-white border-[3px]">
@@ -169,7 +169,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
             <h4 className="ml-[6.5rem] text-2xl font-bold text-gray-700">
               {forumDetails.name}
             </h4>
-            <button className="ml-4 text-sm text-green-400 font-semibold border border-green-400 py-1 px-3 rounded-md focus:outline-none" onClick={joinInForum}>
+            <button className="ml-4 text-sm text-[#007dfd] font-semibold border border-[#007dfd] py-1 px-3 rounded-lg focus:outline-none" onClick={joinInForum}>
               {joined ? "JOINED" : "JOIN"}
             </button>
           </div>
@@ -189,8 +189,8 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
 
           {/* >Right Column (sidebar) */}
           <div className="w-1/3 ml-4 bg-white rounded-md mt-1">
-            <div className="bg-green-400 py-4 px-2 rounded-t-md">
-              <p className="text-sm text-gray-900 font-bold">About Community</p>
+            <div className="bg-[#007dfd] py-4 px-2 rounded-t-md">
+              <p className="text-base text-[#ffffff] font-bold text-center">About Community</p>
             </div>
             <div className="p-2">
               <p>{forumDetails.description?parse(forumDetails.description):""}</p>
@@ -210,7 +210,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                 <span>{dateString && <p className='ml-1 mt-[2.5px] font-semibold text-gray-900 text-sm'>{dateString}</p>}</span>
               </p>
               <Link href={`/forums/createForum`}>
-              <button className="focus:outline-none rounded-md w-full py-3 text-gray-900 font-semibold bg-green-400">
+              <button className="focus:outline-none rounded-md w-full py-3 text-[#ffffff] font-semibold bg-[#007dfd]">
                 CREATE POST
               </button>
               </Link>

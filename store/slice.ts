@@ -123,6 +123,19 @@ export const eventSlice = createSlice({
     },
 });
 
+//for forum posts
+export const forumPostSlice = createSlice({
+    name: "forumPost",
+    initialState: {
+        currentForum: null,
+    },
+    reducers: {
+        setForumURL: (state, action) => {
+        state.currentForum = action.payload;
+        }
+    },
+});
+
 
 //algolia search
 export const { setSearchText , triggerSearch } = searchSlice.actions;
@@ -133,6 +146,7 @@ export const {setPosts , addPosts, setCategoryE, setChange, setCategoryQ, update
 export const categoryE = (state: RootState) => state.posts.categoryE;
 export const categoryQ = (state: RootState) => state.posts.categoryQ;
 export const userCache = (state: RootState) => state.posts.userCache;
+export const forumPostURL = (state: RootState) => state.forumURL.currentForum;
 export const change = (state: RootState) =>state.posts.change;
 export const postsReducer = postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts.posts;
@@ -144,3 +158,6 @@ export const eventSearchReducer = eventSearchSlice.reducer;
 // for event additional information
 export const { setEventId } = eventSlice.actions;
 export const eventReducer = eventSlice.reducer;
+export const forumPostReducer = forumPostSlice.reducer;
+
+export const {setForumURL} = forumPostSlice.actions;

@@ -41,6 +41,10 @@ const PostVoteClientPhone = ({
       docPath = `answers/${postId}`;
     }
 
+    if(postType==="forumPosts"){
+      docPath = `forumPosts/${postId}`;
+    }
+
     // Fetch user's vote on mount
     const fetchUserVote = async () => {
       const docRef = doc(db, `${docPath}/votes/${userId}`);
@@ -84,6 +88,10 @@ const PostVoteClientPhone = ({
         return;
       }
       docPath = `answers/${postId}`;
+    }
+
+    if(postType==="forumPosts"){
+      docPath = `forumPosts/${postId}`;
     }
   
     const voteValue = type === "UP" ? 1 : -1;

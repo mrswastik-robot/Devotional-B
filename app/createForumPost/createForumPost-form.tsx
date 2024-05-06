@@ -56,6 +56,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
+import { UseSelector, useSelector } from "react-redux";
+import { forumPostURL } from "@/store/slice";
 
 import {useForm} from "react-hook-form";
 import { Controller } from "react-hook-form";
@@ -63,13 +65,13 @@ import { Controller } from "react-hook-form";
 import { Tiptap } from "@/components/TipTapAns";
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-import { ForumType } from "@/schemas/forum";
+import { QuestionType } from "@/schemas/question";
 
 import { auth , db , storage } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter , useSearchParams } from "next/navigation";
 
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { ref , uploadBytes, uploadBytesResumable , getDownloadURL} from "firebase/storage";
 import { DialogClose } from "@radix-ui/react-dialog";
 
@@ -78,11 +80,11 @@ import algoliasearch from "algoliasearch/lite";
 import { InstantSearch , SearchBox , Hits, Highlight } from "react-instantsearch";
 import Post from "@/components/Post";
 
-type Input = z.infer<typeof ForumType>;
+type Input = z.infer<typeof QuestionType>;
 
 type Props = {}
 
-const CreateForumPage = (props: Props) => {
+const CreateForumPostPage = (props: Props) => {
 
     const router = useRouter();
   const searchParams = useSearchParams();
@@ -97,11 +99,8 @@ const CreateForumPage = (props: Props) => {
   //system image upload stuff
   const [imageUpload , setImageUpload] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [bannerImgUrl, setBannerImgUrl] = useState<string|null>(null);
   const [progress , setProgress] = useState<number | null>(0);
-  const [bannerProgress, setBannerProgress] = useState<number|null>(0);
   const [previewImg, setPreviewImg] = useState<any>(null);
-  const [bannerPreviewImg, setBannerPreviewImg] = useState<any>(null);
   const [selectC, setSelectC] = useState<any>([]);
   const [selectedCategories, setSelectedCategories] = useState<SelectedCategoriesType>({});
   const [selectedMainCategory, setSelectedMainCategory] = useState('');
@@ -124,7 +123,8 @@ const CreateForumPage = (props: Props) => {
     console.log(selectC);
   };
 
-  //for uploading banner image
+  
+
   const uploadImage = async(file: any) => {
     if(file == null) return;
 
@@ -144,7 +144,7 @@ const CreateForumPage = (props: Props) => {
       setPreviewImg(null);
     }
 
-    const storageRef = ref(storage, `forums/${file.name}`);
+    const storageRef = ref(storage, `forumsPost/${file.name}`);
 
     try {
       // Set compression options
@@ -167,67 +167,6 @@ const CreateForumPage = (props: Props) => {
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       console.log('Upload is ' + progress + '% done');
       setProgress(progress);
-    }, 
-    (error: any) => {
-      // Handle unsuccessful uploads
-      console.log('Upload failed', error);
-    }, 
-    () => {
-      // Upload completed successfully, now we can get the download URL
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        console.log('File available at', downloadURL);
-        // Save the URL to state or wherever you want to keep it
-        setBannerImgUrl(downloadURL);
-      });
-    }
-  );}catch(err){
-    console.error('Error compressing or uploading image:', err);
-  }
-
-  }
-
-  const uploadForumLogo = async(file: any) => {
-    if(file == null) return;
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target) {
-          const imageUrl = event.target.result;
-          setBannerPreviewImg(imageUrl);
-        } else {
-          console.error('Error reading file:', file);
-          setBannerPreviewImg(null);
-        }
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setBannerPreviewImg(null);
-    }
-
-    const storageRef = ref(storage, `forums/${file.name}`);
-
-    try {
-      // Set compression options
-    const options = {
-      maxSizeMB: 1, // Max size in megabytes
-      maxWidthOrHeight: 800, // Max width or height
-      useWebWorker: true, // Use web worker for better performance (optional)
-    };
-  
-      // Compress the image
-      
-      const compressedFile = await imageCompression(file, options);
-
-    //uploading compressed file
-    const uploadTask = uploadBytesResumable(storageRef, compressedFile);
-
-    uploadTask.on('state_changed', 
-    (snapshot:any) => {
-      // You can use this to display upload progress
-      const bannerProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + bannerProgress + '% done');
-      setBannerProgress(bannerProgress);
     }, 
     (error: any) => {
       // Handle unsuccessful uploads
@@ -328,6 +267,8 @@ const CreateForumPage = (props: Props) => {
   ))
   //console.log(selectedCategories);
   }
+
+  const ForumPostURL = useSelector(forumPostURL);
 
   // const signingInAnonymously = async () => {
 
@@ -462,68 +403,106 @@ const CreateForumPage = (props: Props) => {
     const form = useForm<Input>({
         // mode: "onSubmit",
         // mode: "onChange",
-        resolver: zodResolver(ForumType),
+        resolver: zodResolver(QuestionType),
         defaultValues: {
-            uniqueForumName: "",
-            name: "",
-            description: "",
-            imageURL: "",
-            forumLogo: "",
-            bannerImageURL: "",
-            rules: "",
+          title: "",
+          description: "",
+          questionImageURL: "",
+          anonymity: false,
         },
       });
     
-      async function createForum(data: Input) {
+      async function createForumPost(data: Input) {
         
         //console.log("creating");
     
-        const docRef = await addDoc(collection(db, "forums"), {
-          uniqueForumName: data.uniqueForumName.split(" ").join("-"),
-          name: data.name,
+        const docRef = await addDoc(collection(db, "forumPosts"), {
+          title: data.title,
           description: data.description,
           uid: user?.uid,
           profilePic: user?.photoURL,
-          userName: name||user?.displayName,
+          name: name||user?.displayName,
           createdAt: serverTimestamp(),
-          imageURL: imageUrl,
-          bannerImageURL: bannerImgUrl,
-          category: selectC,
-          rules: data.rules,
-          noOfMembers: 1,
-
+          questionImageURL: imageUrl,
+          forumName: ForumPostURL,
+          anonymity: data.anonymity,
           // ansNumbers: 0,
         });
     
-        //const quesId = docRef.id;
+        const quesId = docRef.id;
+
+        const forumName = ForumPostURL;
+
+  // Create a query to find the forum with the uniqueForumName
+  const forumQuery = query(collection(db, "forums"), where("uniqueForumName", "==", forumName));
+
+  try {
+    const forumSnapshot = await getDocs(forumQuery);
+
+    if (forumSnapshot.empty) {
+      console.error("Forum not found.");
+      return;
+    }
+
+    const forumDoc = forumSnapshot.docs[0];
+    const forumRef = doc(db, "forums", forumDoc.id);
+
+    const docSnap = await getDoc(forumRef);
+
+    if (docSnap.exists()) {
+      const forumData = docSnap.data();
+      const numOfPosts = forumData.numOfPosts || 0;
+
+      // Update numOfPosts
+      if (numOfPosts === 0) {
+        // If numOfPosts is 0 or not present, set it to 1
+        await setDoc(forumRef, { numOfPosts: 1 }, { merge: true });
+      } else {
+        // Increment numOfPosts by 1
+        await updateDoc(forumRef, { numOfPosts: numOfPosts + 1 });
+      }
+
+      console.log("NumOfPosts updated successfully.");
+      // toast({
+      //   title: "Forum Updated",
+      //   description: "NumOfPosts updated successfully.",
+      // });
+
+      // router.push("/forums");
+    } else {
+      console.error("Forum document not found.");
+    }
+  } catch (error) {
+    console.error("Error updating document: ", error);
+  }
     
         toast({
-          title: "Forum Created",
-          description: "Your forum has been created successfully.",
+          title: "Posted Sucessfully",
+          description: "Your post has been posted successfully.",
         });
 
-        router.push(`/`);
+        router.push(`/forums/${ForumPostURL}`);
     
-        try {
-          for (const [mainCategory, subcategories] of Object.entries(selectedCategories)) {
-            // Update Firestore for main category
-            await updateDoc(doc(db, 'meta-data', 'v1', 'forum-categories', mainCategory), {
-              Posts: arrayUnion(docRef.id),
-            });
+        // try {
+        //   for (const [mainCategory, subcategories] of Object.entries(selectedCategories)) {
+        //     // Update Firestore for main category
+        //     await updateDoc(doc(db, 'meta-data', 'v1', 'post-categories', mainCategory), {
+        //       Posts: arrayUnion(docRef.id),
+        //     });
       
-            // Update Firestore for each subcategory
-            for (const subcategory of subcategories) {
-              await updateDoc(doc(db, 'meta-data', 'v1', 'forum-categories', mainCategory), {
-                [subcategory]: arrayUnion(docRef.id),
-              });
-            }
-          }
+        //     // Update Firestore for each subcategory
+        //     for (const subcategory of subcategories) {
+        //       await updateDoc(doc(db, 'meta-data', 'v1', 'post-categories', mainCategory), {
+        //         [subcategory]: arrayUnion(docRef.id),
+        //       });
+        //     }
+        //   }
       
-          // Clear selected categories after submission
-          setSelectedCategories({});
-        } catch (error) {
-          console.error('Error updating Firestore:', error);
-        }
+        //   // Clear selected categories after submission
+        //   setSelectedCategories({});
+        // } catch (error) {
+        //   console.error('Error updating Firestore:', error);
+        // }
     
         // try {
         //   console.log("keyword Gen.....")
@@ -562,14 +541,14 @@ const CreateForumPage = (props: Props) => {
         //   console.error('Error adding document: ', error);
         // }
     
-        console.log("Document written with ID: ", docRef.id);
+        //console.log("Document written with ID: ", docRef.id);
         //console.log(data);
       }
     
       function onSubmit(data: Input) {
         // console.log(data);
     
-        createForum(data);
+        createForumPost(data);
         //setNewPost((prev)=>!prev);
         
       }
@@ -580,6 +559,8 @@ const CreateForumPage = (props: Props) => {
         router.push("/auth");
         }
       }
+
+      console.log("FORUMP: ", ForumPostURL);
     
   return (
     <div>
@@ -593,70 +574,18 @@ const CreateForumPage = (props: Props) => {
                           {/* Title */}
                           <FormField
                           control={form.control}
-                          name="uniqueForumName"
+                          name="title"
                           render = {({field}) => (
                             <FormItem>
-                              <FormLabel>Forum Name</FormLabel>
+                              <FormLabel>Title</FormLabel>
                               <FormControl>
-                                <Input className="" placeholder="Give a Unique Forum Name..." {...field}/>
+                                <Input className="" placeholder="Title for the question ..." {...field}/>
                               </FormControl>
-                              <div className="text-[12px] opacity-70">This is for forum url, Give a Unique Forum Name here</div>
+                              <div className="text-[12px] opacity-70">This is the title, write your Post here.</div>
                               <FormMessage/>
                             </FormItem>
                           )}
                           />
-                           
-                          <FormField
-                          control={form.control}
-                          name="name"
-                          render = {({field}) => (
-                            <FormItem>
-                              <FormLabel>Display Name</FormLabel>
-                              <FormControl>
-                                <Input className="" placeholder="Give a name to your Forum" {...field}/>
-                              </FormControl>
-                              <div className="text-[12px] opacity-70">This name will be visible to the users, Give a Forum Name here</div>
-                              <FormMessage/>
-                            </FormItem>
-                          )}
-                          />
-
-                          <FormField
-                          control={form.control}
-                          name="forumLogo"
-                          render = {({field}) => (
-                            <FormItem>
-                              <FormLabel>Upload forum logo</FormLabel>
-                              <FormControl>
-                                <Input type="file" onChange={(e) => {
-                                  if(e.target.files){
-                                  uploadForumLogo(e.target.files[0])
-                                  }
-
-                                  }} className="" placeholder="Give a name to your Forum" />
-                              </FormControl>
-                              <div className="text-[12px] opacity-70">Upload a logo for your Forum here.</div>
-                              <FormMessage/>
-                            </FormItem>
-                          )}
-                          
-                          />
-                          <div>
-                          <div>
-                            {
-                              bannerPreviewImg&&<div className="w-full flex items-center justify-center">
-                                <Image src={bannerPreviewImg} alt="previewImage" width={250} height={250}/>
-                              </div>
-                            }
-                          </div>
-                          <div>
-                          {
-                          (bannerProgress||0)>0&&
-                          <Progress value={bannerProgress} className=" w-full z-10"/>
-                          }
-                          </div>
-                          {(bannerProgress||0)>0&&<span className='pt-3'>{`${Math.ceil((bannerProgress||0))} % Uploaded`}</span>}
-                          </div>
 
                           {/* TipTap Editor */}
                           <FormField
@@ -678,7 +607,7 @@ const CreateForumPage = (props: Props) => {
                                    /> 
                                 </FormControl>
                                 </div>
-                                <div className="text-[12px] opacity-70">Give a description and set banner of your forum from here.</div>
+                                <div className="text-[12px] opacity-70">This is the description, give more details about your Post here.</div>
                                 <FormMessage/>
                               </FormItem>
                             )}
@@ -696,7 +625,7 @@ const CreateForumPage = (props: Props) => {
                             }
                           </div>
                           <div>
-                            <div className="text-sm font-medium mb-2">Category</div>
+                            {/* <div className="text-sm font-medium mb-2">Category</div>
                           <Select value={""} onValueChange={handleMainCategoryChange} >
       <SelectTrigger className="w-full">
       <SelectValue placeholder="Select a Category" />
@@ -718,56 +647,50 @@ const CreateForumPage = (props: Props) => {
           <SelectItem value="Others">Others</SelectItem>
         </SelectGroup>
       </SelectContent>
-    </Select>
-    <div className="flex">
+    </Select> */}
+    {/* <div className="flex">
                               {
                                 selectC.map((category:string, index:number)=>{
                                   return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{category.split("|").join("/")} <span onClick={()=>{delCategories(category)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
                                 })
                               }
-                            </div>
-                            <div className="mt-3">
-                            {selectedMainCategory && (
-                              <Select value={""} onValueChange={handleSubcategoryChange}>
-                                <SelectTrigger>
-                                <SelectValue placeholder={`Select subCategory for ${selectedMainCategory.split("|").join("/")}`} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectGroup>
-                                  <SelectLabel>Sub Categories</SelectLabel>
-                                    {
-                                      subCategoryy.map((subcategory:any, index:any)=>(
-                                        <SelectItem key={index} value={subcategory}>{subcategory}</SelectItem>
-                                      ))
-                                    }
-                                    {/* Add more subcategories for other main categories */}
-                                  </SelectGroup>
-                                </SelectContent>
-                              </Select>
-                            )}
-                            <div className="flex">
+                            </div> */}
+                            {/* <div className="mt-3"> */}
+                            
+                            {/* <div className="flex">
                               {
                                 tempSubCategory.map((subcategory:string, index:number)=>{
                                   return <span className='bg-slate-300 text-slate-800 rounded-xl p-1 text-sm flex mr-1 mt-3' key={index}>{subcategory} <span onClick={()=>{delSubCategories(subcategory)}} className="mt-[0.27rem] ml-1 cursor-pointer text-slate-800 hover:text-slate-900"><LuXCircle /></span></span>
                                 })
                               }
-                            </div>
-                            </div>
-                            <div className="text-[12px] opacity-70 mt-[0.45rem]">This is the category, you can choose multiple categories for your Question.</div>
+                            </div> */}
+                            {/* </div> */}
+                            {/* <div className="text-[12px] opacity-70 mt-[0.45rem]">This is the category, you can choose multiple categories for your Question.</div> */}
                           </div>
                           <FormField
-                          control={form.control}
-                          name="rules"
-                          render = {({field}) => (
-                            <FormItem>
-                              <FormLabel>Set Rules for Forum</FormLabel>
-                              <FormControl>
-                                <Input className="" placeholder="Set Some Rules for your Forum" {...field}/>
-                              </FormControl>
-                              <div className="text-[12px] opacity-70">Here you can write some Rules for the forum</div>
-                              <FormMessage/>
-                            </FormItem>
-                          )}
+                            control={form.control}
+                            name="anonymity"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2">
+                                <div className="space-y-0.5">
+                                  <FormLabel className="text-sm font-medium">
+                                    Post Anonymously
+                                    <div className="text-[12px] font-normal opacity-70">Hide your details while posting question</div>
+                                  </FormLabel>
+                                  {/* <FormDescription>
+                                    Post question without revealing your identity.
+                                  </FormDescription> */}
+                                </div>
+                                <div className="mb-5">
+                                <FormControl>
+                                  <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                  />
+                                </FormControl>
+                                </div>
+                              </FormItem>
+                            )}
                           />
 
                               <Button type="submit" 
@@ -787,4 +710,4 @@ const CreateForumPage = (props: Props) => {
   )
 }
 
-export default CreateForumPage
+export default CreateForumPostPage;

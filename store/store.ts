@@ -6,12 +6,14 @@ import {postsReducer} from './slice'
 import { eventSearchReducer } from './slice';
 
 import { eventReducer } from './slice';
+import { forumPostReducer } from './slice';
 
 const rootReducer = combineReducers({
     search: searchReducer,
     posts: postsReducer,
     eventSearch: eventSearchReducer,
     eventID: eventReducer,
+    forumURL: forumPostReducer,
 });
 
 export const store = () => {

@@ -14,7 +14,7 @@ import { db } from "@/utils/firebase";
 
 type Props = {
   postId: string;
-  postType: "questions" | "answers";
+  postType: "questions" | "answers" | "forumPosts";
   userId: string;
   questionId?: string;
 };

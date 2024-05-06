@@ -4,10 +4,11 @@ import { db } from '@/utils/firebase';
 import { collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import parse from "html-react-parser"
+//import parse from "html-react-parser"
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react';
 import { SubRedditPost } from './components/subredditPost';
+import parse from "html-react-parser";
 import { Avatar } from '@/components/ui/avatar';
 import { AvatarFallback } from '@radix-ui/react-avatar';
 import { useDispatch } from 'react-redux';
@@ -209,7 +210,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                 <b>Created On : {` `}</b>{" "}
                 <span>{dateString && <p className='ml-1 mt-[2.5px] font-semibold text-gray-900 text-sm'>{dateString}</p>}</span>
               </p>
-              <Link href={`/forums/createForum`}>
+              <Link href={`/createForumPost`}>
               <button className="focus:outline-none rounded-md w-full py-3 text-[#ffffff] font-semibold bg-[#007dfd]">
                 CREATE POST
               </button>

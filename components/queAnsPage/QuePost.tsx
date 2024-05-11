@@ -185,7 +185,7 @@ const handleFollow = async () => {
 
   return (
 
-    <div className="rounded-md bg-white dark:bg-[#262626] shadow break-words overflow-hidden mt-1 font-dmsans">
+    <div className="rounded-2xl bg-white dark:bg-[#262626] shadow break-words overflow-hidden mt-1 font-dmsans">
       <div className="px-6 md:py-6 py-4 flex justify-between">
 
         {/* <PostVoteClient
@@ -291,7 +291,7 @@ const handleFollow = async () => {
       </div>
 
       
-      <div className="bg-gray-50 dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150  flex justify-between gap-x-3 text-sm px-4 py-2 sm:px-6">
+      <div className=" dark:bg-[#1A1A1B]/65 rounded-b-2xl z-20 flex justify-between gap-x-3 text-sm px-4 py-4 sm:px-6">
 
         <PostVoteClientPhone postId={post.id} postType="questions" userId={user?.uid!}/>
 

@@ -569,19 +569,19 @@ export default function Home() {
   {
 
   return (
-    <div className="lg:container lg:max-w-[100rem] lg:mx-auto ">
+    <div className="lg:container lg:max-w-[100rem] lg:mx-auto">
     <Suspense>
     <>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
-      <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-9 gap-y-4 md:gap-x-4 pb-6 font-dmsans lg:ml-[4rem]'>
+      <div className='flex gap-y-4 md:gap-x-4 lg:gap-x-6 pb-6 font-dmsans mt-4 ml-[5.5rem]'>
         
         {/* <TopFeedCard /> */}
-        <div className="hidden lg:block col-span-2 sticky lg:top-[4.2rem] max-w-[20rem] lg:ml-[6px]">
+        <div className="hidden lg:block col-span-2 sticky lg:top-[4.2rem] lg:w-[20rem]">
           <Sidebar playlists={[]} />
         </div>
       
         
-      <div className=" col-span-4 ">
+      <div className="lg:w-[37rem]">
         {/* {
           searchClient && (
             <InstantSearch searchClient={searchClient} indexName="search_questions" >
@@ -604,39 +604,16 @@ export default function Home() {
 
 
         {/* subreddit info */}
-        <div className='col-span-3 lg:col-span-3 lg:mr-[73px] lg:sticky lg:top-[4.2rem] overflow-hidden h-fit rounded-lg  order-first lg:order-last space-y-3'>
+        <div className='col-span-3 lg:col-span-3 lg:w-[321px] lg:sticky overflow-hidden h-fit rounded-2xl order-first lg:order-last space-y-3'>
           {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
             <p className='font-semibold py-3 flex items-center gap-1.5'>
               <HomeIcon className='h-4 w-4' />
               Home
             </p>
           </div> */}
-          <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-100  px-6 py-3 text-sm leading-6'>
-            <div className='flex rounded-md justify-between md:min-h-[3rem] lg:min-h-[5rem] gap-x-4 py-3 md:justify-center'>
-              {
-                (isGuest === 'true' || user?.isAnonymous==true) ? (
-                  <p className=" text-zinc-500 font-dmsans">
-                    You are currently logged in as a Guest. To post question you need to have an account.
-                  </p>
-                ) : (
-                <p className='text-zinc-500 font-semibold font-dmsans'>
-                  Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
-              </p>
-                )
-              }
-            </div>
-
-            <div>
-              <Link href={'/createQue'}>
-                <Button className=" w-full">
-                  Ask a Question
-                </Button>
-              </Link>
-            </div>
-          </dl>
 
           {/* <RightHandFeed />           */}
-          <div className='hidden lg:block col-span-4 lg:col-span-2 overflow-hidden h-fit rounded-lg border border-gray-100 order-last'>
+          <div className='hidden lg:block col-span-4 lg:col-span-2 overflow-hidden rounded-2xl h-fit border border-gray-100 order-last'>
             <RightHandFeed />
           </div>
 

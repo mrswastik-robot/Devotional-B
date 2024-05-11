@@ -533,7 +533,7 @@ const clearNotifications = async () => {
       </div>
 
 
-      <div className=" sm:block hidden container max-w-7xl h-full mx-auto md:flex items-center justify-between ">
+      <div className=" sm:block hidden container max-w-7xl h-[3rem] mx-auto md:flex items-center justify-between ">
         {/* logo */}
         <div className=" flex gap-[1rem]">
           <Link href="/" className="flex gap-2 items-center">
@@ -543,13 +543,13 @@ const clearNotifications = async () => {
           </Link>
 
           {/* search bar */}
-        { !hideQueSearch && <div className=" relative ml-[18.1px]">
+        { !hideQueSearch && <div className=" relative ml-[18.1px] ">
           {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
           <input type="text" 
             value={searchText}
             onChange={handleSearchText} 
             placeholder="Search" 
-            className="lg:w-[38rem] w-[22rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
+            className="lg:w-[38rem] w-[22rem] text-sm border border-gray-300 rounded-2xl p-2 pl-8" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerSearch());

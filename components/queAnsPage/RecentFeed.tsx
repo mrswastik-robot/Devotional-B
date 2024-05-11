@@ -69,13 +69,13 @@ const RecentFeed = (props: Props) => {
   }, [])
   
   return (
-    <div className=' bg-[#FFFFFF] dark:bg-[#262626] order-last font-dmsans'>
+    <div className=' bg-[#FFFFFF] dark:bg-[#262626] order-last font-dmsans px-2 pt-0 pb-2'>
 
 
 <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-left font-[590] text-base text-black dark:text-white">Recent Posts</TableHead>
+          <TableHead className="text-left font-bold text-lg text-black dark:text-white">Recent Posts</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

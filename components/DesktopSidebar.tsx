@@ -32,6 +32,7 @@ import { setCategoryE, categoryE, change, setChange } from "@/store/slice";
 import { useSelector, useDispatch } from "react-redux"
 import { store } from "@/store/store"
 import { PlusCircleIcon } from "lucide-react";
+import { Separator } from "./ui/separator";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   playlists: Playlist[],
@@ -48,11 +49,40 @@ export function Sidebar({ className, playlists }: SidebarProps) {
       dispatch(setCategoryQ(category));
   }
 
+  const [forums, setForums] = useState<any>([]);
+
+    useEffect(() => {
+        const fetchForums = async () => {
+          try {
+            const forumsCollection = collection(db, "forums");
+            const forumsSnapshot = await getDocs(forumsCollection);
+    
+            const forumsData:any = [];
+            forumsSnapshot.forEach((doc) => {
+              // Assuming each forum document has fields like title, description, etc.
+              const forumDetails = {
+                uniqueForumName: doc.data().uniqueForumName,
+                title: doc.data().name,
+                description: doc.data().description,
+                // Add other fields as needed
+              };
+              forumsData.push(forumDetails);
+            });
+    
+            setForums(forumsData);
+          } catch (error) {
+            console.error("Error fetching forums:", error);
+          }
+        };
+    
+        fetchForums();
+      }, []);
+
   return (
-    <div className={cn("pb-1 rounded-lg sticky lg:top-[69px] max-h-[40.5rem] dark:bg-[#262626] bg-[#ffffff]", className)}>
+    <div className={cn("pb-1 rounded-2xl sticky lg:top-[69px] max-h-[39rem] dark:bg-[#262626] bg-[#ffffff]", className)}>
       <div className="space-y-4 py-4">
-        <div className="px-1 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+        <div className="px-4 py-2">
+          <h2 className="mb-2 px-4 text-lg font-bold tracking-tight">
             Categories
           </h2>
           <ScrollArea className="h-[350px] px-1">
@@ -104,40 +134,34 @@ export function Sidebar({ className, playlists }: SidebarProps) {
           </div>
           </ScrollArea>
         </div>
-        <div className="py-2">
-          <h2 className="relative px-7 text-lg font-semibold tracking-tight">
-            Forums
+        </div>
+        <Separator/>
+        <div className="py-2 mt-2 bt-1 border-black">
+          <h2 className="relative px-7 text-lg font-bold tracking-tight flex items-center justify-between">
+            <span>Forums</span>
+            <Link href="/createForum">
+            <span><PlusCircleIcon/></span>
+            </Link>
           </h2>
-          <ScrollArea className="h-[300px] px-1">
+          <ScrollArea className="h-[150px] px-1">
             <div className="space-y-1 p-2">
-            <dl className='rounded-md divide-y divide-gray-100 border bg-[#FFFFFF] dark:bg-[#262626] border-gray-300  px-6 py-3 pt-0 text-sm leading-6'>
-            <div className='flex rounded-md justify-between md:min-h-[3rem] lg:min-h-[1rem] gap-x-4 py-3 md:justify-center dark:border-0'>
-              {
-                (user?.isAnonymous==true) ? (
-                  <p className=" text-zinc-500 font-dmsans">
-                    You are currently logged in as a Guest. To create forum you need to have an account.
-                  </p>
-                ) : (
-                <p className='text-zinc-500 font-semibold font-dmsans'>
-                  Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
-              </p>
-                )
+            {
+                forums?
+                forums.map((forum:any, index:any)=>(
+                  <div key={index}>
+                    <div className="w-full justify-start px-4 py-2 text-base">
+                    <Link href={`/forums/${forum.uniqueForumName}`}>
+                      {forum.title}
+                    </Link>  
+                    </div>
+                    <Separator/>
+                  </div>
+                )):
+                <div><Loader/></div>
               }
-            </div>
-
-            <div>
-              <Link href={'/createForum'}>
-                <Button className=" w-full gap-2">
-                  <PlusCircleIcon></PlusCircleIcon>
-                  Create a Forum
-                </Button>
-              </Link>
-            </div>
-          </dl>
             </div>
           </ScrollArea>
         </div>
       </div>
-    </div>
   )
 }

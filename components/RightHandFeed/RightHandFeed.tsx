@@ -2,6 +2,7 @@ import { RecentPosts } from '@/lib/data'
 import React, {useEffect, useState} from 'react'
 import { db } from '@/utils/firebase'
 import { collection, getDocs, limit, onSnapshot, orderBy, query } from 'firebase/firestore'
+import parse from "html-react-parser"
 
 import RightHandFeedCard from './RightHandFeedCard'
 import { Separator } from '../ui/separator'
@@ -24,6 +25,7 @@ type PostType = {
   name: string;
   title: string;
   profilePic: string;
+  description: string;
   voteAmt: number;
   comments: number;
   createdAt: string;
@@ -38,7 +40,7 @@ const RightHandFeed = (props: Props) => {
   useEffect(() => {
 
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(7));
+    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(5));
 
     const unsub = onSnapshot(q, async(snapshot) => {
       const postsData =[];
@@ -69,19 +71,20 @@ const RightHandFeed = (props: Props) => {
 
   return (
 
-    <div className=' rounded-md max-h-[30rem] overflow-auto bg-[#FFFFFF] dark:bg-[#262626]'>
+    <div className=' rounded-md max-h-[40rem] p-2 overflow-auto bg-[#FFFFFF] dark:bg-[#262626]'>
 
 <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="font-dmsans text-left font-[590] text-base text-black dark:text-white">Recent Posts</TableHead>
+          <TableHead className="font-dmsans text-left font-bold text-lg text-black dark:text-white">Recent Posts</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {posts.map((post, index) => (
           <TableRow key={index}>
-            <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-            <TableCell className="text-[#195FAA] text-base font-dmsans">{post.title.length>70?post.title.substring(0, 69)+"...":post.title}</TableCell>
+            <Link className='flex flex-col' href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
+            <TableCell className="text-black text-base font-semibold font-dmsans">{post.title.length>70?post.title.substring(0, 69)+"...":post.title}</TableCell>
+            <TableCell className="text-sm text-gray-800 font-dmsans">{post.description.length>1000?parse(post.description.substring(0, 99))+"...":parse(post.description)}</TableCell>
             </Link>
           </TableRow>
         ))}

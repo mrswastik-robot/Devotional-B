@@ -271,7 +271,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
     <>
     {
       post.uid?
-    <div className="rounded-md bg-white dark:bg-[#262626] shadow my-1">
+    <div className=" bg-white dark:bg-[#262626] shadow mb-2 rounded-2xl">
       <div className="px-6 py-4 flex justify-between">
         {/* <PostVoteClient
         //   postId={post.id}
@@ -386,7 +386,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
         </div>
       </div>
 
-      <div className="bg-gray-50 rounded-b-md dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150 flex justify-between  gap-x-3 text-sm px-4 py-2  sm:px-6">
+      <div className="rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 flex justify-between  gap-x-3 text-sm px-4 py-4  sm:px-6">
         {/* <div className=' sm:block md:hidden '> */}
         <PostVoteClientPhone
           postId={post.id}

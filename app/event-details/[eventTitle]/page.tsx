@@ -321,11 +321,10 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
 
   return (
-    <div className=' grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6 font-dmsans'>
+    <div className=' grid md:grid-cols-2 lg:grid-cols-7 gap-y-4 md:gap-x-4 pb-6 font-dmsans mt-3'>
         <div className=' md:col-span-5 col-span-2 order-first  '>
 
-          <div className=' w-full  bg-white dark:bg-[#262626] rounded-md shadow break-words overflow-hidden mt-1 font-dmsans p-4'>
-
+          <div className=' w-full  bg-white dark:bg-[#262626] rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06) break-words overflow-hidden mt-1 font-dmsans p-4'>
             <div className=''>
                 <div>
                   {
@@ -413,11 +412,9 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div className='p-4 mt-5'>
-              <div className=' flex gap-4'>
-                <Badge className=' p-2 py-1'>
+              <div className=' flex gap-4 border border-black rounded-2xl bg-gray-300 p-2'>
                 <div className=' text-lg font-bold'>Registration Link :</div>
-                </Badge>
-                <a target='_blank' href="#" className=' text-blue-400 underline cursor-pointer text-lg mt-1'>{eventObject.registrationLink}</a>
+                <a target='_blank' href="#" className=' text-blue-400 underline cursor-pointer text-lg'>{eventObject.registrationLink}</a>
               </div>
             </div>
 
@@ -431,37 +428,37 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div className='rounded-md p-4'>
-  <table className='border border-black border-collapse w-full rounded-md'>
+  <table className='border border-gray-600 border-collapse w-full rounded-md'>
     <thead>
       <tr>
-        <th className='text-[18px] border border-black'>Event Info</th>
-        <th className="text-[18px] border border-black">Details</th>
+        <th className='text-[18px] border border-gray-600'>Event Info</th>
+        <th className="text-[18px] border border-gray-600">Details</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td className='border border-black'>Pre-Conference Date :</td>
-        <td className='text-blue-400 underline cursor-pointer border border-black'>{eventObject.preConferenceDate && eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+        <td className='border border-gray-600'>Pre-Conference Date :</td>
+        <td className='text-blue-400 underline cursor-pointer border border-gray-600'>{eventObject.preConferenceDate && eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
       </tr>
       <tr>
-        <td className='border border-black'>Registration Start Date :</td>
-        <td className='text-blue-400 underline cursor-pointer border border-black'>{eventObject.registrationStartDate && eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+        <td className='border border-gray-600'>Registration Start Date :</td>
+        <td className='text-blue-400 underline cursor-pointer border border-gray-600'>{eventObject.registrationStartDate && eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
       </tr>
       <tr>
-        <td className='border border-black'>Registration End Date :</td>
-        <td className='text-blue-400 underline cursor-pointer border border-black'>{eventObject.registrationEndDate && eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+        <td className='border border-gray-600'>Registration End Date :</td>
+        <td className='text-blue-400 underline cursor-pointer border border-gray-600'>{eventObject.registrationEndDate && eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
       </tr>
       <tr>
-        <td className='border border-black'>Early Bird Registration Fee :</td>
-        <td className='text-blue-400 cursor-pointer border border-black'>{`₹ ${eventObject.earlyBirdRegistrationFee}`}</td>
+        <td className='border border-gray-600'>Early Bird Registration Fee :</td>
+        <td className='text-blue-400 cursor-pointer border border-gray-600'>{`₹ ${eventObject.earlyBirdRegistrationFee}`}</td>
       </tr>
       <tr>
-        <td className='border border-black'>Late Registration Fee :</td>
-        <td className="text-blue-400 cursor-pointer border border-black">{`₹ ${eventObject.lateRegistrationFee}`}</td>
+        <td className='border border-gray-600'>Late Registration Fee :</td>
+        <td className="text-blue-400 cursor-pointer border border-gray-600">{`₹ ${eventObject.lateRegistrationFee}`}</td>
       </tr>
       <tr>
-        <td className='border border-black'>Contact Number :</td>
-        <td className="text-blue-400 underline cursor-pointer border border-black">{eventObject.contactNumber}</td>
+        <td className='border border-gray-600'>Contact Number :</td>
+        <td className="text-blue-400 underline cursor-pointer border border-gray-600">{eventObject.contactNumber}</td>
       </tr>
     </tbody>
   </table>
@@ -490,11 +487,11 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
             <div className="top-0 h-fit">
 
-        <div className='mt-1 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+        <div className='mt-1 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
               <CardTitle>Created By</CardTitle>
-              <div className='text-sm text-muted-foreground'>Moderator/Creator of this event.</div>
+              <div className='text-xs text-muted-foreground'>Moderator/Creator of this event.</div>
             </CardHeader>
             <CardContent className="">
 
@@ -519,14 +516,14 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
           </Card>
         </div>
 
-        <div className='mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+        <div className='mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
           <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader className='text-sm pb-1'>
                 <CardTitle>Register</CardTitle>
-                <div className='text-sm text-muted-foreground'>Verify the third-party sites before entering data.</div>
+                <div className='text-xs text-muted-foreground'>Verify the third-party sites before entering data.</div>
               </CardHeader>
               <CardContent className="">
-                <p className=' text-base'>Register for this event on a single click</p>
+                <p className=' text-base'>Register for this event on a single clickkkkkkkkkk</p>
                 <div className=' flex items-end justify-end mt-4'>
                   <Button className=' w-full'><a target='_blabk' href="#">Register now</a></Button>
                 </div>
@@ -534,11 +531,11 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
           </Card>
         </div>
 
-        <div className='mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+        <div className='mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
           <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader>
                 <CardTitle>Credits</CardTitle>
-                <div className='text-sm text-muted-foreground'>Few events comes with Govt. recognized credits. <span className='text-black'>Check Info*</span></div>
+                <div className='text-xs text-muted-foreground'>Few events comes with Govt. recognized credits. <span className='text-black'>Check Info*</span></div>
               </CardHeader>
               <CardContent className="">
                 <h1 className=' text-4xl flex items-center justify-center mx-auto'>
@@ -554,11 +551,11 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
           </Card>
         </div>
 
-        <div className=' mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last'>
+        <div className=' mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 order-last shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
               <CardTitle>Sponsors</CardTitle>
-              <div className='text-sm text-muted-foreground'>Either sponsoring this event or this post.</div>
+              <div className='text-xs text-muted-foreground'>Either sponsoring this event or this post.</div>
             </CardHeader>
             <CardContent className="grid gap-8 uppercase">
 
@@ -661,11 +658,11 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
        <div className="w-[21.3rem] top-0 h-fit md:hidden lg:block">
 
-        <div className='mt-1 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+        <div className='mt-1 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
-              <CardTitle>Created By</CardTitle>
-              <div className='text-sm text-muted-foreground'>Moderator/Creator of this event.</div>
+              <CardTitle className='text-[21px]'>Created By</CardTitle>
+              <div className='text-xs text-muted-foreground'>Moderator/Creator of this event.</div>
             </CardHeader>
             <CardContent className="">
 
@@ -690,13 +687,13 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
           </Card>
         </div>
 
-        <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+        <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
           <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader className='text-sm pb-1'>
-                <CardTitle>Register</CardTitle>
-                <div className='text-sm text-muted-foreground'>Verify the third-party sites before entering data.</div>
+                <CardTitle className="text-[21px]">Register</CardTitle>
+                <div className='text-xs text-muted-foreground'>Verify the third-party sites before entering data.</div>
               </CardHeader>
-              <CardContent className="">
+              <CardContent className="mt-2">
                 <p className=' text-base'>Register for this event on a single click</p>
                 <div className=' flex items-end justify-end mt-4'>
                   <Button className=' w-full'><a target='_blabk' href="#">Register now</a></Button>
@@ -705,11 +702,11 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
           </Card>
         </div>
 
-        <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300'>
+        <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
           <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader>
-                <CardTitle>Credits</CardTitle>
-                <div className='text-sm text-muted-foreground'>Few events comes with Govt. recognized credits. <span className='text-black'>Check Info*</span></div>
+                <CardTitle className='text-[21px]'>Credits</CardTitle>
+                <div className='text-xs text-muted-foreground'>Few events comes with Govt. recognized credits. <span className='text-black'>Check Info*</span></div>
               </CardHeader>
               <CardContent className="">
                 <h1 className=' text-4xl flex items-center justify-center mx-auto'>
@@ -725,11 +722,11 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
           </Card>
         </div>
 
-        <div className=' sm:block mt-3 hidden col-span-2 sticky overflow-hidden h-fit rounded-lg border border-gray-300 order-last'>
+        <div className=' sm:block mt-3 hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 order-last'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
-              <CardTitle>Sponsors</CardTitle>
-              <div className='text-sm text-muted-foreground'>Either sponsoring this event or this post.</div>
+              <CardTitle className='text-[21px]'>Sponsors</CardTitle>
+              <div className='text-xs text-muted-foreground'>Either sponsoring this event or this post.</div>
             </CardHeader>
             <CardContent className="grid gap-8 uppercase">
 

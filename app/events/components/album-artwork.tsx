@@ -146,11 +146,11 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
 
 
   return (
-    <div className="dark:bg-[#262626] shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] dark:hover:shadow-[#2f2e2e] hover:shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] h-[21.1rem] w-[18.9rem] pl-[0.45rem] bg-white rounded-md pt-1 transition-all duration-300">
+    <div className="dark:bg-[#262626] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)] dark:hover:shadow-[#2f2e2e] hover:shadow-[0px_10px_1px_rgba(8,_112,_184,_0),_0_10px_20px_rgba(8,_112,_184,_0.5)] h-[280px] w-[20.9rem] pl-[0.45rem] bg-white rounded-md pt-1 transition-all duration-300">
     <div className="lg:w-[18.5rem] w-[full] lg:h-[8.1rem] h-[7.7rem]">
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="overflow-hidden rounded-md relative h-[10.15rem] w-[18rem]">
+          <div className="overflow-hidden rounded-md relative h-[12rem] w-[20rem]">
             {
             post.eventImageURL== null ?    
             <Image
@@ -159,7 +159,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
               width={900}
               height={500}
               className={cn(
-                "h-auto w-auto object-cover transition-all hover:scale-105",
+                "h-full w-full object-cover transition-all hover:scale-105",
               )}
             />:
             <Image
@@ -168,7 +168,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
               width={900}
               height={500}
               className={cn(
-                "h-auto w-auto object-cover transition-all hover:scale-105",
+                "h-full w-full object-cover transition-all hover:scale-105",
               )}
             />
             }
@@ -189,6 +189,21 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
             )}
           </button>
           </div>
+          <div className="absolute bottom-[0.5rem] left-[0.5rem] z-10">
+          {dateString && <div className="mt-[0.30rem] text-[14px] text-white font-semibold">{dateString}</div>}
+          </div>
+          <div className="absolute bottom-[0.4rem] left-[0.3rem] opacity-50">
+          <div className="mt-[0.30rem] h-[1.5rem] w-[98px] bg-black rounded-md z-0"></div>
+          </div>
+          <div className="pt-[9px] absolute top-[0rem] left-[0.5rem]">
+          {
+            post?.category?.slice(0, 2).map((category, index)=>(
+              <Button key={index} className='text-black bg-slate-100 text-sm hover:text-white rounded-3xl h-[1.4rem] mr-[0.4rem] px-2'>
+                            {category.split("|").join("/")}
+                            </Button>
+            ))
+}                 
+        </div>
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-40">
@@ -202,21 +217,11 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
       <Link href={`/event-details/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
         <h3 className="text-[17px] font-bold leading-none">{post.title.length>28?post.title.substring(0, 27)+"...":post.title}</h3>
       </Link>  
-      {dateString && <div className="mt-[0.30rem] text-[14px] text-red-600 font-semibold">{dateString}</div>}
-      <div className="mt-[0.30rem] text-[14px] font-semibold opacity-85">{post.locationOfEvent}</div>
+      {/* <div className="mt-[0.30rem] text-[14px] font-semibold opacity-85">{post.locationOfEvent}</div> */}
       <div className="hidden lg:block">
         {
-        <p className="mt-[0.30rem] overflow-hidden opacity-85 line-clamp-2 text-[15px]">{parse(`${post.description.length>84?post.description.substring(0, 83)+"...":post.description}`)}</p>
+        <p className="mt-[0.30rem] overflow-hidden opacity-85 line-clamp-2 text-[15px]">{parse(`${post.description.length>90?post.description.substring(0, 89)+"...":post.description}`)}</p>
 }
-        </div>
-        <div className="pt-[0.6rem]">
-          {
-            post?.category?.slice(0, 2).map((category, index)=>(
-              <Button key={index} className='text-black bg-slate-100 hover:text-white rounded-3xl h-[1.7rem] mr-[0.4rem]'>
-                            {category.split("|").join("/")}
-                            </Button>
-            ))
-}                 
         </div>
       </div>
     </div>

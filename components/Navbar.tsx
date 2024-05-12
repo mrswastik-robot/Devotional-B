@@ -568,7 +568,7 @@ const clearNotifications = async () => {
             value={eventSearchText}
             onChange={handleEventSearchText}
             placeholder="Search Events" 
-            className="lg:w-[37rem] w-[22rem] text-sm border border-gray-300 rounded-md p-2 pl-8" 
+            className="lg:w-[37rem] w-[22rem] text-sm border border-gray-300 rounded-2xl p-2 pl-8" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerEventSearch());

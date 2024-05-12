@@ -29,7 +29,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
     <>
     <div className="md:container md:max-w-7xl md:mx-auto ">
       
-      <div className=" space-y-6 p-10 pb-16  bg-white dark:bg-[#262626] rounded-md font-dmsans">
+      <div className=" space-y-6 p-10 pb-16  bg-white dark:bg-[#262626] rounded-md font-dmsans shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)] mt-3">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Create your event here</h2>
           <p className="text-muted-foreground">

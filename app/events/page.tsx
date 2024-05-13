@@ -779,7 +779,7 @@ export default function MusicPage() {
 
   return (
     <>
-      <div className="lg:container lg:max-w-[93rem] lg:mx-auto font-dmsans mt-3">
+      <div className="lg:container lg:max-w-[93.5rem] lg:mx-auto font-dmsans mt-3">
         <div className="flex justify-center">
           <div className="lg:w-[20.5rem]">
         <Sidebar playlists={playlists} selectChange={handleSelectChange} currentC={selectedCategory||"all"} className="hidden lg:block bg-[#ffffff] mr-4 rounded-2xl" />
@@ -787,18 +787,18 @@ export default function MusicPage() {
           <div className="bg-background rounded-2xl mb-2 pl-[8px] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
             <div className="">
               <div className="">
-                <div className="px-2 py-6 md:w-[1063px] block">
+                <div className="px-2 py-6 md:w-[1090px] block">
                   <Tabs defaultValue="Webinar" className="h-full space-y-6">
                     <div className="space-between flex items-center">
                       <TabsList>
-                        <TabsTrigger value="Webinar" className="relative" onClick={()=>{
+                        <TabsTrigger value="Webinar" className="relative text-[15px] font-[500]" onClick={()=>{
                           setPosts([]);
                           setEventModeChange("Webinar");
                         }}>
                           Webinar
                         </TabsTrigger>
                         {/* <TabsTrigger value="podcasts">Podcasts</TabsTrigger> */}
-                        <TabsTrigger value="Offline" onClick={()=>{
+                        <TabsTrigger value="Offline" className="text-[15px] font-[500]" onClick={()=>{
                           setPosts([]);
                           setEventModeChange("Offline");
                         }}>
@@ -811,7 +811,7 @@ export default function MusicPage() {
                       className="hidden lg:inline"
                     href={"mailto:abhijeetgupta989@gmail.com"}
                     >
-                        <Button className=" mr-2 bg-transparent border border-black text-black rounded-2xl hover:bg-gray-300">
+                        <Button className=" mr-2 bg-transparent border text-[15px] border-black text-black rounded-2xl hover:bg-gray-300">
                           <MailIcon className="mr-2 h-4 w-4" />
                           Mail To
                         </Button>
@@ -823,7 +823,7 @@ export default function MusicPage() {
                     <Link
                     href={'/events/createEvent'}
                     >
-                        <Button className=" bg-transparent border border-black rounded-2xl text-black hover:bg-gray-300">
+                        <Button className=" bg-transparent border border-black rounded-2xl text-[15px] text-black hover:bg-gray-300">
                           <FaCirclePlus className="hidden lg:block mr-2 h-4 w-4" />
                           Create Event
                         </Button>
@@ -1166,10 +1166,10 @@ export default function MusicPage() {
                     >
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                          <h2 className="text-xl font-semibold tracking-tight">
+                          <h2 className="text-xl font-[500] tracking-tight">
                             Online Events
                           </h2>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-[18px] text-muted-foreground">
                           Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
                           </p>
                         </div>

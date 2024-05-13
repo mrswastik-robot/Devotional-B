@@ -190,7 +190,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
           </button>
           </div>
           <div className="absolute bottom-[0.5rem] left-[0.5rem] z-10">
-          {dateString && <div className="mt-[0.30rem] text-[14px] text-white font-semibold">{dateString}</div>}
+          {dateString && <div className="mt-[0.30rem] text-[14px] text-white font-[500]">{dateString}</div>}
           </div>
           <div className="absolute bottom-[0.4rem] left-[0.3rem] opacity-50">
           <div className="mt-[0.30rem] h-[1.5rem] w-[98px] bg-black rounded-md z-0"></div>
@@ -215,12 +215,12 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
       </ContextMenu>
       <div className="mt-3 text-sm">
       <Link href={`/event-details/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-        <h3 className="text-[17px] font-bold leading-none">{post.title.length>28?post.title.substring(0, 27)+"...":post.title}</h3>
+        <h3 className="text-[18px] font-[500] leading-none">{post.title.length>28?post.title.substring(0, 27)+"...":post.title}</h3>
       </Link>  
       {/* <div className="mt-[0.30rem] text-[14px] font-semibold opacity-85">{post.locationOfEvent}</div> */}
       <div className="hidden lg:block">
         {
-        <p className="mt-[0.30rem] overflow-hidden opacity-85 line-clamp-2 text-[15px]">{parse(`${post.description.length>90?post.description.substring(0, 89)+"...":post.description}`)}</p>
+        <p className="mt-[0.30rem] font-[400] overflow-hidden opacity-85 line-clamp-2 text-[18px]">{parse(`${post.description.length>90?post.description.substring(0, 89)+"...":post.description}`)}</p>
 }
         </div>
       </div>

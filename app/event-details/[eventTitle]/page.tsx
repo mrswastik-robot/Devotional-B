@@ -337,7 +337,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
                 <div className=' max-w-[70%]'>
                     <div className='p-4 space-y-7'>
-                        <h1 className='text-[21px] font-bold'>{eventObject.title}</h1>
+                        <h1 className='text-[30px] font-[500]'>{eventObject.title}</h1>
                     </div>
                 </div>
             </div>
@@ -369,15 +369,15 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             <div className='md:flex gap-10 md:justify-between flex-row border border-black rounded-md m-4'>
 
             <div className=' p-4 space-y-3 mt-3'>
-                <h1 className=' font-bold'>Date and Time</h1>
+                <h1 className=' font-[500] text-[20px]'>Date and Time</h1>
                 <div className=' flex gap-3'>
                     <CalendarCheck2 size={24} />
-                    {dateString && <p className=' font-semibold text-gray-900 text-sm'>{dateString}</p>}
+                    {dateString && <p className=' font-[400] text-gray-900 text-[17px]'>{dateString}</p>}
                 </div>
             </div>
 
             <div className="mb-4">
-            <h1 className=' font-bold px-4 my-3 lg:mt-6'>Location</h1>
+            <h1 className=' font-[500] text-[20px] px-4 my-3 lg:mt-6'>Location</h1>
             <div className=' px-4 flex gap-x-5'>
                 <div className=' mt-2'>
                     <MapPin size={24} />
@@ -389,14 +389,14 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                           const [location, landmark] = eventObject.locationOfEvent.split(', ');
                           return (
                             <>
-                              <p className=' font-bold text-base'>{location}</p>
-                              <p className=' text-sm'>{landmark}</p>
+                              <p className=' font-[500] text-[17px]'>{location}</p>
+                              <p className=' text-[16px]'>{landmark}</p>
                             </>
                           )
                         })()
                       }
                     <div className=' flex gap-1'>
-                        <p className=' text-base font-bold text-blue-400 hover:underline cursor-pointer'>Show Map</p>
+                        <p className=' text-[17px] font-[500] text-blue-400 hover:underline cursor-pointer'>Show Map</p>
                         <ChevronDown className='text-blue-400' size={24} />
                     </div>
                 </div>
@@ -404,8 +404,8 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div className='mb-6'>
-              <h1 className='font-bold px-4 my-3 mt-6 text-base'>Duration of the event</h1>
-              <div className='px-4 flex gap-2'><span><Clock/></span><div>{eventObject.durationOfEvent} hours</div></div>
+              <h1 className='font-[500] px-4 my-3 mt-6 text-[20px]'>Duration of the event</h1>
+              <div className='px-4 flex gap-2 text-[17px]'><span><Clock/></span><div>{eventObject.durationOfEvent} hours</div></div>
               
             </div>
 
@@ -413,16 +413,16 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
             <div className='p-4 mt-5'>
               <div className=' flex gap-4 border border-black rounded-2xl bg-gray-300 p-2'>
-                <div className=' text-lg font-bold'>Registration Link :</div>
-                <a target='_blank' href="#" className=' text-blue-400 underline cursor-pointer text-lg'>{eventObject.registrationLink}</a>
+                <div className=' text-[20px] font-[500]'>Registration Link :</div>
+                <a target='_blank' href="#" className=' text-blue-400 underline cursor-pointer text-[20px]'>{eventObject.registrationLink}</a>
               </div>
             </div>
 
             <div className=' p-4 mt-1'>
-            <h1 className=' font-bold text-[18px] mb-4 '>Description</h1>
+            <h1 className=' font-[500] text-[20px] mb-4 '>Description</h1>
             <div className=' font-medium my-3 mt-6'>
                   <div className=''>
-                      <p className=' text-[16px] font-normal'>{eventObject.description && parse(eventObject.description)}</p>
+                      <p className=' text-[17px] font-[400]'>{eventObject.description && parse(eventObject.description)}</p>
                   </div>
             </div>
             </div>
@@ -431,34 +431,34 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
   <table className='border border-gray-600 border-collapse w-full rounded-md'>
     <thead>
       <tr>
-        <th className='text-[18px] border border-gray-600'>Event Info</th>
-        <th className="text-[18px] border border-gray-600">Details</th>
+        <th className='text-[20px] font-[500] border border-gray-600'>Event Info</th>
+        <th className="text-[20px] font-[500] border border-gray-600">Details</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td className='border border-gray-600'>Pre-Conference Date :</td>
-        <td className='text-blue-400 underline cursor-pointer border border-gray-600'>{eventObject.preConferenceDate && eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+        <td className='border text-[17px] border-gray-600'>Pre-Conference Date :</td>
+        <td className='text-blue-400 text-[17px] underline cursor-pointer border border-gray-600'>{eventObject.preConferenceDate && eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
       </tr>
       <tr>
-        <td className='border border-gray-600'>Registration Start Date :</td>
-        <td className='text-blue-400 underline cursor-pointer border border-gray-600'>{eventObject.registrationStartDate && eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+        <td className='border text-[17px] border-gray-600'>Registration Start Date :</td>
+        <td className='text-blue-400 text-[17px] underline cursor-pointer border border-gray-600'>{eventObject.registrationStartDate && eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
       </tr>
       <tr>
-        <td className='border border-gray-600'>Registration End Date :</td>
-        <td className='text-blue-400 underline cursor-pointer border border-gray-600'>{eventObject.registrationEndDate && eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+        <td className='border text-[17px] border-gray-600'>Registration End Date :</td>
+        <td className='text-blue-400 text-[17px] underline cursor-pointer border border-gray-600'>{eventObject.registrationEndDate && eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
       </tr>
       <tr>
-        <td className='border border-gray-600'>Early Bird Registration Fee :</td>
-        <td className='text-blue-400 cursor-pointer border border-gray-600'>{`₹ ${eventObject.earlyBirdRegistrationFee}`}</td>
+        <td className='border text-[17px] border-gray-600'>Early Bird Registration Fee :</td>
+        <td className='text-blue-400 text-[17px] cursor-pointer border border-gray-600'>{`₹ ${eventObject.earlyBirdRegistrationFee}`}</td>
       </tr>
       <tr>
-        <td className='border border-gray-600'>Late Registration Fee :</td>
-        <td className="text-blue-400 cursor-pointer border border-gray-600">{`₹ ${eventObject.lateRegistrationFee}`}</td>
+        <td className='border text-[17px] border-gray-600'>Late Registration Fee :</td>
+        <td className="text-blue-400 text-[17px] cursor-pointer border border-gray-600">{`₹ ${eventObject.lateRegistrationFee}`}</td>
       </tr>
       <tr>
-        <td className='border border-gray-600'>Contact Number :</td>
-        <td className="text-blue-400 underline cursor-pointer border border-gray-600">{eventObject.contactNumber}</td>
+        <td className='border text-[17px] border-gray-600'>Contact Number :</td>
+        <td className="text-blue-400 text-[17px] underline cursor-pointer border border-gray-600">{eventObject.contactNumber}</td>
       </tr>
     </tbody>
   </table>
@@ -466,13 +466,13 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
 
             <div className=' p-4 mb-5 mt-2'>
-                <h1 className=' font-bold text-[18px] mb-4 '>Tags</h1>
+                <h1 className=' font-[500] text-[20px] mb-4 '>Tags</h1>
 
                 <div>
                     <div className=' space-y-2'>
                         {eventObject.hashtags?(
                           eventObject.hashtags.map((hashtag, index)=>{
-                            return <span key={index} className='text-blue-600 ml-2'>
+                            return <span key={index} className='text-blue-600 ml-2 text-[17px]'>
                             {hashtag}
                             </span>
                           })
@@ -490,7 +490,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         <div className='mt-1 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
-              <CardTitle>Created By</CardTitle>
+              <CardTitle className='text-[24px] font-[500]'>Created By</CardTitle>
               <div className='text-xs text-muted-foreground'>Moderator/Creator of this event.</div>
             </CardHeader>
             <CardContent className="">
@@ -506,8 +506,8 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                         />
             </div>  
           <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">{userData.name}</p>
-            <p className="text-sm text-muted-foreground">{userData.email}</p>
+          <p className="text-[17px] font-medium leading-none">{userData.name}</p>
+            <p className="text-[17px] text-muted-foreground">{userData.email}</p>
           </div>
           <div className="ml-auto font-medium"></div>
         </div>
@@ -519,11 +519,11 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         <div className='mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
           <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader className='text-sm pb-1'>
-                <CardTitle>Register</CardTitle>
+                <CardTitle className='text-[24px] font-[500]'>Register</CardTitle>
                 <div className='text-xs text-muted-foreground'>Verify the third-party sites before entering data.</div>
               </CardHeader>
               <CardContent className="">
-                <p className=' text-base'>Register for this event on a single clickkkkkkkkkk</p>
+                <p className='text-[17px]'>Register for this event on a single click</p>
                 <div className=' flex items-end justify-end mt-4'>
                   <Button className=' w-full'><a target='_blabk' href="#">Register now</a></Button>
                 </div>
@@ -534,11 +534,11 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         <div className='mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
           <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader>
-                <CardTitle>Credits</CardTitle>
+                <CardTitle className='text-[24px] font-[500]' >Credits</CardTitle>
                 <div className='text-xs text-muted-foreground'>Few events comes with Govt. recognized credits. <span className='text-black'>Check Info*</span></div>
               </CardHeader>
               <CardContent className="">
-                <h1 className=' text-4xl flex items-center justify-center mx-auto'>
+                <h1 className=' text-[30px] flex items-center justify-center mx-auto'>
                   {
                     eventObject.creditPoints 
                     ?
@@ -554,7 +554,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         <div className=' mt-3 lg:hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 order-last shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
-              <CardTitle>Sponsors</CardTitle>
+              <CardTitle className='text-[24px] font-[500]'>Sponsors</CardTitle>
               <div className='text-xs text-muted-foreground'>Either sponsoring this event or this post.</div>
             </CardHeader>
             <CardContent className="grid gap-8 uppercase">
@@ -567,9 +567,9 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                     <AvatarFallback><Building/></AvatarFallback>
                   </Avatar>
                   <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
+                    <div className="text-[17px] font-medium leading-none">
                       {sponsor}
-                    </p>
+                    </div>
                   </div>
                 </div>
                 }
@@ -607,7 +607,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                     render={({ field }) => (
                       <FormItem>
                         {/* <FormLabel>Write an answer...</FormLabel> */}
-                        <FormLabel>Comment Box</FormLabel>
+                        <FormLabel className='text-[17px] font-[500]'>Comment Box</FormLabel>
                                 <div className={`${isFocused?"border-black border-[2.3px]": "border-[2px] border-[#d3d7dd]"} rounded-lg`} onFocus={() => setIsFocused(true)}
                                 onBlur={() => setIsFocused(false)}
                                 >
@@ -627,13 +627,13 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
                   <div className=" space-x-2 flex items-end justify-end ">
                     
-                    <Button variant="outline" className=" rounded-3xl"
+                    <Button variant="outline" className=" rounded-3xl text-[17px]"
                     onClick={() => {setIsCommentBoxOpen(true); form.reset(); setImageUrl(null);}}
                     >
                       Cancel
                     </Button>
 
-                    <Button type="submit" variant="outline" className=" rounded-3xl "
+                    <Button type="submit" variant="outline" className=" rounded-3xl text-[17px]"
                     >
                       Post
                     </Button>
@@ -661,7 +661,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         <div className='mt-1 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
-              <CardTitle className='text-[21px]'>Created By</CardTitle>
+              <CardTitle className='text-[24px] font-[500]'>Created By</CardTitle>
               <div className='text-xs text-muted-foreground'>Moderator/Creator of this event.</div>
             </CardHeader>
             <CardContent className="">
@@ -677,8 +677,8 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                         />
             </div>  
           <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">{userData.name}</p>
-            <p className="text-sm text-muted-foreground">{userData.email}</p>
+          <p className="text-[17px] font-medium leading-none">{userData.name}</p>
+            <p className="text-[17px] text-muted-foreground">{userData.email}</p>
           </div>
           <div className="ml-auto font-medium"></div>
         </div>
@@ -690,13 +690,13 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
           <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader className='text-sm pb-1'>
-                <CardTitle className="text-[21px]">Register</CardTitle>
+                <CardTitle className="text-[24px] font-[500]">Register</CardTitle>
                 <div className='text-xs text-muted-foreground'>Verify the third-party sites before entering data.</div>
               </CardHeader>
               <CardContent className="mt-2">
-                <p className=' text-base'>Register for this event on a single click</p>
+                <p className=' text-[17px]'>Register for this event on a single click</p>
                 <div className=' flex items-end justify-end mt-4'>
-                  <Button className=' w-full'><a target='_blabk' href="#">Register now</a></Button>
+                  <Button className=' w-full text-[17px]'><a target='_blabk' href="#">Register now</a></Button>
                 </div>
               </CardContent>
           </Card>
@@ -705,11 +705,11 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
           <Card x-chunk="dashboard-01-chunk-5">
               <CardHeader>
-                <CardTitle className='text-[21px]'>Credits</CardTitle>
+                <CardTitle className='text-[24px] font-[500]'>Credits</CardTitle>
                 <div className='text-xs text-muted-foreground'>Few events comes with Govt. recognized credits. <span className='text-black'>Check Info*</span></div>
               </CardHeader>
               <CardContent className="">
-                <h1 className=' text-4xl flex items-center justify-center mx-auto'>
+                <h1 className=' text-[30px] flex items-center justify-center mx-auto'>
                   {
                     eventObject.creditPoints 
                     ?
@@ -725,7 +725,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
         <div className=' sm:block mt-3 hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 order-last'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
-              <CardTitle className='text-[21px]'>Sponsors</CardTitle>
+              <CardTitle className='text-[24px] font-[500]'>Sponsors</CardTitle>
               <div className='text-xs text-muted-foreground'>Either sponsoring this event or this post.</div>
             </CardHeader>
             <CardContent className="grid gap-8 uppercase">
@@ -738,7 +738,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                     <AvatarFallback><Building/></AvatarFallback>
                   </Avatar>
                   <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
+                    <p className="text-[17px] font-medium leading-none">
                       {sponsor}
                     </p>
                   </div>

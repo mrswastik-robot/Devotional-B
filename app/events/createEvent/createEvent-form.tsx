@@ -684,7 +684,7 @@ const CreatEventPage = () => {
                           name="title"
                           render = {({field}) => (
                             <FormItem>
-                              <FormLabel>Title</FormLabel>
+                              <FormLabel className="text-[17px]">Title</FormLabel>
                               <FormControl>
                                 <Input className="" placeholder="Title for the Event ..." {...field}/>
                               </FormControl>
@@ -700,7 +700,7 @@ const CreatEventPage = () => {
                           name="eventImageURL"
                           render = {({field}) => (
                             <FormItem>
-                              <FormLabel>Event Image</FormLabel>
+                              <FormLabel className="text-[17px]">Event Image</FormLabel>
                               <FormControl>
                                 
                                 <Input
@@ -721,7 +721,7 @@ const CreatEventPage = () => {
                             name="description"
                             render = {({field}) => (
                               <FormItem>
-                                <FormLabel>Description</FormLabel>
+                                <FormLabel className="text-[17px]">Description</FormLabel>
                                 <div className={`${isFocused?"border-black border-[2.1px]": "border-[1.2px]"} rounded-lg`} onFocus={() => setIsFocused(true)}
                                   onBlur={() => setIsFocused(false)}
                                   >
@@ -754,7 +754,7 @@ const CreatEventPage = () => {
 
                           {/* Event Type */}
                           <div>
-                          <div className="text-sm font-medium mb-2">Event Type</div>
+                          <div className="text-[17px] font-medium mb-2">Event Type</div>
                           <Select value={eventMode} onValueChange={handleEventModeChange}>
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select Event Type" />
@@ -772,7 +772,7 @@ const CreatEventPage = () => {
                           {/*Category thing*/}
                           <div>
                           
-                          <div className="text-sm font-medium mb-2">Category</div>
+                          <div className="text-[17px] font-medium mb-2">Category</div>
                           <Select value={""} onValueChange={handleMainCategoryChange} >
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select a Category" />
@@ -839,7 +839,7 @@ const CreatEventPage = () => {
                               name="dateOfEvent"
                               render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                  <FormLabel>Date of Event</FormLabel>
+                                  <FormLabel className="text-[17px]">Date of Event</FormLabel>
                                   <Popover>
                                     <PopoverTrigger asChild>
                                       <FormControl>
@@ -886,7 +886,7 @@ const CreatEventPage = () => {
                           render = {({field}) => (
                             <div className=" flex-col space-y-1">
                                 <FormItem>
-                                    <FormLabel>Location</FormLabel>
+                                    <FormLabel className="text-[17px]">Location</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Main location of the Event" 
                                         {...field}
@@ -914,7 +914,7 @@ const CreatEventPage = () => {
                           name="durationOfEvent"
                           render={({field}) => (
                             <FormItem>
-                              <FormLabel>Duration of the Event</FormLabel>
+                              <FormLabel className="text-[17px]">Duration of the Event</FormLabel>
                               <FormControl>
                                 <Input type="number" placeholder="Duration of the Event (in hours)" {...field}
                                 min={1}
@@ -935,7 +935,7 @@ const CreatEventPage = () => {
                           name="registrationLink"
                           render = {({field}) => (
                             <FormItem>
-                              <FormLabel>Registration Link</FormLabel>
+                              <FormLabel className="text-[17px]">Registration Link</FormLabel>
                               <FormControl>
                                 <Input placeholder="Registration Link ..." {...field}/>
                               </FormControl>
@@ -997,7 +997,7 @@ const CreatEventPage = () => {
                           /> */}
 
                             <Button type="submit" 
-                                className=" w-full"
+                                className=" w-full text-[17px]"
                                 // disabled={isGuest === 'true'}
                               >
                                 Post

@@ -59,12 +59,12 @@ export function Sidebar({ className, playlists, selectChange, currentC }: Sideba
     <div className={cn(" dark:bg-[#262626] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]", className)}>
       <div className="space-y-4 pt-4 pb-2">
         <div className="px-4 py-2">
-          <h2 className="mb-2 px-4 text-lg font-bold tracking-tight">
+          <h2 className="mb-2 px-4 text-lg font-[500] tracking-tight">
             Discover
           </h2>
           <ScrollArea className="h-[320px] px-1">
           <div className="space-y-1">
-            <Button onClick={()=>{selectChange("all")}} variant={`${currentC=="all"?"secondary":"ghost"}`} className="w-full justify-start">
+            <Button onClick={()=>{selectChange("all")}} variant={`${currentC=="all"?"secondary":"ghost"}`} className="w-full justify-start text-[15px]">
               {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -85,7 +85,7 @@ export function Sidebar({ className, playlists, selectChange, currentC }: Sideba
                 sidebarCategory?
                 sidebarCategory.map((categoryD:any, index:any)=>(
                   <div key={index}>
-                    <Button onClick={()=>{selectChange(categoryD.id)}} variant={`${currentC==categoryD.id.split("|").join("/")?"secondary":"ghost"}`} className="w-full justify-start">
+                    <Button onClick={()=>{selectChange(categoryD.id)}} variant={`${currentC==categoryD.id.split("|").join("/")?"secondary":"ghost"}`} className="w-full justify-start text-[15px]">
                       {categoryD.id.split("|").join("/")}
                     </Button>
                   </div>
@@ -116,7 +116,7 @@ export function Sidebar({ className, playlists, selectChange, currentC }: Sideba
     <div className={cn(" dark:bg-[#262626] mt-[14px] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]", className)}>
     <div className="space-y-4 pt-4 pb-2">
     <div className="py-1 mt-1">
-          <h2 className="relative px-7 text-lg font-bold tracking-tight">
+          <h2 className="relative px-7 text-lg tracking-tight font-[500]">
             Playlists
           </h2>
           <ScrollArea className="h-[150px] px-1">
@@ -125,7 +125,7 @@ export function Sidebar({ className, playlists, selectChange, currentC }: Sideba
                 <Button
                   key={`${playlist}-${i}`}
                   variant="ghost"
-                  className="w-full justify-start font-normal"
+                  className="w-full justify-start text-[15px]"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

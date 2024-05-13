@@ -569,11 +569,11 @@ export default function Home() {
   {
 
   return (
-    <div className="lg:container lg:max-w-[100rem] lg:mx-auto">
+    <div className="lg:container lg:max-w-[112rem] lg:mx-auto">
     <Suspense>
     <>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
-      <div className='flex gap-y-4 md:gap-x-4 lg:gap-x-6 pb-6 font-dmsans mt-4 ml-[5.5rem]'>
+      <div className='flex gap-y-4 md:gap-x-3 lg:gap-x-6 pb-6 font-dmsans mt-4 ml-[41px]'>
         
         {/* <TopFeedCard /> */}
         <div className="hidden lg:block col-span-2 sticky lg:top-[4.2rem] lg:w-[20rem]">
@@ -581,7 +581,7 @@ export default function Home() {
         </div>
       
         
-      <div className="lg:w-[37rem]">
+      <div className="lg:w-[42rem]">
         {/* {
           searchClient && (
             <InstantSearch searchClient={searchClient} indexName="search_questions" >
@@ -604,7 +604,7 @@ export default function Home() {
 
 
         {/* subreddit info */}
-        <div className='col-span-3 lg:col-span-3 lg:w-[321px] lg:sticky overflow-hidden h-fit rounded-2xl order-first lg:order-last space-y-3'>
+        <div className='col-span-3 lg:col-span-3 lg:w-[331px] lg:sticky overflow-hidden h-fit rounded-2xl order-first lg:order-last space-y-3'>
           {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
             <p className='font-semibold py-3 flex items-center gap-1.5'>
               <HomeIcon className='h-4 w-4' />
@@ -613,8 +613,10 @@ export default function Home() {
           </div> */}
 
           {/* <RightHandFeed />           */}
-          <div className='hidden lg:block col-span-4 lg:col-span-2 overflow-hidden rounded-2xl h-fit border border-gray-100 order-last'>
+          <div className="shadow-lg shadow-blue-300">
+          <div className='hidden lg:block col-span-4 lg:col-span-2 overflow-hidden rounded-2xl h-fit order-last'>
             <RightHandFeed />
+          </div>
           </div>
 
         </div>

@@ -79,13 +79,14 @@ export function Sidebar({ className, playlists }: SidebarProps) {
       }, []);
 
   return (
-    <div className={cn("pb-1 rounded-2xl sticky lg:top-[69px] max-h-[39rem] dark:bg-[#262626] bg-[#ffffff]", className)}>
+    <div>
+    <div className={cn("pb-1 rounded-2xl sticky lg:top-[69px] max-h-[39rem] dark:bg-[#262626] bg-[#ffffff] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]", className)}>
       <div className="space-y-4 py-4">
         <div className="px-4 py-2">
           <h2 className="mb-2 px-4 text-lg font-bold tracking-tight">
             Categories
           </h2>
-          <ScrollArea className="h-[350px] px-1">
+          <ScrollArea className="h-[320px] px-1">
           <div className="space-y-1">
             <Button onClick={()=>{selectChange("all")}} variant={`${categoryPosts=="all"?"secondary":"ghost"}`} className="w-full justify-start">
               {/* <svg
@@ -136,7 +137,8 @@ export function Sidebar({ className, playlists }: SidebarProps) {
         </div>
         </div>
         <Separator/>
-        <div className="py-2 mt-2 bt-1 border-black">
+      </div>
+      <div className={cn("py-[14px] bt-1 border-black rounded-2xl bg-[#ffffff] dark:bg-[#262626] mt-[14px] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]", className)}>
           <h2 className="relative px-7 text-lg font-bold tracking-tight flex items-center justify-between">
             <span>Forums</span>
             <Link href="/createForum">

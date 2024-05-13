@@ -185,7 +185,7 @@ const handleFollow = async () => {
 
   return (
 
-    <div className="rounded-2xl bg-white dark:bg-[#262626] shadow break-words overflow-hidden mt-1 font-dmsans">
+    <div className="rounded-2xl bg-white dark:bg-[#262626] break-words overflow-hidden mt-1 font-dmsans shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
       <div className="px-6 md:py-6 py-4 flex justify-between">
 
         {/* <PostVoteClient

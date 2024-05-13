@@ -5,6 +5,7 @@ import RecentFeedCard from './RecentFeedCard'
 import { collection, getDocs, limit, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { db } from '@/utils/firebase'
 import { Separator } from '../ui/separator'
+import parse from "html-react-parser"
 
 type Props = {}
 
@@ -13,6 +14,7 @@ type PostType = {
   name: string;
   title: string;
   profilePic: string;
+  description: string;
   voteAmt: number;
   comments: number;
   createdAt: string;
@@ -39,7 +41,7 @@ const RecentFeed = (props: Props) => {
   useEffect(() => {
 
     const collectionRef = collection(db, 'questions');
-    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(7));
+    const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(5));
 
     const unsub = onSnapshot(q, async(snapshot) => {
       const postsData =[];
@@ -69,21 +71,22 @@ const RecentFeed = (props: Props) => {
   }, [])
   
   return (
-    <div className=' bg-[#FFFFFF] dark:bg-[#262626] order-last font-dmsans px-2 pt-0 pb-2'>
-
+    <div className='max-h-[40rem] p-2 overflow-auto bg-[#FFFFFF] dark:bg-[#262626] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
 
 <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-left font-bold text-lg text-black dark:text-white">Recent Posts</TableHead>
+          <TableHead className="font-dmsans text-left font-bold text-lg text-black dark:text-white">Recent Posts</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {posts.map((post, index) => (
           <TableRow key={index}>
-            <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-            <TableCell className="text-[#195FAA] text-base">{post.title}</TableCell>
+            <Link className='flex flex-col' href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
+            <TableCell className="text-black text-base font-semibold font-dmsans">{post.title.length>70?post.title.substring(0, 69)+"...":post.title}</TableCell>
+            <TableCell className="text-sm text-gray-800 font-dmsans">{post.description.length>1000?parse(post.description.substring(0, 99))+"...":parse(post.description)}</TableCell>
             </Link>
+            <Separator/>
           </TableRow>
         ))}
       </TableBody>
@@ -93,6 +96,7 @@ const RecentFeed = (props: Props) => {
         </TableRow>
       </TableFooter> */}
       </Table>
+
 
     </div>
   )

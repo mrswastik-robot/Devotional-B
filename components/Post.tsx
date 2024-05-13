@@ -271,7 +271,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
     <>
     {
       post.uid?
-    <div className=" bg-white dark:bg-[#262626] shadow mb-2 rounded-2xl">
+    <div className=" bg-white dark:bg-[#262626] mb-3 rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
       <div className="px-6 py-4 flex justify-between">
         {/* <PostVoteClient
         //   postId={post.id}

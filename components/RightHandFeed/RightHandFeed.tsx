@@ -71,7 +71,7 @@ const RightHandFeed = (props: Props) => {
 
   return (
 
-    <div className=' rounded-md max-h-[40rem] p-2 overflow-auto bg-[#FFFFFF] dark:bg-[#262626]'>
+    <div className='max-h-[40rem] p-2 overflow-auto bg-[#FFFFFF] dark:bg-[#262626] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
 
 <Table>
       <TableHeader>
@@ -86,6 +86,7 @@ const RightHandFeed = (props: Props) => {
             <TableCell className="text-black text-base font-semibold font-dmsans">{post.title.length>70?post.title.substring(0, 69)+"...":post.title}</TableCell>
             <TableCell className="text-sm text-gray-800 font-dmsans">{post.description.length>1000?parse(post.description.substring(0, 99))+"...":parse(post.description)}</TableCell>
             </Link>
+            <Separator/>
           </TableRow>
         ))}
       </TableBody>

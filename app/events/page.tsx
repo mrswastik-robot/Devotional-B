@@ -787,7 +787,7 @@ export default function MusicPage() {
           <div className="bg-background rounded-2xl mb-2 pl-[8px] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
             <div className="">
               <div className="">
-                <div className="px-2 py-6 md:w-[1090px] block">
+                <div className="px-2 py-6 md:w-[1100px] block">
                   <Tabs defaultValue="Webinar" className="h-full space-y-6">
                     <div className="space-between flex items-center">
                       <TabsList>

@@ -598,7 +598,7 @@ export default function Home() {
             </InstantSearch>
           )
         } */}
-        {/*<CustomFeed newPost = {newPost}/>*/}
+        <CustomFeed newPost = {newPost}/>
         </div>
         {/* <CustomFeed /> */}
 

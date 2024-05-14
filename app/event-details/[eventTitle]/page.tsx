@@ -366,7 +366,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
             </div> */}
 
-            <div className='md:flex gap-10 md:justify-between flex-row border border-black rounded-md m-4'>
+            <div className='md:flex gap-10 md:justify-between flex-row border border-[#d3d3d3] rounded-md m-4'>
 
             <div className=' p-4 space-y-3 mt-3'>
                 <h1 className=' font-[500] text-[20px]'>Date and Time</h1>
@@ -428,37 +428,37 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div className='rounded-md p-4'>
-  <table className='border border-gray-600 border-collapse w-full rounded-md'>
+  <table className='border border-[#d3d3d3] border-collapse w-full rounded-md'>
     <thead>
       <tr>
-        <th className='text-[20px] font-[500] border border-gray-600'>Event Info</th>
-        <th className="text-[20px] font-[500] border border-gray-600">Details</th>
+        <th className='text-[20px] font-[500] border border-[#d3d3d3]'>Event Info</th>
+        <th className="text-[20px] font-[500] border border-[#d3d3d3]">Details</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td className='border text-[17px] border-gray-600'>Pre-Conference Date :</td>
-        <td className='text-blue-400 text-[17px] underline cursor-pointer border border-gray-600'>{eventObject.preConferenceDate && eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+        <td className='border text-[17px] border-[#d3d3d3]'>Pre-Conference Date :</td>
+        <td className='text-blue-400 text-[17px] underline cursor-pointer border border-[#d3d3d3]'>{eventObject.preConferenceDate && eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
       </tr>
       <tr>
-        <td className='border text-[17px] border-gray-600'>Registration Start Date :</td>
-        <td className='text-blue-400 text-[17px] underline cursor-pointer border border-gray-600'>{eventObject.registrationStartDate && eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+        <td className='border text-[17px] border-[#d3d3d3]'>Registration Start Date :</td>
+        <td className='text-blue-400 text-[17px] underline cursor-pointer border border-[#d3d3d3]'>{eventObject.registrationStartDate && eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
       </tr>
       <tr>
-        <td className='border text-[17px] border-gray-600'>Registration End Date :</td>
-        <td className='text-blue-400 text-[17px] underline cursor-pointer border border-gray-600'>{eventObject.registrationEndDate && eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+        <td className='border text-[17px] border-[#d3d3d3]'>Registration End Date :</td>
+        <td className='text-blue-400 text-[17px] underline cursor-pointer border border-[#d3d3d3]'>{eventObject.registrationEndDate && eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
       </tr>
       <tr>
-        <td className='border text-[17px] border-gray-600'>Early Bird Registration Fee :</td>
-        <td className='text-blue-400 text-[17px] cursor-pointer border border-gray-600'>{`₹ ${eventObject.earlyBirdRegistrationFee}`}</td>
+        <td className='border text-[17px] border-[#d3d3d3]'>Early Bird Registration Fee :</td>
+        <td className='text-blue-400 text-[17px] cursor-pointer border border-[#d3d3d3]'>{`₹ ${eventObject.earlyBirdRegistrationFee}`}</td>
       </tr>
       <tr>
-        <td className='border text-[17px] border-gray-600'>Late Registration Fee :</td>
-        <td className="text-blue-400 text-[17px] cursor-pointer border border-gray-600">{`₹ ${eventObject.lateRegistrationFee}`}</td>
+        <td className='border text-[17px] border-[#d3d3d3]'>Late Registration Fee :</td>
+        <td className="text-blue-400 text-[17px] cursor-pointer border border-[#d3d3d3]">{`₹ ${eventObject.lateRegistrationFee}`}</td>
       </tr>
       <tr>
-        <td className='border text-[17px] border-gray-600'>Contact Number :</td>
-        <td className="text-blue-400 text-[17px] underline cursor-pointer border border-gray-600">{eventObject.contactNumber}</td>
+        <td className='border text-[17px] border-[#d3d3d3]'>Contact Number :</td>
+        <td className="text-blue-400 text-[17px] underline cursor-pointer border border-[#d3d3d3]">{eventObject.contactNumber}</td>
       </tr>
     </tbody>
   </table>

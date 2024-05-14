@@ -505,7 +505,7 @@ const clearNotifications = async () => {
 
 
   return (
-    <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#FFFFFF] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2 font-dmsans">
+    <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#000000] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2 font-dmsans">
 
       {/* mobile Navbar */}
       <div className=" md:hidden flex justify-between px-2">
@@ -749,7 +749,7 @@ const clearNotifications = async () => {
             </div>
 
             <div className=" ml-5 flex">
-          <Button variant="ghost" className="hover:bg-transparent" onClick={() => setClicked("home")}>
+          <Button variant="ghost" className="hover:bg-transparent text-[#ffffff]" onClick={() => setClicked("home")}>
             <Link href="/">
             <Home
               className={`h-5 w-5 ${clicked === 'home' ? "" : ""}`}
@@ -761,7 +761,7 @@ const clearNotifications = async () => {
           <div className="ml-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="hover:bg-transparent focus-visible:ring-0.1" onClick={() => setClicked("notification")}>
+              <Button variant="ghost" className="hover:bg-transparent focus-visible:ring-0.1 text-[#ffffff]" onClick={() => setClicked("notification")}>
                 <Bell
                   className={`h-5 w-5 ${clicked === 'notification' ? "" : ""}`}
                 />

@@ -1170,7 +1170,7 @@ export default function MusicPage() {
                             Online Events
                           </h2>
                           <p className="text-[18px] text-muted-foreground">
-                          Enrich your spiritual journey through TheGodSays. Ask, seek, answer, and grow.
+                          List of upcoming conferences in medical domain.
                           </p>
                         </div>
                       </div>

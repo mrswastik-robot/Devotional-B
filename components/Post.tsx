@@ -333,7 +333,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
 
                 {(
-        <button className=" text-xs mt-[0.33rem] text-blue-500 p-0 hover:underline cursor-pointer" onClick={handleFollow}>
+        <button className=" text-[14px] mt-[0.33rem] text-blue-500 p-0 hover:underline cursor-pointer" onClick={handleFollow}>
           {isFollowing ? "Following" : "Follow"}
         </button>
       )}
@@ -346,7 +346,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
           
           <div className={`${post.title?"":"hidden"}`}>
           <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-            <h1 className={`font-bold py-2 leading-6 text-[17px] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
+            <h1 className={`font-bold py-2 leading-6 text-[16px] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
           </Link>

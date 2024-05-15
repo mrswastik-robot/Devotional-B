@@ -245,7 +245,7 @@ const handleFollow = async () => {
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           {/* <a href={`/postPage/${post.id}`}> */}
-            <h1 className="font-bold py-3 text-[21px] leading-6 dark:text-white">
+            <h1 className="font-bold py-3 leading-6 dark:text-white">
               {post.title}
             </h1>
           {/* </a> */}

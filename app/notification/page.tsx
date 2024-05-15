@@ -83,12 +83,12 @@ useEffect(() => {
 
   return (
     <div>
-        <div className="w-full p-4 font-dmsans">
+        <div className="w-full p-4">
             {/* <h1 className="text-2xl font-bold text-black dark:text-white">Notifications</h1> */}
             <Table>
             <TableHeader>
                 <TableRow>
-                <TableHead className="text-left text-2xl font-bold text-black dark:text-white">Recent Notifications</TableHead>
+                <TableHead className="text-left text-2xl font-bold dark:text-white">Recent Notifications</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>

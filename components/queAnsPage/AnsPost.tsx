@@ -259,7 +259,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
             /> */}
 
             <div className="w-0 flex-1">
-              <div className="flex max-h-40 mt-1 space-x-2 text-xs text-gray-500">
+              <div className="flex max-h-40 mt-1 space-x-2 text-xs">
                 {/* <div> */}
                 <Avatar>
                   <div className=" relative w-full h-full aspect-square">
@@ -273,7 +273,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
                   <AvatarFallback>SP</AvatarFallback>
                 </Avatar>
                 {/* </div> */}
-                <span className="mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-white">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
+                <span className="mt-3 text-[#0c0c0c] text-sm font-semibold dark:text-white">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
                 {answer.anonymity || !user || answer.uid === user.uid ? null : (
               <div className=" flex space-x-1 mr-5">
                 <svg
@@ -300,10 +300,10 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
                 <div>
                 {(
                   <button
-                    className=" text-blue-500 text-xs mt-[0.87rem] p-0 hover:underline cursor-pointer"
+                    className="  mt-[0.87rem] p-0 hover:underline cursor-pointer"
                     onClick={() => (isUserFollowed(answer.uid) ? unfollowUser(answer.uid) : followUser(answer.uid))}
                   >
-                    <span className="sm:block hidden">
+                    <span className="sm:block hidden text-xs text-blue-500">
                       {isUserFollowed(answer.uid) ? 'Following' : 'Follow'}
                     </span>
                   </button>
@@ -333,7 +333,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
               }
 
               <div
-                className="relative text-base max-h-50 text-[#282829] dark:text-white w-full mt-2 "
+                className="relative text-base max-h-50 dark:text-white w-full mt-2 "
                 ref={pRef}
               >
                 {/* <EditorOutput content={post.content} /> */}

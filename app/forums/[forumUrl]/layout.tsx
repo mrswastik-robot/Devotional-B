@@ -4,7 +4,7 @@ export default function ForumsPage ({
     children: React.ReactNode;
 }) {
     return(
-        <div className="lg:container lg:max-w-[86rem] lg:mx-auto font-dmsans mt-1">
+        <div className="lg:container lg:max-w-[86rem] lg:mx-auto mt-3">
             {children}
         </div>
     )

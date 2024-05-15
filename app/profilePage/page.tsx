@@ -529,7 +529,7 @@ useEffect(() => {
 
 
   return (
-    <div className='mt-0 font-dmsans md:container md:max-w-[84rem] md:mx-auto '>
+    <div className=' md:container md:max-w-[84rem] md:mx-auto mt-3'>
         <ProfileCard user={user}/>
         {/* <div className='toggleSwitch flex items-center justify-center mt-5'>
         <label className="inline-flex items-center cursor-pointer">
@@ -595,7 +595,7 @@ useEffect(() => {
                           className=" w-[10rem] h-[9rem] rounded-full"
                           alt="Profile Pic"
                         />
-                        <h1 className=" text-2xl text-zinc-500">
+                        <h1 className=" text-2xl">
                           No posts yet
                         </h1>
                       </div>
@@ -621,7 +621,7 @@ useEffect(() => {
                     className=" w-[10rem] h-[9rem] rounded-full"
                     alt="Profile Pic"
                   />
-                  <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+                  <h1 className=" text-2xl">No posts yet</h1>
                 </div>
               )
             ) : (
@@ -653,7 +653,7 @@ useEffect(() => {
             className=" w-[10rem] h-[9rem] rounded-full"
             alt="Profile Pic"
           />
-          <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+          <h1 className=" text-2xl">No posts yet</h1>
         </div>
       )}
                 </div>:<div>
@@ -672,7 +672,7 @@ useEffect(() => {
                     className=" w-[10rem] h-[9rem] rounded-full"
                     alt="Profile Pic"
                   />
-                  <h1 className=" text-2xl text-zinc-500">No posts yet</h1>
+                  <h1 className=" text-2xl">No posts yet</h1>
                 </div>
               )
             ) : (

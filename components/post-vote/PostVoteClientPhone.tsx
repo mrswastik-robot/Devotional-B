@@ -144,18 +144,18 @@ const PostVoteClientPhone = ({
         aria-label="upvote"
       >
         <ArrowBigUp
-          className={cn("h-5 w-5 text-zinc-700 dark:text-white", {
+          className={cn("h-5 w-5 dark:text-white", {
             "text-emerald-500 fill-emerald-500": currentVote === "UP",
           })}
         />
-        <p className=" text-sm text-zinc-500 ml-2 hover:text-zinc-700 font-dmsans">
+        <p className=" ml-2">
           Support
         </p>
         {/* <Separator orientation="vertical" className=" h-7 my-1 ml-2 dark:text-zinc-400 text-zinc-500"/> */}
       </Button>
 
       {/* score */}
-      <p className="text-center py-2 font-medium text-sm text-zinc-900 dark:text-white font-dmsans">
+      <p className="text-center py-2 font-medium dark:text-white font-dmsans">
         {votesAmt||0}
       </p>
 
@@ -174,7 +174,7 @@ const PostVoteClientPhone = ({
           className=" h-7 my-1 mr-2 dark:text-zinc-400"
         />
         <ArrowBigDown
-          className={cn("h-5 w-5 text-zinc-700 dark:text-white", {
+          className={cn("h-5 w-5 dark:text-white", {
             "text-red-500 fill-red-500": currentVote === "DOWN",
           })}
         />

@@ -167,14 +167,14 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
               <AvatarFallback>SP</AvatarFallback>
             </Avatar>
           <div className="flex items-center">
-            <h4 className="ml-[6.5rem] text-2xl font-bold text-gray-700">
+            <h4 className="ml-[6.5rem] text-2xl font-bold">
               {forumDetails.name}
             </h4>
             <button className="ml-4 text-sm text-[#007dfd] font-semibold border border-[#007dfd] py-1 px-3 rounded-lg focus:outline-none" onClick={joinInForum}>
               {joined ? "JOINED" : "JOIN"}
             </button>
           </div>
-          <p className="ml-[6.5rem] text-sm text-gray-600">r/{forumDetails.uniqueForumName}</p>
+          <p className="ml-[6.5rem] text-sm">r/{forumDetails.uniqueForumName}</p>
         </div>
       </div>
       <div className="">
@@ -211,7 +211,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                 <span>{dateString && <p className='ml-1 mt-[2.5px] font-semibold text-gray-900 text-sm'>{dateString}</p>}</span>
               </p>
               <Link href={`/createForumPost`}>
-              <button className="focus:outline-none rounded-md w-full py-3 text-[#ffffff] font-semibold bg-[#007dfd]">
+              <button className="focus:outline-none rounded-md w-full py-3 font-semibold bg-[#007dfd]">
                 CREATE POST
               </button>
               </Link>

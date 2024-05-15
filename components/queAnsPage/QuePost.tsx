@@ -195,7 +195,7 @@ const handleFollow = async () => {
         /> */}
 
         <div className="w-0 flex-1">
-          <div className="flex max-h-60 mt-1 space-x-2 text-xs text-gray-500">
+          <div className="flex max-h-60 mt-1 space-x-2 text-xs">
             {/* <div> */}
             <Avatar>
               <div className=" relative w-full h-full aspect-square">
@@ -210,7 +210,7 @@ const handleFollow = async () => {
             </Avatar>
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-3 " /> */}
-            <span className="mt-3 text-sm font-semibold dark:text-white text-[#0c0c0c]">{isAnonymous ? ('Anonymous') : (post.name)}</span>{" "}
+            <span className="mt-3 text-[#0c0c0c]  text-sm font-semibold dark:text-white">{isAnonymous ? ('Anonymous') : (post.name)}</span>{" "}
             {isAnonymous||isCurrentUser || !user ? null : (
               <div className=" flex space-x-1 mr-5">
                 <svg
@@ -235,7 +235,7 @@ const handleFollow = async () => {
                 </svg>
 
                 <div
-                  className=" text-blue-500 text-xs mt-[0.87rem] p-0 hover:underline cursor-pointer"
+                  className="text-xs text-blue-500 mt-[0.87rem] p-0 hover:underline cursor-pointer"
                   onClick={handleFollow}
                 >
                   {isFollowing ? "Following" : "Follow"}
@@ -245,7 +245,7 @@ const handleFollow = async () => {
             {/* {formatTimeToNow(new Date(post.createdAt))} */}
           </div>
           {/* <a href={`/postPage/${post.id}`}> */}
-            <h1 className="font-bold py-3 text-[21px] leading-6 text-gray-900 dark:text-white">
+            <h1 className="font-bold py-3 text-[21px] leading-6 dark:text-white">
               {post.title}
             </h1>
           {/* </a> */}
@@ -277,7 +277,7 @@ const handleFollow = async () => {
           <div>
           {
           (post.hashtags&&(Array.isArray(post.hashtags))&&(post.hashtags.length>0))&&
-            <div className='text-blue-600 mt-4'>
+            <div className=' mt-4'>
               {
                 post.hashtags.map((hashtag:any, index:number)=>{
                   return <span className="mx-1 font-[500] text-sm" key={index} >{hashtag}</span>

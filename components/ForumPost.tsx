@@ -284,7 +284,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
         <div className="w-0 flex-1 break-normal overflow-hidden">
 
           {!isProfile&&
-          <div className="flex max-h-40 mt-1 space-x-2 text-xs text-gray-500">
+          <div className="flex max-h-40 mt-1 space-x-2 text-xs">
 
             {/* <div> */}
             <Avatar>
@@ -305,7 +305,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
             <div className=" flex space-x-2">
-            <span className=" mt-3 text-sm font-semibold text-[#0c0c0c] dark:text-yellow-50 font-dmsans">
+            <span className=" mt-3 text-sm font-semibold dark:text-yellow-50 font-dmsans">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
             {isAnonymous||isCurrentUser || !user ? null : (
@@ -333,7 +333,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
 
 
                 {(
-        <button className=" text-blue-500 font-dmsans text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer" onClick={handleFollow}>
+        <button className="text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer" onClick={handleFollow}>
           {isFollowing ? "Following" : "Follow"}
         </button>
       )}
@@ -346,7 +346,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
           
           <div className={`${post.title?"":"hidden"}`}>
           <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-            <h1 className={`font-bold font-dmsans py-2 leading-6 text-[17px] text-[#282829] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
+            <h1 className={`font-bold font-dmsans py-2 leading-6 text-[17px] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
           </Link>
@@ -370,7 +370,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
           >
             {/* <EditorOutput content={post.content} /> */}
 
-            <p onClick={fetchQuestion} className="text-[#282829] font-dmsans dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
+            <p onClick={fetchQuestion} className=" dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
             {!isExpanded && isOverflowing && ( <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div>) }
 
             {/* {pRef.current?.clientHeight === 160 ? (
@@ -379,7 +379,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
             ) : null} */}
             {!isExpanded && isOverflowing && (
               <div className="absolute bottom-0 md:bottom-[-0.16rem] left-0 w-full  text-right ">
-                <button className=" text-blue-500  hover:underline md:w-[8%] w-full backdrop-blur-none bg-white/50 dark:bg-transparent  text-right text-sm  " onClick={() => setIsExpanded(true)}>(more)</button>
+                <button className="  hover:underline md:w-[8%] w-full backdrop-blur-none bg-white/50 dark:bg-transparent  text-right text-sm  " onClick={() => setIsExpanded(true)}>(more)</button>
               </div>
             )}
           </div>
@@ -401,9 +401,9 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
             className="w-fit flex items-center gap-2"
           >
             <MessageSquare className="h-4 w-4" />{" "}
-            <span className=" sm:block hidden font-dmsans">{0} Comments</span>
+            <span className=" sm:block hidden">{0} Comments</span>
           </Link>
-          <button className="w-fit flex items-center gap-2 font-dmsans">
+          <button className="w-fit flex items-center gap-2">
             <ShareDialog
               postLink={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
             />
@@ -418,9 +418,9 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
               })}
             />{" "}
             {savedState ? (
-              <span className=" sm:block hidden font-dmsans">Saved</span>
+              <span className=" sm:block hidden ">Saved</span>
             ) : (
-              <span className=" sm:block hidden font-dmsans">Save</span>
+              <span className=" sm:block hidden">Save</span>
             )}
           </button>
 

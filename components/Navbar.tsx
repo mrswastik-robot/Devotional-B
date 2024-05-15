@@ -92,7 +92,7 @@ import { useToast } from "./ui/use-toast";
 import { Separator } from "./ui/separator";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import { LuXCircle } from "react-icons/lu";
-import logo from '../public/logo.png'
+import logo from '../public/newvainaha.png'
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -505,7 +505,7 @@ const clearNotifications = async () => {
 
 
   return (
-    <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#000000] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2 font-dmsans">
+    <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#000000] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2">
 
       {/* mobile Navbar */}
       <div className=" md:hidden flex justify-between px-2">
@@ -514,7 +514,7 @@ const clearNotifications = async () => {
         href={`/`}
         className=" my-auto"
         >
-          <p className=" text-lg font-bold my-auto font-dmsans">
+          <p className=" text-lg font-bold my-auto">
           <Image src={logo} alt="logo" width={150} height={55} />
           </p>
         </Link>
@@ -537,7 +537,7 @@ const clearNotifications = async () => {
         {/* logo */}
         <div className=" flex gap-[1rem]">
           <Link href="/" className="flex gap-2 items-center">
-            <p className="hidden text-zinc-700 dark:text-emerald-100 text-xl font-bold md:block mr-[4rem]">
+            <p className="hidden dark:text-emerald-100 text-xl font-bold md:block mr-[4rem]">
               <Image src={logo} alt="logo" width={160} height={60} />
             </p>
           </Link>
@@ -556,7 +556,7 @@ const clearNotifications = async () => {
                 }
             }}
           />
-          <Search className=" absolute left-2 top-1/2 transform text-gray-400 -translate-y-1/2 h-4 w-4" />
+          <Search className=" absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4" />
         </div>
         }
 
@@ -575,7 +575,7 @@ const clearNotifications = async () => {
                 }
             }}
           />
-          <Search className=" absolute left-2 top-1/2 transform text-gray-400 -translate-y-1/2 h-4 w-4" />
+          <Search className=" absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4" />
         </div>
         }
 
@@ -749,7 +749,7 @@ const clearNotifications = async () => {
             </div>
 
             <div className=" ml-5 flex">
-          <Button variant="ghost" className="hover:bg-transparent text-[#ffffff]" onClick={() => setClicked("home")}>
+          <Button variant="ghost" className="hover:text-black text-[#ffffff] " onClick={() => setClicked("home")}>
             <Link href="/">
             <Home
               className={`h-5 w-5 ${clicked === 'home' ? "" : ""}`}
@@ -761,7 +761,7 @@ const clearNotifications = async () => {
           <div className="ml-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="hover:bg-transparent focus-visible:ring-0.1 text-[#ffffff]" onClick={() => setClicked("notification")}>
+              <Button variant="ghost" className="hover:text-black focus-visible:ring-0.1 text-[#ffffff]" onClick={() => setClicked("notification")}>
                 <Bell
                   className={`h-5 w-5 ${clicked === 'notification' ? "" : ""}`}
                 />

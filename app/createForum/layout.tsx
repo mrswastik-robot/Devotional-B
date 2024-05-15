@@ -24,7 +24,7 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <>
-    <div className="md:container md:max-w-7xl md:mx-auto ">
+    <div className="md:container md:max-w-7xl md:mx-auto mt-3">
       
       <div className=" space-y-6 p-10 pb-16  bg-white dark:bg-[#262626] rounded-md font-dmsans">
         <div className="space-y-0.5">

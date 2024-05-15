@@ -183,9 +183,9 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
               })}
             />{" "}
             {savedState ? (
-              <span className=" sm:block hidden font-dmsans"></span>
+              <span className=" sm:block hidden"></span>
             ) : (
-              <span className=" sm:block hidden font-dmsans"></span>
+              <span className=" sm:block hidden"></span>
             )}
           </button>
           </div>

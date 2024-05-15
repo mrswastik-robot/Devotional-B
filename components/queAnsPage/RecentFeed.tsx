@@ -76,17 +76,19 @@ const RecentFeed = (props: Props) => {
 <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="font-dmsans text-left font-bold text-lg text-black dark:text-white">Recent Posts</TableHead>
+          <TableHead className=" text-left font-bold text-lg dark:text-white text-[#000000]">Recent Posts</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {posts.map((post, index) => (
           <TableRow key={index}>
             <Link className='flex flex-col' href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-            <TableCell className="text-black text-base font-semibold font-dmsans">{post.title.length>70?post.title.substring(0, 69)+"...":post.title}</TableCell>
-            <TableCell className="text-sm text-gray-800 font-dmsans">{post.description.length>1000?parse(post.description.substring(0, 99))+"...":parse(post.description)}</TableCell>
+            <TableCell className=" text-base font-semibold">{post.title.length>70?post.title.substring(0, 69)+"...":post.title}</TableCell>
+            <TableCell className="text-sm">{post.description.length>1000?parse(post.description.substring(0, 99))+"...":parse(post.description)}</TableCell>
             </Link>
+            {index!=4&&
             <Separator/>
+}
           </TableRow>
         ))}
       </TableBody>

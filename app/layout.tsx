@@ -53,7 +53,7 @@ export default function RootLayout({
     <StoreProvider>
       <html lang="en">
       <GoogleTagManager gtmId="GTM-5L5XG2V6" />
-        <body className={cn(GeistSans.className, `antialiased min-h-screen pt-12 bg-[#F1F2F2] dark:bg-[#181818] ${dmSans_init.variable}`)}>
+        <body className={cn(GeistSans.className, `antialiased min-h-screen pt-12 bg-[#e8eaf6] dark:bg-[#181818] ${dmSans_init.variable}`)}>
           <Providers>
             <Navbar />
             <div className="h-full pt-4 ">

@@ -350,7 +350,7 @@ const ForumAnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
           <div className=" dark:bg-[#1A1A1B]/65 z-20 flex justify-between gap-x-3 text-sm px-4 py-4 sm:px-6">
 
-            <PostVoteClientPhone postId={answer.id} postType="forumPostAnswers"  userId={user?.uid!} questionId={postId}/>
+            <PostVoteClientPhone postId={answer.id} postType="answers"  userId={user?.uid!} questionId={postId}/>
             
             <div className=" flex gap-x-3">
               <button

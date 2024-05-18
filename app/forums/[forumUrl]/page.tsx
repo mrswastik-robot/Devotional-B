@@ -36,7 +36,17 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
     }
 
     useEffect(()=>{
-        dispatch(setForumURL(forumUrl));
+        //dispatch(setForumURL(forumUrl));
+        //storing value of eventId in sessional storage
+        const devotionalforumUrl = sessionStorage.getItem('devotionalforumUrl');
+        
+        if (!devotionalforumUrl) {
+          // If "devotionalEventId" is not already present, store "eventId"
+          sessionStorage.setItem('devotionalforumUrl', forumUrl);
+        } else {
+          // If "devotionalEventId" is already present, update it with the new "eventId"
+          sessionStorage.setItem('devotionalforumUrl', forumUrl);
+        }
     }, []);
 
     const joinInForum = async()=>{
@@ -164,7 +174,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <AvatarFallback>SP</AvatarFallback>
+              {/* <AvatarFallback>SP</AvatarFallback> */}
             </Avatar>
           <div className="flex items-center">
             <h4 className="ml-[6.5rem] text-2xl font-bold">
@@ -211,7 +221,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                 <span>{dateString && <p className='ml-1 mt-[2.5px] font-semibold text-gray-900 text-sm'>{dateString}</p>}</span>
               </p>
               <Link href={`/createForumPost`}>
-              <button className="focus:outline-none rounded-md w-full py-3 font-semibold bg-[#007dfd]">
+              <button className="focus:outline-none rounded-md w-full py-3 text-white font-semibold bg-[#007dfd]">
                 CREATE POST
               </button>
               </Link>

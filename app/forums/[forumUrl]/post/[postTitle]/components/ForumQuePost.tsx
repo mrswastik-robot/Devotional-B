@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
 import { formatTimeToNow } from "@/lib/date";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
-import ShareDialog from "../ShareDialog";
+import PostVoteClientPhone from "@/components/post-vote/PostVoteClientPhone";
+import ShareDialog from "@/components/ShareDialog";
 
 import { auth } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -47,7 +47,7 @@ type Props = {
   // id: string
 };
 
-const QuePost = ({ post }: Props) => {
+const ForumQuePost = ({ post }: Props) => {
 
   const { toast } = useToast();
   //console.log(post)
@@ -68,41 +68,46 @@ const QuePost = ({ post }: Props) => {
 
   const handleSave = async() => {
 
-    if(!user)
-    {
-      toast({
-        title:' Please sign in to save posts ',
-        variant:'destructive',
-      })
-      return;
-    }
+    toast({
+      title: "Feature Coming Soon",
+      variant: "default",
+    });
+
+    // if(!user)
+    // {
+    //   toast({
+    //     title:' Please sign in to save posts ',
+    //     variant:'destructive',
+    //   })
+    //   return;
+    // }
     
-      const userRef = doc(db , 'users' , user.uid);
+    //   const userRef = doc(db , 'users' , user.uid);
     
 
-    if(savedState)
-    {
-      //post is currently saved remove it from saved posts
-      await updateDoc(userRef , {
-        savedPosts: arrayRemove(post.id)
-      })
-      toast({
-        title:' Post removed from saved ',
-        variant:'default',  
-      })
-    }else{
-      //post is currently not saved add it to saved posts
-      await updateDoc(userRef , {
-        savedPosts: arrayUnion(post.id),
-      })
-      toast({
-        title:' Post saved ',
-        variant:'default',
-      })
-    }
+    // if(savedState)
+    // {
+    //   //post is currently saved remove it from saved posts
+    //   await updateDoc(userRef , {
+    //     savedPosts: arrayRemove(post.id)
+    //   })
+    //   toast({
+    //     title:' Post removed from saved ',
+    //     variant:'default',  
+    //   })
+    // }else{
+    //   //post is currently not saved add it to saved posts
+    //   await updateDoc(userRef , {
+    //     savedPosts: arrayUnion(post.id),
+    //   })
+    //   toast({
+    //     title:' Post saved ',
+    //     variant:'default',
+    //   })
+    // }
 
 
-      setSavedState(!savedState);
+    //   setSavedState(!savedState);
   }
 
   //fetching savedPosts from user's document
@@ -293,7 +298,7 @@ const handleFollow = async () => {
       
       <div className=" dark:bg-[#1A1A1B]/65 rounded-b-2xl z-20 flex justify-between gap-x-3 text-sm px-4 py-4 sm:px-6">
 
-        <PostVoteClientPhone postId={post.id} postType="questions" userId={user?.uid!}/>
+        <PostVoteClientPhone postId={post.id} postType="forumPosts" userId={user?.uid!}/>
 
         <div className=" flex gap-x-3">
             <button
@@ -316,4 +321,4 @@ const handleFollow = async () => {
   );
 };
 
-export default QuePost;
+export default ForumQuePost;

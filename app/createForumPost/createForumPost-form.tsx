@@ -268,7 +268,8 @@ const CreateForumPostPage = (props: Props) => {
   //console.log(selectedCategories);
   }
 
-  const ForumPostURL = useSelector(forumPostURL);
+  //const ForumPostURL = useSelector(forumPostURL);
+  const ForumPostURL = sessionStorage.getItem('devotionalforumUrl');
 
   // const signingInAnonymously = async () => {
 

@@ -502,7 +502,7 @@ const CreateForumPage = (props: Props) => {
           description: "Your forum has been created successfully.",
         });
 
-        router.push(`/forum`);
+        router.push(`/forums/${data.uniqueForumName.split(" ").join("-")}`);
     
         try {
           for (const [mainCategory, subcategories] of Object.entries(selectedCategories)) {

@@ -15,6 +15,7 @@ import { RiUserFollowLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { userCache } from "@/store/slice";
 import { updateUserCache } from "@/store/slice";
+import { useParams } from "next/navigation";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -74,9 +75,23 @@ type Props = {
   // id: string
   isProfile?: boolean;
   handleDelete?: Function;
+  
+    // post: {
+    //   id: string;
+    //   title: string;
+    //   name: string;
+    //   description: string;
+    //   profilePic: string;
+    //   postImage: string;
+    //   likes: number;
+    //   comments: number;
+    //   shares: number;
+    // };
 };
 
-const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
+const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) => {
+  const params = useParams();
+  const forumUrl = params.forumUrl
   const pRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const userCacheData = useSelector(userCache);
@@ -300,7 +315,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <AvatarFallback>SP</AvatarFallback>
+              {/* <AvatarFallback>SP</AvatarFallback> */}
             </Avatar>
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
@@ -345,7 +360,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
           }
           
           <div className={`${post.title?"":"hidden"}`}>
-          <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
+          <Link href={`/forums/${forumUrl}/post/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
             <h1 className={`font-bold font-dmsans py-2 leading-6 text-[17px] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
               {post.title}
             </h1>
@@ -397,7 +412,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
 
         <div className=" flex gap-x-3">
           <Link
-            href={`/${post?.title?.split(" ").join("-")}`}
+            href={`/forums/${forumUrl}/post/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
             className="w-fit flex items-center gap-2"
           >
             <MessageSquare className="h-4 w-4" />{" "}
@@ -405,7 +420,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {} }: Props) 
           </Link>
           <button className="w-fit flex items-center gap-2">
             <ShareDialog
-              postLink={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
+              postLink={`/forums/${forumUrl}/post/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
             />
           </button>
           <button

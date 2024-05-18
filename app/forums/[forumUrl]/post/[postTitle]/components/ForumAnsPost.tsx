@@ -13,9 +13,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import PostVoteClient from "@/components/post-vote/PostVoteClient";
-import CommentBox from "./CommentBox";
-import PostVoteClientPhone from "../post-vote/PostVoteClientPhone";
-import Loader from "../ui/Loader";
+import CommentBox from "@/components/queAnsPage/CommentBox";
+import PostVoteClientPhone from "@/components/post-vote/PostVoteClientPhone";
+import Loader from "@/components/ui/Loader";
 import { useToast } from "@/components/ui/use-toast";
 
 import { auth, db } from "@/utils/firebase";
@@ -58,7 +58,7 @@ type AnswerType = {
   // Add any other fields as necessary
 };
 
-const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
+const ForumAnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
   const { toast } = useToast();
   // console.log("postid is:", postId);
@@ -104,7 +104,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
       {
       // Set up the initial query
       const ansQuery = query(
-        collection(db, 'answers'),
+        collection(db, 'forumPostAnswers'),
         where("questionTitle", "==", postTitleWithSpaces),
         orderBy('createdAt', 'desc'),
         limit(5) // Adjust the limit based on your preference
@@ -200,7 +200,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
     //console.log("hey ", lastAnswer)
     // Set up the query for the next batch
     let ansQuery = query(
-      collection(db, 'answers'),
+      collection(db, 'forumPostAnswers'),
       where("questionTitle", "==", postTitleWithSpaces),
       orderBy('createdAt', 'desc'),
       startAfter(lastAnswer ? lastAnswer.createdAt : null), // If there is a last answer, start the query after it
@@ -350,7 +350,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
           <div className=" dark:bg-[#1A1A1B]/65 z-20 flex justify-between gap-x-3 text-sm px-4 py-4 sm:px-6">
 
-            <PostVoteClientPhone postId={answer.id} postType="answers"  userId={user?.uid!} questionId={postId}/>
+            <PostVoteClientPhone postId={answer.id} postType="forumPostAnswers"  userId={user?.uid!} questionId={postId}/>
             
             <div className=" flex gap-x-3">
               <button
@@ -393,5 +393,5 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
     </div>
   );
 };
-export default AnsPost;
+export default ForumAnsPost;
 

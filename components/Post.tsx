@@ -300,7 +300,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <AvatarFallback>SP</AvatarFallback>
+              {/* <AvatarFallback>SP</AvatarFallback> */}
             </Avatar>
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}

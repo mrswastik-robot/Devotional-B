@@ -537,26 +537,27 @@ const clearNotifications = async () => {
         {/* logo */}
         <div className=" flex gap-[1rem]">
           <Link href="/" className="flex gap-2 items-center">
-            <p className="hidden dark:text-emerald-100 text-xl font-bold md:block mr-[3rem]">
+            <p className="hidden dark:text-emerald-100 text-xl font-bold md:block">
               <Image src={logo} alt="logo" width={160} height={60} />
             </p>
           </Link>
-
+          </div>
           {/* search bar */}
+          <div>
         { !hideQueSearch && <div className=" relative ml-[0px] ">
           {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
           <input type="text" 
             value={searchText}
             onChange={handleSearchText} 
             placeholder="Search" 
-            className="peer cursor-pointer relative z-10 h-10 w-10 rounded-full border-[2px] bg-transparent border-[#ffffff] pl-12 outline-none focus:w-[39rem] focus:cursor-text focus:border-[#ffffff] focus:pl-[3rem] focus:pr-4 transition-all" 
+            className="peer cursor-pointer relative z-10 h-10 w-10 text-white pl-12 rounded-full border-[2px] bg-transparent border-[#ffffff] outline-none focus:w-[37rem] ml-[41rem] focus:ml-[0rem] focus:cursor-text focus:border-[#ffffff] transition-all" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerSearch());
                 }
             }}
           />
-          <svg xmlns="http://www.w3.org/2000/svg" className="absolute inset-y-0 my-auto h-14 w-12 border-transparent stroke-[#ffffff] px-3.5 peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" className={`absolute inset-y-0 my-auto ml-[41rem] transition-all h-14 w-12 border-transparent stroke-[#ffffff] px-3.5 peer-focus:ml-[0rem] peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         </div>
@@ -570,14 +571,14 @@ const clearNotifications = async () => {
             value={eventSearchText}
             onChange={handleEventSearchText}
             placeholder="Search Events" 
-            className="peer cursor-pointer relative z-10 h-10 w-10 rounded-full border-[2px] bg-transparent border-[#ffffff] pl-12 outline-none focus:w-[39rem] focus:cursor-text focus:border-[#ffffff] focus:pl-[3rem] focus:pr-4 transition-all" 
+            className="peer cursor-pointer relative z-10 h-10 w-10 text-white pl-12 rounded-full border-[2px] bg-transparent border-[#ffffff] outline-none focus:w-[37rem] ml-[49.5rem] focus:ml-[0rem] focus:cursor-text focus:border-[#ffffff] transition-all" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerEventSearch());
                 }
             }}
           />
-          <svg xmlns="http://www.w3.org/2000/svg" className="absolute inset-y-0 my-auto h-14 w-12 border-transparent stroke-[#ffffff] px-3.5 peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" className={`absolute inset-y-0 my-auto ml-[49.5rem] transition-all h-14 w-12 border-transparent stroke-[#ffffff] px-3.5 peer-focus:ml-[0rem] peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         </div>
@@ -829,7 +830,7 @@ const clearNotifications = async () => {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <AvatarFallback>SP</AvatarFallback>
+              {/* <AvatarFallback>SP</AvatarFallback> */}
             </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">

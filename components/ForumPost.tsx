@@ -134,37 +134,42 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
   };
 
   const handleSave = async () => {
-    if (!user||user.isAnonymous==true) {
-      toast({
-        title: " Please sign in to save posts ",
-        variant: "destructive",
-      });
-      return;
-    }
 
-    const userRef = doc(db, "users", user.uid);
+    toast({
+      title: "Feature Coming Soon",
+      variant: "default",
+    });
+    // if (!user||user.isAnonymous==true) {
+    //   toast({
+    //     title: " Please sign in to save posts ",
+    //     variant: "destructive",
+    //   });
+    //   return;
+    // }
 
-    if (savedState) {
-      //post is currently saved remove it from saved posts
-      await updateDoc(userRef, {
-        savedForumPosts: arrayRemove(post.id),
-      });
-      toast({
-        title: " Post removed from saved ",
-        variant: "default",
-      });
-    } else {
-      //post is currently not saved add it to saved posts
-      await updateDoc(userRef, {
-        savedForumPosts: arrayUnion(post.id),
-      });
-      toast({
-        title: " Post saved ",
-        variant: "default",
-      });
-    }
+    // const userRef = doc(db, "users", user.uid);
 
-    setSavedState(!savedState);
+    // if (savedState) {
+    //   //post is currently saved remove it from saved posts
+    //   await updateDoc(userRef, {
+    //     savedForumPosts: arrayRemove(post.id),
+    //   });
+    //   toast({
+    //     title: " Post removed from saved ",
+    //     variant: "default",
+    //   });
+    // } else {
+    //   //post is currently not saved add it to saved posts
+    //   await updateDoc(userRef, {
+    //     savedForumPosts: arrayUnion(post.id),
+    //   });
+    //   toast({
+    //     title: " Post saved ",
+    //     variant: "default",
+    //   });
+    // }
+
+    // setSavedState(!savedState);
   };
 
   useEffect(() => {
@@ -416,7 +421,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
             className="w-fit flex items-center gap-2"
           >
             <MessageSquare className="h-4 w-4" />{" "}
-            <span className=" sm:block hidden">{0} Comments</span>
+            <span className=" sm:block hidden">{post.comments} Comments</span>
           </Link>
           <button className="w-fit flex items-center gap-2">
             <ShareDialog

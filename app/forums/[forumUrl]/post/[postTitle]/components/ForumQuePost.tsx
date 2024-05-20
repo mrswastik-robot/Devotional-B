@@ -13,6 +13,7 @@ import Image from "next/image";
 
 import PostVoteClient from "@/components/post-vote/PostVoteClient";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -48,6 +49,9 @@ type Props = {
 };
 
 const ForumQuePost = ({ post }: Props) => {
+
+  const params = useParams();
+  const forumUrl = params.forumUrl
 
   const { toast } = useToast();
   //console.log(post)
@@ -304,7 +308,7 @@ const handleFollow = async () => {
             <button
               className="w-fit flex items-center gap-2"
             >
-            <ShareDialog postLink={`/${post?.title?.split(" ").join("-")}`}/>
+            <ShareDialog postLink={`/forums/${forumUrl}/post/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}/>
           </button>
           <button
             className="w-fit flex items-center gap-2"

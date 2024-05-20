@@ -217,19 +217,19 @@ const PostFeed = (props: Props) => {
       setMorePosts(true);
     }
     for (const doc of snapshot.docs) {
-      // Fetch the 'answers' subcollection for each question
-    //   const answersCollectionRef = collection(db, "answers");
-    //   const answersQuery = query(
-    //     collection(db, 'answers'),
-    //     where("questionId", "==", doc.id),
-    //   );
-    //   const answersSnapshot = await getDocs(answersQuery);
-    //   const numAnswers = answersSnapshot.size;
+      
+      const answersCollectionRef = collection(db, "forumPostAnswers");
+      const answersQuery = query(
+        answersCollectionRef,
+        where("forumpostId", "==", doc.id),
+      );
+      const answersSnapshot = await getDocs(answersQuery);
+      const numAnswers = answersSnapshot.size;
 
       // Add the total number of answers to the question data
       const questionData = {
         id: doc.id,
-        comments: 5,
+        comments: numAnswers,
         ...doc.data(),
       };
 

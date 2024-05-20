@@ -21,6 +21,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { auth, db } from "@/utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter, updateDoc, where } from "firebase/firestore";
+import ForumPostCommentBox from "./ForumPostCommentBox";
 
 type Props = {
   answers: {
@@ -125,6 +126,7 @@ const ForumAnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
     };
 
     fetchData();
+    //console.log("Data of answer")
   }, [postId, answers, commentAdded]);
 
   // Fetch followed users on component mount
@@ -350,7 +352,7 @@ const ForumAnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
           <div className=" dark:bg-[#1A1A1B]/65 z-20 flex justify-between gap-x-3 text-sm px-4 py-4 sm:px-6">
 
-            <PostVoteClientPhone postId={answer.id} postType="answers"  userId={user?.uid!} questionId={postId}/>
+            <PostVoteClientPhone postId={answer.id} postType="forumAnswerPost"  userId={user?.uid!} questionId={postId}/>
             
             <div className=" flex gap-x-3">
               <button
@@ -377,7 +379,7 @@ const ForumAnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
 
           {/* Add a comment input that shows or hides when the comments button is clicked */}
           {commentInputVisibility[key] && (
-            <CommentBox postTitleWithSpaces={postTitleWithSpaces} changeHandler={setCommentAdded} answerId={answer.id} toggleCommentInputVisibility={() => toggleCommentInputVisibility(key)} />
+            <ForumPostCommentBox postTitleWithSpaces={postTitleWithSpaces} changeHandler={setCommentAdded} answerId={answer.id} toggleCommentInputVisibility={() => toggleCommentInputVisibility(key)} />
           )} 
 
         </div>

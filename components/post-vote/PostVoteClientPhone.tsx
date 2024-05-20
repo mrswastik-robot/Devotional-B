@@ -14,7 +14,7 @@ import { db } from "@/utils/firebase";
 
 type Props = {
   postId: string;
-  postType: "questions" | "answers" | "forumPosts";
+  postType: "questions" | "answers" | "forumPosts" | "forumAnswerPost";
   userId: string;
   questionId?: string;
 };
@@ -43,6 +43,10 @@ const PostVoteClientPhone = ({
 
     if(postType==="forumPosts"){
       docPath = `forumPosts/${postId}`;
+    }
+
+    if(postType==="forumAnswerPost"){
+      docPath = `forumPostAnswers/${postId}`;
     }
 
     // Fetch user's vote on mount
@@ -92,6 +96,10 @@ const PostVoteClientPhone = ({
 
     if(postType==="forumPosts"){
       docPath = `forumPosts/${postId}`;
+    }
+
+    if(postType==="forumAnswerPost"){
+      docPath = `forumPostAnswers/${postId}`;
     }
   
     const voteValue = type === "UP" ? 1 : -1;

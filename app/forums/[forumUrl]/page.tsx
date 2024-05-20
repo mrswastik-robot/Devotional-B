@@ -1,7 +1,7 @@
 "use client";
 
 import { db } from '@/utils/firebase';
-import { collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, increment, onSnapshot, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 //import parse from "html-react-parser"
@@ -14,6 +14,9 @@ import { AvatarFallback } from '@radix-ui/react-avatar';
 import { useDispatch } from 'react-redux';
 import { setForumURL } from '@/store/slice';
 import ForumsPostFeed from '../../../components/ForumsPostFeed'
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/utils/firebase';
+import { useToast } from '@/components/ui/use-toast';
 
 type Props = {
     params: {
@@ -25,9 +28,11 @@ type Props = {
 const ForumsPage = ({ params: { forumUrl } }: Props) => {
 
     const [forumDetails , setForumDetails] = useState<any>({});  
-    const [joined, setForumJoin] = useState(true);
+    const [joined, setForumJoin] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch();
+    const [rerun, setRerun] = useState(false);
+    const { toast } = useToast();
     //const joined = false;
     let dateString;
     if (forumDetails.createdAt) {
@@ -35,7 +40,10 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
     dateString = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
+    const [user, loading] = useAuthState(auth);
+
     useEffect(()=>{
+      //console.log("User: ", user);
         //dispatch(setForumURL(forumUrl));
         //storing value of eventId in sessional storage
         const devotionalforumUrl = sessionStorage.getItem('devotionalforumUrl');
@@ -47,7 +55,47 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
           // If "devotionalEventId" is already present, update it with the new "eventId"
           sessionStorage.setItem('devotionalforumUrl', forumUrl);
         }
+
+
     }, []);
+
+    useEffect(()=>{
+     isJoined();
+    }, [rerun, user])
+
+    const isJoined = async()=>{
+      const forumQuery = query(collection(db, "forums"), where("uniqueForumName", "==", forumUrl));
+
+      const forumSnapshot = await getDocs(forumQuery);
+  
+      if (forumSnapshot.empty) {
+        console.error("Forum not found.");
+        return;
+      }
+  
+      const forumDoc = forumSnapshot.docs[0];
+      const forumRef = doc(db, "forums", forumDoc.id);
+  
+      const docSnap = await getDoc(forumRef);
+  
+      if (docSnap.exists()) {
+        const forumData = docSnap.data();
+        if(user){
+        
+          const members = forumData.members || [];
+    const userIndex = members.indexOf(user.uid);
+
+    //console.log("UserId", user.uid);
+
+    if (userIndex !== -1||forumData.uid==user.uid) {
+      setForumJoin(true);
+    }
+    else {
+      setForumJoin(false);
+    }
+      }
+    }
+    }
 
     const joinInForum = async()=>{
       //setForumJoin((prev)=>!prev);
@@ -68,16 +116,40 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
 
     if (docSnap.exists()) {
       const forumData = docSnap.data();
-      const numOfMembers = forumData.noOfMembers;
+      if(user){
+      if(forumData.uid==user.uid){
+        toast({
+          title: "You can't leave your own server",
+          variant: "destructive",
+        });
+        return
+      }
+    
+    const members = forumData.members || [];
+    const userIndex = members.indexOf(user.uid);
+    let updateData;
 
-        if(joined==false){
-        await updateDoc(forumRef, { noOfMembers: numOfMembers + 1 });
-        setForumJoin(true);
-        }
-        else{
-        await updateDoc(forumRef, { noOfMembers: numOfMembers - 1 });
-        setForumJoin(false);
-        }
+    if (userIndex !== -1) {
+      // User exists in members array, remove them
+      updateData = {
+        members: arrayRemove(user.uid),
+        noOfMembers: increment(-1),
+      };
+    } else {
+      // User does not exist in members array, add them
+      updateData = {
+        members: arrayUnion(user.uid),
+        noOfMembers: increment(1),
+      };
+    }
+
+    await updateDoc(forumRef, updateData);
+  }
+
+    console.log("Members and noOfMembers updated successfully.");
+
+      //logic to add user in forums  
+
 
       console.log("NumOfMembers updated successfully.");
       // toast({
@@ -86,6 +158,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
       // });
 
       // router.push("/forums");
+      setRerun((prev)=>!prev)
     } else {
       console.error("Forum document not found.");
     }
@@ -140,6 +213,8 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
         )
       }
       ,[forumUrl, router, joined])
+
+      //console.log(user);
     
     return (
       <div>
@@ -211,7 +286,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                   <p className="text-sm">Members</p>
                 </div>
                 <div className="w-full">
-                  <p>{forumDetails.numOfPosts}</p>
+                  <p>{forumDetails.numOfPosts||0}</p>
                   <p className="text-sm">total Posts</p>
                 </div>
               </div>
@@ -220,11 +295,23 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                 <b>Created On : {` `}</b>{" "}
                 <span>{dateString && <p className='ml-1 mt-[2.5px] font-semibold text-gray-900 text-sm'>{dateString}</p>}</span>
               </p>
+              <div>
+              {joined?
               <Link href={`/createForumPost`}>
               <button className="focus:outline-none rounded-md w-full py-3 text-white font-semibold bg-[#007dfd]">
                 CREATE POST
               </button>
-              </Link>
+              </Link>:
+              <button onClick={()=>{
+                toast({
+                  title: "Join Forum to post stuffs",
+                  variant: "destructive",
+                });
+              }} className="focus:outline-none rounded-md w-full py-3 text-white font-semibold bg-[#007dfd]">
+              CREATE POST
+            </button>
+}
+</div>
               <p className="text-md mb-1 mt-3">
                 <b className='mb-1'>Rules 👇</b>
 

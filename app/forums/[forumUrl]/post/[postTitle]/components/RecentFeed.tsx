@@ -40,7 +40,7 @@ const RecentFeed = (props: Props) => {
 
   useEffect(() => {
 
-    const collectionRef = collection(db, 'questions');
+    const collectionRef = collection(db, 'forumPosts');
     const q = query(collectionRef, orderBy('createdAt', 'desc'), limit(5));
 
     const unsub = onSnapshot(q, async(snapshot) => {
@@ -62,7 +62,7 @@ const RecentFeed = (props: Props) => {
       }
   
       //console.log(postsData)
-      //setPosts(postsData);
+      setPosts(postsData);
     })
 
     return () => {

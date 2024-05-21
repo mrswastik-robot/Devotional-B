@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { SubRedditPost } from './components/subredditPost';
 import parse from "html-react-parser";
 import { Avatar } from '@/components/ui/avatar';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AvatarFallback } from '@radix-ui/react-avatar';
 import { useDispatch } from 'react-redux';
 import { setForumURL } from '@/store/slice';
@@ -17,6 +18,9 @@ import ForumsPostFeed from '../../../components/ForumsPostFeed'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/utils/firebase';
 import { useToast } from '@/components/ui/use-toast';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import Loader from '@/components/ui/Loader';
 
 type Props = {
     params: {
@@ -28,6 +32,7 @@ type Props = {
 const ForumsPage = ({ params: { forumUrl } }: Props) => {
 
     const [forumDetails , setForumDetails] = useState<any>({});  
+    const [memberDetails, setMemberDetails] = useState<any>([]);
     const [joined, setForumJoin] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch();
@@ -62,6 +67,33 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
     useEffect(()=>{
      isJoined();
     }, [rerun, user])
+
+    useEffect(() => {
+      const fetchMemberDetails = async () => {
+        if (forumDetails) {
+          const allUids = [forumDetails.uid, ...(forumDetails.members || [])];
+          const uniqueUids = Array.from(new Set(allUids)); // Convert Set back to array
+  
+          const memberPromises = uniqueUids.map(async (uid) => {
+            const userRef = doc(db, 'users', uid);
+            const userSnap = await getDoc(userRef);
+  
+            if (userSnap.exists()) {
+              return { uid, ...userSnap.data() };
+            } else {
+              console.error(`User document for UID ${uid} not found.`);
+              return null;
+            }
+          });
+  
+          const members = await Promise.all(memberPromises);
+          setMemberDetails(members.filter((member) => member !== null));
+        }
+      };
+  
+      fetchMemberDetails();
+      console.log(memberDetails);
+    }, [forumDetails]);
 
     const isJoined = async()=>{
       const forumQuery = query(collection(db, "forums"), where("uniqueForumName", "==", forumUrl));
@@ -219,7 +251,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
     return (
       <div>
       <div className="" />
-      <div className="w-full h-[9rem] relative border-white border-[3px]">
+      <div className="w-full h-[10rem] relative border-white border-[3px]">
               <div className="w-full h-full">
                 <Image
                   fill
@@ -233,8 +265,8 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                 />
               </div>
             </div>
-      <div className="h-18 bg-white rounded-b-lg">
-        <div className="mx-auto container px-12 py-2 flex relative flex-col">
+      <div className="h-18 bg-white rounded-b-2xl">
+        <div className="mx-auto container px-16 py-2 flex relative flex-col">
           {/* <div className="w-16 absolute h-16 bottom-6 rounded-full bg-green-400 border-white border-2" /> */}
           <Avatar className="w-24 absolute h-24 bottom-6 rounded-full border-white border-[3px]">
               <div className="">
@@ -252,53 +284,28 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
               {/* <AvatarFallback>SP</AvatarFallback> */}
             </Avatar>
           <div className="flex items-center">
-            <h4 className="ml-[6.5rem] text-2xl font-bold">
+            <h4 className="ml-[7rem] text-2xl font-bold">
               {forumDetails.name}
             </h4>
-            <button className="ml-4 text-sm text-[#007dfd] font-semibold border border-[#007dfd] py-1 px-3 rounded-lg focus:outline-none" onClick={joinInForum}>
+            <button className="ml-5 text-sm text-[#007dfd] font-semibold border border-[#007dfd] py-1 px-3 rounded-lg focus:outline-none" onClick={joinInForum}>
               {joined ? "JOINED" : "JOIN"}
             </button>
           </div>
-          <p className="ml-[6.5rem] text-sm">r/{forumDetails.uniqueForumName}</p>
-        </div>
-      </div>
-      <div className="">
-        <div className="flex container mx-auto py-2 px-4 items-start">
-          {/* Left Column (Posts) */}
-          <div className="w-2/3">
-            
-            <ForumsPostFeed newPost={false} forumURL={forumUrl}/>
-            {/* {forumPost?.map((post:any, index:any) => (
-              <SubRedditPost key={index}/>
-            ))} */}
-          </div>
-
-          {/* >Right Column (sidebar) */}
-          <div className="w-1/3 ml-4 bg-white rounded-md mt-1">
-            <div className="bg-[#007dfd] py-4 px-2 rounded-t-md">
-              <p className="text-base text-[#ffffff] font-bold text-center">About Community</p>
-            </div>
-            <div className="p-2">
-              <p>{forumDetails.description?parse(forumDetails.description):""}</p>
-              <div className="flex w-full mt-2 font-semibold">
-                <div className="w-full">
-                  <p>{forumDetails.noOfMembers}</p>
-                  <p className="text-sm">Members</p>
-                </div>
-                <div className="w-full">
-                  <p>{forumDetails.numOfPosts||0}</p>
-                  <p className="text-sm">total Posts</p>
-                </div>
-              </div>
-              <div className="w-full h-px bg-gray-300 my-4" />
-              <p className="text-md mb-4 flex">
-                <b>Created On : {` `}</b>{" "}
-                <span>{dateString && <p className='ml-1 mt-[2.5px] font-semibold text-gray-900 text-sm'>{dateString}</p>}</span>
-              </p>
+          <p className="ml-[7rem] text-sm">r/{forumDetails.uniqueForumName}</p>
+          <div className="flex ml-[7rem] text-sm mt-[2px] font-semibold">
               <div>
+                  <span className='mr-1'>{forumDetails.noOfMembers}</span>
+                  <span className="text-sm">Members</span>
+              </div> 
+              <div className='ml-3'> 
+                  <span className='mr-1'>{forumDetails.numOfPosts||0}</span>
+                  <span className="text-sm">total Posts</span>
+              </div>  
+          </div>
+          <div className='absolute right-[7rem] bottom-[27px]'>
               {joined?
               <Link href={`/createForumPost`}>
-              <button className="focus:outline-none rounded-md w-full py-3 text-white font-semibold bg-[#007dfd]">
+              <button className="focus:outline-none rounded-xl bg-[#007dfd] text-white w-full py-2 px-2 font-semibold border border-[#007dfd]">
                 CREATE POST
               </button>
               </Link>:
@@ -307,22 +314,77 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                   title: "Join Forum to post stuffs",
                   variant: "destructive",
                 });
-              }} className="focus:outline-none rounded-md w-full py-3 text-white font-semibold bg-[#007dfd]">
+              }} className="focus:outline-none rounded-xl w-full py-2 bg-[#007dfd] text-white px-2 font-semibold border border-[#007dfd]">
               CREATE POST
             </button>
-}
-</div>
-              <p className="text-md mb-1 mt-3">
-                <b className='mb-1'>Rules 👇</b>
-
-                <div>{forumDetails.rules}</div>
-              </p>
+            }
             </div>
+        </div>
+      </div>
+      <div className="flex container mx-auto py-2 px-0 items-start">
+      <div className="w-1/4 bg-white mt-1 mr-4 rounded-2xl">
+            
+      <div className={"pb-1 max-h-[15rem] dark:bg-[#262626] bg-[#ffffff] rounded-2xl"}>
+      <div className="space-y-4 py-4">
+        <div className="px-2 py-2">
+          <h2 className="mb-2 px-4 text-[20px] font-bold tracking-tight">
+            Members
+          </h2>
+          <ScrollArea className="h-[320px] px-1">
+          <div className="space-y-1">
+            <div>
+              {
+                memberDetails?
+                memberDetails.map((member:any, index:any)=>(
+                  <div key={index}>
+                    <Button variant={"ghost"} className="w-full justify-start">
+                      {member.name}
+                    </Button>
+                  </div>
+                )):
+                <div><Loader/></div>
+              }
+            </div>
+            
+          </div>
+          </ScrollArea>
+        </div>
+        </div>
+      </div>
+    
+            
+          </div>
+        
+          {/* Left Column (Posts) */}
+          <div className="w-2/4">
+            
+            <ForumsPostFeed newPost={false} forumURL={forumUrl}/>
+            {/* {forumPost?.map((post:any, index:any) => (
+              <SubRedditPost key={index}/>
+            ))} */}
+          </div>
+
+          {/* >Right Column (sidebar) */}
+          <div className="w-1/4 ml-4 bg-white rounded-2xl mt-1">
+            
+          <Card x-chunk="dashboard-01-chunk-5">
+              <CardHeader className='text-sm pb-1'>
+                <CardTitle className='text-[20px] font-[700]'>Forum Description</CardTitle>
+                <div className='text-xs text-muted-foreground'><span>Created On : {` `}</span>{" "}
+                <span>{dateString && <>{dateString}</>}</span></div>
+              </CardHeader>
+              <CardContent className="mt-3">
+                <p className="text-[21px]">{forumDetails.description?parse(forumDetails.description):""}</p>
+                {/* <p className='text-[17px] max-h-[18rem] overflow-y-scroll'>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+                </p> */}
+                
+              </CardContent>
+          </Card>
             
           </div>
         </div>
       </div>
-        </div>
 
     );
 }

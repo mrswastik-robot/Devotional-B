@@ -291,7 +291,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
     <>
     {
       post.uid?
-    <div className="rounded-lg bg-white dark:bg-[#262626] shadow my-1">
+    <div className="rounded-2xl bg-white dark:bg-[#262626] shadow my-1">
       <div className="px-6 py-4 flex justify-between">
         {/* <PostVoteClient
         //   postId={post.id}
@@ -325,7 +325,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
             <div className=" flex space-x-2">
-            <span className=" mt-3 text-sm font-semibold dark:text-yellow-50 font-dmsans">
+            <span className=" mt-3 text-sm font-semibold dark:text-yellow-50 font-dmsans text-black">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
             {isAnonymous||isCurrentUser || !user ? null : (
@@ -406,7 +406,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
         </div>
       </div>
 
-      <div className="bg-gray-50 rounded-b-lg dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150 flex justify-between  gap-x-3 text-sm px-4 py-2  sm:px-6">
+      <div className="bg-gray-50 rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150 flex justify-between  gap-x-3 text-sm px-4 py-2  sm:px-6">
         {/* <div className=' sm:block md:hidden '> */}
         <PostVoteClientPhone
           postId={post.id}

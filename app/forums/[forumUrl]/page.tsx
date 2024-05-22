@@ -284,7 +284,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
               {/* <AvatarFallback>SP</AvatarFallback> */}
             </Avatar>
           <div className="flex items-center">
-            <h4 className="ml-[7rem] text-2xl font-bold">
+            <h4 className="forumHeading ml-[7rem] text-2xl font-bold">
               {forumDetails.name}
             </h4>
             <button className="ml-5 text-sm text-[#007dfd] font-semibold border border-[#007dfd] py-1 px-3 rounded-lg focus:outline-none" onClick={joinInForum}>
@@ -321,25 +321,44 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
             </div>
         </div>
       </div>
-      <div className="flex container mx-auto py-2 px-0 items-start">
-      <div className="w-1/4 bg-white mt-1 mr-4 rounded-2xl">
+      <div className="flex container mx-auto py-[11px] px-0 items-start">
+        <div className='w-1/4 border-0 '>
+      <div className=" bg-[#ffffff] mt-[7px] mr-4 rounded-2xl border-0">
             
-      <div className={"pb-1 max-h-[15rem] dark:bg-[#262626] bg-[#ffffff] rounded-2xl"}>
+      <div className={"pb-1 dark:bg-[#262626] bg-[#ffffff] rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]"}>
       <div className="space-y-4 py-4">
         <div className="px-2 py-2">
-          <h2 className="mb-2 px-4 text-[20px] font-bold tracking-tight">
+          <h2 className="mb-[10px] px-4 text-[20px] font-bold tracking-tight">
             Members
           </h2>
-          <ScrollArea className="h-[320px] px-1">
+          <ScrollArea className="px-1 h-[150px]">
           <div className="space-y-1">
             <div>
               {
                 memberDetails?
                 memberDetails.map((member:any, index:any)=>(
                   <div key={index}>
-                    <Button variant={"ghost"} className="w-full justify-start">
-                      {member.name}
-                    </Button>
+                    <div >
+            <div className="mb-[10px]">
+
+            <div className="flex ml-[13px]">
+              <div>
+            <Image
+                        src={member.profilePic}
+                        width={250}
+                        height={250}
+                        alt='Conference'
+                        className=' w-10 h-10 rounded-full'
+                        />
+            </div>  
+          <div className="ml-4 space-y-1">
+          <p className="text-[17px] font-medium leading-none mt-2">{member.name}</p>
+          {/* <p className="text-[12px] text-muted-foreground">{member.email}</p> */}
+          </div>
+        </div>
+              
+            </div>
+          </div>
                   </div>
                 )):
                 <div><Loader/></div>
@@ -354,9 +373,12 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
     
             
           </div>
+
+            
+          </div>
         
           {/* Left Column (Posts) */}
-          <div className="w-2/4">
+          <div className="w-2/4 ">
             
             <ForumsPostFeed newPost={false} forumURL={forumUrl}/>
             {/* {forumPost?.map((post:any, index:any) => (
@@ -365,9 +387,9 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
           </div>
 
           {/* >Right Column (sidebar) */}
-          <div className="w-1/4 ml-4 bg-white rounded-2xl mt-1">
+          <div className="w-1/4 ml-4 bg-white rounded-2xl mt-[7px] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
             
-          <Card x-chunk="dashboard-01-chunk-5">
+          <Card x-chunk="dashboard-01-chunk-5" className='rounded-2xl'>
               <CardHeader className='text-sm pb-1'>
                 <CardTitle className='text-[20px] font-[700]'>Forum Description</CardTitle>
                 <div className='text-xs text-muted-foreground'><span>Created On : {` `}</span>{" "}

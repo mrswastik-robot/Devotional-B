@@ -400,7 +400,7 @@ const PostFeed = (props: Props) => {
           </ul>
         ) : (
           <div className=" w-[100%]">
-            <ul className=" flex flex-col col-span-2 mb-[4px]">
+            <ul className=" flex flex-col col-span-2 mb-[4px] mt-[7px]">
               {posts.map((post, index) => (
                 <li key={index}>
                   <ForumPost post={post}  />

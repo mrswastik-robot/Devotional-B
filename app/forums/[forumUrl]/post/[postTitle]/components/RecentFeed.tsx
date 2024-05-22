@@ -33,10 +33,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
 const RecentFeed = (props: Props) => {
 
   const [posts , setPosts] = useState<PostType[]>([]);
+  const params = useParams();
+  const forumUrl = params.forumUrl
 
   useEffect(() => {
 
@@ -82,7 +85,7 @@ const RecentFeed = (props: Props) => {
       <TableBody>
         {posts.map((post, index) => (
           <TableRow key={index}>
-            <Link className='flex flex-col' href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
+            <Link className='flex flex-col' href={`/forums/${forumUrl}/post/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
             <TableCell className=" text-[14px] font-[500]">{post.title.length>70?post.title.substring(0, 69)+"...":post.title}</TableCell>
             <TableCell className="text-[14px]">{post.description.length>1000?parse(post.description.substring(0, 99))+"...":parse(post.description)}</TableCell>
             </Link>

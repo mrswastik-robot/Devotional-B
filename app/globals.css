@@ -114,6 +114,10 @@ h3 {
     color: #000000;
 }
 
+h4 {
+    font-family: 'Montserrat';
+}
+
 div.h-full.pt-4 {
     background-color: #e8eaf6;
 }

@@ -291,7 +291,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
     <>
     {
       post.uid?
-    <div className="rounded-2xl bg-white dark:bg-[#262626] shadow my-1">
+    <div className="rounded-2xl bg-white dark:bg-[#262626] mb-3 shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
       <div className="px-6 py-4 flex justify-between">
         {/* <PostVoteClient
         //   postId={post.id}
@@ -325,7 +325,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
             <div className=" flex space-x-2">
-            <span className=" mt-3 text-sm font-semibold dark:text-yellow-50 font-dmsans text-black">
+            <span className=" mt-3 text-sm font-semibold dark:text-yellow-50 text-black">
               {isAnonymous ? "Anonymous" : post.name}
             </span>{" "}
             {isAnonymous||isCurrentUser || !user ? null : (
@@ -353,7 +353,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
 
 
                 {(
-        <button className="text-xs mt-[0.33rem] p-0 hover:underline cursor-pointer" onClick={handleFollow}>
+        <button className="text-xs mt-[0.33rem] text-[#1976d2] p-0 hover:underline cursor-pointer" onClick={handleFollow}>
           {isFollowing ? "Following" : "Follow"}
         </button>
       )}
@@ -406,7 +406,7 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
         </div>
       </div>
 
-      <div className="bg-gray-50 rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 border border-t-gray-150 flex justify-between  gap-x-3 text-sm px-4 py-2  sm:px-6">
+      <div className=" rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 flex justify-between  gap-x-3 text-sm px-4 py-2  sm:px-6">
         {/* <div className=' sm:block md:hidden '> */}
         <PostVoteClientPhone
           postId={post.id}

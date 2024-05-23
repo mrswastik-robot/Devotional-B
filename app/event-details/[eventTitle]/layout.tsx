@@ -6,7 +6,7 @@ export default function EventDetailsPage ({
     children: React.ReactNode;
 }) {
     return(
-        <div className=" md:container md:max-w-7xl  md:mx-auto">
+        <div className=" md:container md:max-w-[74rem]  md:mx-auto">
             {children}
         </div>
     )

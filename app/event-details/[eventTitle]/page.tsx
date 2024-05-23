@@ -326,12 +326,12 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
           <div className=' w-full  bg-white dark:bg-[#262626] rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06) break-words overflow-hidden mt-10 font-dmsans p-10'>
             <div className=''>
-                <div>
+                <div className=''>
                   {
                     eventObject.eventImageURL ? 
-                    <Image src={eventObject.eventImageURL} width={1920} height={1080} alt='Conference' />
+                    <Image src={eventObject.eventImageURL} width={1920} height={1080} alt='Conference' className='rounded-2xl' />
                     :
-                    <Image src='https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F723807029%2F1879204942643%2F1%2Foriginal.20240320-051010?w=940&auto=format%2Ccompress&q=75&sharp=10&s=5758072329789ed48407ed8022bcbe72' width={1920} height={1080} alt='Conference' />
+                    <Image src='https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F723807029%2F1879204942643%2F1%2Foriginal.20240320-051010?w=940&auto=format%2Ccompress&q=75&sharp=10&s=5758072329789ed48407ed8022bcbe72' width={1920} height={1080} alt='Conference' className='rounded-2xl' />
 
                   }
                 </div>

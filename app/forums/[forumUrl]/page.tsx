@@ -287,9 +287,9 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
             <h4 className="forumHeading ml-[7rem] text-2xl font-bold">
               {forumDetails.name}
             </h4>
-            <button className="ml-5 text-sm text-[#007dfd] font-semibold border border-[#007dfd] py-1 px-3 rounded-lg focus:outline-none" onClick={joinInForum}>
+            <Button className="ml-5 text-sm text-black font-semibold border hover:bg-slate-300 border-gray-600 bg-slate-200 py-0 px-3 rounded-3xl focus:outline-none" onClick={joinInForum}>
               {joined ? "JOINED" : "JOIN"}
-            </button>
+            </Button>
           </div>
           <p className="ml-[7rem] text-sm">r/{forumDetails.uniqueForumName}</p>
           <div className="flex ml-[7rem] text-sm mt-[2px] font-semibold">
@@ -305,9 +305,9 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
           <div className='absolute right-[7rem] bottom-[27px]'>
               {joined?
               <Link href={`/createForumPost`}>
-              <button className="focus:outline-none rounded-xl bg-[#007dfd] text-white w-full py-2 px-2 font-semibold border border-[#007dfd]">
+              <Button className="focus:outline-none rounded-3xl w-full py-2 px-3 bg-black text-white font-bold border border-gray-600">
                 CREATE POST
-              </button>
+              </Button>
               </Link>:
               <button onClick={()=>{
                 toast({
@@ -387,8 +387,10 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
           </div>
 
           {/* >Right Column (sidebar) */}
-          <div className="w-1/4 ml-4 bg-white rounded-2xl mt-[7px] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
+          <div className="w-1/4 ml-4">
             
+            
+          <div className='bg-white rounded-2xl mt-[7px] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
           <Card x-chunk="dashboard-01-chunk-5" className='rounded-2xl'>
               <CardHeader className='text-sm pb-1'>
                 <CardTitle className='text-[20px] font-[700]'>Forum Description</CardTitle>
@@ -403,7 +405,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
                 
               </CardContent>
           </Card>
-            
+          </div>  
           </div>
         </div>
       </div>

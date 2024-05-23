@@ -491,7 +491,7 @@ const ForumPostPage = ({ params: { postTitle } }: Props) => {
       </div>
 </div>
       
-      <div className=" sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 order-last mt-1">
+      <div className=" sm:block hidden col-span-2 sticky overflow-hidden h-fit order-last mt-1">
       <div>
         <RecentFeed />
       </div>

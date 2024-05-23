@@ -614,7 +614,7 @@ export default function Home() {
 
           {/* <RightHandFeed />           */}
           <div className="shadow-lg shadow-blue-300">
-          <div className='hidden lg:block col-span-4 lg:col-span-2 overflow-hidden rounded-2xl h-fit order-last'>
+          <div className='hidden lg:block col-span-4 lg:col-span-2 overflow-hidden h-fit order-last'>
             <RightHandFeed />
           </div>
           </div>

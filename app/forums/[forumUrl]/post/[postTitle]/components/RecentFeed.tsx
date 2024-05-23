@@ -34,6 +34,8 @@ import {
 } from "@/components/ui/table"
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 
 const RecentFeed = (props: Props) => {
 
@@ -74,7 +76,9 @@ const RecentFeed = (props: Props) => {
   }, [])
   
   return (
-    <div className='max-h-[40rem] p-2 overflow-auto bg-[#FFFFFF] dark:bg-[#262626] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
+    <div>
+      
+    <div className='max-h-[40rem] p-2 overflow-auto bg-[#FFFFFF] rounded-2xl dark:bg-[#262626] shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
 
 <Table>
       <TableHeader>
@@ -103,6 +107,7 @@ const RecentFeed = (props: Props) => {
       </Table>
 
 
+    </div>
     </div>
   )
 }

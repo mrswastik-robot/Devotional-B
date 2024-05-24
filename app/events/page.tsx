@@ -2,7 +2,7 @@
 
 import { Metadata } from "next"
 import Image from "next/image"
-import { MailIcon, PlusCircleIcon } from "lucide-react"
+import { Layers3, LocateIcon, MailIcon, MapPin, PlusCircleIcon } from "lucide-react"
 import { X } from 'lucide-react';
 
 import { ScrollArea, ScrollBar } from "../../components/ui/scroll-area"
@@ -24,6 +24,12 @@ import { postData } from "@/lib/data";
 
 import { Button } from "../../components/ui/button";
 import Loader from "../../components/ui/Loader"
+
+
+import { setEventSearchText, setSearchText , triggerSearch } from "@/store/slice";
+
+//for event search
+
 
 import { db , storage} from "@/utils/firebase";
 import {
@@ -108,7 +114,7 @@ import { title } from "process";
 import Link from "next/link";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { FaCirclePlus } from "react-icons/fa6";
-import BImage from "../../public/WhatsApp Image 2024-05-23 at 4.10.50 PM.jpeg"
+import BImage from "../../public/richard-horvath-cPccYbPrF-A-unsplash.jpg"
 
 type Input = z.infer<typeof EventType>;
 
@@ -194,6 +200,14 @@ export default function MusicPage() {
   const [sponsorInput , setSponsorInput] = useState<string>("");
 
   const [eventModeChange, setEventModeChange] = useState<string>("Webinar");
+
+  // const dispatch = useDispatch();
+  //const searchTextI = useSelector((state: RootState) => state.search.searchText);
+  const searchTextI = useSelector((state: RootState) => state.eventSearch.searchText);
+  const handleEventSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    dispatch(setEventSearchText(e.target.value));
+  }
 
    //old homepage stuff
    const [posts, setPosts] = useState<EventType[]>([]);
@@ -775,7 +789,49 @@ export default function MusicPage() {
     }
   }
 
-  
+  const [sidebarCategory, setSidebarCategory] = useState<any>([]);
+  // const categoryEvents = useSelector(categoryE);
+  // const changeE = useSelector(change);
+
+  // useEffect(()=>{
+  //   selectChange(categoryEvents);
+  // }, [changeE])
+  const [location, setLocation] = useState("all");
+
+  const handleLocationChange = ()=>{
+
+  }
+
+  const handleChangeCat = (event:any)=>{
+    const value = event.target.value;
+    handleSelectChange(value);
+  }
+
+  const locations:any = [];
+
+  useEffect(()=>{
+    const getCat=async()=>{
+      try {
+        const eventCategoriesRef = collection(db, 'meta-data', 'v1', 'event-categories');
+        const snapshot = await getDocs(eventCategoriesRef);
+    
+        const eventCategories:any = [];
+        snapshot.forEach(doc => {
+          eventCategories.push({ id: doc.id, ...doc.data() });
+        });
+    
+        return eventCategories;
+      } catch (error) {
+        console.error('Error fetching event categories:', error);
+        return [];
+      }
+  }
+  const category = getCat().then(categories => {
+    setSidebarCategory(categories);
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+  }, [])
    
 
   return (
@@ -790,6 +846,86 @@ export default function MusicPage() {
                 "h-full w-full object-cover",
               )}
             />
+            <div className="top-[18.5rem] left-[12rem] absolute text-[42px] font-[700] italic text-pink-500">Find Your Next Experience</div>
+            <div className="top-[24rem] left-[12rem] absolute text-[76px] font-[800] w-[60rem] leading-[69px] text-white">Discover & Promote Upcoming Event</div>
+            <div className="h-[5rem] top-[36rem] w-[65rem] bg-white absolute left-[12rem] rounded-2xl">
+            <div className="search-box absolute top-[11.5px] left-[1rem]">
+              
+          {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
+          <input type="text" 
+            value={searchTextI}
+            onChange={handleEventSearchText}
+            placeholder="Search Events" 
+            className="peer cursor-pointer relative h-14 w-30 text-black pl-[53px] rounded-2xl bg-white outline-none focus:ml-[0rem] focus:cursor-text focus:border-[#ffffff] transition-all" 
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  dispatch(triggerEventSearch());
+                }
+            }}
+          />
+          <svg xmlns="http://www.w3.org/2000/svg" className={`absolute top-[10px] left-[13px] transition-all h-9 w-7 border-transparent text-black`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        </div>
+        <div className="absolute mt-[26.5px] left-[16rem]"><Layers3/></div>
+        <div className="absolute top-[11.5px] left-[18rem] w-[12rem] h-[62px] font-[19px]">
+      <form className="max-w-sm mx-auto">
+        <label htmlFor="countries" className="mb-2 text-sm font-medium text-gray-900 dark:text-white hidden">
+          Select an option
+        </label>
+        <select
+          id="countries"
+          className={`mt-[8px] h-full text-slate-400 text-base rounded-lg block w-full p-2.5 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+            selectedCategory ? 'border-none' : ''
+          }`}
+          value={selectedCategory}
+          onChange={handleChangeCat}
+        >
+          <option value="all" selected>
+            Choose a Category
+          </option>
+          <option value="all">All</option>
+          {sidebarCategory &&
+            sidebarCategory.map((categoryD:any, index:any) => (
+              <option key={index} value={categoryD.id}>
+                {categoryD.id.split('|').join('/')}
+              </option>
+            ))}
+        </select>
+      </form>
+    </div>
+    <div className="absolute mt-[26.5px] left-[514px]"><MapPin/></div>
+        <div className="absolute top-[11.5px] left-[546px] w-[12rem] h-[62px] font-[19px]">
+      <form className="max-w-sm mx-auto">
+        <label htmlFor="location" className="mb-2 text-sm font-medium text-gray-900 dark:text-white hidden">
+          Select an option
+        </label>
+        <select
+          id="location"
+          className={`mt-[8px] h-full text-slate-400 text-base rounded-lg block w-full p-2.5 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+            location ? 'border-none' : ''
+          }`}
+          value={location}
+          onChange={handleLocationChange}
+        >
+          <option value="all" selected>
+            Choose a location
+          </option>
+          { locations&&
+            locations.map((categoryD:any, index:any) => (
+              <option key={index} value={categoryD.id}>
+                {categoryD.id.split('|').join('/')}
+              </option>
+            ))}
+        </select>
+      </form>
+    </div>
+    <div>
+    <svg xmlns="http://www.w3.org/2000/svg" className={`absolute top-[17px] left-[60.5rem] bg-purple-600 p-3 rounded-full transition-all h-[3rem] w-[3rem] border-transparent text-white hover:cursor-pointer`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        </div>
+            </div>
       </div>
       <div className="lg:container lg:max-w-[93.5rem] lg:mx-auto font-dmsans mt-[5rem]">
       <div className="mb-8">

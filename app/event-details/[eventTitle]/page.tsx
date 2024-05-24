@@ -324,7 +324,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
     <div className=' grid md:grid-cols-2 lg:grid-cols-9 gap-y-4 md:gap-x-6 pb-6 font-dmsans mt-3'>
         <div className=' md:col-span-6 col-span-2 order-first  '>
 
-          <div className=' w-full  bg-white dark:bg-[#262626] rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06) break-words overflow-hidden mt-10 font-dmsans p-10'>
+          <div className=' w-full  bg-white dark:bg-[#262626] rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06) break-words overflow-hidden mt-[4rem] font-dmsans p-10'>
             <div className=''>
                 <div className=''>
                   {
@@ -485,9 +485,9 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
             </div>
 
-            <div className="top-0 h-fit">
+            <div className="h-fit">
 
-        <div className='mt-10 lg:hidden col-span-3 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
+        <div className='lg:hidden col-span-3 sticky overflow-hidden h-fit rounded-2xl border border-gray-300 shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
               <CardTitle className='text-[24px] font-[500]'>Created By</CardTitle>
@@ -658,7 +658,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
        <div className="w-[21.3rem] top-0 h-fit md:hidden lg:block">
 
-        <div className='mt-[39px] sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
+        <div className='mt-[4rem] sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
               <CardTitle className='text-[24px] font-[500]'>Created By</CardTitle>

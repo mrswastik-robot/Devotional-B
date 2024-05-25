@@ -1,4 +1,4 @@
-
+import './custom.css'
 
 export default function EventDetailsPage ({
     children,

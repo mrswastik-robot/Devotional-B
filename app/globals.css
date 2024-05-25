@@ -180,6 +180,18 @@ span {
     color: #212121;
 }
 
+select {
+    font-family: 'Plus Jakarta Sans';
+}
+
+input {
+    font-family: 'Plus Jakarta Sans';
+}
+
+.eventSubHeading {
+    font-family: 'Plus Jakarta Sans';
+}
+
 ol li p {
     font-family: 'Plus Jakarta Sans';
     font-size: 14px;

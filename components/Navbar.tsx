@@ -9,6 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Book, HomeIcon, Search, User } from "lucide-react";
 import { Home } from "lucide-react";
 import { Bell } from "lucide-react";
+import { FiPlusCircle } from "react-icons/fi";
 import { NotebookTabs } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
@@ -93,6 +94,7 @@ import { Separator } from "./ui/separator";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import { LuXCircle } from "react-icons/lu";
 import logo from '../public/newvainaha.png'
+import { FaCirclePlus } from "react-icons/fa6";
 
 type Input = z.infer<typeof QuestionType>;
 
@@ -550,14 +552,14 @@ const clearNotifications = async () => {
             value={searchText}
             onChange={handleSearchText} 
             placeholder="Search" 
-            className="peer cursor-pointer relative z-10 h-10 w-10 text-white pl-12 rounded-full border-[2px] bg-transparent border-[#ffffff] outline-none focus:w-[37rem] ml-[41rem] focus:ml-[0rem] focus:cursor-text focus:border-[#ffffff] transition-all" 
+            className="peer cursor-pointer relative z-10 h-10 w-10 text-white pl-12 rounded-full border-[2px] bg-transparent border-[#ffffff] outline-none focus:w-[37rem] ml-[44rem] focus:ml-[0rem] focus:cursor-text focus:border-[#ffffff] transition-all" 
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   dispatch(triggerSearch());
                 }
             }}
           />
-          <svg xmlns="http://www.w3.org/2000/svg" className={`absolute inset-y-0 my-auto ml-[41rem] transition-all h-14 w-12 border-transparent stroke-[#ffffff] px-3.5 peer-focus:ml-[0rem] peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" className={`absolute inset-y-0 my-auto ml-[44rem] transition-all h-14 w-12 border-transparent stroke-[#ffffff] px-3.5 peer-focus:ml-[0rem] peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         </div>
@@ -593,10 +595,10 @@ const clearNotifications = async () => {
               <Dialog>
                 {
                   isGuest === 'true'||user?.isAnonymous==true?
-                  <Button variant="outline"  className=" rounded-3xl w-full" onClick={guestHandler}>Ask Question</Button>:
+                  <FiPlusCircle className="w-[26px] h-[26px] text-white mt-[7px] mr-[1px]" onClick={guestHandler}/>:
                   // <DialogTrigger asChild>
                   <Link href={'/createQue'}>
-                    <Button variant="outline"  className=" rounded-3xl w-full">Ask Question</Button>
+                    <FiPlusCircle className="text-white w-[26px] h-[26px] mt-[7px] mr-[1px]" />
                   </Link>
                   // </DialogTrigger>
   }

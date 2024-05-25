@@ -798,8 +798,9 @@ export default function MusicPage() {
   // }, [changeE])
   const [location, setLocation] = useState("all");
 
-  const handleLocationChange = ()=>{
-
+  const handleLocationChange = (event:any)=>{
+    const value = event.target.value;
+    setLocation(value); 
   }
 
   const handleChangeCat = (event:any)=>{
@@ -807,7 +808,7 @@ export default function MusicPage() {
     handleSelectChange(value);
   }
 
-  const locations:any = [];
+  const locations:any = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua &amp; Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia &amp; Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Cape Verde","Cayman Islands","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cruise Ship","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kuwait","Kyrgyz Republic","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Mauritania","Mauritius","Mexico","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Namibia","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","Norway","Oman","Pakistan","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre &amp; Miquelon","Samoa","San Marino","Satellite","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","South Africa","South Korea","Spain","Sri Lanka","St Kitts &amp; Nevis","St Lucia","St Vincent","St. Lucia","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad &amp; Tobago","Tunisia","Turkey","Turkmenistan","Turks &amp; Caicos","Uganda","Ukraine","United Arab Emirates","United Kingdom","Uruguay","Uzbekistan","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
 
   useEffect(()=>{
     const getCat=async()=>{
@@ -836,7 +837,7 @@ export default function MusicPage() {
 
   return (
     <>
-      <div>
+      <div className="w-full">
       <Image
               src={BImage}
               alt="BannerImage"
@@ -846,9 +847,9 @@ export default function MusicPage() {
                 "h-full w-full object-cover",
               )}
             />
-            <div className="top-[18.5rem] left-[12rem] absolute text-[42px] font-[700] italic text-pink-500">Find Your Next Experience</div>
-            <div className="top-[24rem] left-[12rem] absolute text-[76px] font-[800] w-[60rem] leading-[69px] text-white">Discover & Promote Upcoming Event</div>
-            <div className="h-[5rem] top-[36rem] w-[65rem] bg-white absolute left-[12rem] rounded-2xl">
+            <h1 className="lg:top-[18.5rem] top-[6rem] left-[1rem] eventSubHeading lg:left-[12rem] absolute text-[27px] lg:text-[42px] font-[700] italic text-pink-500">Find Your Next Experience</h1>
+            <h1 className="lg:top-[24rem] lg:left-[12rem] top-[9rem] left-[1rem] eventHeading absolute [text-shadow:_0_1px_0_rgb(0_0_0_/_40%)] text-[35px] leading-9 lg:text-[76px] font-[800] lg:w-[60rem] lg:leading-[69px] text-white">Discover & Promote Upcoming Event</h1>
+            <div className="hidden lg:block h-[5rem] top-[36rem] w-[65rem] bg-white absolute left-[12rem] rounded-2xl">
             <div className="search-box absolute top-[11.5px] left-[1rem]">
               
           {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
@@ -911,10 +912,11 @@ export default function MusicPage() {
           <option value="all" selected>
             Choose a location
           </option>
+          <option value="all">World Wide</option>
           { locations&&
-            locations.map((categoryD:any, index:any) => (
-              <option key={index} value={categoryD.id}>
-                {categoryD.id.split('|').join('/')}
+            locations.map((location:any, index:any) => (
+              <option key={index} value={location}>
+                {location}
               </option>
             ))}
         </select>
@@ -927,12 +929,12 @@ export default function MusicPage() {
         </div>
             </div>
       </div>
-      <div className="lg:container lg:max-w-[93.5rem] lg:mx-auto font-dmsans mt-[5rem]">
+      <div className="lg:container lg:max-w-[93.5rem] lg:mx-auto font-dmsans mt-[1rem] lg:mt-[5rem]">
       <div className="mb-8">
         <div className="font-[700] text-[32px] text-center text-red-500 italic">Upcoming Events</div>
-        <div className="text-[46px] font-[900] text-center">Featured Events</div>
+        <div className="lg:text-[46px] text-[37px] font-[900] text-center">Featured Events</div>
       </div>
-      <div className="flex flex-col mx-[9.5rem]">
+      <div className="flex flex-col lg:mx-[9.5rem]">
                           <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-[1rem] pb-4">
                             {searchResult && searchResult.length > 0 ?(
                               searchResult.map((hit: any) => {

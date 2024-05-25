@@ -1,0 +1,140 @@
+h2 {
+    font-size: 20px;
+    font-family: Plus Jakarta Sans;
+    font-weight: 700;
+    font-style: normal;
+}
+
+h3 {
+    font-size: 16px;
+    font-weight: 700;
+    font-style: normal;
+    text-transform: capitalize;
+    color: #000000;
+    background-color: #ffffff;
+    font-family: Plus Jakarta Sans;
+}
+
+div p p {
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    text-decoration: none;
+    text-transform: none;
+    text-align: left;
+    color: #525769;
+    font-family: Plus Jakarta Sans;
+}
+
+div.h-full.pt-4 {
+    background-color: #e8eaf6;
+}
+
+button {
+    font-family: Plus Jakarta Sans;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+p {
+    font-family: Plus Jakarta Sans;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    color: #212121;
+}
+
+div div a {
+    font-family: Plus Jakarta Sans;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+}
+
+td {
+    font-family: Plus Jakarta Sans;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 14px;
+    color: #1976d2;
+}
+
+a td p {
+    color: #212121;
+    font-family: Plus Jakarta Sans;
+    font-weight: 400;
+    font-style: normal;
+}
+
+h1 {
+    font-family: Plus Jakarta Sans;
+    font-size: 16px;
+    font-weight: 700;
+    font-style: normal;
+    text-transform: none;
+    color: #311b92;
+}
+
+span {
+    font-family: Plus Jakarta Sans;
+    font-size: 14px;
+    color: #212121;
+}
+
+ol li p {
+    font-family: Plus Jakarta Sans;
+    font-size: 14px;
+    color: #424242;
+}
+
+div.rounded-3xl {
+    font-family: Plus Jakarta Sans;
+    font-size: 14px;
+}
+
+label {
+    font-family: Plus Jakarta Sans;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    text-decoration: none;
+    color: #212121;
+}
+
+div.text-sm.font-normal.opacity-70 {
+    font-family: Plus Jakarta Sans;
+    font-size: 14px;
+}
+
+th {
+    font-family: Plus Jakarta Sans;
+}
+
+button.inline-flex {
+    font-family: Plus Jakarta Sans;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+}
+
+p.ml-4.text-zinc-400 {
+    font-family: Plus Jakarta Sans;
+}
+
+p.ml-4 {
+    font-family: Plus Jakarta Sans;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 16px;
+}
+
+
+/* input.lg:w-[38rem].w-[22rem].text-sm.border.border-gray-300.rounded-2xl.p-2.pl-8 {
+    display: none;
+}*/
+
+input {
+    display: none;
+}

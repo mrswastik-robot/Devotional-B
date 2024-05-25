@@ -1,4 +1,4 @@
-
+import custom from './custom.module.css'
 "use client";
 
 import Image from 'next/image'
@@ -337,7 +337,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 </div>
                 <div className=' max-w-[70%]'>
                     <div className='p-4 space-y-7'>
-                        <h1 className='text-[30px] font-[500]'>{eventObject.title}</h1>
+                        <h1 className='text-[30px] font-[500] text-[#311b92]'>{eventObject.title}</h1>
                     </div>
                 </div>
             </div>
@@ -369,7 +369,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             <div className='md:flex gap-10 md:justify-between flex-row border border-[#d3d3d3] rounded-md m-4'>
 
             <div className=' p-4 space-y-3 mt-3'>
-                <h1 className=' font-[500] text-[20px]'>Date and Time</h1>
+                <h1 className=' font-[500] text-[20px] text-[#311b92]'>Date and Time</h1>
                 <div className=' flex gap-3'>
                     <CalendarCheck2 size={24} />
                     {dateString && <p className=' font-[400] text-gray-900 text-[17px]'>{dateString}</p>}
@@ -377,7 +377,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div className="mb-4">
-            <h1 className=' font-[500] text-[20px] px-4 my-3 lg:mt-6'>Location</h1>
+            <h1 className=' font-[500] text-[20px] px-4 my-3 lg:mt-6 text-[#311b92]'>Location</h1>
             <div className=' px-4 flex gap-x-5'>
                 <div className=' mt-2'>
                     <MapPin size={24} />
@@ -396,7 +396,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                         })()
                       }
                     <div className=' flex gap-1'>
-                        <p className=' text-[17px] font-[500] text-blue-400 hover:underline cursor-pointer'>Show Map</p>
+                        <p className=' text-[17px] font-[500] text-black hover:underline cursor-pointer'>Show Map</p>
                         <ChevronDown className='text-blue-400' size={24} />
                     </div>
                 </div>
@@ -404,7 +404,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div className='mb-6'>
-              <h1 className='font-[500] px-4 my-3 mt-6 text-[20px]'>Duration of the event</h1>
+              <h1 className='font-[500] px-4 my-3 mt-6 text-[20px] text-[#311b92]'>Duration of the event</h1>
               <div className='px-4 flex gap-2 text-[17px]'><span><Clock/></span><div>{eventObject.durationOfEvent} hours</div></div>
               
             </div>
@@ -419,7 +419,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
 
             <div className=' p-4 mt-1'>
-            <h1 className=' font-[500] text-[20px] mb-4 '>Description</h1>
+            <h1 className=' font-[500] text-[20px] mb-4 text-[#311b92]'>Description</h1>
             <div className=' font-medium my-3 mt-6'>
                   <div className=''>
                       <p className=' text-[17px] font-[400]'>{eventObject.description && parse(eventObject.description)}</p>
@@ -427,7 +427,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
             </div>
             </div>
 
-            <div className='rounded-md p-4'>
+            {/* <div className='rounded-md p-4'>
   <table className='border border-[#d3d3d3] border-collapse w-full rounded-md'>
     <thead>
       <tr>
@@ -462,7 +462,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
       </tr>
     </tbody>
   </table>
-</div>
+</div> */}
 
 
             <div className=' p-4 mb-5 mt-2'>
@@ -658,7 +658,20 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
 
        <div className="w-[21.3rem] top-0 h-fit md:hidden lg:block">
 
-        <div className='mt-[4rem] sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
+       <div className='mt-[4rem] sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
+          <Card x-chunk="dashboard-01-chunk-5">
+              <CardContent className="mt-[1.5rem]">
+                <div className='text-[18px]'><span className='font-[700] mr-[1rem]'>Pre-Conference Date :</span><span>{eventObject.preConferenceDate && eventObject.preConferenceDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span></div>
+                <div className='text-[18px]'><span className='font-[700]  mr-[1rem]'>Registration Start Date :</span><span>{eventObject.registrationStartDate && eventObject.registrationStartDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span></div>
+                <div className='text-[18px]'><span className='font-[700]  mr-[1rem]'>Registration End Date :</span><span>{eventObject.registrationEndDate && eventObject.registrationEndDate.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span></div>
+                <div className='text-[18px]'><span className='font-[700] mr-[1rem]'>Early Bird Registration Fee :</span><span>{eventObject.earlyBirdRegistrationFee}</span></div>
+                <div className='text-[18px]'><span className='font-[700]  mr-[1rem]' >Late Registration Fee :</span><span>{eventObject.lateRegistrationFee}</span></div>
+                <div className='text-[18px]'><span className='font-[700]  mr-[1rem]'>Contact Number :</span><span>{eventObject.contactNumber}</span></div>
+              </CardContent>
+          </Card>
+        </div>
+
+        <div className='mt-3 sm:block hidden col-span-2 sticky overflow-hidden h-fit rounded-2xl border border-gray-300'>
         <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
               <CardTitle className='text-[24px] font-[500]'>Created By</CardTitle>
@@ -709,7 +722,7 @@ const EventDetailsPage = ({ params: { eventTitle } }: Props) => {
                 <div className='text-xs text-muted-foreground'>Few events comes with Govt. recognized credits. <span className='text-black'>Check Info*</span></div>
               </CardHeader>
               <CardContent className="">
-                <h1 className=' text-[30px] flex items-center justify-center mx-auto'>
+                <h1 className=' text-[30px] flex items-center justify-center mx-auto text-[#311b92]'>
                   {
                     eventObject.creditPoints 
                     ?

@@ -217,7 +217,7 @@ export function AlbumArtwork({ post, isProfile = false, handleDelete = () => {} 
         <h3 className="text-[20px] font-[700] leading-none ml-6 mt-6">{post.title.length>28?post.title.substring(0, 27)+"...":post.title}</h3>
       </Link>  
       {/* <div className="mt-[0.30rem] text-[14px] font-semibold opacity-85">{post.locationOfEvent}</div> */}
-      <div className="hidden lg:block">
+      <div className="lg:block">
         {
         <div className="m-6 text-[14px] text-gray-500 font-[500] flex gap-[25px]"><span className="text-black w-2 mt-[1.5px]"><CalendarDays className="text-xs w-4 h-4"/></span>{dateString}</div>
 }

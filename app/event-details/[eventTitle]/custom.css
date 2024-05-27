@@ -1,6 +1,5 @@
 h2 {
     font-size: 20px;
-    font-family: Plus Jakarta Sans;
     font-weight: 700;
     font-style: normal;
 }
@@ -12,7 +11,6 @@ h3 {
     text-transform: capitalize;
     color: #000000;
     background-color: #ffffff;
-    font-family: Plus Jakarta Sans;
 }
 
 div p p {
@@ -23,7 +21,6 @@ div p p {
     text-transform: none;
     text-align: left;
     color: #525769;
-    font-family: Plus Jakarta Sans;
 }
 
 div.h-full.pt-4 {
@@ -31,7 +28,6 @@ div.h-full.pt-4 {
 }
 
 button {
-    font-family: Plus Jakarta Sans;
     font-weight: 500;
     font-style: normal;
     font-size: 14px;
@@ -39,7 +35,6 @@ button {
 }
 
 p {
-    font-family: Plus Jakarta Sans;
     font-weight: 400;
     font-style: normal;
     font-size: 14px;
@@ -47,14 +42,12 @@ p {
 }
 
 div div a {
-    font-family: Plus Jakarta Sans;
     font-size: 14px;
     font-weight: 500;
     font-style: normal;
 }
 
 td {
-    font-family: Plus Jakarta Sans;
     font-weight: 500;
     font-style: normal;
     font-size: 14px;
@@ -63,13 +56,11 @@ td {
 
 a td p {
     color: #212121;
-    font-family: Plus Jakarta Sans;
     font-weight: 400;
     font-style: normal;
 }
 
 h1 {
-    font-family: Plus Jakarta Sans;
     font-size: 16px;
     font-weight: 700;
     font-style: normal;
@@ -78,24 +69,20 @@ h1 {
 }
 
 span {
-    font-family: Plus Jakarta Sans;
     font-size: 14px;
     color: #212121;
 }
 
 ol li p {
-    font-family: Plus Jakarta Sans;
     font-size: 14px;
     color: #424242;
 }
 
 div.rounded-3xl {
-    font-family: Plus Jakarta Sans;
     font-size: 14px;
 }
 
 label {
-    font-family: Plus Jakarta Sans;
     font-size: 14px;
     font-weight: 500;
     font-style: normal;
@@ -104,27 +91,16 @@ label {
 }
 
 div.text-sm.font-normal.opacity-70 {
-    font-family: Plus Jakarta Sans;
     font-size: 14px;
 }
 
-th {
-    font-family: Plus Jakarta Sans;
-}
-
 button.inline-flex {
-    font-family: Plus Jakarta Sans;
     font-size: 14px;
     font-weight: 500;
     font-style: normal;
 }
 
-p.ml-4.text-zinc-400 {
-    font-family: Plus Jakarta Sans;
-}
-
 p.ml-4 {
-    font-family: Plus Jakarta Sans;
     font-weight: 500;
     font-style: normal;
     font-size: 16px;

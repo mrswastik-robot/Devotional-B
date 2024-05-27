@@ -837,7 +837,7 @@ export default function MusicPage() {
 
   return (
     <>
-      <div className="w-full">
+      <div className="w-full font-jakarta">
       <Image
               src={BImage}
               alt="BannerImage"
@@ -847,9 +847,9 @@ export default function MusicPage() {
                 "h-full w-full object-cover",
               )}
             />
-            <h1 className="lg:top-[18.5rem] top-[6rem] left-[1rem] eventSubHeading lg:left-[12rem] absolute text-[27px] lg:text-[42px] font-[700] italic text-pink-500">Find Your Next Experience</h1>
-            <h1 className="lg:top-[24rem] lg:left-[12rem] top-[9rem] left-[1rem] eventHeading absolute [text-shadow:_0_1px_0_rgb(0_0_0_/_40%)] text-[35px] leading-9 lg:text-[76px] font-[800] lg:w-[60rem] lg:leading-[69px] text-white">Discover & Promote Upcoming Event</h1>
-            <div className="hidden lg:block h-[5rem] top-[36rem] w-[65rem] bg-white absolute left-[12rem] rounded-2xl">
+            <h1 className="lg:top-[18.5rem] top-[6rem] left-[1rem] font-jakarta eventSubHeading lg:left-[12rem] absolute text-[27px] lg:text-[30px] font-[700] italic text-pink-500">Find Your Next Experience</h1>
+            <h1 className="lg:top-[22rem] lg:left-[12rem] top-[9rem] font-jakarta left-[1rem] eventHeading absolute [text-shadow:_0_1px_0_rgb(0_0_0_/_40%)] text-[35px] leading-9 lg:text-[55px] font-[800] lg:w-[60rem] lg:leading-[50px] text-white">Discover & Promote Upcoming Event</h1>
+            <div className="hidden lg:block h-[5rem] top-[34rem] w-[65rem] bg-white absolute left-[12rem] rounded-2xl">
             <div className="search-box absolute top-[11.5px] left-[1rem]">
               
           {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}

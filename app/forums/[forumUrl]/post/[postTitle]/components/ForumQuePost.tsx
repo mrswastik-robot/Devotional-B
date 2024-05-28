@@ -67,7 +67,7 @@ const ForumQuePost = ({ post }: Props) => {
   const isAnonymous = post.anonymity;
 
   //handling the saving Post functionality
-  //saving the post funcitonality
+  //not implemented yet
   const [savedState , setSavedState] = useState(false);
 
   const handleSave = async() => {

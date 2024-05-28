@@ -43,6 +43,8 @@ const RecentFeed = (props: Props) => {
   const params = useParams();
   const forumUrl = params.forumUrl
 
+
+ //fetching latest forum posts
   useEffect(() => {
 
     const collectionRef = collection(db, 'forumPosts');

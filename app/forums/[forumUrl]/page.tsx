@@ -47,17 +47,13 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
 
     const [user, loading] = useAuthState(auth);
 
+    //setting forum url of the current forum
     useEffect(()=>{
-      //console.log("User: ", user);
-        //dispatch(setForumURL(forumUrl));
-        //storing value of eventId in sessional storage
         const devotionalforumUrl = sessionStorage.getItem('devotionalforumUrl');
         
         if (!devotionalforumUrl) {
-          // If "devotionalEventId" is not already present, store "eventId"
           sessionStorage.setItem('devotionalforumUrl', forumUrl);
         } else {
-          // If "devotionalEventId" is already present, update it with the new "eventId"
           sessionStorage.setItem('devotionalforumUrl', forumUrl);
         }
 
@@ -68,6 +64,8 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
      isJoined();
     }, [rerun, user])
 
+
+    //fetching members details
     useEffect(() => {
       const fetchMemberDetails = async () => {
         if (forumDetails) {
@@ -129,6 +127,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
     }
     }
 
+    //function to join unjoin forum
     const joinInForum = async()=>{
       //setForumJoin((prev)=>!prev);
       const forumQuery = query(collection(db, "forums"), where("uniqueForumName", "==", forumUrl));
@@ -211,29 +210,8 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
               const data = doc.data();
               setForumDetails(data);
     
-              //listener for the comments of the event
-            //   const eventCommentsRef = collection(db, 'eventsComments');
-            //   const q = query(eventCommentsRef, where('eventId', '==', doc.id));
-            //   const commentsUnsub = onSnapshot(q, (snapshot) => {
-            //     const comments = snapshot.docs.map((doc) => {
-            //       const data = doc.data() as EventCommentType;
-            //       return {
-            //         eventId: data.eventId,
-            //         eventTitle: data.eventTitle,
-            //         comment: data.comment,
-            //         uid: data.uid,
-            //         name: data.name,
-            //         profilePic: data.profilePic,
-            //         createdAt: data.createdAt,
-            //         imageUrl: data.imageUrl,
-            //       }
-            //     })
-            //     setEventComment(comments);
-            //   })
-    
               return () => {
                 eventsUnsub();
-                // commentsUnsub();
               }
             }
             else
@@ -245,8 +223,6 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
         )
       }
       ,[forumUrl, router, joined])
-
-      //console.log(user);
     
     return (
       <div>

@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import parse from "html-react-parser";
 
-
+//not in use currently
 const ForumPage = () => {
 
     const [forums, setForums] = useState<any>([]);

@@ -53,7 +53,6 @@ import { useForm } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
-// import { Tiptap } from "@/components/TipTap";
 import { Tiptap } from "@/components/TipTapAns";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -67,18 +66,6 @@ type Props = {
   params: {
     postTitle: string;
   };
-
-  // post: {
-  //   id: string;
-  //   title: string;
-  //   name: string;
-  //   description: string;
-  //   profilePic: string;
-  //   postImage: string;
-  //   likes: number;
-  //   comments: number;
-  //   shares: number;
-  // };
 };
 
 type QuestionType = {
@@ -105,7 +92,6 @@ type AnswerType = {
   name: string;
   description: string;
   profilePic: string;
-  // postImage: string;
   likes: number;
   comments: number;
   shares: number;
@@ -119,14 +105,12 @@ type AnswerType = {
 };
 
 const ForumPostPage = ({ params: { postTitle } }: Props) => {
-  // console.log(postId);
-  // const queObject = postData.filter((post) => post.id === postId)[0];
 
   const postTitleWithSpaces = decodeURIComponent(postTitle as string).split("-").join(" ");
 
   const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(true);
 
-  const [queObject, setQueObject] = useState<QuestionType>({} as QuestionType); //postData.filter((post) => post.id === postId)[0
+  const [queObject, setQueObject] = useState<QuestionType>({} as QuestionType);
   const [answers, setAnswers] = useState<AnswerType[]>([] as AnswerType[]);
 
   const [imageUpload, setImageUpload] = useState<File | null>(null);
@@ -140,7 +124,6 @@ const ForumPostPage = ({ params: { postTitle } }: Props) => {
 
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
-  //console.log("UserU: ", user);
   const [previewImg, setPreviewImg] = useState<any>(null);
 
   const uploadImage = async(file: any) => {
@@ -206,6 +189,7 @@ const ForumPostPage = ({ params: { postTitle } }: Props) => {
 
   const [name, setName] = useState<string>(user?.displayName||"loading...");
 
+  //fetching followers/following data
   useEffect(() => {
     const fetchFollowersAndFollowing = async () => {
       if (user?.uid) {
@@ -265,59 +249,8 @@ const ForumPostPage = ({ params: { postTitle } }: Props) => {
   
       console.log("Document written with ID: ", docRef.id);
 
-      // create a notification for the question owner
-      // const notificationCollection = collection(db, "notifications");
-      // const newNotificationRef = docc(notificationCollection);
-      // await setDoc(newNotificationRef, {
-      //   type: "answer",
-      //   questionId: questionId,
-      //   questionTitle: queObject.title,
-      //   questionUid: queObject.uid,
-      //   answerId: docRef.id,
-      //   answerDescription: data.description,
-      //   answerUid: user?.uid,
-      //   answerName: user?.displayName,
-      //   answerProfilePic: user?.photoURL,
-      //   createdAt: serverTimestamp(),
-      //   read: false,
-      // });
-
-
-      // Generate Keywords and Hashtags for the answer
-      // try {
-      //   console.log("keyword Gen.....")
-      //   const docRef = await addDoc(collection(db, 'keywords'), {
-      //     prompt: `Generate some keywords and hashtags on topic ${data.description}`,
-      //   });
-      //   console.log('Keyword Document written with ID: ', docRef.id);
-    
-      //   // Listen for changes to the document
-      //   const unsubscribe = onSnapshot(docc(db, 'keywords', docRef.id), async(snap) => {
-      //     const data = snap.data();
-      //     if (data && data.response) {
-      //       console.log('RESPONSE: ' + data.response);
-      //       const keywordsString = `${data.response}`;
-  
-      //       const questionDocRef = docc(db, 'questions', questionId);
-      //       await updateDoc(questionDocRef, {
-      //       answerKeywords: keywordsString, // Add your keywords here
-      //   });
-      //     }
-      //   });
-    
-      //   // Stop listening after some time (for demonstration purposes)
-      //   setTimeout(() => unsubscribe(), 60000);
-      // } catch (error) {
-      //   console.error('Error adding document: ', error);
-      // }
-
-      // Increment the ansNumbers field of the question
-    // await updateDoc(docRef, {
-    //   ansNumbers: increment(1),
-    // });
-
       //set the postId to the id of the question so that finally it can be sent to PostVoteClient for voting system.
-      setPostId(doc.id); // lets see
+      setPostId(doc.id);
       console.log(postId)
 
       //reset the form and image
@@ -335,7 +268,6 @@ const ForumPostPage = ({ params: { postTitle } }: Props) => {
 
     createAnswerPost(data);
     setIsCommentBoxOpen(true);
-    // form.reset();     //won't reset from here
   }
 
   //fetching question and answers to display on the page
@@ -373,7 +305,6 @@ const ForumPostPage = ({ params: { postTitle } }: Props) => {
   }, [postTitleWithSpaces, postTitle]);
 
   const [description, setDescription] = useState("");
-  //console.log("Keywords ", queObject.keywords);
 
   return (
 

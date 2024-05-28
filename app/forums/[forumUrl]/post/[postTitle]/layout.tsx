@@ -26,45 +26,6 @@ type Post = {
     answerKeywords: string;
 }
 
-// const fetchPost = async (postTitle: string) => {
-    
-//     //how to fetch the question from the firestore using postTitle
-//     const queRef = collection(db, "questions");
-//     const q = query (queRef, where("title", "==", postTitle));
-
-//     const querySnapshot = await getDocs(q);
-//     const post = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Post ));
-//     console.log(post);
-//     return { post };
-    
-// }
-
-// export async function generateMetadata({ params }: Props) : Promise<Metadata> {
-
-//     const postTitleWithSpaces = decodeURIComponent(params.postTitle as string).split("-").join(" ");
-//     const { post }= await fetchPost(postTitleWithSpaces);
-//     const metadata: Metadata = {
-//         title: post[0]?.title,
-//         description: post[0]?.description,
-//         keywords: post[0]?.keywords,
-//         // answerKeywords: post[0].answerKeywords
-//         openGraph: {
-//             title: post[0]?.title,
-//             description: post[0]?.description,
-//             type: "website",
-//             locale: "en_US",
-//             url: "https://devotional-b.vercel.app",
-//         },
-//     };
-//     return metadata;
-    
-// }
-
-// export const metadata: Metadata = {
-//   title: "Your Questions Answered",
-//   description: "Get all your answers here.",
-// };
-
 export default function ForumPostPage({
   children,
 }:{

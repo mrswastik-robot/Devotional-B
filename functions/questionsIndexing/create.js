@@ -34,3 +34,21 @@ exports.onQuestionDeleted = functions.firestore.document('questions/{questionId}
 
     return index.deleteObject(objectID).catch(err => console.error(`Error when deleting question ${objectID}: ${err}`));
 });
+
+exports.deleteOldPosts = functions.pubsub.schedule('every 2 minutes').onRun(async context => {
+    const twoMinutesAgo = new Date();
+    twoMinutesAgo.setMinutes(twoMinutesAgo.getMinutes() - 2);
+
+    const recentPostsQuery = admin.firestore().collection('questions').where('createdAt', '>=', twoMinutesAgo);
+    const recentPostsSnapshot = await recentPostsQuery.get();
+
+    recentPostsSnapshot.forEach(async doc => {
+        const post = doc.data();
+        const votesAmt = post.voteAmt; // replace with your actual logic to get votes
+
+        if (votesAmt < 5) {
+            await index.deleteObject(doc.id); // delete from Algolia index
+            await doc.ref.delete(); // delete from Firestore
+        }
+    });
+});

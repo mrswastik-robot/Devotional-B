@@ -34,3 +34,24 @@ exports.onQuestionDeleted = functions.firestore.document('questions/{questionId}
 
     return index.deleteObject(objectID).catch(err => console.error(`Error when deleting question ${objectID}: ${err}`));
 });
+
+
+
+
+exports.deleteOldPosts = functions.pubsub.schedule('every 24 hours').onRun(async context => {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const oldPostsQuery = admin.firestore().collection('questions').where('createdAt', '<=', thirtyDaysAgo);
+    const oldPostsSnapshot = await oldPostsQuery.get();
+
+    oldPostsSnapshot.forEach(async doc => {
+        const post = doc.data();
+        const votesAmt = post.voteAmt;
+
+        if (votesAmt < 5) {
+            await index.deleteObject(doc.id); // delete from Algolia index
+            await doc.ref.delete(); // delete from Firestore
+        }
+    });
+});

@@ -273,7 +273,7 @@ const AnsPost = ({answers , postTitleWithSpaces , postId }: Props) => {
                   {/* <AvatarFallback>SP</AvatarFallback> */}
                 </Avatar>
                 {/* </div> */}
-                <span className="mt-3 text-[#0c0c0c] text-sm font-semibold dark:text-white">{answer.anonymity ? ('Anonymous') : (answer.name)}</span>{" "}
+                <span className="mt-3 text-[#0c0c0c] text-sm font-semibold dark:text-white">{answer.anonymity ? ('Anonymous') : <Link className=" hover:underline cursor-pointer" href={`/profile/${answer.uid}`}>{answer.name}</Link>}</span>{" "}
                 {answer.anonymity || !user || answer.uid === user.uid ? null : (
               <div className=" flex space-x-1 mr-5">
                 <svg

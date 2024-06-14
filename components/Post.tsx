@@ -384,7 +384,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                 ) : null}
 
                 <div
-                  className={`relative text-sm max-h-20 w-full overflow-clip ${
+                  className={`relative  text-sm max-h-20 w-full overflow-clip ${
                     isExpanded ? "max-h-none" : ""
                   }`}
                   ref={pRef}
@@ -393,7 +393,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
                   <p
                     onClick={fetchQuestion}
-                    className=" dark:text-white text-base/[21px] text-[15px]"
+                    className=" dark:text-yellow-50 text-base/[21px] text-[15px]"
                   >
                     {parse(post.description)}
                   </p>
@@ -435,7 +435,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                 className="w-fit flex items-center gap-2"
               >
                 <MessageSquare className="h-4 w-4" />{" "}
-                <span className=" sm:block hidden ">
+                <span className=" sm:block hidden text-black dark:text-white ">
                   {post.comments} Answers
                 </span>
               </Link>
@@ -456,9 +456,9 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
                   })}
                 />{" "}
                 {savedState ? (
-                  <span className=" sm:block hidden">Saved</span>
+                  <span className=" sm:block hidden text-black dark:text-white">Saved</span>
                 ) : (
-                  <span className=" sm:block hidden">Save</span>
+                  <span className=" sm:block hidden text-black dark:text-white">Save</span>
                 )}
               </button>
 

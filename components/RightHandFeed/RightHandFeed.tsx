@@ -73,13 +73,13 @@ const RightHandFeed = (props: Props) => {
 
   return (
 <div>
-    <div className='bg-white rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
+    <div className='bg-white dark:bg-black rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]'>
           <Card x-chunk="dashboard-01-chunk-5" className='rounded-2xl'>
               <CardHeader className='text-sm pb-1'>
-                <CardTitle className="text-[19px] font-[700]">Ask Question</CardTitle>
+                <CardTitle className="text-[19px] dark:bg-black  dark:text-white font-[700]">Ask Question</CardTitle>
               </CardHeader>
               <CardContent className="mt-2">
-                <p className=' text-[14px]'>Enrich your Spiritual journey with TheGodSays.</p>
+                <p className=' text-[14px] dark:text-zinc-50/70'>Enrich your Spiritual journey with TheGodSays.</p>
                 <div className=' flex items-end justify-end mt-4'>
                 <Link href={'/createQue'} className='w-full'>
                   <Button className=' w-full text-[17px]'><a target='_blabk' href="#">Ask Question</a></Button>

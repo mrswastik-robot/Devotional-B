@@ -210,7 +210,7 @@ const handleFollow = async () => {
             </Avatar>
             {/* </div> */}
             {/* <Separator orientation="vertical" className=" h-5 mt-3 " /> */}
-            <span className="mt-3 text-[#0c0c0c]  text-sm font-semibold dark:text-white">{isAnonymous ? ('Anonymous') : (post.name)}</span>{" "}
+            <span className="mt-3 text-[#0c0c0c]  text-sm font-semibold dark:text-white">{isAnonymous ? ('Anonymous') : <Link className=" hover:underline cursor-pointer" href={`/profile/${post.uid}`}>{post.name}</Link>}</span>{" "}
             {isAnonymous||isCurrentUser || !user ? null : (
               <div className=" flex space-x-1 mr-5">
                 <svg
@@ -267,7 +267,7 @@ const handleFollow = async () => {
             ref={pRef}
           >
             {/* <EditorOutput content={post.content} /> */}
-            <p className="ProseMirror">{post.description ? parse(post.description) : ""}</p>
+            <p className="ProseMirror dark:text-white">{post.description ? parse(post.description) : ""}</p>
             {/* <div className='absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/80 dark:from-[#262626] to-transparent'></div> */}
             {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long

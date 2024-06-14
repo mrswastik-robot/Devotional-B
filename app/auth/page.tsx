@@ -6,6 +6,7 @@ import { FaFacebookF } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 import { auth, db } from "@/utils/firebase";
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -211,8 +212,12 @@ const LoginPage = (props: Props) => {
                 <div className="mt-1 flex flex-col gap-4 w-full px-4">
                   <p className=" text-sm text-zinc-400">
                     By continiuing you indicate that you agree to Devotional-B{" "}
-                    <span className=" text-blue-500">Terms of Service</span> and{" "}
-                    <span className=" text-blue-500">Privacy Policy</span>.
+                    <Link className=" hover:underline cursor-pointer" href="/termsandconditions">
+                      <span className=" text-blue-500">Terms of Service</span> and{" "}
+                    </Link>
+                    <Link className=" hover:underline cursor-pointer" href="/termsandconditions">
+                      <span className=" text-blue-500">Privacy</span>.
+                    </Link>
                   </p>
                   <button
                     className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border hover:bg-gray-100 border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"

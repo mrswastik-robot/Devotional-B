@@ -156,7 +156,7 @@ const PostVoteClientPhone = ({
             "text-emerald-500 fill-emerald-500": currentVote === "UP",
           })}
         />
-        <p className=" ml-2">
+        <p className=" ml-2 dark:text-white font-dmsans">
           Support
         </p>
         {/* <Separator orientation="vertical" className=" h-7 my-1 ml-2 dark:text-zinc-400 text-zinc-500"/> */}
@@ -179,7 +179,7 @@ const PostVoteClientPhone = ({
       >
         <Separator
           orientation="vertical"
-          className=" h-7 my-1 mr-2 dark:text-zinc-400"
+          className=" h-7 my-1 mr-2 dark:text-white"
         />
         <ArrowBigDown
           className={cn("h-5 w-5 dark:text-white", {

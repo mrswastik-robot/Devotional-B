@@ -102,7 +102,7 @@ div p p {
     text-decoration: none;
     text-transform: none;
     text-align: left;
-    color: #525769;
+    /* color: #525769; */
 }
 
 h3 {
@@ -124,7 +124,7 @@ p {
     font-weight: 400;
     font-style: normal;
     font-size: 14px;
-    color: #212121;
+    /* color: #212121; */
 }
 
 div div a {

@@ -306,7 +306,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
             <div className=" flex space-x-2">
             <span className=" mt-3 text-sm text-[#0c0c0c]  font-semibold dark:text-yellow-50">
-              {isAnonymous ? "Anonymous" : post.name}
+              {isAnonymous ? "Anonymous" : (<Link href={`/profile/${post.uid}`} className=" hover:underline cursor-pointer">{post.name}</Link>)}
             </span>{" "}
             {isAnonymous||isCurrentUser || !user ? null : (
               <div className=" flex space-x-1 mr-5 ">

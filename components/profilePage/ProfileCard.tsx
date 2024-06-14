@@ -21,6 +21,7 @@ const ProfileCard = ({user}: Props) => {
   const [followingCount, setFollowingCount] = useState<number>(0);
   const [name, setName] = useState<string>(user?.displayName);
   const [bio, setBio] = useState("");
+  const [profilePic, setProfilePic] = useState<string>(user?.photoURL);
 
   useEffect(() => {
     const fetchFollowersAndFollowing = async () => {
@@ -34,9 +35,11 @@ const ProfileCard = ({user}: Props) => {
           const followers = userData?.followers?.length;
           const realName = userData?.name;
           const bioo = userData?.bio;
+          const profilePic = userData?.profilePic;
           // Assuming followers and following fields exist in user data
           setName(realName);
           setBio(bioo);
+          setProfilePic(profilePic);
           setFollowersCount(followers || 0);
           setFollowingCount(following || 0);
         }
@@ -54,7 +57,7 @@ const ProfileCard = ({user}: Props) => {
 
         <div className="ml-5">
         <Image
-          src={user?.photoURL || '/nodp.webp'}
+          src={profilePic}
           width={300}
           height={300}
           className=" lg:w-[7rem] lg:h-[7rem] w-[5rem] h-[5rem] rounded-full"

@@ -33,7 +33,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 
-import { arrayRemove, arrayUnion, doc, updateDoc , getDoc, onSnapshot } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  updateDoc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -44,9 +51,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
-type UserData={
+type UserData = {
   following: Array<string>;
   followers: Array<string>;
   name: string;
@@ -86,8 +93,8 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   const isAnonymous = post.anonymity;
 
   //for displaying 'more' button
-  const [isExpanded , setIsExpanded] = useState(false);
-  const [isOverflowing , setIsOverflowing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
 
   //needed to send it to PostVoteClientPhone so that it can get the current user's vote
   const [user, loading] = useAuthState(auth);
@@ -98,28 +105,28 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   const [isFollowing, setIsFollowing] = useState(false); // State to track if the user is following this post's creator
   const [isCurrentUser, setIsCurrentUser] = useState(false); // State to track if the post's creator is the current user
 
-  const fetchQuestion = async()=>{
+  const fetchQuestion = async () => {
     //console.log("hii ", post.title, post.uid);
-    if(post.title==undefined){
-    if (post.uid) {
-      const questionRef = doc(db, "questions", post.uid);
-      const questionDoc = await getDoc(questionRef);
- 
-      console.log(questionDoc, " * ", questionDoc.exists())
-      if (questionDoc.exists()) {
-        const questionData = questionDoc.data();
-        console.log(questionData);
+    if (post.title == undefined) {
+      if (post.uid) {
+        const questionRef = doc(db, "questions", post.uid);
+        const questionDoc = await getDoc(questionRef);
+
+        console.log(questionDoc, " * ", questionDoc.exists());
+        if (questionDoc.exists()) {
+          const questionData = questionDoc.data();
+          console.log(questionData);
+        }
       }
     }
-  }
-  }
-  
+  };
+
   const HandleDelete = () => {
     handleDelete(post.id);
   };
 
   const handleSave = async () => {
-    if (!user||user.isAnonymous==true) {
+    if (!user || user.isAnonymous == true) {
       toast({
         title: " Please sign in to save posts ",
         variant: "destructive",
@@ -154,8 +161,8 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
   useEffect(() => {
     // Check if the current user is following the post's creator
-    if(post.uid && !userCacheData[post.uid]){
-      const fetchUserData = async () =>{
+    if (post.uid && !userCacheData[post.uid]) {
+      const fetchUserData = async () => {
         if (user) {
           const userRef = doc(db, "users", user.uid);
           const unsubscribe = onSnapshot(userRef, (doc) => {
@@ -163,25 +170,22 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
               const userData = doc.data() as UserData;
               setIsFollowing(userData.following.includes(post.uid)); // Update isFollowing based on the following list
               setIsCurrentUser(user.uid === post.uid); // Check if the post's creator is the current user
-              dispatch(updateUserCache({uid:post.uid, userData}));
+              dispatch(updateUserCache({ uid: post.uid, userData }));
             }
           });
-    
-        return () => unsubscribe();
+
+          return () => unsubscribe();
         }
         //const userData = {id: post.uid};
       };
       fetchUserData();
-    }
-    else{
-        //console.log("FollowCache: ", userCacheData[post.uid]);
-        setIsFollowing(userCacheData[post.uid].following.includes(post.uid));
-        if(user){
+    } else {
+      //console.log("FollowCache: ", userCacheData[post.uid]);
+      setIsFollowing(userCacheData[post.uid].following.includes(post.uid));
+      if (user) {
         setIsCurrentUser(user.uid === post.uid);
-        }
+      }
     }
-
-
   }, [post.uid, userCacheData, dispatch]);
 
   //fetching savedPosts from user's document
@@ -212,8 +216,8 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   //for displaying 'more' button
   useEffect(() => {
     // Assuming a line height of around 20px
-    const maxHeight = 25 * 3; 
-  
+    const maxHeight = 25 * 3;
+
     if (pRef.current && pRef.current.offsetHeight > maxHeight) {
       setIsOverflowing(true);
     } else {
@@ -224,7 +228,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
   //console.log("Id: ", post.uid, " ",  post.title);
 
   const handleFollow = async () => {
-    if (!user||(user&&user.isAnonymous==true)) {
+    if (!user || (user && user.isAnonymous == true)) {
       toast({
         title: " Please login to follow others ",
         variant: "destructive",
@@ -253,10 +257,11 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
       // Show toast notification based on follow/unfollow action
       toast({
-        title: isFollowing ? "You have unfollowed this user ❌" : "You are now following this user ✅",
+        title: isFollowing
+          ? "You have unfollowed this user ❌"
+          : "You are now following this user ✅",
         variant: "default",
       });
-
     } catch (error) {
       console.error("Error updating following list:", error);
       toast({
@@ -266,194 +271,229 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
     }
   };
 
-
   return (
     <>
-    {
-      post.uid?
-    <div className=" bg-white dark:bg-[#262626] mb-3 rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
-      <div className="px-6 py-4 flex justify-between">
-        {/* <PostVoteClient
+      {post.uid ? (
+        <div className=" bg-white dark:bg-[#262626] mb-3 rounded-2xl shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
+          <div className="px-6 py-4 flex justify-between">
+            {/* <PostVoteClient
         //   postId={post.id}
         //   initialVotesAmt={_votesAmt}
         //   initialVote={_currentVote?.type}
         /> */}
 
-        {/* <PostVoteClientPhone/> */}
+            {/* <PostVoteClientPhone/> */}
 
-        <div className="w-0 flex-1 break-normal overflow-hidden">
+            <div className="w-0 flex-1 break-normal overflow-hidden">
+              <Link
+                href={`/${encodeURIComponent(
+                  post?.title?.split(" ").join("-")
+                )}`}
+              >
+                {!isProfile && (
+                  <div className="flex max-h-40 mt-1 space-x-2 text-xs">
+                    {/* <div> */}
+                    <Avatar>
+                      <div className=" relative w-full h-full aspect-square">
+                        <Image
+                          fill
+                          src={
+                            isAnonymous
+                              ? "https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png"
+                              : post.profilePic
+                          }
+                          alt="profile picture"
+                          referrerPolicy="no-referrer"
+                        />
+                      </div>
+                      {/* <AvatarFallback>SP</AvatarFallback> */}
+                    </Avatar>
+                    {/* </div> */}
+                    {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
+                    <div className=" flex space-x-2">
+                      <span className=" mt-3 text-sm text-[#0c0c0c]  font-semibold dark:text-yellow-50">
+                        {isAnonymous ? (
+                          "Anonymous"
+                        ) : (
+                          <Link
+                            href={`/profile/${post.uid}`}
+                            className=" hover:underline cursor-pointer"
+                          >
+                            {post.name}
+                          </Link>
+                        )}
+                      </span>{" "}
+                      {isAnonymous || isCurrentUser || !user ? null : (
+                        <div className=" flex space-x-1 mr-5 ">
+                          <svg
+                            viewBox="0 0 48 48"
+                            className=" mt-[1.20rem] mr-1 w-1 h-1"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                              id="SVGRepo_tracerCarrier"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                              {" "}
+                              <path
+                                d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z"
+                                fill="#333333"
+                              ></path>{" "}
+                            </g>
+                          </svg>
 
-          {!isProfile&&
-          <div className="flex max-h-40 mt-1 space-x-2 text-xs">
+                          {
+                            <button
+                              className=" text-[14px] mt-[0.33rem] text-blue-500 p-0 hover:underline cursor-pointer"
+                              onClick={handleFollow}
+                            >
+                              {isFollowing ? "Following" : "Follow"}
+                            </button>
+                          }
+                        </div>
+                      )}
+                    </div>
+                    {/* {formatTimeToNow(new Date(post.createdAt))} */}
+                  </div>
+                )}
 
-            {/* <div> */}
-            <Avatar>
-              <div className=" relative w-full h-full aspect-square">
-                <Image
-                  fill
-                  src={
-                    isAnonymous
-                      ? "https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png"
-                      : post.profilePic
-                  }
-                  alt="profile picture"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              {/* <AvatarFallback>SP</AvatarFallback> */}
-            </Avatar>
-            {/* </div> */}
-            {/* <Separator orientation="vertical" className=" h-5 mt-4 " /> */}
-            <div className=" flex space-x-2">
-            <span className=" mt-3 text-sm text-[#0c0c0c]  font-semibold dark:text-yellow-50">
-              {isAnonymous ? "Anonymous" : (<Link href={`/profile/${post.uid}`} className=" hover:underline cursor-pointer">{post.name}</Link>)}
-            </span>{" "}
-            {isAnonymous||isCurrentUser || !user ? null : (
-              <div className=" flex space-x-1 mr-5 ">
-                <svg
-                  viewBox="0 0 48 48"
-                  className=" mt-[1.20rem] mr-1 w-1 h-1"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div className={`${post.title ? "" : "hidden"}`}>
+                  <h1
+                    className={`font-bold py-2 leading-6 text-[16px] dark:text-white ${
+                      isExpanded ? "hover:underline" : ""
+                    }`}
+                  >
+                    {post.title}
+                  </h1>
+                </div>
+
+                {/* <p className="mb-1">{parse(post.description)}</p> */}
+                {post.questionImageURL ? (
+                  <div className="relative w-full h-60">
+                    <Image
+                      src={post.questionImageURL}
+                      layout="fill"
+                      objectFit="cover"
+                      alt="post image"
+                    />
+                  </div>
+                ) : null}
+
+                <div
+                  className={`relative text-sm max-h-20 w-full overflow-clip ${
+                    isExpanded ? "max-h-none" : ""
+                  }`}
+                  ref={pRef}
                 >
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                  <g
-                    id="SVGRepo_tracerCarrier"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></g>
-                  <g id="SVGRepo_iconCarrier">
-                    {" "}
-                    <path
-                      d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3725 30.6274 12 24 12C17.3726 12 12 17.3725 12 24C12 30.6274 17.3726 36 24 36Z"
-                      fill="#333333"
-                    ></path>{" "}
-                  </g>
-                </svg>
+                  {/* <EditorOutput content={post.content} /> */}
 
+                  <p
+                    onClick={fetchQuestion}
+                    className=" dark:text-white text-base/[21px] text-[15px]"
+                  >
+                    {parse(post.description)}
+                  </p>
+                  {!isExpanded && isOverflowing && (
+                    <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div>
+                  )}
 
-                {(
-        <button className=" text-[14px] mt-[0.33rem] text-blue-500 p-0 hover:underline cursor-pointer" onClick={handleFollow}>
-          {isFollowing ? "Following" : "Follow"}
-        </button>
-      )}
-              </div>
-            )}
-            </div>
-            {/* {formatTimeToNow(new Date(post.createdAt))} */}
-          </div>
-          }
-          
-          <div className={`${post.title?"":"hidden"}`}>
-          <Link href={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}>
-            <h1 className={`font-bold py-2 leading-6 text-[16px] dark:text-white ${isExpanded ? 'hover:underline' : ''}`}>
-              {post.title}
-            </h1>
-          </Link>
-          </div>
-
-          {/* <p className="mb-1">{parse(post.description)}</p> */}
-          {post.questionImageURL ? (
-            <div className="relative w-full h-60">
-              <Image
-                src={post.questionImageURL}
-                layout="fill"
-                objectFit="cover"
-                alt="post image"
-              />
-            </div>
-          ) : null}
-
-          <div
-            className={`relative text-sm max-h-20 w-full overflow-clip ${isExpanded ? 'max-h-none': '' }`}
-            ref={pRef}
-          >
-            {/* <EditorOutput content={post.content} /> */}
-
-            <p onClick={fetchQuestion} className=" dark:text-white text-base/[21px] text-[15px]">{parse(post.description)}</p>
-            {!isExpanded && isOverflowing && ( <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white/95 dark:from-[#262626] to-transparent"></div>) }
-
-            {/* {pRef.current?.clientHeight === 160 ? (
+                  {/* {pRef.current?.clientHeight === 160 ? (
               // blur bottom if content is too long
               
             ) : null} */}
-            {!isExpanded && isOverflowing && (
-              <div className="absolute bottom-0 md:bottom-[-0.16rem] left-0 w-full  text-right ">
-                <button className="  hover:underline md:w-[8%] w-full backdrop-blur-none bg-white/50 dark:bg-transparent  text-right text-sm  " onClick={() => setIsExpanded(true)}>(more)</button>
-              </div>
-            )}
+                  {!isExpanded && isOverflowing && (
+                    <div className="absolute bottom-0 md:bottom-[-0.16rem] left-0 w-full  text-right ">
+                      <button
+                        className="  hover:underline md:w-[8%] w-full backdrop-blur-none bg-white/50 dark:bg-transparent  text-right text-sm  "
+                        onClick={() => setIsExpanded(true)}
+                      >
+                        (more)
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 flex justify-between  gap-x-3 text-sm px-4 py-4  sm:px-6">
+            {/* <div className=' sm:block md:hidden '> */}
+            <PostVoteClientPhone
+              postId={post.id}
+              postType="questions"
+              userId={user?.uid!}
+            />
+            {/* </div> */}
+
+            <div className=" flex gap-x-3">
+              <Link
+                href={`/${post?.title?.split(" ").join("-")}`}
+                className="w-fit flex items-center gap-2"
+              >
+                <MessageSquare className="h-4 w-4" />{" "}
+                <span className=" sm:block hidden ">
+                  {post.comments} Answers
+                </span>
+              </Link>
+              <button className="w-fit flex items-center gap-2">
+                <ShareDialog
+                  postLink={`/${encodeURIComponent(
+                    post?.title?.split(" ").join("-")
+                  )}`}
+                />
+              </button>
+              <button
+                className="w-fit flex items-center gap-2"
+                onClick={handleSave}
+              >
+                <Bookmark
+                  className={cn("h-4 w-4", {
+                    " text-black fill-black": savedState == true,
+                  })}
+                />{" "}
+                {savedState ? (
+                  <span className=" sm:block hidden">Saved</span>
+                ) : (
+                  <span className=" sm:block hidden">Save</span>
+                )}
+              </button>
+
+              {isProfile && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button className="w-fit flex items-center gap-2">
+                      <AiTwotoneDelete className="text-xl" />{" "}
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your post and remove the data from our servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={HandleDelete}>
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 flex justify-between  gap-x-3 text-sm px-4 py-4  sm:px-6">
-        {/* <div className=' sm:block md:hidden '> */}
-        <PostVoteClientPhone
-          postId={post.id}
-          postType="questions"
-          userId={user?.uid!}
-        />
-        {/* </div> */}
-
-        <div className=" flex gap-x-3">
-          <Link
-            href={`/${post?.title?.split(" ").join("-")}`}
-            className="w-fit flex items-center gap-2"
-          >
-            <MessageSquare className="h-4 w-4" />{" "}
-            <span className=" sm:block hidden ">{post.comments} Answers</span>
-          </Link>
-          <button className="w-fit flex items-center gap-2">
-            <ShareDialog
-              postLink={`/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
-            />
-          </button>
-          <button
-            className="w-fit flex items-center gap-2"
-            onClick={handleSave}
-          >
-            <Bookmark
-              className={cn("h-4 w-4", {
-                " text-black fill-black": savedState == true,
-              })}
-            />{" "}
-            {savedState ? (
-              <span className=" sm:block hidden">Saved</span>
-            ) : (
-              <span className=" sm:block hidden">Save</span>
-            )}
-          </button>
-
-          {isProfile&&
-          <AlertDialog>
-          <AlertDialogTrigger asChild>
-          <button
-            className="w-fit flex items-center gap-2"
-          >
-            <AiTwotoneDelete className='text-xl' />{" "}
-          </button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                post and remove the data from our servers.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={HandleDelete} >Delete</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-          }
-
-        </div>
-      </div>
-    </div>
-    :<div></div>
-}
+      ) : (
+        <div></div>
+      )}
     </>
   );
 };

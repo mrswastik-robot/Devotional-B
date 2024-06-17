@@ -117,7 +117,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
             <h2 className="mb-2 px-4 text-[20px] font-bold tracking-tight">
               Categories
             </h2>
-            <Command>
+            <Command className="dark:bg-[#262626]">
               <CommandInput placeholder="Search..." />
               <CommandList>
                 <CommandEmpty>No results found</CommandEmpty>

@@ -394,7 +394,7 @@ const UserProfilePage = ({ params: { profileId } }: Props) => {
                   questions && postType === "normal" &&
                   questions.map((post, index) => (
                     <div key={index} className="my-1">
-                      <Post post={post} isProfile={true} />
+                      <Post post={post} isProfile={true} othersProfile={true}/>
                     </div>
                   ))
                 )}
@@ -420,7 +420,7 @@ const UserProfilePage = ({ params: { profileId } }: Props) => {
                       answers && postType === "answers" &&
                       answers.map((post, index) => (
                         <div key={index} className="my-1">
-                          <AnswerPost post={post} isProfile={true} />
+                          <AnswerPost post={post} isProfile={true} othersProfile={true} />
                         </div>
                       ))
                     )}

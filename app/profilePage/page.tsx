@@ -641,7 +641,7 @@ useEffect(() => {
                   { savedPosts.length !== 0 ? (
         savedPosts.map((post, index) => (
           <div key={index} className="my-1">
-            <Post post={post} />
+            <Post post={post} othersProfile={false} />
           </div>
         ))
       ) : (
@@ -680,7 +680,7 @@ useEffect(() => {
               answers.map((post, index) => (
                 // <Post key={index} post={post} />
                 <div key={index} className=" my-1">
-                  <AnswerPost post={post} isProfile={true} handleDelete={handleAnswerDelete} />
+                  <AnswerPost post={post} isProfile={true} othersProfile={false} handleDelete={handleAnswerDelete} />
                 </div>
               ))
             )

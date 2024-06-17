@@ -507,7 +507,7 @@ const clearNotifications = async () => {
 
 
   return (
-    <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#000000] dark:bg-[#020817] border-b border-zinc-300 z-[10] py-2">
+    <div className="fixed top-0 max-w-full inset-x-0 h-fit bg-[#000000] dark:bg-[#262626] border-b border-zinc-300 z-[10] py-2">
 
       {/* mobile Navbar */}
       <div className=" md:hidden flex justify-between px-2">
@@ -854,7 +854,7 @@ const clearNotifications = async () => {
                 </Link>
                 <div className="mt-1 ml-2 mb-2">
                 <div className="flex items-center justify-between pr-1 space-x-2">
-                <Label htmlFor="airplane-mode" className="font-normal">Dark Mode</Label>
+                <Label htmlFor="airplane-mode" className="font-normal dark:text-yellow-50">Dark Mode</Label>
                 <Switch id="airplane-mode" onCheckedChange={toggleTheme} checked={theme==='dark'}/>
                 </div>
                 </div>

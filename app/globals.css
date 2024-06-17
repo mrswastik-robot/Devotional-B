@@ -140,11 +140,11 @@ td {
     color: #1976d2;
 }
 
-a td p {
+/* a td p {
     color: #212121;
     font-weight: 400;
     font-style: normal;
-}
+} */
 
 h1 {
     font-size: 16px;
@@ -155,22 +155,22 @@ h1 {
     font-weight: 700;
     font-style: normal;
     text-transform: none;
-    color: #311b92;
+    /* color: #311b92; */
 }
 
 span {
     font-size: 14px;
-    color: #212121;
+    /* color: #212121; */
 }
 
 ol li p {
     font-size: 14px;
-    color: #424242;
+    /* color: #424242; */
 }
 
-span {
+/* span {
     color: #4a148c;
-}
+} */
 
 div.rounded-3xl {
     font-size: 14px;
@@ -181,7 +181,7 @@ label {
     font-weight: 500;
     font-style: normal;
     text-decoration: none;
-    color: #212121;
+    /* color: #212121; */
 }
 
 div.text-sm.font-normal.opacity-70 {

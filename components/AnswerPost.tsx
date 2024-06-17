@@ -63,10 +63,11 @@ type Props = {
   // children: Element
   // id: string
   isProfile?: boolean;
+  othersProfile?: boolean;
   handleDelete?: Function;
 };
 
-const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
+const Post = ({ post, isProfile = false,othersProfile, handleDelete = () => {} }: Props) => {
   const pRef = useRef<HTMLDivElement>(null);
 
   //console.log("Answer Posr: ", post);
@@ -238,7 +239,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
 
         <div className="w-0 flex-1 break-normal overflow-hidden">
 
-          {!isProfile&&
+          {!isProfile &&
           <div className="flex max-h-40 mt-1 space-x-2 text-xs text-gray-500">
 
             {/* <div> */}
@@ -382,7 +383,7 @@ const Post = ({ post, isProfile = false, handleDelete = () => {} }: Props) => {
             )}
           </button> */}
 
-          {isProfile&&
+          {isProfile && !othersProfile &&
           <AlertDialog>
           <AlertDialogTrigger asChild>
           <button

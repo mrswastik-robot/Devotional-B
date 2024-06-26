@@ -296,7 +296,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
               <span className="text-sm">total Posts</span>
             </div>
           </div> */}
-          <div className="absolute right-[3rem] bottom-[27px]">
+          <div className="absolute right-[1rem] md:right-[3rem] md:bottom-[27px] bottom-[22px]">
             {joined ? (
               <Link href={`/createForumPost`}>
                 <Button className="focus:outline-none rounded-3xl w-full py-2 px-3 bg-black text-white font-bold border border-gray-600">
@@ -319,8 +319,8 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
           </div>
         </div>
       </div>
-      <div className="flex container mx-auto py-[11px] px-0 items-start space-x-[2rem] mt-[4rem]">
-        <div className=" flex-col space-y-[2rem] w-1/4 border-0 ">
+      <div className="md:flex container mx-auto py-[11px] px-0 md:items-start items-center justify-center space-x-[2rem] mt-[4rem]">
+        <div className=" flex-col space-y-[2rem] w-[90%] items-center mx-auto md:w-1/4 border-0 ">
           
           <div className="bg-[#ffffff] dark:bg-[#262626] mt-[7px] flex-col space-y-4 mr-4 p-4 rounded-md border-0">
             <p className="text-2xl font-semibold">{forumDetails.noOfMembers} Members</p>
@@ -387,7 +387,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
         </div>
 
         {/* Left Column (Posts) */}
-        <div className="w-3/4 py-3 px-[2rem] rounded-lg bg-[#ffffff] dark:bg-[#535252] ">
+        <div className=" flex justify-center mt-6 md:mt-0 w-[90%] items-center mx-auto md:w-3/4 py-3 px-[2rem] rounded-lg bg-[#ffffff] dark:bg-[#535252] ">
           <ForumsPostFeed newPost={false} forumURL={forumUrl} />
           {/* {forumPost?.map((post:any, index:any) => (
               <SubRedditPost key={index}/>

@@ -291,8 +291,8 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
     <>
     {
       post.uid?
-    <div className="rounded-2xl bg-white dark:bg-[#262626] mb-3 shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
-      <div className="px-6 py-4 flex justify-between">
+    <div className="rounded-md bg-[#E8E8E8] dark:bg-[#262626] my-9 mb-3 hover:shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
+      <div className="px-6 py-4 flex justify-between space-x-4">
         {/* <PostVoteClient
         //   postId={post.id}
         //   initialVotesAmt={_votesAmt}
@@ -404,19 +404,9 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
             )}
           </div>
         </div>
-      </div>
 
-      <div className=" rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 flex justify-between  gap-x-3 text-sm px-4 py-4  sm:px-6">
-        {/* <div className=' sm:block md:hidden '> */}
-        <PostVoteClientPhone
-          postId={post.id}
-          postType="forumPosts"
-          userId={user?.uid!}
-        />
-        {/* </div> */}
-
-        <div className=" flex gap-x-3">
-          <Link
+        <div className=" flex-col space-y-6 items-center justify-center my-auto">
+        <Link
             href={`/forums/${forumUrl}/post/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
             className="w-fit flex items-center gap-2"
           >
@@ -443,6 +433,47 @@ const ForumPost = ({ post, isProfile = false, handleDelete = () => {}}: Props) =
               <span className=" sm:block hidden">Save</span>
             )}
           </button>
+        </div>
+
+      </div>
+
+      <div className=" rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 flex justify-between  gap-x-3 text-sm px-4 py-4  sm:px-6">
+        {/* <div className=' sm:block md:hidden '> */}
+        <PostVoteClientPhone
+          postId={post.id}
+          postType="forumPosts"
+          userId={user?.uid!}
+        />
+        {/* </div> */}
+
+        <div className=" flex gap-x-3">
+          {/* <Link
+            href={`/forums/${forumUrl}/post/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
+            className="w-fit flex items-center gap-2"
+          >
+            <MessageSquare className="h-4 w-4" />{" "}
+            <span className=" sm:block hidden">{post.comments} Comments</span>
+          </Link>
+          <button className="w-fit flex items-center gap-2">
+            <ShareDialog
+              postLink={`/forums/${forumUrl}/post/${encodeURIComponent(post?.title?.split(" ").join("-"))}`}
+            />
+          </button>
+          <button
+            className="w-fit flex items-center gap-2"
+            onClick={handleSave}
+          >
+            <Bookmark
+              className={cn("h-4 w-4", {
+                " text-black fill-black": savedState == true,
+              })}
+            />{" "}
+            {savedState ? (
+              <span className=" sm:block hidden ">Saved</span>
+            ) : (
+              <span className=" sm:block hidden">Save</span>
+            )}
+          </button> */}
 
           {isProfile&&
           <AlertDialog>

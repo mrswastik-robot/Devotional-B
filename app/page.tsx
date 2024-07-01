@@ -15,6 +15,7 @@ import RightHandFeed from "@/components/RightHandFeed/RightHandFeed";
 import TopFeedCard from "@/components/TopFeedCard";
 import Loader from "@/components/ui/Loader";
 import { LuXCircle } from "react-icons/lu";
+import TempImage from "../public/oppenheimer.jpg"
 
 import {
   signInAnonymously, updateProfile,
@@ -569,11 +570,28 @@ export default function Home() {
   {
 
   return (
-    <div className="lg:container lg:max-w-[112rem] lg:mx-auto">
+    <div className="lg:container lg:max-w-[86rem] lg:mx-auto">
     <Suspense>
     <>
+    <div className="w-full h-[14rem] flex gap-12">
+      <div className="h-[14.5rem] w-[29rem] mt-[45px]">
+      <Image
+      src={TempImage}
+      alt="post image"
+      />
+      </div>
+      <div className="mt-[45px] w-[69rem]">
+      <div>
+        <div className="text-3xl font-semibold">Discover Devotional Content</div>
+        <div className="text-lg font-semibold mt-[19px]">Your Pathway to conect to God</div>
+        <div className="text-base mt-[10px]">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        </div>
+      </div>
+      </div>
+    </div>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
-      <div className='flex gap-y-4 md:gap-x-3 lg:gap-x-6 pb-6 font-dmsans mt-4 ml-[41px]'>
+      <div className='md:flex container mx-auto py-[11px] px-0 md:items-start items-center justify-center space-x-[3rem] mt-[4rem]'>
         
         {/* <TopFeedCard /> */}
         <div className="hidden lg:block col-span-2 sticky lg:top-[4.2rem] lg:w-[20rem]">
@@ -581,7 +599,7 @@ export default function Home() {
         </div>
       
         
-      <div className="lg:w-[42rem]">
+      <div className=" flex justify-center mt-6 md:mt-0 w-[90%] items-center mx-auto md:w-3/4 py-3 px-[2rem] rounded-lg bg-[#ffffff] dark:bg-[#535252] ">
         {/* {
           searchClient && (
             <InstantSearch searchClient={searchClient} indexName="search_questions" >
@@ -604,22 +622,14 @@ export default function Home() {
 
 
         {/* subreddit info */}
-        <div className='col-span-3 lg:col-span-3 lg:w-[331px] lg:sticky overflow-hidden h-fit rounded-2xl order-first lg:order-last space-y-3'>
-          {/* <div className='bg-emerald-100 dark:bg-red-500 px-6 py-4'>
-            <p className='font-semibold py-3 flex items-center gap-1.5'>
-              <HomeIcon className='h-4 w-4' />
-              Home
-            </p>
-          </div> */}
-
-          {/* <RightHandFeed />           */}
+        {/* <div className='col-span-3 lg:col-span-3 lg:w-[331px] lg:sticky overflow-hidden h-fit rounded-2xl order-first lg:order-last space-y-3'>
           <div className="shadow-lg shadow-blue-300">
           <div className='hidden lg:block col-span-4 lg:col-span-2 overflow-hidden h-fit order-last'>
             <RightHandFeed />
           </div>
           </div>
 
-        </div>
+        </div> */}
         
       </div>
     </>

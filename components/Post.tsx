@@ -275,8 +275,8 @@ const Post = ({ post, isProfile = false, othersProfile , handleDelete = () => {}
   return (
     <>
       {post.uid ? (
-        <div className=" bg-white dark:bg-[#262626] mb-3 rounded-2xl hover:shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
-          <div className="px-6 py-4 flex justify-between">
+        <div className=" bg-[#E8E8E8] dark:bg-[#262626] mb-3 my-7 rounded-md hover:shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]">
+          <div className="px-6 py-4 flex justify-between space-x-4">
             {/* <PostVoteClient
         //   postId={post.id}
         //   initialVotesAmt={_votesAmt}
@@ -364,7 +364,7 @@ const Post = ({ post, isProfile = false, othersProfile , handleDelete = () => {}
 
                 <div className={`${post.title ? "" : "hidden"}`}>
                   <h1
-                    className={`font-bold py-2 leading-6 text-[16px] dark:text-white ${
+                    className={`font-bold py-2 leading-6 text-[17px] dark:text-white ${
                       isExpanded ? "hover:underline" : ""
                     }`}
                   >
@@ -394,7 +394,7 @@ const Post = ({ post, isProfile = false, othersProfile , handleDelete = () => {}
 
                   <p
                     onClick={fetchQuestion}
-                    className=" dark:text-yellow-50 text-base/[21px] text-[15px]"
+                    className=" dark:text-white text-base/[21px] text-[15px]"
                   >
                     {parse(post.description)}
                   </p>
@@ -419,19 +419,8 @@ const Post = ({ post, isProfile = false, othersProfile , handleDelete = () => {}
                 </div>
               </Link>
             </div>
-          </div>
-
-          <div className="rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 flex justify-between  gap-x-3 text-sm px-4 py-4  sm:px-6">
-            {/* <div className=' sm:block md:hidden '> */}
-            <PostVoteClientPhone
-              postId={post.id}
-              postType="questions"
-              userId={user?.uid!}
-            />
-            {/* </div> */}
-
-            <div className=" flex gap-x-3">
-              <Link
+            <div className=" flex-col space-y-6 items-center justify-center my-auto">
+          <Link
                 href={`/${post?.title?.split(" ").join("-")}`}
                 className="w-fit flex items-center gap-2"
               >
@@ -462,6 +451,52 @@ const Post = ({ post, isProfile = false, othersProfile , handleDelete = () => {}
                   <span className=" sm:block hidden text-black dark:text-white">Save</span>
                 )}
               </button>
+          </div>
+          </div>
+
+          
+
+          <div className="rounded-b-2xl dark:bg-[#1A1A1B]/65 z-20 flex justify-between  gap-x-3 text-sm px-4 py-4  sm:px-6">
+            {/* <div className=' sm:block md:hidden '> */}
+            <PostVoteClientPhone
+              postId={post.id}
+              postType="questions"
+              userId={user?.uid!}
+            />
+            {/* </div> */}
+
+            <div className=" flex gap-x-3">
+              {/* <Link
+                href={`/${post?.title?.split(" ").join("-")}`}
+                className="w-fit flex items-center gap-2"
+              >
+                <MessageSquare className="h-4 w-4" />{" "}
+                <span className=" sm:block hidden text-black dark:text-white ">
+                  {post.comments} Answers
+                </span>
+              </Link>
+              <button className="w-fit flex items-center gap-2">
+                <ShareDialog
+                  postLink={`/${encodeURIComponent(
+                    post?.title?.split(" ").join("-")
+                  )}`}
+                />
+              </button>
+              <button
+                className="w-fit flex items-center gap-2"
+                onClick={handleSave}
+              >
+                <Bookmark
+                  className={cn("h-4 w-4", {
+                    " text-black fill-black": savedState == true,
+                  })}
+                />{" "}
+                {savedState ? (
+                  <span className=" sm:block hidden text-black dark:text-white">Saved</span>
+                ) : (
+                  <span className=" sm:block hidden text-black dark:text-white">Save</span>
+                )}
+              </button> */}
 
               {isProfile && !othersProfile && (
                 <AlertDialog>

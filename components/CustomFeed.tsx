@@ -10,8 +10,9 @@ type Props = {
 const CustomFeed = (props: Props) => {
   //console.log(props.newPost)
   return (
-    <div className=''>
+    <div className='w-full'>
         {/* <TopFeedCard/> */}
+        <div className='text-[20px] font-bold mt-3'>Discussions</div>
         <PostFeed newPost={props.newPost}/>
     </div>
   )

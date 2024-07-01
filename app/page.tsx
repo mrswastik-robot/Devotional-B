@@ -573,14 +573,14 @@ export default function Home() {
     <div className="lg:container lg:max-w-[86rem] lg:mx-auto">
     <Suspense>
     <>
-    <div className="w-full h-[14rem] flex flex-col md:flex-row gap-12">
-      <div className="h-[14.5rem] w-[29rem] md:mt-[45px]">
+    <div className="w-full h-[14rem] flex flex-col md:flex-row md:gap-12 gap-6">
+      <div className="md:h-[14.5rem] md:w-[29rem] md:mt-[45px]">
       <Image
       src={TempImage}
       alt="post image"
       />
       </div>
-      <div className="md:mt-[45px] md:w-[69rem] ml-[40px] md:ml-0">
+      <div className="md:mt-[45px] md:w-[69rem]">
       <div>
         <div className="text-3xl font-semibold text-center md:text-left">Discover Devotional Content</div>
         <div className="text-lg font-semibold md:mt-[19px] mt-1 text-center md:text-left">Your Pathway to conect to God</div>
@@ -591,7 +591,7 @@ export default function Home() {
       </div>
     </div>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
-      <div className='md:flex container mx-auto py-[11px] px-0 md:items-start items-center justify-center space-x-[3rem] mt-[4rem]'>
+      <div className='md:flex container mx-auto py-[11px] px-0 md:items-start items-center justify-center md:space-x-[3rem] mt-[4rem]'>
         
         {/* <TopFeedCard /> */}
         <div className="hidden lg:block col-span-2 sticky lg:top-[4.2rem] lg:w-[20rem]">
@@ -599,7 +599,7 @@ export default function Home() {
         </div>
       
         
-      <div className=" flex justify-center mt-[6.5rem] md:mt-0 w-[90%] items-center mx-auto md:w-3/4 py-3 px-[2rem] rounded-lg bg-[#ffffff] dark:bg-[#535252] ">
+      <div className=" flex justify-center mt-[3.5rem] md:mt-0 w-[90%] items-center mx-auto md:w-3/4 py-3 px-[2rem] rounded-lg bg-[#ffffff] dark:bg-[#535252] ">
         {/* {
           searchClient && (
             <InstantSearch searchClient={searchClient} indexName="search_questions" >

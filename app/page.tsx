@@ -573,18 +573,18 @@ export default function Home() {
     <div className="lg:container lg:max-w-[86rem] lg:mx-auto">
     <Suspense>
     <>
-    <div className="w-full h-[14rem] flex gap-12">
-      <div className="h-[14.5rem] w-[29rem] mt-[45px]">
+    <div className="w-full h-[14rem] flex flex-col md:flex-row gap-12">
+      <div className="h-[14.5rem] w-[29rem] md:mt-[45px]">
       <Image
       src={TempImage}
       alt="post image"
       />
       </div>
-      <div className="mt-[45px] w-[69rem]">
+      <div className="md:mt-[45px] md:w-[69rem] ml-[40px] md:ml-0">
       <div>
-        <div className="text-3xl font-semibold">Discover Devotional Content</div>
-        <div className="text-lg font-semibold mt-[19px]">Your Pathway to conect to God</div>
-        <div className="text-base mt-[10px]">
+        <div className="text-3xl font-semibold text-center md:text-left">Discover Devotional Content</div>
+        <div className="text-lg font-semibold md:mt-[19px] mt-1 text-center md:text-left">Your Pathway to conect to God</div>
+        <div className="text-base hidden md:block md:mt-[10px] mt-[3px]">
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
         </div>
       </div>
@@ -599,7 +599,7 @@ export default function Home() {
         </div>
       
         
-      <div className=" flex justify-center mt-6 md:mt-0 w-[90%] items-center mx-auto md:w-3/4 py-3 px-[2rem] rounded-lg bg-[#ffffff] dark:bg-[#535252] ">
+      <div className=" flex justify-center mt-[6.5rem] md:mt-0 w-[90%] items-center mx-auto md:w-3/4 py-3 px-[2rem] rounded-lg bg-[#ffffff] dark:bg-[#535252] ">
         {/* {
           searchClient && (
             <InstantSearch searchClient={searchClient} indexName="search_questions" >

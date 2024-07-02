@@ -113,12 +113,12 @@ export function Sidebar({ className, playlists }: SidebarProps) {
         )}
       >
         <div className="space-y-4 py-4">
-          <div className="px-4 py-2">
-            <h2 className="mb-2 px-4 text-[20px] font-bold tracking-tight">
+          <div className=" py-2">
+            <h2 className="mb-2 px-7 text-[20px] font-bold tracking-tight">
               Categories
             </h2>
             <Command className="dark:bg-[#262626]">
-              <CommandInput placeholder="Search..." />
+              <CommandInput className="" placeholder="Search..." />
               <CommandList>
                 <CommandEmpty>No results found</CommandEmpty>
                 <CommandGroup>
@@ -129,26 +129,28 @@ export function Sidebar({ className, playlists }: SidebarProps) {
                     variant={`${
                       categoryPosts == "all" ? "secondary" : "ghost"
                     }`}
-                    className="w-full justify-start"
+                    className="w-full px-7 justify-start"
                   >
                     <CommandItem>All</CommandItem>
                   </Button>
                 </CommandGroup>
+                <ScrollArea className="h-[250px] px-1">
                 <div>
                   {sidebarCategory ? (
                     sidebarCategory.map((categoryD: any, index: any) => (
                       <CommandGroup key={index}>
-                        <Button
+                        <div
                           onClick={() => {
                             selectChange(categoryD);
                           }}
-                          variant={`${
-                            categoryPosts == categoryD ? "secondary" : "ghost"
-                          }`}
-                          className="w-full justify-start"
+                          // variant={`${
+                          //   categoryPosts == categoryD ? "secondary" : "ghost"
+                          // }`}
+                          className="w-full px-4 py-[1px] justify-start cursor-pointer"
                         >
-                          <CommandItem>{categoryD}</CommandItem>
-                        </Button>
+                          <CommandItem ><div className="text-black dark:text-white">{categoryD}</div></CommandItem>
+                          <Separator />
+                        </div>
                       </CommandGroup>
                     ))
                   ) : (
@@ -157,6 +159,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
                     </div>
                   )}
                 </div>
+                </ScrollArea>
               </CommandList>
             </Command>
           </div>

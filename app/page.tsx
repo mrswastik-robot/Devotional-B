@@ -591,7 +591,7 @@ export default function Home() {
       </div>
     </div>
     {/* <h1 className='font-bold text-3xl md:text-4xl'>Your feed</h1> */}
-      <div className='md:flex container mx-auto py-[11px] px-0 md:items-start items-center justify-center md:space-x-[3rem] mt-[4rem]'>
+      <div className='md:flex container mx-auto py-[11px] px-0 md:items-start items-center justify-center md:space-x-[2rem] mt-[4rem]'>
         
         {/* <TopFeedCard /> */}
         <div className="hidden lg:block col-span-2 sticky lg:top-[4.2rem] lg:w-[20rem]">

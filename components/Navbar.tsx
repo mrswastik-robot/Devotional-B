@@ -543,62 +543,15 @@ const clearNotifications = async () => {
               <Image src={logo} alt="logo" width={160} height={60} />
             </p>
           </Link>
-          </div>
-          {/* search bar */}
-          <div>
-        { !hideQueSearch && <div className=" relative ml-[0px] ">
-          {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
-          <input type="text" 
-            value={searchText}
-            onChange={handleSearchText} 
-            placeholder="Search" 
-            className="peer cursor-pointer relative z-10 h-10 w-10 text-white pl-12 rounded-full border-[2px] bg-transparent border-[#ffffff] outline-none focus:w-[37rem] ml-[44rem] focus:ml-[0rem] focus:cursor-text focus:border-[#ffffff] transition-all" 
-            onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  dispatch(triggerSearch());
-                }
-            }}
-          />
-          <svg xmlns="http://www.w3.org/2000/svg" className={`absolute inset-y-0 my-auto ml-[44rem] transition-all h-14 w-12 border-transparent stroke-[#ffffff] px-3.5 peer-focus:ml-[0rem] peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        </div>
-        }
-
-        {/* ye upar wala que search ka input tha , ab neeche event search ka input bana rhe */}
-
-        { hideQueSearch && <div className="search-box relative ml-5">
-          {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
-          <input type="text" 
-            value={eventSearchText}
-            onChange={handleEventSearchText}
-            placeholder="Search Events" 
-            className="peer cursor-pointer relative z-10 h-10 w-10 text-white pl-12 rounded-full border-[2px] bg-transparent border-[#ffffff] outline-none focus:w-[37rem] ml-[49.5rem] focus:ml-[0rem] focus:cursor-text focus:border-[#ffffff] transition-all" 
-            onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  dispatch(triggerEventSearch());
-                }
-            }}
-          />
-          <svg xmlns="http://www.w3.org/2000/svg" className={`absolute inset-y-0 my-auto ml-[49.5rem] transition-all h-14 w-12 border-transparent stroke-[#ffffff] px-3.5 peer-focus:ml-[0rem] peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        </div>
-        }
-
-
-        </div>
-
-        <div className="flex ">
-        <div className="hidden lg:inline">
+          <div className="hidden lg:inline ">
           {!pathname.includes("event-details")&&pathname!='/events'&&
               <Dialog>
                 {
                   isGuest === 'true'||user?.isAnonymous==true?
-                  <FiPlusCircle className="w-[26px] h-[26px] text-white mt-[7px] mr-[1px]" onClick={guestHandler}/>:
+                  <Button variant="outline" onClick={guestHandler} className=" rounded-3xl h-[37px] w-[9rem]"><FiPlusCircle className="w-[18px] h-[18px] mr-[5px]"/>Ask Question</Button>:
                   // <DialogTrigger asChild>
                   <Link href={'/createQue'}>
-                    <FiPlusCircle className="text-white w-[26px] h-[26px] mt-[7px] mr-[1px]" />
+                    <Button variant="outline"  className=" rounded-3xl h-[37px] w-[9rem]"><FiPlusCircle className="w-[18px] h-[18px] mr-[5px]"/>Ask Question</Button>
                   </Link>
                   // </DialogTrigger>
   }
@@ -754,23 +707,70 @@ const clearNotifications = async () => {
               </Dialog>
 }
             </div>
+          </div>
+          
+          
+
+        <div className="flex ">
+
+
 
             <div className=" ml-5 flex">
-          <Button variant="ghost" className="hover:text-black text-[#ffffff] " onClick={() => setClicked("home")}>
-            <Link href="/">
-            <Home
-              className={`h-5 w-5 ${clicked === 'home' ? "" : ""}`}
-            />
-            </Link>
-          </Button>
+
+          {/* search bar */}
+          <div>
+        { !hideQueSearch && <div className=" relative">
+          {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
+          <input type="text" 
+            value={searchText}
+            onChange={handleSearchText} 
+            placeholder="Search" 
+            className="peer cursor-pointer relative z-10 h-10 w-10 text-white pl-12 rounded-full focus:border-[2px] bg-transparent outline-none focus:w-[42rem] ml-[0rem] focus:ml-[0rem] focus:cursor-text transition-all" 
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  dispatch(triggerSearch());
+                }
+            }}
+          />
+          <svg xmlns="http://www.w3.org/2000/svg" className={`absolute inset-y-0 my-auto ml-[0rem] transition-all peer-focus:h-14 peer-focus:w-12 h-[59px] w-[53px] border-transparent stroke-[#ffffff] px-3.5 peer-focus:ml-[0rem] peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        </div>
+        }
+
+        {/* ye upar wala que search ka input tha , ab neeche event search ka input bana rhe */}
+
+        { hideQueSearch && <div className="search-box relative">
+          {/* <Input className=" pl-10 w-[40rem]" placeholder="Search" /> */}
+          <input type="text" 
+            value={eventSearchText}
+            onChange={handleEventSearchText}
+            placeholder="Search Events" 
+            className="peer cursor-pointer relative z-10 h-10 w-10 text-white pl-12 rounded-full focus:border-[2px] bg-transparent border-[#ffffff] outline-none focus:w-[42rem] ml-[0rem] focus:ml-[0rem] focus:cursor-text focus:border-[#ffffff] transition-all" 
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  dispatch(triggerEventSearch());
+                }
+            }}
+          />
+          <svg xmlns="http://www.w3.org/2000/svg" className={`absolute inset-y-0 my-auto ml-[0rem] transition-all h-[59px] w-[53px] peer-focus:h-14 peer-focus:w-12 border-transparent stroke-[#ffffff] px-3.5 peer-focus:ml-[0rem] peer-focus:border-[#ffffff] peer-focus:stroke-[#ffffff]`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        </div>
+        }
+
+
+        </div>
+
+          
           
           {/* Notification Drop-down */}
-          <div className="ml-2">
+          <div className="ml-[11px]">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="hover:text-black focus-visible:ring-0.1 text-[#ffffff]" onClick={() => setClicked("notification")}>
                 <Bell
-                  className={`h-5 w-5 ${clicked === 'notification' ? "" : ""}`}
+                  className={`h-[21px] w-[21px] ${clicked === 'notification' ? "" : ""}`}
                 />
               </Button>
             </DropdownMenuTrigger>
@@ -816,6 +816,14 @@ const clearNotifications = async () => {
           </div>
           
         </div>
+
+        <Button variant="ghost" className="hover:text-black text-[#ffffff] " onClick={() => setClicked("home")}>
+            <Link href="/">
+            <Home
+              className={`h-5 w-5 ${clicked === 'home' ? "" : ""}`}
+            />
+            </Link>
+          </Button>
 
         <div className="flex gap-4 ml-5">
           {/* <ThemeToggler className=" mr-4" /> Theme option added on dropdown menu  */}

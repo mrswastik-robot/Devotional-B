@@ -272,7 +272,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
               {forumDetails.name}
             </h4>
             <Button
-              className="ml-5 text-sm text-black font-semibold border hover:bg-slate-300 border-gray-600 bg-slate-200 py-0 px-3 rounded-3xl focus:outline-none"
+              className="ml-5 text-sm text-black font-semibold border hover:bg-slate-300 border-gray-600 bg-slate-200 py-0 md:px-3 rounded-3xl focus:outline-none"
               onClick={joinInForum}
             >
               {joined ? "JOINED" : "JOIN"}
@@ -319,20 +319,20 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
           </div>
         </div>
       </div>
-      <div className="md:flex container mx-auto py-[11px] px-0 md:items-start items-center justify-center space-x-[2rem] mt-[2rem]">
-        <div className=" flex-col space-y-[2rem] w-[90%] items-center mx-auto md:w-1/4 border-0 ">
+      <div className="md:flex container mx-auto py-[11px] px-0 md:items-start items-center justify-center md:space-x-[2rem] mt-[1rem] md:mt-[2rem]">
+        <div className=" flex-col space-y-[2rem] w-[100%] items-center md:mx-auto md:w-1/4 border-0 ">
           
-          <div className="bg-[#ffffff] dark:bg-[#262626] mt-[7px] flex-col space-y-4 mr-4 p-4 rounded-lg border-0">
+          <div className="bg-[#ffffff] dark:bg-[#262626] md:mt-[7px] flex-col space-y-4 md:mr-4 p-4 rounded-lg border-0">
             <p className="text-2xl font-semibold">{forumDetails.noOfMembers} Members</p>
             <p className=" text-sm ">Many members are interested in this forum and looking for opportunities</p>
           </div>
 
-          <div className="bg-[#ffffff] dark:bg-[#262626] mt-[7px] flex-col space-y-4 mr-4 p-4 rounded-lg border-0">
+          <div className="bg-[#ffffff] dark:bg-[#262626] md:mt-[7px] flex-col space-y-4 md:mr-4 p-4 rounded-lg border-0">
             <p className="text-2xl font-semibold">{forumDetails.numOfPosts || 0} Posts</p>
             <p className=" text-sm ">Join the conversation and share your thoughts. Find insights from professionals.</p>
           </div>
 
-          <div className=" bg-[#ffffff] mt-[7px] mr-4 rounded-lg border-0">
+          <div className=" bg-[#ffffff] mt-[7px] md:mr-4 rounded-lg border-0">
             <div
               className={
                 "pb-1 dark:bg-[#262626] bg-[#ffffff] rounded-md shadow-[0px_0px_0px_1px_rgba(8,112,184,0.06),0px_1px_1px_-0.5px_rgba(8,112,184,0.06),0px_3px_3px_-1.5px_rgba(8,112,184,0.06),_0px_6px_6px_-3px_rgba(8,112,184,0.06),0px_12px_12px_-6px_rgba(8,112,184,0.06),0px_24px_24px_-12px_rgba(8,112,184,0.06)]"
@@ -387,7 +387,7 @@ const ForumsPage = ({ params: { forumUrl } }: Props) => {
         </div>
 
         {/* Left Column (Posts) */}
-        <div className=" flex justify-center mt-6 md:mt-1 w-[90%] items-center mx-auto md:w-3/4 py-3 px-[2rem] rounded-lg bg-[#ffffff] dark:bg-[#535252] ">
+        <div className=" flex justify-center mt-6 md:mt-1 w-[100%] items-center md:mx-auto md:w-3/4 py-3 px-[2rem] rounded-lg bg-[#ffffff] dark:bg-[#535252] ">
           <ForumsPostFeed newPost={false} forumURL={forumUrl} />
           {/* {forumPost?.map((post:any, index:any) => (
               <SubRedditPost key={index}/>
